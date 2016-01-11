@@ -12,7 +12,7 @@ The contracts are written in the [Solidity](http://solidity.readthedocs.org/en/l
 
 The repo only has the Solidity contracts at this point, but will have scripts for automatic deployment later.
 
-[User Manual](./docs/Manual.md) (soon to come)
+[User Manual](./docs/Manual.md)
 
 ## Components
 

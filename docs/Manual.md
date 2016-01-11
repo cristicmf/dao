@@ -11,7 +11,7 @@ This section contains a more detailed description, for developers.
 
 ## Overview
 
-![DaoCore](./docs/dao-core.png)
+![DaoCore](./dao-core.png)
 
 The DAO framework uses three main classes of contracts: Libraries, Databases and Actions.
 

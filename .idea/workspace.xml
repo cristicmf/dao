@@ -39,15 +39,15 @@
       </file>
       <file leaf-file-name="Manual.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/docs/Manual.md">
-          <provider editor-type-id="Gfm">
+          <provider selected="true" editor-type-id="Gfm">
             <state />
           </provider>
           <provider editor-type-id="MarkdownPreviewEditor">
             <state />
           </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3211679">
-              <caret line="505" column="706" selection-start-line="505" selection-start-column="706" selection-end-line="505" selection-end-column="706" />
+          <provider editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="505" column="620" selection-start-line="505" selection-start-column="620" selection-end-line="505" selection-end-column="620" />
               <folding />
             </state>
           </provider>
@@ -261,15 +261,15 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/Manual.md">
-      <provider editor-type-id="Gfm">
+      <provider selected="true" editor-type-id="Gfm">
         <state />
       </provider>
       <provider editor-type-id="MarkdownPreviewEditor">
         <state />
       </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3211679">
-          <caret line="505" column="706" selection-start-line="505" selection-start-column="706" selection-end-line="505" selection-end-column="706" />
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="505" column="620" selection-start-line="505" selection-start-column="620" selection-end-line="505" selection-end-column="620" />
           <folding />
         </state>
       </provider>

@@ -503,13 +503,15 @@ The purpose of the database and actions contract separation is to work around th
 
 Database contracts would normally work like very basic collections and provide an interface for reading, writing and modifying the data. Additionally, they only need to do one simple check to see if the caller has the right permission. Admittedly it will cost a bit more gas then when everything is lumped together into one contract, but the cost is in most cases negligible (a few hundred gas).
 
-Finally, It's worth pointing out that a lot of the difficulties with contracts doesn't come with basic usage. "I can test my contract to see if it works, why would it all over sudden break???". That is a bad question, because most contracts that are part of a system will depend on other contracts - most importantly the ones that handles account permissions - and some would likely be replaceable. A call-chain could start with a user calling a contract, which in turn leads to a series of intra-system contract-to-contract calls. Changing one of those contract could have effects on the others, and those effects can sometimes be hard to predict. It may also be that some of the effects are irreversible.
+It's worth pointing out that a lot of the difficulties with contracts doesn't come with basic usage. "I can test my contract to see if it works, why would it all over sudden break???". That is a bad question, because most contracts that are part of a system will depend on other contracts - most importantly the ones that handles account permissions - and some would likely be replaceable. A user calling a contract will often lead to a series of intra-system contract-to-contract calls. Changing one of those contract could have effects on the others, and those effects could sometimes be hard to predict; some could even be irreversible.
+
+Finally, because of the flexibility that this system adds, one could argue that it isn't an actual DAO framework, because if there are administrators then the organization is not really autonomous. This is correct, but it is *possible* to create autonomous systems, or those that are "somewhat autonomous" (through the use of voting and other mechanisms). It really works like Ethereum contracts. Ethereum contracts are often called smart-contracts even though they don't have to be smart, and they don't have to be [legal] contracts; the Ethereum protocol can't be used to check if that is indeed what they are. Similarly, the DAO framework lets you create DAOs, but they don't have to be distributed, autonomous, or organizations. You can create a fully managed single user system and deploy it on an offline block-chain node, nothing in this framework will prevent you from doing that, but if you want to create a DAO you can do that too.
 
 #### Avoiding complexity
 
-The DAO framework has a clear separation between its different components. The `dao-core` library, for example, requires only two contracts to be deployed (Doug, Permissions) - because that's all it needs.
+The DAO framework has a clear separation between its different components. The `dao-core` library, for example, requires only two contracts to be deployed, Doug and Permission, because that's all it needs.
 
-This I believe encourages developers to write modular code, like they would in any other language.
+This I believe encourages developers (including myself) to write modular code, like they would in any other language.
 
 #### A note on public and private chains
 

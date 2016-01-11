@@ -2,12 +2,10 @@
 
 ## Table of Content
 
-1. Overview
-2. Getting started
-3. Ðevelopment
-4. Ðesign philosophy
-
-This section contains a more detailed description, for developers.
+1. [Overview](#overview)
+2. [Getting started](#getting-started)
+3. [Ðevelopment](#develop)
+4. [Ðesign philosophy](#design)
 
 ## Overview
 
@@ -74,12 +72,14 @@ There are three main types of access in this system:
 
 TODO
 
+<a name="develop"></a>
 ## Ðevelopment
 
 This section contains a more detailed description, for developers.
 
 TODO
 
+<a name="design"></a>
 ## Ðesign philosophy
 
 The purpose of the dao-core is to provide a solid base for advanced systems of Ethereum contracts. The goal is to make the system:

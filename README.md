@@ -41,10 +41,13 @@ You need [why3](http://why3.lri.fr/) (latest release).
 
 This is not required for normal usage.
 
-## DAO Components
+## Components
 
 - [dao-core](https://github.com/smartcontractproduction/dao-core)
-- dao-databases
+
+#### Utilities
+
+- [dao-collections](https://github.com/smartcontractproduction/dao-collections)
 
 **dao-core**
 

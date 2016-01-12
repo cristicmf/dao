@@ -46,7 +46,7 @@ contract Coin {
 }
 ```
 
-This contract has all the basic functionality needed for a subcurrency contract, but it is not fit for the dao framework. We need to separate it into a database and an actions contract. The reasons will become clear later.
+This contract has all the basic functionality needed for a subcurrency contract, but it is not fit for the dao framework. We need to separate it into a database and an actions contract.
 
 ### Step 1
 
@@ -175,7 +175,7 @@ We have now lifted the `minter` mechanics out of the database contract and put i
 
 The database contract only has a simple mapping in it, but in a real system we would probably want a more advanced collection, so there would be a lot more code in there (or it would delegate some of that functionality to a library contract).
 
-Note that the actions contract takes the coin database contract address as a constructor argument. We will look at a number of different ways of doing this in the advanced tutorial.
+Note that the actions contract takes the coin database contract address as a constructor argument. We will look at a number of different ways of doing this in another tutorial.
 
 ### Step 3
 

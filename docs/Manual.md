@@ -69,7 +69,7 @@ NOTE: It is quite limited, and will hopefully be replaced with a more standardiz
 
 ## Getting Started
 
-TODO when new 
+TODO (when new imports are in place)
 
 #### Next steps
 

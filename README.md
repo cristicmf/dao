@@ -53,11 +53,9 @@ This is not required for normal usage.
 
 The [dao-core](https://github.com/smartcontractproduction/dao-core) library contains the core components of the system - Doug and Permission. Everything but the dao-core is optional.
 
-**dao-databases**
+**dao-collections**
 
-NOTE: Not yet uploaded. Some cleanup left.
-
-The dao-databases component has a number of database contracts ready to be used.
+A number of collections such as maps, multi-maps and sets.
 
 ## DAO framework?
 

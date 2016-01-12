@@ -15,7 +15,33 @@ The repo only has the Solidity contracts at this point, but will have scripts fo
 The best way to get started is the [Getting Started](./docs/Manual.md#getting-started) section of the
 [User Manual](./docs/Manual.md).
 
-## Components
+## Dependencies and tools
+
+This is only tested on 64 bit Ubuntu 14.04+
+
+**Test contracts only**
+
+The [Solidity online compiler](https://chriseth.github.io/browser-solidity/) is all you need.
+
+**Deployment and other scripts**
+
+Deployment and other script is done using the official [Ethereum javascript library](https://github.com/ethereum/web3.js) web3.js.
+
+[node.js](https://nodejs.org/en/) and command-line [Gulp](http://gulpjs.com/) is optional.
+
+**Compiling contracts**
+
+You need [solc](https://github.com/ethereum/solidity) on your path (always latest dev).
+
+You do not need this for examples and such.
+
+**Formal proofs**
+
+You need [why3](http://why3.lri.fr/) (latest release).
+
+This is not required for normal usage.
+
+## DAO Components
 
 - [dao-core](https://github.com/smartcontractproduction/dao-core)
 - dao-databases

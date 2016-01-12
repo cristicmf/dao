@@ -6,7 +6,7 @@ This is the conventions used in these libraries.
 
 ### Code
 
-* All names are camelcased. Functions and variables start with a lower case letter, structs, contracts and libraries with an upper case letter. `uint radius`, `int64 xCoord`, `function addInts(int numOne, numTwo)`, `struct Map`, `contract Coin`, `library StringUtils`. The exception is constant variables which written in all-caps, separated by floors, e.g. `MAX_VALUE`, `RESOURCE_NOT_FOUND`. 
+* All names are camelcased. Functions and variables start with a lower case letter, structs, contracts and libraries with an upper case letter. `uint radius`, `int64 xCoord`, `function addInts(int numOne, numTwo)`, `struct Map`, `contract Coin`, `library StringUtils`. The exception is constant variables which written in all-caps, separated by floors, e.g. `MAX_VALUE`, `RESOURCE_NOT_FOUND`.
 
 * The `get` in accessor functions is omitted, e.g. `owner()`, not `getOwner()`.
 

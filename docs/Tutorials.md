@@ -30,18 +30,19 @@ contract Coin {
     function Coin() {
         minter = msg.sender;
     }
-    
+
     function mint(address receiver, uint amount) {
         if (msg.sender != minter) return;
         balances[receiver] += amount;
     }
-    
+
     function send(address receiver, uint amount) {
         if (balances[msg.sender] < amount) return;
         balances[msg.sender] -= amount;
         balances[receiver] += amount;
         Sent(msg.sender, receiver, amount);
     }
+
 }
 ```
 
@@ -75,7 +76,7 @@ contract CoinActions is DefaultDougEnabled, Errors {
     address _minter;
     mapping (address => uint) _balances;
 
-    function Coin(address minter) {
+    function CoinActions(address minter) {
         _minter = minter;
     }
     
@@ -98,7 +99,7 @@ contract CoinActions is DefaultDougEnabled, Errors {
         return _minter;
     }
     
-    function balance(address addr) constant returns (uint balance){
+    function accountBalance(address addr) constant returns (uint balance){
         return _balances[addr];
     }
     
@@ -111,12 +112,9 @@ The next step is to separate permissions logic from the data storage. User permi
 
 ```
 contract CoinDb is Database, Errors {
-
     
     mapping (address => uint) _balances;
 
-    function Coin() {}
-    
     function add(address receiver, uint amount) returns (uint16 error) {
         if(!_checkCaller()){
             return ACCESS_DENIED;
@@ -181,7 +179,7 @@ Note that the actions contract takes the coin database contract address as a con
 
 ### Step 3
 
-We now have to deploy the system and test it. We will do that through the browser compiler, to make it as simple as possible. Also, note that the test contract is now the minter, and the sender in all transfers - not us.
+We now have to deploy the system and test it. We will do that through the browser compiler, to make it as simple as possible. Note that the test contract is now the minter and the sender - not us.
 
 ```
 contract CoinTest {
@@ -218,9 +216,7 @@ What we did here was to set the system up so that we call it from a solidity con
 
 This tutorial builds on the basic tutorial, where we created and deployed a subcurrency using the DAO framework. We are now going to add a user management system that will work together with the currency. Users will no longer be able to just get and transfer money around, but will have to be identified first. 
 
-There are two ways to go about this; one is to add a set of administrators that will vet users off-chain before they are added to the system. It could also be made so that users can register themselves automatically. We will start with the automatic approach.
-
-The way this will work together with the subcurrency contract is that users must be registered in order to send or receive coins. Let's start by adding the user manager database. It allows people to register their account and add a nickname.
+There are two ways to go about this; one is to add a set of administrators that will vet users off-chain before they add them to the system. It could also be made so that users can register themselves automatically. We will start with the automatic approach, and add a simple user manager that lets people register their account along with a (unique) nickname.
 
 ```
 contract UserDb is Database, Errors {
@@ -304,7 +300,7 @@ contract UserActions is DefaultDougEnabled, Errors {
 }
 ```
 
-This module is very basic. It lets actions-contracts register and deregister users. Note that some input validation is done in the actions contract and some in the database. The rule of thumb is that if the validation is done using the data inside the database (such as checking if a user is already in the database), it is best done there.
+This module is very basic. It lets actions-contracts register and deregister users. Note that some input validation is done in the actions contract and some in the database. The rule of thumb is that if the validation requires data from the database (such as checking if a user is already registered), it is best done there.
 
 There are two methods for de-registering users, one that takes no parameter and defaults to `msg.sender`, and another one that takes the address as a param. The second one is for adminstrators who wants to remove users that perhaps has an inappropriate name, or that needs to be removed for some other reason.
 

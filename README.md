@@ -12,8 +12,7 @@ The contracts are written in the [Solidity](http://solidity.readthedocs.org/en/l
 
 The repo only has the Solidity contracts at this point, but will have scripts for automatic deployment later. Solidity imports and the compiler is being upgraded and will get some very nice new features in the coming weeks, and the scripts will make use of those.
 
-The best way to get started is the [Getting Started](./docs/Manual.md#getting-started) section of the
-[User Manual](./docs/Manual.md).
+The best way to get started is reading the [User Manual](./docs/Manual.md).
 
 ## Dependencies and tools
 

@@ -18,21 +18,17 @@ The best way to get started is reading the [User Manual](./docs/Manual.md).
 
 This is only tested on 64 bit Ubuntu 14.04+
 
-**Test contracts only**
+**Contracts only**
 
-The [Solidity online compiler](https://chriseth.github.io/browser-solidity/) is all you need.
+The [Solidity online compiler](https://chriseth.github.io/browser-solidity/) is all you need for experimenting with contracts, or intend to copy some contracts (or parts of them) into an already existing DApp. Most modules have solidity test contracts that are designed to run in the browser compiler.
 
-**Deployment and other scripts**
+**Scripts**
 
-Deployment and other script is done using the official [Ethereum javascript library](https://github.com/ethereum/web3.js) web3.js.
+[node.js](https://nodejs.org/en/) is a requirement for scripts that talks to a running block-chain node. Those scripts are based on the official javascript APIs, such as the [Ethereum web3.js library](https://github.com/ethereum/web3.js). 
 
-[node.js](https://nodejs.org/en/) and command-line [Gulp](http://gulpjs.com/) is optional.
+Command-line [Gulp](http://gulpjs.com/) is optional, but has tasks for building and deploying.
 
-**Compiling contracts**
-
-You need [solc](https://github.com/ethereum/solidity) on your path (always latest dev).
-
-You do not need this for examples and such.
+You need [solc](https://github.com/ethereum/solidity) on your path to compile locally (always latest dev). You also need `GNU make` (for now).
 
 **Formal proofs**
 
@@ -50,7 +46,7 @@ This is not required for normal usage.
 
 **dao-core**
 
-The [dao-core](https://github.com/smartcontractproduction/dao-core) library contains the core components of the system - Doug and Permission. Everything but the dao-core is optional.
+The [dao-core](https://github.com/smartcontractproduction/dao-core) library contains the core components of the system - Doug and Permission.
 
 **dao-collections**
 

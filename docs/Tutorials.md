@@ -56,11 +56,11 @@ We will make a few modifications first.
 
 - The event is not needed for this example, so it will be removed. 
 
-- We will remove the public modifier from `minter` and write the accessor function ourselves so that we can document it and name the return value. Also, sticking to the coding conventions, we will put a `_` in front of the variable name since it's not public. This helps us avoid name collisions with functions, and signals to other ÐApp Ðevs that they should never access the variable directly. 
+- Sticking to the coding conventions we will remove the public modifier from `minter` and write the accessor function ourselves so that we can document it and name the return value. We will also put a `_` in front of the variable name since it's not public. This helps us avoid name collisions with functions, and signals to other ÐApp Ðevs that they should never access the variable directly. 
 
 - We will do the same thing as above with the `balances` field.
 
-- We will add return values to all functions, so that callers knows what's going on. These are standard errors so the errors in dao-core's `Errors.sol` will do.
+- We will add return values to all functions, so that callers knows what's going on. These are standard errors so the errors in dao-core's `Errors.sol` will do. NOTE: Ethereum itself does not support return values from transactions yet, but others (like Tendermint) do, and it's planned for Ethereum as well.
 
 - We will make the minter address a constructor argument instead of automatically assigning `msg.sender`.
 
@@ -108,7 +108,7 @@ contract CoinActions is DefaultDougEnabled, Errors {
 
 ### Step 2
 
-The next step is to separate permissions logic from the data storage. User permission checks in the DAO framework are always done in actions contracts.
+The next step is to separate logic from data storage. User permission checks in the DAO framework are always done in actions contracts.
 
 ```
 contract CoinDb is Database, Errors {
@@ -182,9 +182,21 @@ Note that the actions contract takes the coin database contract address as a con
 We now have to deploy the system and test it. We will do that through the browser compiler, to make it as simple as possible. Note that the test contract is now the minter and the sender - not us.
 
 ```
+contract UserProxy {
+
+    function mint(address doug, address receiver, uint amount) returns (uint16 error){
+        error = CoinActions(doug.actionsContractAddress("minted_coin")).mint(receiver,amount);
+    }
+    
+    function send(address doug, address receiver, uint amount) returns (uint16 error){
+        error = CoinActions(doug.actionsContractAddress("minted_coin")).send(receiver,amount);
+    }
+}
+
 contract CoinTest {
     
     Doug _doug;
+    UserProxy _user;
     
     function CoinTest(){
         _doug = new DefaultDoug(new DefaultPermission(address(this)), false);
@@ -192,19 +204,35 @@ contract CoinTest {
         _doug.addDatabaseContract("coin", cdb);
         var ca = new CoinActions(cdb, this);
         _doug.addActionsContract("minted_coin", ca);
+        _user = new UserProxy();
     }
     
-    function mint(address receiver, uint amount) returns (bool){
-        var err = CoinActions(_doug.actionsContractAddress("minted_coin")).mint(receiver,amount);
-        return err == 0;
+    function mint(address receiver, uint amount) returns (uint16){
+        return CoinActions(_doug.actionsContractAddress("minted_coin")).mint(receiver,amount);
     }
     
     function send(address receiver, uint amount) returns (bool){
-         var err = CoinActions(_doug.actionsContractAddress("minted_coin")).send(receiver,amount);
+         return CoinActions(_doug.actionsContractAddress("minted_coin")).send(receiver,amount);
+    }
+    
+    function mintAsProxy(address receiver, uint amount) returns (uint16){
+        return _proxy.mint(_doug, receiver, amount);
+    }
+    
+    function send(address receiver, uint amount) returns (uint16){
+         return _proxy.mint(_doug, receiver, amount);
     }
     
     function balance(address addr) constant returns (uint) {
         return CoinDb(_doug.databaseContractAddress("coin")).accountBalance(addr);
+    }
+    
+    function myAddress() constant returns (address){
+        return address(this);
+    }
+        
+    function proxyAddress() constant returns (address){
+        return address(_proxy);
     }
     
 }
@@ -212,9 +240,15 @@ contract CoinTest {
 
 What we did here was to set the system up so that we call it from a solidity contract. This is just to make testing simpler. In a normal system, this would be done from a custom web-page or a server (through RPC calls to the ethereum client).
 
+You may run this yourself by clicking this link: https://chriseth.github.io/browser-solidity/?gist=https://gist.github.com/anonymous/55740f9702fbf082c5a3
+
+WARNING: It will take a while to load the page and compile.
+
+After loaded, find `CoinTest` in the menu to the right, click `create`, and then play around with the methods.
+
 ## Advanced Tutorial
 
-This tutorial builds on the basic tutorial, where we created and deployed a subcurrency using the DAO framework. We are now going to add a user management system that will work together with the currency. Users will no longer be able to just get and transfer money around, but will have to be identified first. 
+This tutorial builds on the basic tutorial, where we created and deployed a sub-currency using the DAO framework. We are now going to add a user management system that will work together with the currency. Users will no longer be able to just get and transfer money around, but will have to be identified first. 
 
 There are two ways to go about this; one is to add a set of administrators that will vet users off-chain before they add them to the system. It could also be made so that users can register themselves automatically. We will start with the automatic approach, and add a simple user manager that lets people register their account along with a (unique) nickname.
 
@@ -310,7 +344,7 @@ Notice that there is an existence check for a pair of users. The reason is becau
 
 Next we're going to modify the old coin actions contract. It will now check if the caller is a registered user before letting them send or receive coins. Good thing the coin actions contract is separate from the database, or we would have had to replace the entire system; now we only have to fix the actions contract and re-deploy.
 
-contract NewCoinActions is DefaultDougEnabled, Errors {
+contract CoinActions is DefaultDougEnabled, Errors {
     
     address _minter;
     
@@ -344,12 +378,18 @@ contract NewCoinActions is DefaultDougEnabled, Errors {
     function minter() constant returns (address minter){
         return _minter;
     }
-        
+    
 }
 
-The subcurrency module now depends on the user module, because it calls on the user database to do checks before any coins can be minted or transferred. Note that the minter does not have to be a user, so the user check in the mint method needs to take that into account (hence the first condition).
+The sub-currency module now depends on the user module, because it calls on the user database to do checks before any coins can be minted or transferred.
 
-### Step 3
+![2Modules](./images/2modules.png)
+
+Note that the minter does not have to be a user, so the user check in the mint method needs to take that into account (hence the first condition).
+
+It would now be possible to deploy this just as any other contracts.
+
+### Step 3 (optional)
 
 Before we go on to test this, we will consider the performance impact of this setup. Let's start by analyzing the call-chain when someone invokes 'send'. It would look like this.
 
@@ -368,8 +408,52 @@ This is a good example of why the separation is important. Not having it could l
 
 A better solution could be to allow bulk operations (through arrays), like checking X users, and doing X sends at once. The memory used for that is cheap, and would make sends cost less on average.
 
-### Step 4
+## Actions and Database Linking
 
-Keeping the system as it is for now, this is what we end up with as a testing contract:
+There are several ways in which actions contracts and database contracts can be linked. In the basic and advanced tutorials they are linked by passing the address to the database in the constructor of the actions contract.
 
-TODO
+```
+function CoinActions(address coinDb, address minter){
+        _cdb = CoinDb(coinDb);
+        _minter = minter;
+    }
+```
+
+Calls to the database are done using the `_cdb` variable.
+
+```
+function send(address receiver, uint amount) returns (uint16 error) {
+    return _cdb.send(msg.sender, receiver, amount);
+}
+```
+
+This is fast and simple, but there is a problem. What if we want to replace the database? In that case we will have to add a method to the actions contract that allow us to change the database address, and remember to do that when we add a new database.
+
+The setter will have to use permissions as well. One way of doing it would be to allow anyone with the Doug permission to do it.
+ 
+```
+function setCoinDb(address newCoinDb) returns (uint16 error) {
+    var perm = Permission(_DOUG.permissionAddress());
+    if(!perm.hasPermission(msg.sender)){
+        return ACCESS_DENIED;
+    }
+    _cdb = CoinDb(newCoinDb);
+    return NO_ERROR;
+}
+```
+
+Another alternative is to fetch the current database in every call through Doug. All contracts in the system has a reference to Doug, which makes it possible to check the contract registries and permission root/owners. 
+
+```
+function mint(address receiver, uint amount) returns (uint16 error) {
+    if (msg.sender != _minter) {
+        return ACCESS_DENIED;
+    }
+    var coinDb = CoinDb(_DOUG.databaseContractAddress("minted_coin"));
+    return coinDb.add(receiver, amount);
+}
+```
+
+This means we can be sure it will always use the latest database, and that we don't have to update manually when changing it. The drawback is that this requires both an additional contract call + Doug has to reach into its iterable map to check, so it adds a small gas overhead to each call. It also can cause issues if the name of the database changes.
+ 
+ Finally, replacing databases should not happen very often. That is one of the main reasons for using database contracts to begin with. It's far more likely that an actions contract would change, since they have all of the application specific logic, but the same principle would apply there (i.e. actions calling other actions).

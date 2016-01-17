@@ -9,7 +9,7 @@
 
 ## Overview
 
-![DaoCore](./dao-core.png)
+![DaoCore](./images/dao-core.png)
 
 The DAO framework uses three main classes of contracts: Libraries, Databases and Actions.
 
@@ -37,7 +37,7 @@ There are three main types of access in this system:
 
 ### Core contracts
 
-These are the most important contracts in the core library (dao-core).
+The core contracts of the framework are in the [core module](https://github.com/smartcontractproduction/dao-core).
 
 #### Doug
 
@@ -59,21 +59,20 @@ The permission contract is used to control access to Doug functionality, such as
 
 #### Database
 
-`Database` is a contract that extends `DefaultDougEnabled` and adds an internal method for checking if the calling contract is registered as a Doug actions contract. It can be extended by contracts that are registered as databases in the system.
+`Database` is a contract that extends `DefaultDougEnabled` and adds an internal method for checking if the calling contract is registered as a Doug actions contract. It is not required, but is slightly more convenient then writing that check alone. It can be extended by contracts that are registered as databases in the system.
 
 #### Errors
 
 Errors is a contract with a number of error names and codes that is used in 'dao-core` functions (and its other modules).
 
-NOTE: It is quite limited, and will hopefully be replaced with a more standardized one later. Also, it will be changed when constant variables can be declared outside of contracts, so that the contract doesn't have to be extended.
+NOTE: The Errors contract is quite limited and will hopefully be replaced with a more standardized one. Also, it will be changed when constant variables can be declared outside of contracts, so that the contract does not have to be extended.
 
 ## Getting Started
 
-TODO (when new imports are in place)
+The easiest way to get started is by looking at the contracts in  [dao-core](https://github.com/smartcontractproduction/dao-core) and running the tests. After that, the contracts can be deployed to a running Ethereum node using the deployment script in `scripts/ethereum` if needed.
 
-#### Next steps
 
-The next step is to go through some of the [tutorials](https://github.com/smartcontractproduction/dao/blob/master/docs/Tutorials.md).
+The next step is to go through some of the [tutorials](https://github.com/smartcontractproduction/dao/blob/master/docs/Tutorials.md). There you will learn how to write and add your own contracts and integrate them with the framework.
 
 <a name="develop"></a>
 ## Ðevelopment
@@ -100,7 +99,7 @@ Striking a good balance can be difficult, as it is in all types of programs. It 
 
 Gas is used to pay for both processing power and database storage on the public Ethereum chain, because every full node has to execute all transactions, and store all the data. The gas cost for each VM instruction can be found in the table on page 20 of the [Ethereum Yellow Paper](http://gavwood.com/paper.pdf).
 
-It's worth noting that as of 2016-01-10, simple operations (push to stack, add, multiply, etc.) costs 1 single gas, but writing one word (up to 32 bytes of data) costs 20000. This means contract optimization can be summed up by two words - **AVOID STORAGE**. Things you can do is to avoid collections that requires extra data per element, instantiating new contracts, and if a function stores user data it should normally be careful with un-bounded strings and arrays.
+It's worth noting that as of 2016-01-10, simple operations can cost 1 or a few gas, but writing one word (up to 32 bytes of data) costs 20000. This means contract optimization can be summed up by two words - **AVOID STORAGE**. Things you can do is to avoid collections that requires extra data per element, instantiating new contracts, and if a function stores user data it should normally be careful with un-bounded strings and arrays.
 
 **Contract calling**
 
@@ -108,11 +107,11 @@ Contracts that has been added to the Ethereum chain can be transacted to by anyo
  
 
 ``` javascript
-contract SelfDestructible {
+contract Destructible {
     
     address _owner;
     
-    function SelfDestructible(address owner) {
+    function Destructible(address owner) {
         _owner = owner;
     }
     
@@ -122,9 +121,9 @@ contract SelfDestructible {
     
 }
 
-contract IncrediblyUseful is SelfDestructible {
+contract IncrediblyUseful is Destructible {
     
-    function IncrediblyUseful() SelfDestructible(msg.sender) {}
+    function IncrediblyUseful() Destructible(msg.sender) {}
     
 }
 ```

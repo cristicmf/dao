@@ -10,8 +10,6 @@ The contracts are written in the [Solidity](http://solidity.readthedocs.org/en/l
 
 ## Getting started
 
-The repo only has the Solidity contracts at this point, but will have scripts for automatic deployment later. Solidity imports and the compiler is being upgraded and will get some very nice new features in the coming weeks, and the scripts will make use of those.
-
 The best way to get started is reading the [User Manual](./docs/Manual.md).
 
 ## Dependencies and tools
@@ -20,7 +18,7 @@ This is only tested on 64 bit Ubuntu 14.04+
 
 **Contracts only**
 
-The [Solidity online compiler](https://chriseth.github.io/browser-solidity/) is all you need for experimenting with contracts, or intend to copy some contracts (or parts of them) into an already existing DApp. Most modules have solidity test contracts that are designed to run in the browser compiler.
+The [Solidity online compiler](https://chriseth.github.io/browser-solidity/) is all you need for experimenting with contracts, or intend to copy some contracts (or parts of them) into an already existing DApp.
 
 **Scripts**
 
@@ -28,7 +26,9 @@ The [Solidity online compiler](https://chriseth.github.io/browser-solidity/) is 
 
 Command-line [Gulp](http://gulpjs.com/) is optional, but has tasks for building and deploying.
 
-You need [solc](https://github.com/ethereum/solidity) on your path to compile locally (always latest dev). You also need `GNU make` (for now).
+You need [solc](https://github.com/ethereum/solidity) on your path to compile locally (always latest dev). You also need `GNU make` (for now). 
+
+The modules normally includes pre-built contract code, so building is not required.
 
 **Formal proofs**
 
@@ -54,7 +54,7 @@ A number of collections such as maps, multi-maps and sets.
 
 ## DAO framework?
 
-Yes, this is a framework for DAOs (Decentralized Autonomous Organizations), although one could argue that it is not, because if there are administrator accounts then the organization is not really autonomous. This is correct, but it is *possible* to create autonomous systems, or those that are "somewhat autonomous" (through the use of voting and other mechanisms). 
+Yes, this is a framework for DAOs (Decentralized Autonomous Organizations), although one could argue that it is not, because if there are administrator accounts then the organization is not really autonomous. This is correct, but it is *possible* to create autonomous systems, or those that are "somewhat autonomous" (through the use of voting and other mechanisms).
 
 It really works like Ethereum contracts. Ethereum contracts are often called smart-contracts even though they don't have to be smart, and they don't have to be [legal] contracts; the Ethereum protocol can't be used to check if that is indeed what they are. Similarly, the DAO framework lets you create DAOs, but they don't have to be distributed, autonomous, or organizations. You can create a fully managed single user system and deploy it on an offline block-chain node, nothing in this framework will prevent you from doing that, but if you want to create a DAO you can do that too.
 

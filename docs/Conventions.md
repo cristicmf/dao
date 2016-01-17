@@ -36,10 +36,8 @@ These rules are not followed religiously.
 
 #### Testing
 
-* Test-contracts ends with Test, e.g. `DougTest`, `AddressSetTest`.
-
-* Test functions return a number of booleans which are test results. For a test to be succesful, all return values must be true.
+* Test-contracts are [sol-unit](https://github.com/smartcontractproduction/sol-unit) compatible. 
 
 ### Files
 
-* Solidity files are named after the main contract in the file, e.g. if the main contract is `Doug` then the file is name is `Doug.sol`.
+* Solidity files are named after the main contract in the file, e.g. if the main contract is `DefaultDoug` then the file is name is `DefaultDoug.sol`.

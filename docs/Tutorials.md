@@ -7,7 +7,7 @@
 
 **Specific**
 
-- Actions and Database Linking
+- [Actions and Database Linking](#actions-and-database-linking)
 
 ## Basic Tutorial
 
@@ -81,18 +81,18 @@ contract CoinActions is DefaultDougEnabled, Errors {
     }
     
     function mint(address receiver, uint amount) returns (uint16 error) {
-        if (msg.sender != minter) {
+        if (msg.sender != _minter) {
             return ACCESS_DENIED;
         }
-        balances[receiver] += amount;
+        _balances[receiver] += amount;
     }
     
     function send(address receiver, uint amount) returns (uint16 error) {
-        if (balances[msg.sender] < amount) {
+        if (_balances[msg.sender] < amount) {
             return INSUFFICIENT_SENDER_BALANCE;
         }
-        balances[msg.sender] -= amount;
-        balances[receiver] += amount;
+        _balances[msg.sender] -= amount;
+        _balances[receiver] += amount;
     }
     
     function minter() constant returns (address minter){
@@ -111,6 +111,7 @@ contract CoinActions is DefaultDougEnabled, Errors {
 The next step is to separate logic from data storage. User permission checks in the DAO framework are always done in actions contracts.
 
 ```
+
 contract CoinDb is Database, Errors {
     
     mapping (address => uint) _balances;
@@ -137,8 +138,9 @@ contract CoinDb is Database, Errors {
         return _balances[addr];
     }
     
+    function destroy(address fundReceiver){}
+    
 }
-
 ```
 
 ```
@@ -167,7 +169,9 @@ contract CoinActions is DefaultDougEnabled, Errors {
     function minter() constant returns (address minter){
         return _minter;
     }
-        
+    
+    function destroy(address fundReceiver){}
+    
 }
 ```
 
@@ -184,47 +188,47 @@ We now have to deploy the system and test it. We will do that through the browse
 ```
 contract UserProxy {
 
-    function mint(address doug, address receiver, uint amount) returns (uint16 error){
-        error = CoinActions(doug.actionsContractAddress("minted_coin")).mint(receiver,amount);
+    function mint(address coinActions, address receiver, uint amount) returns (uint16 error){
+        error = CoinActions(coinActions).mint(receiver,amount);
     }
     
-    function send(address doug, address receiver, uint amount) returns (uint16 error){
-        error = CoinActions(doug.actionsContractAddress("minted_coin")).send(receiver,amount);
+    function send(address coinActions, address receiver, uint amount) returns (uint16 error){
+        error = CoinActions(coinActions).send(receiver,amount);
     }
 }
 
 contract CoinTest {
     
     Doug _doug;
-    UserProxy _user;
+    UserProxy _proxy;
     
     function CoinTest(){
-        _doug = new DefaultDoug(new DefaultPermission(address(this)), false);
+        _doug = new DefaultDoug(new DefaultPermission(address(this)), false, false);
         var cdb = new CoinDb();
-        _doug.addDatabaseContract("coin", cdb);
+        _doug.addDatabaseContract("minted_coin", cdb);
         var ca = new CoinActions(cdb, this);
         _doug.addActionsContract("minted_coin", ca);
-        _user = new UserProxy();
+        _proxy = new UserProxy();
     }
     
     function mint(address receiver, uint amount) returns (uint16){
         return CoinActions(_doug.actionsContractAddress("minted_coin")).mint(receiver,amount);
     }
     
-    function send(address receiver, uint amount) returns (bool){
+    function send(address receiver, uint amount) returns (uint16){
          return CoinActions(_doug.actionsContractAddress("minted_coin")).send(receiver,amount);
     }
     
     function mintAsProxy(address receiver, uint amount) returns (uint16){
-        return _proxy.mint(_doug, receiver, amount);
+        return _proxy.mint(_doug.actionsContractAddress("minted_coin"), receiver, amount);
     }
     
-    function send(address receiver, uint amount) returns (uint16){
-         return _proxy.mint(_doug, receiver, amount);
+    function sendAsProxy(address receiver, uint amount) returns (uint16){
+         return _proxy.send(_doug.actionsContractAddress("minted_coin"), receiver, amount);
     }
     
     function balance(address addr) constant returns (uint) {
-        return CoinDb(_doug.databaseContractAddress("coin")).accountBalance(addr);
+        return CoinDb(_doug.databaseContractAddress("minted_coin")).accountBalance(addr);
     }
     
     function myAddress() constant returns (address){

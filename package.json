@@ -1,0 +1,24 @@
+{
+  "name": "dao-framework",
+  "version": "0.1.0",
+  "description": "dao-core",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smartcontractproduction/dao.git"
+  },
+  "author": "Andreas Olofsson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/smartcontractproduction/dao/issues"
+  },
+  "homepage": "https://github.com/smartcontractproduction/dao#readme",
+  "dependencies": {
+    "async": "^1.5.2",
+    "fs-extra": "^0.26.4",
+    "web3": "^0.15.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "sol-unit": "^0.4.1"
+  }
+}

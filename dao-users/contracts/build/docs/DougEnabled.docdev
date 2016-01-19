@@ -1,0 +1,20 @@
+{
+   "author" : "Andreas Olofsson (andolo1980@gmail.com)",
+   "methods" : {
+      "destroy(address)" : {
+         "details" : "Destroy a contract. No return values since it's a destruction."
+      },
+      "dougAddress()" : {
+         "details" : "Get the address of the Doug contract.",
+         "return" : "dougAddress (address) the doug address."
+      },
+      "setDougAddress(address)" : {
+         "details" : "Set the address of the Doug contract.",
+         "params" : {
+            "dougAddr" : "(address) the address"
+         },
+         "return" : "added (bool) true means the address was added successfully (doug implementations should normally not register a contract that returns false."
+      }
+   },
+   "title" : "DougEnabled"
+}

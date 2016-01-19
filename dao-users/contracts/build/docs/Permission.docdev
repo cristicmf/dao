@@ -1,0 +1,60 @@
+{
+   "author" : "Andreas Olofsson (androlo1980@gmail.com)",
+   "methods" : {
+      "addOwner(address)" : {
+         "details" : "Add a new owner. Can only be done as root.",
+         "params" : {
+            "addr" : "(address) the address of the new owner"
+         },
+         "return" : "error (uint16) error code"
+      },
+      "hasPermission(address)" : {
+         "details" : "Check if an address has this permission.",
+         "params" : {
+            "addr" : "(address) the address"
+         },
+         "return" : "hasPerm (bool) true if the address is either root or an owner, false otherwise."
+      },
+      "numOwners()" : {
+         "details" : "Get the total number of owners.",
+         "return" : "numOwners (uint) the number of owners"
+      },
+      "ownerFromIndex(uint256)" : {
+         "details" : "Get the owner with position 'index' in the backing array.",
+         "params" : {
+            "index" : "(uint) the index."
+         },
+         "return" : "owner (address) the owner addresstimestamp (uint) the time when the owner was addederror (uint16) error code"
+      },
+      "ownerTimestamp(address)" : {
+         "details" : "Get the time when the owner was added.",
+         "params" : {
+            "addr" : "(address) the owner address"
+         },
+         "return" : "timestamp (uint) the time when the owner was addederror (uint16) error code"
+      },
+      "removeOwner(address)" : {
+         "details" : "Remove an owner. Can only be done as root and the owner in question.",
+         "params" : {
+            "addr" : "(address) the address of the owner"
+         },
+         "return" : "error (uint16) error code"
+      },
+      "root()" : {
+         "details" : "Get the root address.",
+         "return" : "root (address) the address of root."
+      },
+      "rootData()" : {
+         "details" : "Get the address of root, and the time they were created.",
+         "return" : "root (address) the addresstimeRootAdded (uint) the time when root was added."
+      },
+      "setRoot(address)" : {
+         "details" : "Set the address of root.",
+         "params" : {
+            "newRoot" : "(address) the address"
+         },
+         "return" : "error (uint16) error code"
+      }
+   },
+   "title" : "Permission"
+}

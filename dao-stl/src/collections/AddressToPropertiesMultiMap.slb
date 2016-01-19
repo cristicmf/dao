@@ -1,0 +1,275 @@
+/// @title AddressToPropertiesMultiMap
+/// @author Andreas Olofsson (androlo1980@gmail.com)
+/// @dev AddressToPropertiesMultiMap is a an iterable map with (address, PropertySet.Set) entries.
+/// O(1) insert, find, and remove.
+/// The size of the map is defined as the total number of key-value pairs.
+/// Order of insertion is not preserved.
+/// PropertySet included in contract.
+library AddressToPropertiesMultiMap {
+
+    struct Element {
+        uint _keyIndex;
+        Set _set;
+    }
+
+    struct Map
+    {
+        mapping(address => Element) _data;
+        address[] _keys;
+        uint _size;
+    }
+
+    struct SElement {
+        uint _valIndex;
+        bool _exists;
+    }
+
+    struct Set
+    {
+        mapping(bytes32 => SElement) _data;
+        bytes32[] _values;
+    }
+
+    /// @notice AddressToPropertiesMultiMap.insert(map, key, value) to insert a (key,value) pair.
+    /// @dev Insert new (key,value) pairs.
+    /// @param map (AddressToPropertiesMultiMap.Map) storage reference to the multimap.
+    /// @param key (address) the key
+    /// @param value (bytes32) the value (property)
+    /// @return added (bool) true if the pair was added, false if not (meaning the pair already exists).
+    function insert(Map storage map, address key, bytes32 value) returns (bool added)
+    {
+        var elem = map._data[key];
+        var vSet = elem._set;
+
+        // Add
+        added = _insert(vSet, value);
+        // If value already exists, break.
+        if(!added){
+            return;
+        }
+        // If the key did not have any mappings before, add it.
+        if(vSet._values.length == 1){
+            var keyIndex = map._keys.length++;
+            map._keys[keyIndex] = key;
+        }
+        map._size++;
+        return;
+    }
+
+    /// @notice AddressToPropertiesMultiMap.remove(map, key, value) to remove a (key,value) pair.
+    /// @dev Remove (key,value) pairs.
+    /// @param map (AddressToPropertiesMultiMap.Map) storage reference to the multimap.
+    /// @param key (address) the key
+    /// @param value (bytes32) the value (property)
+    /// @return added (bool) true if the pair was removed, false if not (meaning the pair could not be found).
+    function remove(Map storage map, address key, bytes32 value) returns (bool removed)
+    {
+        var elem = map._data[key];
+        var vSet = elem._set;
+        // Remove
+        removed = _remove(vSet, value);
+        // If value was not found for the given key, break.
+        if(!removed){
+            return false;
+        }
+        // If this removes the last mapping with 'key' in it, remove the key entirely.
+        if(vSet._values.length == 0){
+            var keyIndex = elem._keyIndex;
+            delete map._data[key];
+            var len = map._keys.length;
+            if(keyIndex != len - 1){
+                var swap = map._keys[len - 1];
+                map._keys[keyIndex] = swap;
+                map._data[swap]._keyIndex = keyIndex;
+            }
+            map._keys.length--;
+        }
+        map._size--;
+        return;
+    }
+
+    /// @notice AddressToPropertiesMultiMap.removeKey(map, key) to remove all mappings from a given key.
+    /// @dev Remove all mappings from a given key.
+    /// @param map (AddressToPropertiesMultiMap.Map) storage reference to the multimap.
+    /// @param key (address) the key.
+    /// @return removed (uint) number of mappings that was removed.
+    function removeKey(Map storage map, address key) returns (uint removed)
+    {
+        var elem = map._data[key];
+        var vSet = elem._set;
+
+        // Remove
+        removed = _removeAll(vSet);
+
+        // If key had no values, break.
+        if(removed == 0){
+            return;
+        }
+
+        var keyIndex = elem._keyIndex;
+        delete map._data[key];
+        var len = map._keys.length;
+        if(keyIndex != len - 1){
+            var swap = map._keys[len - 1];
+            map._keys[keyIndex] = swap;
+            map._data[swap]._keyIndex = keyIndex;
+        }
+        map._keys.length--;
+
+        map._size -= removed;
+        return;
+    }
+
+    /// @notice AddressToPropertiesMultiMap.removeAll(map) to remove all mappings.
+    /// @dev Remove all mappings.
+    /// @param map (AddressToPropertiesMultiMap.Map) storage reference to the multimap.
+    /// @return pairsRemoved (uint) number of mappings that was removed.
+    function removeAll(Map storage map) returns (uint numRemoved){
+        var l = map._keys.length;
+        if(l == 0){
+            return 0;
+        }
+
+        for(uint i = 0; i < l; i++){
+            var key = map._keys[i];
+            _removeAll(map._data[key]._set);
+            delete map._data[key];
+        }
+
+        delete map._keys;
+        map._size = 0;
+        return l;
+    }
+
+    /// @notice AddressToPropertiesMultiMap.hasKey(map, key) to check if a key exists.
+    /// @dev Check if a key exists.
+    /// @param map (AddressToPropertiesMultiMap.Map) storage reference to the multimap.
+    /// @param key (address) the key.
+    /// @return has (bool) true if the key was found, false otherwise.
+    function hasKey(Map storage map, address key) constant returns (bool has){
+        return map._data[key]._set._values.length != 0;
+    }
+
+    /// @notice AddressToPropertiesMultiMap.hasMapping(map, key) to check if a (key, value) pair exists.
+    /// @dev Check if a (key, value) pair exists.
+    /// @param map (AddressToPropertiesMultiMap.Map) storage reference to the multimap.
+    /// @param key (address) the key.
+    /// @param value (bytes32) the value.
+    /// @return has (bool) true if the pair was found, false otherwise.
+    function hasMapping(Map storage map, address key, bytes32 value) constant returns (bool has){
+        return _hasValue(map._data[key]._set, value);
+    }
+
+    /// @notice AddressToPropertiesMultiMap.keyFromIndex(map, index) to get a key based on its index.
+    /// @dev Get a key based on its index.
+    /// @param map (AddressToPropertiesMultiMap.Map) storage reference to the multimap.
+    /// @param index (uint) the index.
+    /// @return key (address) The key.
+    /// @return exists (bool) true if the key exists, false if not (needed to resolve index=0 ambiguity).
+    function keyFromIndex(Map storage map, uint index) constant returns (address key, bool exists){
+        if(index >= map._keys.length){
+            return;
+        }
+        key = map._keys[index];
+        exists = true;
+        return;
+    }
+
+    /// @notice AddressToPropertiesMultiMap.numKeyMappings(map, key) to get the number of values mapped to a key.
+    /// @dev Get the number of values mapped to a key.
+    /// @param map (AddressToPropertiesMultiMap.Map) storage reference to the multimap.
+    /// @param key (address) the key.
+    /// @return numKeys (uint) The number of values.
+    function numKeyMappings(Map storage map, address key) constant returns (uint numValues){
+        return map._data[key]._set._values.length;
+    }
+
+    /// @notice AddressToPropertiesMultiMap.valueFromKeyAndIndex(map, key, index) to get a value by key and index.
+    /// @dev Get value from key and index.
+    /// @param map (AddressToPropertiesMultiMap.Map) storage reference to the multimap.
+    /// @param key (address) the key.
+    /// @param index (uint) the index.
+    /// @return value (bytes32) the value.
+    /// @return value (exists) true if a value with the given index exists.
+    function valueFromKeyAndIndex(Map storage map, address key, uint index) constant returns (bytes32 value, bool exists){
+        return _valueFromIndex(map._data[key]._set, index);
+    }
+
+    /// @notice AddressToPropertiesMultiMap.size(map) to get the size of the map (total number of mappings).
+    /// @dev Get the size of the map (total number of mappings).
+    /// @param map (AddressToPropertiesMultiMap.Map) storage reference to the multimap.
+    /// @return size (uint) The size.
+    function size(Map storage map) constant returns (uint size){
+        return map._size;
+    }
+
+    /// @notice AddressToPropertiesMultiMap.numKeys(map) to get the number of keys in the map.
+    /// @dev Get the number of keys.
+    /// @param map (AddressToPropertiesMultiMap.Map) storage reference to the multimap.
+    /// @return numKeys (uint) The number of keys.
+    function numKeys(Map storage map) constant returns (uint numKeys){
+        return map._keys.length;
+    }
+
+    // *************************** PropertySet ****************************
+
+    function _insert(Set storage set, bytes32 val) internal returns (bool added)
+    {
+        if (set._data[val]._exists){
+            return false;
+        } else {
+            var valIndex = set._values.length++;
+            set._data[val] = SElement(valIndex, true);
+            set._values[valIndex] = val;
+            return true;
+        }
+    }
+
+    function _remove(Set storage set, bytes32 val) internal returns (bool removed)
+    {
+        var elem = set._data[val];
+        if (!elem._exists){
+            return false;
+        }
+        var valIndex = elem._valIndex;
+        delete set._data[val];
+        var len = set._values.length;
+        if(valIndex != len - 1){
+            var swap = set._values[len - 1];
+            set._values[valIndex] = swap;
+            set._data[swap]._valIndex = valIndex;
+        }
+        set._values.length--;
+        return true;
+    }
+
+    function _removeAll(Set storage set) internal returns (uint numRemoved){
+        var l = set._values.length;
+        if(l == 0){
+            return 0;
+        }
+        for(uint i = 0; i < l; i++){
+            delete set._data[set._values[i]];
+        }
+        delete set._values;
+        return l;
+    }
+
+    function _hasValue(Set storage set, bytes32 val) constant returns (bool has){
+        return set._data[val]._exists;
+    }
+
+    function _valueFromIndex(Set storage set, uint index) internal constant returns (bytes32 value, bool exists){
+        if(index >= set._values.length){
+            return;
+        }
+        value = set._values[index];
+        exists = true;
+        return;
+    }
+
+    function _size(Set storage set) internal constant returns (uint size){
+        return set._values.length;
+    }
+
+}

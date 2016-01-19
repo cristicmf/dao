@@ -6,7 +6,7 @@
 
 - Ethereum is still experimental, and so is this code. Using this on a chain where Ether has real value, or in any form of production environment is **not** recommended.
 
-- The code in `dao-core` and `dao-users` is stable, but again - imports will change. 
+- The code in `dao-core` is stable, but again - imports will change. 
 
 ## Information
 
@@ -42,26 +42,16 @@ These are the different parts of the framework.
 
 **Modules**
 
-- [dao-core]()
-- [dao-users]()
+- [dao-core](https://github.com/smartcontractproduction/dao/blob/master/dao-core/README.md) - core contracts.
+- [dao-users](https://github.com/smartcontractproduction/dao/blob/master/dao-users/README.md) - simple user management.
 
 **Utilities**
 
-- [dao-stl]()
+- [dao-stl](https://github.com/smartcontractproduction/dao/tree/master/dao-stl) - shared, standard contracts.
 
-#### dao-core
+## Testing
 
-The dao-core library contains the core components of the system - Doug and Permission.
-
-#### dao-users
-
-A basic user registry.
-
-#### dao-stl
-
-A library made up of standard contracts that are shared between modules. 
-
-A number of collections such as maps, multi-maps and sets.
+Contract tests are done using [sol-unit](https://github.com/androlo/sol-unit).
 
 ## DAO framework?
 

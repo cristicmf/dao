@@ -43,6 +43,7 @@ contract PropertyToAddressDb {
     }
 }
 
+
 contract PropertyToAddressTest {
 
     address constant TEST_ADDRESS = 0x12345;

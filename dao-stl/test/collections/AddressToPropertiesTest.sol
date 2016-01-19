@@ -51,6 +51,7 @@ contract AddressToPropertiesDb {
     }
 }
 
+
 contract AddressToPropertiesTest {
 
     address constant TEST_ADDRESS = 0x12345;

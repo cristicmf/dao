@@ -51,6 +51,7 @@ contract PropertyToAddressesDb {
     }
 }
 
+
 contract PropertyToAddressesTest {
 
     bytes32 constant TEST_PROPERTY   = 1;

@@ -244,11 +244,7 @@ contract CoinTest {
 
 What we did here was to set the system up so that we call it from a solidity contract. This is just to make testing simpler. In a normal system, this would be done from a custom web-page or a server (through RPC calls to the ethereum client).
 
-You may run this yourself by clicking this link: https://chriseth.github.io/browser-solidity/?gist=https://gist.github.com/anonymous/55740f9702fbf082c5a3
-
-WARNING: It will take a while to load the page and compile.
-
-After loaded, find `CoinTest` in the menu to the right, click `create`, and then play around with the methods.
+You may run this yourself by clicking this [link]( https://chriseth.github.io/browser-solidity/?gist=https://gist.github.com/anonymous/55740f9702fbf082c5a3). After the page has loaded, find `CoinTest` in the menu to the right, click `create`, and then play around with the methods. WARNING: It will take a while to load the page and compile the code.
 
 ## Advanced Tutorial
 

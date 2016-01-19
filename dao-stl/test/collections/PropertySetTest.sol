@@ -31,6 +31,7 @@ contract PropertySetDb {
     }
 }
 
+
 contract PropertySetTest {
 
     bytes32 constant TEST_PROPERTY = 0x12345;

@@ -1,32 +1,53 @@
-# dao-core
+# dao-users
 
-**Status:** Not ready for use. Contracts ETA mid/late january 2016. Will announce.
-
-dao-core is the centerpiece of [DAO](https://github.com/smartcontractproduction/dao) - a light-weight framework for modular systems of [Ethereum](https://ethereum.org/) contracts. New users should start from the DAO repository.
+**Under construction**
 
 ## Installation and Usage
 
-[User manual](https://github.com/smartcontractproduction/dao/blob/master/docs/Manual.md)
-
-node.js is needed to run any the helper scripts.
-
-#### Deployment
-
-Deployment to an Ethereum chain can be done using `dao-core/script/ethereum/deploy.js`.
- 
-There will be more deployment options later.
-
 #### Building/rebuilding of contracts
 
-NOTE: Requires `solc` and `GNU make`.
+NOTE: Requires `solc`.
 
-Either run `make` from `daoc-re/contracts` or `gulp build-contracts`
+Shell script: `$ ./build_contracts.sh dao-users`
 
-## Testing
+Gulp: `$ gulp build-dao-users`
 
-Contract tests are done using [sol-unit](https://github.com/androlo/sol-unit).
+#### Testing
 
-Gulp: `gulp test-contracts` (the `contracts/build/test` folder must be intact)
+From the dao project root:
 
-Command-line tool: `npm install -g sol-unit`, `cd` into `dao-core/contracts/build/test` and run `solunit`.
+Gulp: `$ gulp test-dao-users`
 
+Command-line tool: `$ solunit -d ./dao-users/contracts/build/test`
+
+#### Usage
+
+[User manual](https://github.com/smartcontractproduction/dao/blob/master/docs/Manual.md)
+
+## Contracts
+
+#### User database
+
+The user database is for storing user data. A user in this system has three properties:
+
+* nickname - a `bytes32` string.
+* timestamp - a `uint` unix timestamp for when the user was added (normally `block.timestamp`).
+* dataHash - a `bytes32` hash pointing to a file in some filesystem (IPFS, bittorrent, etc.)
+
+The contents of the file that the hash points to is application specific, and could contain anything. Usually it would have the user e-mail address, phone numbers, etc. Things that isn't needed for any smart-contract logic.
+
+This is a bare-bones user manager. If more user data is needed, such as reputation or a sub-currency/token balance, one should consider adding that in a separate module before hacking into this one. User data will usually change, and it might be worth keeping things separate.
+
+There is an interface, `UserDatabase` and a default implementation, `DefaultUserDatabase`.
+ 
+#### User actions
+
+There are two actions contracts, `UserRegistryAdminReg` and `UserRegistrySelfReg` that both extend a third one, `AdminUserRegistry`.
+
+`UserRegistryAdminReg` only lets an admin add users. It can be useful when people must be identified before they may join.
+
+`UserRegistrySelfReg` lets users register themselves.
+
+Both registries has a single `admin` account that is allowed to remove users and modify their user data in both registries.
+
+Both registries allows users to modify their user data and remove themselves.

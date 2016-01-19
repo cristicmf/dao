@@ -35,44 +35,11 @@ There are three main types of access in this system:
     
 3. **User access**. This includes access to all actions except those that involves Doug. The application maker is in full control over these permissions. It could be handled per-contract or on a system wide basis (or both).
 
-### Core contracts
-
-The core contracts of the framework are in the [core module](https://github.com/smartcontractproduction/dao-core).
-
-#### Doug
-
-Doug is the top level contract. It has a permissions contract, registries for actions and database contracts, and a number of basic options.
-
-In the default implementation, the creator of Doug supplies the address to an already deployed `Permission` contract in the constructor. Doug will then use that to check if a caller is allowed to add, modify, or remove any of its contracts, or change the properties. By default it will also disallow everything if the permissions contract was not set (i.e. the address is nil).
-
-The `Doug` contract itself is an interface, and `DefaultDoug` is the default implementation. 
-
-#### DougEnabled
-
-`DougEnabled` is an interface that contracts must implement in order to be added to Doug.
- 
-Note that this interface does not guarantee that a contract is safe to add, it just makes it easier for developers to create contracts that works with the system.
-
-#### Permission
-
-The permission contract is used to control access to Doug functionality, such as adding and removing contracts, and changing its options. It has an interface, `Permission` and a default implementation, `DefaultPermission`. Doug works with the interface, and the contract can be replaced by the user with (Doug) root permission, so it is possible to write a custom permission contract and use that instead.
-
-#### Database
-
-`Database` is a contract that extends `DefaultDougEnabled` and adds an internal method for checking if the calling contract is registered as a Doug actions contract. It is not required, but is slightly more convenient then writing that check alone. It can be extended by contracts that are registered as databases in the system.
-
-#### Errors
-
-Errors is a contract with a number of error names and codes that is used in 'dao-core` functions (and its other modules).
-
-NOTE: The Errors contract is quite limited and will hopefully be replaced with a more standardized one. Also, it will be changed when constant variables can be declared outside of contracts, so that the contract does not have to be extended.
-
 ## Getting Started
 
-The easiest way to get started is by looking at the contracts in  [dao-core](https://github.com/smartcontractproduction/dao-core) and running the tests. After that, the contracts can be deployed to a running Ethereum node using the deployment script in `scripts/ethereum` if needed.
+The easiest way to get started is by looking at the [contracts](https://github.com/smartcontractproduction/dao/tree/master/dao-core/contracts) in `dao-core`. The contracts can also be deployed to a running Ethereum node using the deployment script in `dao-core/script/ethereum`.
 
-
-The next step is to go through some of the [tutorials](https://github.com/smartcontractproduction/dao/blob/master/docs/Tutorials.md). There you will learn how to write and add your own contracts and integrate them with the framework.
+There are also [tutorials](https://github.com/smartcontractproduction/dao/blob/master/docs/Tutorials.md). They teach how to write contracts and integrate them with the framework.
 
 <a name="develop"></a>
 ## Ðevelopment
@@ -145,8 +112,6 @@ It's worth pointing out that a lot of the difficulties with contracts doesn't co
 #### Avoiding complexity
 
 The DAO framework has a clear separation between its different components. The `dao-core` library, for example, requires only two contracts to be deployed, Doug and Permission, because that's all it needs.
-
-This I believe encourages developers (including myself) to write modular code, like they would in any other language.
 
 #### A note on public and private chains
 

@@ -28,13 +28,15 @@ This is only tested on 64 bit Ubuntu 14.04+
 
 Command-line [Gulp](http://gulpjs.com/) is optional, but has tasks for building and deploying.
 
-You need [solc](https://github.com/ethereum/solidity) on your path to compile locally (always latest dev). You also need `GNU make`. NOTE: These are placeholders until new imports are done, and the Javascript Solidity compiler is available.
+You need [sol-unit](https://github.com/smartcontractproduction/sol-unit) to run the contract unit-tests that comes with the framework.
+
+You need [solc](https://github.com/ethereum/solidity) on your path to compile locally (latest dev).
 
 **Formal proofs**
 
 You need [why3](http://why3.lri.fr/) (latest release).
 
-This is not required for normal usage.
+Solidity to why3 is still experimental, and is not required for normal usage.
 
 ## Structure
 
@@ -47,11 +49,7 @@ These are the different parts of the framework.
 
 **Utilities**
 
-- [dao-stl](https://github.com/smartcontractproduction/dao/tree/master/dao-stl) - shared, standard contracts.
-
-## Testing
-
-Contract tests are done using [sol-unit](https://github.com/androlo/sol-unit).
+- [dao-stl](https://github.com/smartcontractproduction/dao/blob/master/dao-stl/README.md) - shared, standard contracts.
 
 ## DAO framework?
 

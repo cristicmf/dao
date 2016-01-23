@@ -59,6 +59,12 @@
          },
          "return" : "identifier (bytes32) the id (or nil)"
       },
+      "destroy(address)" : {
+         "details" : "Destroy a contract. No return values since it's a destruction.",
+         "params" : {
+            "fundReceiver" : "(address) the account that receives the funds."
+         }
+      },
       "destroyRemovedActions()" : {
          "details" : "Check if contracts are automatically destroyed when removed",
          "return" : "destroyRemovedActions (bool) whether or not 'destroy' should be called on contracts when they are removed."

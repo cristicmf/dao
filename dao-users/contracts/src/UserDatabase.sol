@@ -45,6 +45,15 @@ contract UserDatabase is DougEnabled {
     /// @return has (bool) whether or not the user exists.
     function hasUser(address addr) constant returns (bool has);
 
+    /// @notice UserDatabase.hasUsers(addr1, addr2) to check if two users exists.
+    /// Convenience function for user-to-user interaction checks.
+    /// @dev Check if two users exists.
+    /// @param addr1 (address) the address of the first user.
+    /// @param addr2 (address) the address of the second user.
+    /// @return has1 (bool) whether or not the first user exists.
+    /// @return has2 (bool) whether or not the second user exists.
+    function hasUsers(address addr1, address addr2) constant returns (bool has1, bool has2);
+
     /// @notice UserDatabase.userAddressFromIndex(index) to get a user address by its index in the backing array.
     /// @dev Get a user address by its index in the backing array.
     /// @param index (uint) the index.

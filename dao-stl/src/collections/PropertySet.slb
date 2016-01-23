@@ -24,11 +24,8 @@ library PropertySet {
     /// @param set (PropertySet.Set) storage reference to the set.
     /// @param val (bytes32) the value
     /// @return added (bool) true if the bytes32 was added, false if not (meaning the value already exists).
-    function insert(Set storage set, bytes32 val) returns (bool added)
-    {
-        if (set._data[val]._exists){
-            return false;
-        } else {
+    function insert(Set storage set, bytes32 val) returns (bool added) {
+        if (!set._data[val]._exists)
             var valIndex = set._values.length++;
             set._data[val] = Element(valIndex, true);
             set._values[valIndex] = val;
@@ -41,12 +38,10 @@ library PropertySet {
     /// @param set (PropertySet.Set) storage reference to the set.
     /// @param val (bytes32) the value
     /// @return removed (bool) true if the value was removed, false if not (meaning the value wasn't found).
-    function remove(Set storage set, bytes32 val) returns (bool removed)
-    {
+    function remove(Set storage set, bytes32 val) returns (bool removed) {
         var elem = set._data[val];
-        if (!elem._exists){
-            return false;
-        }
+        if (!elem._exists)  return false;
+
         var valIndex = elem._valIndex;
         delete set._data[val];
         var len = set._values.length;
@@ -59,28 +54,12 @@ library PropertySet {
         return true;
     }
 
-    /// @notice PropertySet.removeAll(set) to remove all values from the set. NOTE: this might fail for large sets due to gas issues.
-    /// @dev Remove all values from the set.
-    /// @param set (PropertySet.Set) storage reference to the set.
-    /// @return numRemoved (uint) number of elements removed.
-    function removeAll(Set storage set) returns (uint numRemoved){
-        var l = set._values.length;
-        if(l == 0){
-            return 0;
-        }
-        for(uint i = 0; i < l; i++){
-            delete set._data[set._values[i]];
-        }
-        delete set._values;
-        return l;
-    }
-
     /// @notice PropertySet.hasValue(set, bytes32) to check if a value is contained in the set.
     /// @dev Check if a value exists.
     /// @param set (PropertySet.Set) storage reference to the set.
     /// @param val (bytes32) the value
     /// @return has (bool) true if the bytes32 was found, false otherwise
-    function hasValue(Set storage set, bytes32 val) constant returns (bool has){
+    function hasValue(Set storage set, bytes32 val) constant returns (bool has) {
         return set._data[val]._exists;
     }
 
@@ -90,20 +69,18 @@ library PropertySet {
     /// @param index (uint) the bytes32
     /// @return index (uint) the index
     /// @return exists (bool) true if the element exists, false otherwise. Used because of index=0 ambiguity.
-    function valueFromIndex(Set storage set, uint index) constant returns (bytes32 value, bool exists){
-        if(index >= set._values.length){
-            return;
-        }
+    function valueFromIndex(Set storage set, uint index) constant returns (bytes32 value, bool exists) {
+        if(index >= set._values.length) return;
+
         value = set._values[index];
         exists = true;
-        return;
     }
 
     /// @notice PropertySet.size(set) to get the size of the set.
     /// @dev Get size of set.
     /// @param set (PropertySet.Set) storage reference to the set.
     /// @return size (uint) the size
-    function size(Set storage set) constant returns (uint size){
+    function size(Set storage set) constant returns (uint size) {
         return set._values.length;
     }
 

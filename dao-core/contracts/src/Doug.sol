@@ -9,6 +9,7 @@ import "./Permission.sol";
 contract Destructible {
     /// @notice Destructible.destroy() to destroy the contract.
     /// @dev Destroy a contract. No return values since it's a destruction.
+    /// @param fundReceiver (address) the account that receives the funds.
     function destroy(address fundReceiver);
 }
 
@@ -38,6 +39,16 @@ contract DougEnabled is Destructible {
 /// @author Andreas Olofsson (androlo1980@gmail.com)
 /// @dev ActionsContractRegistry has a registry for actions contracts.
 contract ActionsContractRegistry {
+
+    /// @dev fired when a new contract is added to Doug.
+    /// @param contractId (bytes32) the id of the contract
+    /// @param contractId (address) the address of the contract
+    event ActionsContractAdded(bytes32 indexed contractId, address indexed contractAddress);
+
+    /// @dev fired when a contract is removed from Doug.
+    /// @param contractId (bytes32) the id of the contract
+    /// @param contractId (address) the address of the contract
+    event ActionsContractRemoved(bytes32 indexed contractId, address indexed contractAddress);
 
     /// @notice ActionsContractRegistry.addActionsContract(identifier, contractAddress) to add a new contract to the registry.
     /// @dev Add a new contract to the registry.
@@ -98,6 +109,16 @@ contract ActionsContractRegistry {
 /// @author Andreas Olofsson (androlo1980@gmail.com)
 /// @dev DatabaseContractRegistry has a registry for database contracts.
 contract DatabaseContractRegistry {
+
+    /// @dev fired when a new database contract is added to Doug.
+    /// @param contractId (bytes32) the id of the contract
+    /// @param contractId (address) the address of the contract
+    event DatabaseContractAdded(bytes32 indexed contractId, address indexed contractAddress);
+
+    /// @dev fired when a database contract is removed from Doug.
+    /// @param contractId (bytes32) the id of the contract
+    /// @param contractId (address) the address of the contract
+    event DatabaseContractRemoved(bytes32 indexed contractId, address indexed contractAddress);
 
     /// @notice DatabaseContractRegistry.addDatabaseContract(identifier, contractAddress) to add a new contract to the registry.
     /// @dev Add a new contract to the registry.
@@ -164,7 +185,7 @@ contract DatabaseContractRegistry {
 /// either by ID or address.
 /// Contracts can only be given one (unique) ID, however the ID of a specific contract
 /// can be changed later, provided that the new ID isn't taken, and the 'overwritable' option is set.
-contract Doug is ActionsContractRegistry, DatabaseContractRegistry {
+contract Doug is ActionsContractRegistry, DatabaseContractRegistry, Destructible {
 
     /// @notice Doug.setPermission(permissionAddress) to set the permission contract address.
     /// @dev Set the permission contract address;
@@ -187,20 +208,18 @@ contract DefaultDougEnabled is DougEnabled {
 
     Doug _DOUG;
 
-    function setDougAddress(address dougAddr) returns (bool result){
+    function setDougAddress(address dougAddr) returns (bool result) {
         // If dougAddr is zero.
-        if(dougAddr == 0){
+        if (dougAddr == 0)
             return false;
-        }
         // If Doug is set, only change it if the caller is the current Doug.
-        if(address(_DOUG) != 0x0 && address(_DOUG) != msg.sender){
+        if(address(_DOUG) != 0x0 && address(_DOUG) != msg.sender)
             return false;
-        }
         _DOUG = Doug(dougAddr);
         return true;
     }
 
-    function dougAddress() constant returns (address dougAddress){
+    function dougAddress() constant returns (address dougAddress) {
         return _DOUG;
     }
 

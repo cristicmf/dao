@@ -10,13 +10,13 @@ NOTE: Requires `solc`.
 
 Shell script: `$ ./build_contracts.sh dao-users`
 
-Gulp: `$ gulp build-dao-users`
+Gulp: `$ gulp build:users`
 
 #### Testing
 
 From the dao project root:
 
-Gulp: `$ gulp test-dao-users`
+Gulp: `$ gulp test:users`
 
 Command-line tool: `$ solunit -d ./dao-users/contracts/build/test`
 

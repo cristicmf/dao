@@ -1,0 +1,22 @@
+{
+   "author" : "Andreas Olofsson (androlo1980@gmail.com)",
+   "methods" : {
+      "mint(address,uint256)" : {
+         "details" : "Mint new coins and add to an account.",
+         "params" : {
+            "amount" : "(uint) the amount",
+            "receiver" : "(address) the receiver account"
+         },
+         "return" : "error (uint16) error code"
+      },
+      "send(address,uint256)" : {
+         "details" : "Send coins from caller to receiver.",
+         "params" : {
+            "amount" : "(uint) the amount.",
+            "receiver" : "(address) the receiver account"
+         },
+         "return" : "error (uint16) error code"
+      }
+   },
+   "title" : "AbstractMintedCurrency"
+}

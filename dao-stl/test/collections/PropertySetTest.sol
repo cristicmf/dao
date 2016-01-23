@@ -1,5 +1,7 @@
 import "../../src/collections/PropertySet.slb";
 
+// TODO sol-unit format
+
 contract PropertySetDb {
 
     using PropertySet for PropertySet.Set;
@@ -38,7 +40,7 @@ contract PropertySetTest {
     bytes32 constant TEST_PROPERTY_2 = 0xABCDEF;
     bytes32 constant TEST_PROPERTY_3 = 0xC0FFEE;
 
-    function testInsert() returns (bool has, bool firstIsCorrect){
+    function testInsert() returns (bool has, bool firstIsCorrect) {
         PropertySetDb psdb = new PropertySetDb();
         psdb.addProperty(TEST_PROPERTY);
         has = psdb.hasProperty(TEST_PROPERTY);
@@ -47,7 +49,7 @@ contract PropertySetTest {
         return;
     }
 
-    function testRemoveProperty() returns (bool removed, bool firstIsCorrect, bool sizeIsCorrect){
+    function testRemoveProperty() returns (bool removed, bool firstIsCorrect, bool sizeIsCorrect) {
         PropertySetDb psdb = new PropertySetDb();
         psdb.addProperty(TEST_PROPERTY);
         psdb.removeProperty(TEST_PROPERTY);
@@ -57,7 +59,7 @@ contract PropertySetTest {
         sizeIsCorrect = psdb.numProperties() == 0;
     }
 
-    function testAddTwoProperties() returns (bool hasFirst, bool hasSecond, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect){
+    function testAddTwoProperties() returns (bool hasFirst, bool hasSecond, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
         PropertySetDb psdb = new PropertySetDb();
         psdb.addProperty(TEST_PROPERTY);
         psdb.addProperty(TEST_PROPERTY_2);
@@ -72,7 +74,7 @@ contract PropertySetTest {
     }
 
     function testAddTwoPropertiesRemoveLast() returns (bool hasFirst, bool secondRemoved, bool firstIsCorrect,
-                bool secondIsCorrect, bool sizeIsCorrect){
+                bool secondIsCorrect, bool sizeIsCorrect) {
         PropertySetDb psdb = new PropertySetDb();
         psdb.addProperty(TEST_PROPERTY);
         psdb.addProperty(TEST_PROPERTY_2);
@@ -89,7 +91,7 @@ contract PropertySetTest {
     }
 
     function testAddTwoPropertiesRemoveFirst() returns (bool firstRemoved, bool hasSecond, bool firstIsCorrect,
-                bool secondIsCorrect, bool sizeIsCorrect){
+                bool secondIsCorrect, bool sizeIsCorrect) {
         PropertySetDb psdb = new PropertySetDb();
         psdb.addProperty(TEST_PROPERTY);
         psdb.addProperty(TEST_PROPERTY_2);
@@ -106,7 +108,7 @@ contract PropertySetTest {
     }
 
     function testAddThreePropertiesRemoveMiddle() returns (bool hasFirst, bool secondRemoved, bool hasThird,
-                bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect){
+                bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
         PropertySetDb psdb = new PropertySetDb();
         psdb.addProperty(TEST_PROPERTY);
         psdb.addProperty(TEST_PROPERTY_2);
@@ -125,7 +127,7 @@ contract PropertySetTest {
     }
 
     function testRemoveAllProperties() returns (bool firstRemoved, bool secondRemoved, bool thirdRemoved,
-                bool sizeIsNil){
+                bool sizeIsNil) {
         PropertySetDb psdb = new PropertySetDb();
         psdb.addProperty(TEST_PROPERTY);
         psdb.addProperty(TEST_PROPERTY_2);

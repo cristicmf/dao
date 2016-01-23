@@ -23,7 +23,11 @@ Database contracts are bare-bones storage contracts. They contain only the funct
 
 #### Actions contracts
 
-Actions contracts contains a number of actions that can be taken by users. There could for example be a 'users' actions contract and a corresponding user database. The actions are functions in the actions contract and could do anything, like for example registering, modifying and removing users.
+Actions contracts contains a number of actions that can be taken by users. There could for example be a 'users' actions contract and a corresponding user database. The actions are functions in the actions contract and could do anything, like for example registering, modifying and removing users. 
+
+#### Notes
+
+This separation is not made with the application / domain layer OO circle-jerk in mind; it's made by necessity, because of how Ethereum contracts and Solidity works. There is more about this in the design philosophy section.
 
 ### DAO permissions model
 
@@ -48,7 +52,6 @@ This section contains a more detailed description, for developers.
 
 TODO
 
-
 <a name="design"></a>
 ## Ðesign philosophy
 
@@ -62,13 +65,13 @@ The purpose of the dao-core is to provide a solid base for advanced systems of E
 
 Striking a good balance can be difficult, as it is in all types of programs. It requires some insight into how the gas system, contract-calling, and the database works.
 
-**Gas**
+##### Gas
 
 Gas is used to pay for both processing power and database storage on the public Ethereum chain, because every full node has to execute all transactions, and store all the data. The gas cost for each VM instruction can be found in the table on page 20 of the [Ethereum Yellow Paper](http://gavwood.com/paper.pdf).
 
 It's worth noting that as of 2016-01-10, simple operations can cost 1 or a few gas, but writing one word (up to 32 bytes of data) costs 20000. This means contract optimization can be summed up by two words - **AVOID STORAGE**. Things you can do is to avoid collections that requires extra data per element, instantiating new contracts, and if a function stores user data it should normally be careful with un-bounded strings and arrays.
 
-**Contract calling**
+##### Contract calling
 
 Contracts that has been added to the Ethereum chain can be transacted to by anyone, which means that anyone can invoke the functions they expose. If a function invocation involves write operations you will normally start by checking if the caller has the permission to run it. This could be done for example by pre-registering an account as the administrator (or owner), and then check if the caller is that account. This is an example:
  
@@ -97,7 +100,7 @@ contract IncrediblyUseful is Destructible {
 
 In this case, a contract that extends `SelfDestructible` will have a `destroy` function for self destruction. This function is public, and can be invoked by anyone, but unless their address is the same as `owner`, it will not pass the guard and nothing will happen. For example, in the  `IncrediblyUseful` contract (which can do nothing but self-destruct), the owner would always be the account that created the contract.
 
-**The database**
+##### The database
 
 Ethereum contracts have access to a database so that they can persist the values of their fields between calls. The big problem is that the storage of a particular contract can only be accessed by the code in that contract, and that code is immutable. If there are bugs in the code, or you need to add new functionality, you can't just update it, restart, and keep going; you have to create an entirely new contract. The old contract will still have the data in it though, and you still have to go through the old code to make changes to that data.
 
@@ -111,7 +114,9 @@ It's worth pointing out that a lot of the difficulties with contracts doesn't co
 
 #### Avoiding complexity
 
-The DAO framework has a clear separation between its different components. The `dao-core` library, for example, requires only two contracts to be deployed, Doug and Permission, because that's all it needs.
+The DAO framework has a clear separation between its different components. The `dao-core` library, for example, requires only two contracts to be deployed, Doug and Permission, because that's all it needs. 
+
+There is also a clear separation of administrative rights. For example, if a managed system is set up, the account managing users and the account managing Doug does not have to be the same (although it could be). It might seem like this makes it more complicated, rather then less, but contract systems and permissions structures can both become very complex, very fast, so dividing them up into components usually pays off in the end. 
 
 #### A note on public and private chains
 

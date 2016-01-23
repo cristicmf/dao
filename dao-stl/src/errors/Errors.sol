@@ -6,6 +6,7 @@ contract Errors {
     // ********************** Normal execution **********************
 
     uint16 constant NO_ERROR = 0;
+    uint16 constant ERROR = 1;
 
     // ********************** Resources **********************
 

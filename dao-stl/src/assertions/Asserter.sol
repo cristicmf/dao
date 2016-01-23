@@ -10,11 +10,10 @@ contract Asserter {
 
     /// @dev used internally to trigger the event.
     function report(bool result, string message) internal constant {
-        if(result){
+        if(result)
             TestEvent(true, "");
-        } else {
+        else
             TestEvent(false, message);
-        }
     }
 
     // ************************************** strings **************************************
@@ -23,7 +22,7 @@ contract Asserter {
     /// @param A The first string.
     /// @param B The second string.
     /// @param message The message to display if the assertion fails.
-    function assertStringsEqual(string A, string B, string message) internal constant returns (bool result){
+    function assertStringsEqual(string A, string B, string message) internal constant returns (bool result) {
         result = _stringsEqual(A, B);
         report(result, message);
     }
@@ -40,7 +39,7 @@ contract Asserter {
     /// @dev Assert that the string 'str' is empty.
     /// @param str the string.
     /// @param message The message to display if the assertion fails.
-    function assertStringIsEmpty(string str, string message) internal constant returns (bool result){
+    function assertStringIsEmpty(string str, string message) internal constant returns (bool result) {
         result = _stringsEqual(str, "");
         report(result, message);
     }
@@ -48,7 +47,7 @@ contract Asserter {
     /// @dev Assert that the string 'str' is not empty.
     /// @param str the string.
     /// @param message The message to display if the assertion fails.
-    function assertStringIsNotEmpty(string str, string message) internal constant returns (bool result){
+    function assertStringIsNotEmpty(string str, string message) internal constant returns (bool result) {
         result = !_stringsEqual(str, "");
         report(result, message);
     }
@@ -59,7 +58,7 @@ contract Asserter {
     /// @param A The first bytes(32).
     /// @param B The second bytes(32).
     /// @param message The message to display if the assertion fails.
-    function assertBytes32Equal(bytes32 A, bytes32 B, string message) internal constant returns (bool result){
+    function assertBytes32Equal(bytes32 A, bytes32 B, string message) internal constant returns (bool result) {
         result = (A == B);
         report(result, message);
     }
@@ -76,7 +75,7 @@ contract Asserter {
     /// @dev Assert that the bytes32 'bts' is zero.
     /// @param bts the bytes(32).
     /// @param message The message to display if the assertion fails.
-    function assertBytes32Zero(bytes32 bts, string message) internal constant returns (bool result){
+    function assertBytes32Zero(bytes32 bts, string message) internal constant returns (bool result) {
         result = (bts == 0);
         report(result, message);
     }
@@ -84,7 +83,7 @@ contract Asserter {
     /// @dev Assert that the bytes32 'bts' is not zero.
     /// @param bts The bytes(32).
     /// @param message The message to display if the assertion fails.
-    function assertBytes32NotZero(bytes32 bts, string message) internal constant returns (bool result){
+    function assertBytes32NotZero(bytes32 bts, string message) internal constant returns (bool result) {
         result = (bts != 0);
         report(result, message);
     }
@@ -95,7 +94,7 @@ contract Asserter {
     /// @param A The first address.
     /// @param B The second address.
     /// @param message The message to display if the assertion fails.
-    function assertAddressesEqual(address A, address B, string message) internal constant returns (bool result){
+    function assertAddressesEqual(address A, address B, string message) internal constant returns (bool result) {
         result = (A == B);
         report(result, message);
     }
@@ -112,7 +111,7 @@ contract Asserter {
     /// @dev Assert that the address 'addr' is zero.
     /// @param addr The Address.
     /// @param message The message to display if the assertion fails.
-    function assertAddressZero(address addr, string message) internal constant returns (bool result){
+    function assertAddressZero(address addr, string message) internal constant returns (bool result) {
         result = (addr == 0);
         report(result, message);
     }
@@ -120,7 +119,7 @@ contract Asserter {
     /// @dev Assert that the address 'addr' is not zero.
     /// @param addr The Address.
     /// @param message The message to display if the assertion fails.
-    function assertAddressNotZero(address addr, string message) internal constant returns (bool result){
+    function assertAddressNotZero(address addr, string message) internal constant returns (bool result) {
         result = (addr != 0);
         report(result, message);
     }

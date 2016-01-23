@@ -20,13 +20,13 @@ NOTE: Requires `solc`.
 
 Shell script: `$ ./build_contracts.sh dao-core`
 
-Gulp: `$ gulp build-dao-core`
+Gulp: `$ gulp build:core`
 
 #### Testing
 
 From the dao project root:
 
-Gulp: `$ gulp test-dao-core` 
+Gulp: `$ gulp test:core` 
 
 Command-line tool: `$ solunit -d ./dao-core/contracts/build/test`
 

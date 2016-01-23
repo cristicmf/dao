@@ -1,5 +1,7 @@
 import "../../src/collections/PropertyToAddressDb.sol";
 
+// TODO sol-unit format
+
 contract PropertyToAddressDb {
 
     using PropertyToAddressMap for PropertyToAddressMap.Map;
@@ -54,7 +56,7 @@ contract PropertyToAddressTest {
     bytes32 constant TEST_BYTES32_2 = 2;
     bytes32 constant TEST_BYTES32_3 = 3;
 
-    function testInsert() returns (bool has, bool firstIsCorrect, bool firstIndexIsCorrect, bool sizeIsCorrect){
+    function testInsert() returns (bool has, bool firstIsCorrect, bool firstIndexIsCorrect, bool sizeIsCorrect) {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         has = padb.hasKey(TEST_BYTES32);
@@ -65,7 +67,7 @@ contract PropertyToAddressTest {
         return;
     }
 
-    function testOverwriteSuccess() returns (bool oldCorrect, bool addedCorrect, bool valCorrect, bool sizeIsCorrect){
+    function testOverwriteSuccess() returns (bool oldCorrect, bool addedCorrect, bool valCorrect, bool sizeIsCorrect) {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         var (old, added) = padb.insert(TEST_BYTES32, TEST_ADDRESS_2, true);
@@ -75,7 +77,7 @@ contract PropertyToAddressTest {
         sizeIsCorrect = padb.size() == 1;
     }
 
-    function testOverwriteFail() returns (bool oldCorrect, bool addedCorrect, bool valCorrect, bool sizeIsCorrect){
+    function testOverwriteFail() returns (bool oldCorrect, bool addedCorrect, bool valCorrect, bool sizeIsCorrect) {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         var (old, added) = padb.insert(TEST_BYTES32, TEST_ADDRESS_2, false);
@@ -85,7 +87,7 @@ contract PropertyToAddressTest {
         sizeIsCorrect = padb.size() == 1;
     }
 
-    function testEntryFromIndex() returns (bool keyCorrect, bool valueCorrect, bool existsCorrect){
+    function testEntryFromIndex() returns (bool keyCorrect, bool valueCorrect, bool existsCorrect) {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         var (k, v, e) = padb.entryFromIndex(0);
@@ -95,7 +97,7 @@ contract PropertyToAddressTest {
         return;
     }
 
-    function testEntryFromIndexFail() returns (bool keyCorrect, bool valueCorrect, bool existsCorrect){
+    function testEntryFromIndexFail() returns (bool keyCorrect, bool valueCorrect, bool existsCorrect) {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         var (k, v, e) = padb.entryFromIndex(0);
         keyCorrect = k == 0;
@@ -104,7 +106,7 @@ contract PropertyToAddressTest {
         return;
     }
 
-    function testRemove() returns (bool removed, bool firstIsCorrect, bool sizeIsCorrect){
+    function testRemove() returns (bool removed, bool firstIsCorrect, bool sizeIsCorrect) {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         padb.remove(TEST_BYTES32);
@@ -115,7 +117,7 @@ contract PropertyToAddressTest {
     }
 
     function testAddTwo() returns (bool hasFirst, bool hasSecond, bool firstIndexIsCorrect,
-                bool secondIndexIsCorrect, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect){
+                bool secondIndexIsCorrect, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         padb.insert(TEST_BYTES32_2, TEST_ADDRESS_2);
@@ -131,7 +133,7 @@ contract PropertyToAddressTest {
     }
 
     function testAddTwoRemoveLast() returns (bool hasFirst, bool secondRemoved, bool firstIndexIsCorrect,
-                bool secondIndexIsCorrect, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect){
+                bool secondIndexIsCorrect, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         padb.insert(TEST_BYTES32_2, TEST_ADDRESS_2);
@@ -151,7 +153,7 @@ contract PropertyToAddressTest {
     }
 
     function testAddTwoRemoveFirst() returns (bool firstRemoved, bool hasSecond, bool firstIndexIsCorrect,
-                bool secondIndexIsCorrect, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect){
+                bool secondIndexIsCorrect, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
                     PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         padb.insert(TEST_BYTES32_2, TEST_ADDRESS_2);
@@ -172,7 +174,7 @@ contract PropertyToAddressTest {
 
     function testAddThreeRemoveMiddle() returns (bool hasFirst, bool secondRemoved, bool hasThird,
                 bool firstIndexIsCorrect, bool secondIndexIsCorrect, bool thirdIndexIsCorrect,
-                bool firstIsCorrect, bool secondIsCorrect, bool thirdIsCorrect, bool sizeIsCorrect){
+                bool firstIsCorrect, bool secondIsCorrect, bool thirdIsCorrect, bool sizeIsCorrect) {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         padb.insert(TEST_BYTES32_2, TEST_ADDRESS_2);
@@ -198,8 +200,7 @@ contract PropertyToAddressTest {
         sizeIsCorrect = padb.size() == 2;
     }
 
-    function testRemoveAll() returns (bool firstRemoved, bool secondRemoved, bool thirdRemoved,
-                bool sizeIsNil){
+    function testRemoveAll() returns (bool firstRemoved, bool secondRemoved, bool thirdRemoved, bool sizeIsNil) {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         padb.insert(TEST_BYTES32_2, TEST_ADDRESS_2);

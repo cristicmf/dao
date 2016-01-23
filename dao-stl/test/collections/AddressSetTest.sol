@@ -1,5 +1,7 @@
 import "../../src/collections/AddressSet.slb";
 
+// TODO sol-unit format
+
 contract AddressSetDb {
 
     using AddressSet for AddressSet.Set;
@@ -38,7 +40,7 @@ contract AddressSetTest {
     address constant TEST_ADDRESS_2 = 0xABCDEF;
     address constant TEST_ADDRESS_3 = 0xC0FFEE;
 
-    function testInsert() returns (bool has, bool firstIsCorrect){
+    function testInsert() returns (bool has, bool firstIsCorrect) {
         AddressSetDb asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
         has = asdb.hasAddress(TEST_ADDRESS);
@@ -47,7 +49,7 @@ contract AddressSetTest {
         return;
     }
 
-    function testRemoveAddress() returns (bool removed, bool firstIsCorrect, bool sizeIsCorrect){
+    function testRemoveAddress() returns (bool removed, bool firstIsCorrect, bool sizeIsCorrect) {
         AddressSetDb asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
         asdb.removeAddress(TEST_ADDRESS);
@@ -57,7 +59,7 @@ contract AddressSetTest {
         sizeIsCorrect = asdb.numAddresses() == 0;
     }
 
-    function testAddTwoAddresses() returns (bool hasFirst, bool hasSecond, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect){
+    function testAddTwoAddresses() returns (bool hasFirst, bool hasSecond, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
         AddressSetDb asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
         asdb.addAddress(TEST_ADDRESS_2);
@@ -72,7 +74,7 @@ contract AddressSetTest {
     }
 
     function testAddTwoAddressesRemoveLast() returns (bool hasFirst, bool secondRemoved, bool firstIsCorrect,
-                bool secondIsCorrect, bool sizeIsCorrect){
+                bool secondIsCorrect, bool sizeIsCorrect) {
         AddressSetDb asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
         asdb.addAddress(TEST_ADDRESS_2);
@@ -89,7 +91,7 @@ contract AddressSetTest {
     }
 
     function testAddTwoAddressesRemoveFirst() returns (bool firstRemoved, bool hasSecond, bool firstIsCorrect,
-                bool secondIsCorrect, bool sizeIsCorrect){
+                bool secondIsCorrect, bool sizeIsCorrect) {
         AddressSetDb asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
         asdb.addAddress(TEST_ADDRESS_2);
@@ -106,7 +108,7 @@ contract AddressSetTest {
     }
 
     function testAddThreeAddressesRemoveMiddle() returns (bool hasFirst, bool secondRemoved, bool hasThird,
-                bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect){
+                bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
         AddressSetDb asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
         asdb.addAddress(TEST_ADDRESS_2);
@@ -125,7 +127,7 @@ contract AddressSetTest {
     }
 
     function testRemoveAllAddresses() returns (bool firstRemoved, bool secondRemoved, bool thirdRemoved,
-                bool sizeIsNil){
+                bool sizeIsNil) {
         AddressSetDb asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
         asdb.addAddress(TEST_ADDRESS_2);

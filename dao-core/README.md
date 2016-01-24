@@ -32,7 +32,7 @@ Command-line tool: `$ solunit -d ./dao-core/contracts/build/test`
 
 ### Contracts
 
-![DaoCoreContracts](../images/dao-core-contracts.png)
+![DaoCoreContracts](../docs/images/dao-core-contracts.png)
 
 #### Doug
 

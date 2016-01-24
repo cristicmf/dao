@@ -4,9 +4,7 @@
 
 This is the a light-weight framework for modular systems of [Ethereum](https://ethereum.org/) contracts. It is meant to be used with Ethereum, or other chains that supports Ethereum contracts. It will get a better name.
 
-The contracts are written in the [Solidity](http://solidity.readthedocs.org/en/latest/index.html) language. The purpose of this library as of now is to act as a template for extending, or just for educational purposes. It may be given more purposes later.
-
-This is a **contracts-only library**. There is some javascript to help deploying and testing and such, but all of that is optional, and is also only meant to be used when authoring.
+The contracts are written in the [Solidity](http://solidity.readthedocs.org/en/latest/index.html) language. The purpose of this library as of now is to act as a template for extending, or just as an example of how to write Solidity contracts. This is a **contracts-only library**. There is some javascript to help deploying and testing and such, but all of that is optional, and is really only meant to be used when authoring.
 
 NOTE: Ethereum is still experimental, and so is this code. Using this on a chain where Ether has real value, or in any form of production environment is **not** recommended.
 
@@ -18,7 +16,7 @@ The best way to get started is reading the [User Manual](./docs/Manual.md).
 
 The tools are only tested on 64 bit Ubuntu 14.04+
 
-[node.js](https://nodejs.org/en/) is a requirement for most of the scripts. The scripts are based on the official javascript APIs, such as the [Ethereum web3.js library](https://github.com/ethereum/web3.js), and are used for deployment and testing etc. 
+[node.js](https://nodejs.org/en/) is a requirement for most of the scripts. The scripts are based on the official javascript APIs, such as the [Ethereum web3.js library](https://github.com/ethereum/web3.js), and are used for deployment and testing etc.
 
 Command-line [Gulp](http://gulpjs.com/) is optional, but has tasks for building and deploying.
 

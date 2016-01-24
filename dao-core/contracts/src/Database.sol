@@ -7,6 +7,7 @@ import "./Doug.sol";
 /// and provides an internal method for checking if caller is an actions contract.
 contract Database is DefaultDougEnabled, Errors {
 
+    // Check if the caller is an actions contract.
     function _checkCaller() constant internal returns (bool) {
         return _DOUG.actionsContractId(msg.sender) != 0;
     }

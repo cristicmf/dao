@@ -8,7 +8,8 @@ import "./Permission.sol";
 /// destroyed when it is removed from Doug.
 contract Destructible {
     /// @notice Destructible.destroy() to destroy the contract.
-    /// @dev Destroy a contract. No return values since it's a destruction.
+    /// @dev Destroy a contract. No return values since it's a destruction. Calls 'selfdestruct'
+    /// on the contract if successful.
     /// @param fundReceiver (address) the account that receives the funds.
     function destroy(address fundReceiver);
 }
@@ -23,7 +24,7 @@ contract DougEnabled is Destructible {
     /// @notice DougEnabled.setDougAddress(dougAddress) to set the address of the Doug contract.
     /// @dev Set the address of the Doug contract.
     /// @param dougAddr (address) the address
-    /// @return added (bool) true means the address was added successfully (doug implementations
+    /// @return added (bool) true means the address was added successfully. Doug implementations
     /// should normally not register a contract that returns false.
     function setDougAddress(address dougAddr) returns (bool result);
 

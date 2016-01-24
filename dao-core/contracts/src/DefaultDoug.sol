@@ -6,6 +6,7 @@ import "./Permission.sol";
 /// @author Andreas Olofsson (androlo1980@gmail.com)
 /// @dev Default implementation of the 'Doug' interface-contract.
 /// Most collections work is done internally, rather then through a library.
+/// Method documentation is in the 'Doug' interface contract.
 contract DefaultDoug is Doug, Errors {
 
     address constant ADDRESS_NULL = 0;
@@ -148,6 +149,7 @@ contract DefaultDoug is Doug, Errors {
 
     // *********************************** Internal ************************************
 
+    // Add a contract to the given map.
     function _addContract(NAMap storage map, bytes32 identifier, address contractAddress) internal returns (uint16 error) {
         if (!_hasDougPermission()) {
             error = ACCESS_DENIED;
@@ -186,6 +188,7 @@ contract DefaultDoug is Doug, Errors {
         map._aToN[contractAddress] = identifier;
     }
 
+    // Remove a contract from the given map.
     function _removeContract(NAMap storage map, bytes32 identifier) internal returns (address addr, uint16 error) {
         if (!_hasDougPermission()) {
             error = ACCESS_DENIED;
@@ -214,6 +217,7 @@ contract DefaultDoug is Doug, Errors {
         map._keys.length--;
     }
 
+    // Get a contract by index, from the given map.
     function _contractFromIndex(NAMap storage map, uint index) internal constant returns (bytes32 identifier, address contractAddress, uint16 error) {
         if (index >= map._keys.length) {
             error = ARRAY_INDEX_OUT_OF_BOUNDS;
@@ -223,6 +227,7 @@ contract DefaultDoug is Doug, Errors {
         contractAddress = map._data[identifier]._value;
     }
 
+    // Check if the caller has doug permissions.
     function _hasDougPermission() constant internal returns (bool isRoot) {
         return address(_permission) != 0 && _permission.hasPermission(msg.sender);
     }

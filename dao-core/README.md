@@ -32,6 +32,8 @@ Command-line tool: `$ solunit -d ./dao-core/contracts/build/test`
 
 ### Contracts
 
+![DaoCoreContracts](../images/dao-core-contracts.png)
+
 #### Doug
 
 Doug is the top level contract. It has a permissions contract, registries for actions and database contracts, and a number of basic options.

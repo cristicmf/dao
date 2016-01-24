@@ -26,15 +26,15 @@ contract Permission {
     /// @notice Permission.ownerFromIndex(index) to get the owner with position 'index' in the backing array.
     /// @dev Get the owner with position 'index' in the backing array.
     /// @param index (uint) the index.
-    /// @return owner (address) the owner address
-    /// @return timestamp (uint) the time when the owner was added
+    /// @return owner (address) the owner address|
+    /// @return timestamp (uint) the time when the owner was added|
     /// @return error (uint16) error code
     function ownerFromIndex(uint index) constant returns (address owner, uint timestamp, uint16 error);
 
     /// @notice Permission.ownerTimestamp(addr) to get the time when the owner was added.
     /// @dev Get the time when the owner was added.
     /// @param addr (address) the owner address
-    /// @return timestamp (uint) the time when the owner was added
+    /// @return timestamp (uint) the time when the owner was added|
     /// @return error (uint16) error code
     function ownerTimestamp(address addr) constant returns (uint timestamp, uint16 error);
 
@@ -56,7 +56,7 @@ contract Permission {
 
     /// @notice Permission.rootData() to get the address of root, and the time they were added.
     /// @dev Get the address of root, and the time they were created.
-    /// @return root (address) the address
+    /// @return root (address) the address|
     /// @return timeRootAdded (uint) the time when root was added.
     function rootData() constant returns (address root, uint timeRootAdded);
 

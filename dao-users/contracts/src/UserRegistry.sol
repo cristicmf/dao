@@ -1,8 +1,11 @@
 import "../../../dao-core/contracts/src/Doug.sol";
 
+/// @title UserRegistry
+/// @author Andreas Olofsson (androlo1980@gmail.com)
+/// @dev A contract that works with a user database to register and manage users.
 contract UserRegistry is DougEnabled {
 
-    /// @notice UserRegistryA.registerUser(addr, nickname, dataHash) to register a new user.
+    /// @notice UserRegistry.registerUser(addr, nickname, dataHash) to register a new user.
     /// @dev Register a new user.
     /// @param addr (address) the address.
     /// @param nickname (bytes32) the user nick.

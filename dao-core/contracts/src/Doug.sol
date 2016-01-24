@@ -78,8 +78,8 @@ contract ActionsContractRegistry {
     /// @notice ActionsContractRegistry.actionsContractFromIndex(index) to get the id and address of the contract with the given index.
     /// @dev Get the id and address of the contract with the given index.
     /// @param index (uint) the index
-    /// @return identifier (bytes32) the id
-    /// @return contractAddress (bytes32) the address
+    /// @return identifier (bytes32) the id|
+    /// @return contractAddress (bytes32) the address|
     /// @return error (uint16) error code
     function actionsContractFromIndex(uint index) constant returns (bytes32 identifier, address contractAddress, uint16 error);
 
@@ -148,8 +148,8 @@ contract DatabaseContractRegistry {
     /// @notice DatabaseContractRegistry.databaseContractFromIndex(index) to get the id and address of the contract with the given index.
     /// @dev Get the id and address of the contract with the given index.
     /// @param index (uint) the index
-    /// @return identifier (bytes32) the id
-    /// @return contractAddress (bytes32) the address
+    /// @return identifier (bytes32) the id|
+    /// @return contractAddress (bytes32) the address|
     /// @return error (uint16) error code
     function databaseContractFromIndex(uint index) constant returns (bytes32 identifier, address contractAddress, uint16 error);
 

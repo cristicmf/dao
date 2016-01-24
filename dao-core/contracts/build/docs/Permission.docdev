@@ -24,14 +24,14 @@
          "params" : {
             "index" : "(uint) the index."
          },
-         "return" : "owner (address) the owner addresstimestamp (uint) the time when the owner was addederror (uint16) error code"
+         "return" : "owner (address) the owner address|timestamp (uint) the time when the owner was added|error (uint16) error code"
       },
       "ownerTimestamp(address)" : {
          "details" : "Get the time when the owner was added.",
          "params" : {
             "addr" : "(address) the owner address"
          },
-         "return" : "timestamp (uint) the time when the owner was addederror (uint16) error code"
+         "return" : "timestamp (uint) the time when the owner was added|error (uint16) error code"
       },
       "removeOwner(address)" : {
          "details" : "Remove an owner. Can only be done as root and the owner in question.",
@@ -46,7 +46,7 @@
       },
       "rootData()" : {
          "details" : "Get the address of root, and the time they were created.",
-         "return" : "root (address) the addresstimeRootAdded (uint) the time when root was added."
+         "return" : "root (address) the address|timeRootAdded (uint) the time when root was added."
       },
       "setRoot(address)" : {
          "details" : "Set the address of root.",

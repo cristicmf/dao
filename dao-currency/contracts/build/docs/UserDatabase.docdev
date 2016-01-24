@@ -24,7 +24,7 @@
             "addr1" : "(address) the address of the first user.",
             "addr2" : "(address) the address of the second user."
          },
-         "return" : "has1 (bool) whether or not the first user exists.has2 (bool) whether or not the second user exists."
+         "return" : "has1 (bool) whether or not the first user exists|has2 (bool) whether or not the second user exists"
       },
       "registerUser(address,bytes32,uint256,bytes32)" : {
          "details" : "Register a new user.",
@@ -67,14 +67,14 @@
          "params" : {
             "addr" : "(address) the address."
          },
-         "return" : "value_nickname (bytes32) the nickname.value_timestamp (uint) the time when the user was added.value_dataHash (bytes32) the data-hash (optional)."
+         "return" : "value_nickname (bytes32) the nickname|value_timestamp (uint) the time when the user was added|value_dataHash (bytes32) the data-hash (optional)."
       },
       "userAddressFromIndex(uint256)" : {
          "details" : "Get a user address by its index in the backing array.",
          "params" : {
             "index" : "(uint) the index."
          },
-         "return" : "key (address) the key.error (uint16) error code."
+         "return" : "key (address) the key|error (uint16) error code"
       }
    },
    "title" : "UserDatabase"

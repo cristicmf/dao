@@ -13,7 +13,7 @@
          "params" : {
             "index" : "(uint) the index"
          },
-         "return" : "identifier (bytes32) the idcontractAddress (bytes32) the addresserror (uint16) error code"
+         "return" : "identifier (bytes32) the id|contractAddress (bytes32) the address|error (uint16) error code"
       },
       "actionsContractId(address)" : {
          "details" : "Get the id of the contract with the given address.",
@@ -50,7 +50,7 @@
          "params" : {
             "index" : "(uint) the index"
          },
-         "return" : "identifier (bytes32) the idcontractAddress (bytes32) the addresserror (uint16) error code"
+         "return" : "identifier (bytes32) the id|contractAddress (bytes32) the address|error (uint16) error code"
       },
       "databaseContractId(address)" : {
          "details" : "Get the id of the contract with the given address.",

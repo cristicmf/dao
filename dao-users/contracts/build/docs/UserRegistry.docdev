@@ -1,4 +1,5 @@
 {
+   "author" : "Andreas Olofsson (androlo1980@gmail.com)",
    "methods" : {
       "destroy(address)" : {
          "details" : "Destroy a contract. No return values since it's a destruction.",
@@ -60,5 +61,6 @@
          },
          "return" : "error (uint16) error code."
       }
-   }
+   },
+   "title" : "UserRegistry"
 }

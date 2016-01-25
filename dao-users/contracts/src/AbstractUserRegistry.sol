@@ -81,4 +81,11 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
         _udb = UserDatabase(dbAddr);
     }
 
+    /// @notice AbstractUserRegistry.userDatabase() to get the address of the user database.
+    /// @dev Get the address of the user database.
+    /// @return dbAddr (address) the database address.
+    function userDatabase() returns (address dbAddr) {
+        return _udb;
+    }
+
 }

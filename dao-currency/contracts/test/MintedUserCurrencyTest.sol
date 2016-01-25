@@ -87,20 +87,4 @@ contract MintedUserCurrencyTest is DaoAsserter {
         assertErrorsEqual(err, RESOURCE_NOT_FOUND, "mint did not return 'resource not found' error");
     }
 
-    function testSetMinterSuccess() {
-        var muc = new MintedUserCurrency(0, 0, this);
-        var err = muc.setMinter(TEST_ADDRESS_2);
-        assertNoError(err, "setMinter returned error");
-        var minter = muc.minter();
-        assertAddressesEqual(muc.minter(), TEST_ADDRESS_2, "minter returns the wrong address");
-    }
-
-    function testSetMinterFailAccessDenied() {
-        var muc = new MintedUserCurrency(0, 0, this);
-        var err = muc.setMinter(TEST_ADDRESS_2);
-        assertNoError(err, "setMinter returned error");
-        var minter = muc.minter();
-        assertAddressesEqual(muc.minter(), TEST_ADDRESS_2, "minter returns the wrong address");
-    }
-
 }

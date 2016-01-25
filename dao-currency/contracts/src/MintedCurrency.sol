@@ -36,4 +36,9 @@ contract MintedCurrency is DougEnabled {
     /// @return error (uint16) error code
     function setCurrencyDatabase(address dbAddr) returns (uint16 error);
 
+    /// @notice MintedCurrency.currencyDatabase() to get the address of the currency database.
+    /// @dev Get the address of the currency database.
+    /// @return dbAddr (address) the database address.
+    function currencyDatabase() returns (address dbAddr);
+
 }

@@ -64,20 +64,4 @@ contract DefaultMintedCurrencyTest is DaoAsserter {
         assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "mint did not return 'null param' error");
     }
 
-    function testSetMinterSuccess() {
-        var dmc = new DefaultMintedCurrency(0, this);
-        var err = dmc.setMinter(TEST_ADDRESS_2);
-        assertNoError(err, "setMinter returned error");
-        var minter = dmc.minter();
-        assertAddressesEqual(dmc.minter(), TEST_ADDRESS_2, "minter returns the wrong address");
-    }
-
-    function testSetMinterFailAccessDenied() {
-        var dmc = new DefaultMintedCurrency(0, this);
-        var err = dmc.setMinter(TEST_ADDRESS_2);
-        assertNoError(err, "setMinter returned error");
-        var minter = dmc.minter();
-        assertAddressesEqual(dmc.minter(), TEST_ADDRESS_2, "minter returns the wrong address");
-    }
-
 }

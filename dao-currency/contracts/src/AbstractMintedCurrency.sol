@@ -44,4 +44,11 @@ contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled, Errors {
         _cdb = CurrencyDatabase(dbAddr);
     }
 
+    /// @notice AbstractMintedCurrency.currencyDatabase() to get the address of the currency database.
+    /// @dev Get the address of the currency database.
+    /// @return dbAddr (address) the database address.
+    function currencyDatabase() returns (address dbAddr) {
+        return _cdb;
+    }
+
 }

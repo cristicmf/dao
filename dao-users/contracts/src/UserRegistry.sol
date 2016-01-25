@@ -50,4 +50,9 @@ contract UserRegistry is DougEnabled {
     /// @return error (uint16) error code
     function setUserDatabase(address dbAddr) returns (uint16 error);
 
+    /// @notice UserRegistry.userDatabase() to get the address of the user database.
+    /// @dev Get the address of the user database.
+    /// @return dbAddr (address) the database address.
+    function userDatabase() returns (address dbAddr);
+
 }

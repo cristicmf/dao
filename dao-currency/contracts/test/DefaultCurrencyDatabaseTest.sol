@@ -91,4 +91,6 @@ contract DefaultCurrencyDatabaseTest is DaoAsserter {
         assertUintZero(ab, "accountBalance is not 0 for receiver.");
     }
 
+
+
 }

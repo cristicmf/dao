@@ -1,6 +1,10 @@
 {
    "author" : "Andreas Olofsson (androlo1980@gmail.com)",
    "methods" : {
+      "currencyDatabase()" : {
+         "details" : "Get the address of the currency database.",
+         "return" : "dbAddr (address) the database address."
+      },
       "destroy(address)" : {
          "details" : "Destroy a contract. No return values since it's a destruction. Calls 'selfdestruct' on the contract if successful.",
          "params" : {

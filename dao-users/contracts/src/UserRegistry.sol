@@ -44,4 +44,10 @@ contract UserRegistry is DougEnabled {
     /// @return error (uint16) error code.
     function updateMyDataHash(bytes32 dataHash) returns (uint16 error);
 
+    /// @notice UserRegistry.setUserDatabase(addr) to set the address of the user database.
+    /// @dev Set the address of the user database.
+    /// @param dbAddr (address) the database address.
+    /// @return error (uint16) error code
+    function setUserDatabase(address dbAddr) returns (uint16 error);
+
 }

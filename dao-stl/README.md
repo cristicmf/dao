@@ -5,7 +5,6 @@ Standard contracts used throughout the entire framework.
 * [Assertions](#assertions)
 * [Collections](#collections)
 * [Errors](#errors)
-* [Tests](#tests)
 
 ### Assertions
 
@@ -18,7 +17,3 @@ A set of standard collections. The key and value types are mostly `address` and 
 ### Errors
 
 Contracts used to handle errors.
-
-### Tests
-
-Contracts used when mocking and testing.

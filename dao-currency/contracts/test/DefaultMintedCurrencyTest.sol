@@ -1,6 +1,6 @@
 import "../../../dao-stl/src/assertions/DaoAsserter.sol";
-import "../src/DefaultMintedCurrency.sol";
 import "./MockCurrencyDatabase.sol";
+import "../src/DefaultMintedCurrency.sol";
 
 contract DefaultMintedCurrencyTest is DaoAsserter {
 
@@ -23,10 +23,45 @@ contract DefaultMintedCurrencyTest is DaoAsserter {
         assertErrorsEqual(err, MOCK_RETURN, "mint returned the wrong error");
     }
 
+    function testMintFailReceiverIsNull() {
+        var mcd = new MockCurrencyDatabase();
+        var dmc = new DefaultMintedCurrency(mcd, this);
+        var err = dmc.mint(0, TEST_AMOUNT);
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "mint did not return 'null param' error");
+    }
+
+    function testMintFailAmountIsNull() {
+        var mcd = new MockCurrencyDatabase();
+        var dmc = new DefaultMintedCurrency(mcd, this);
+        var err = dmc.mint(TEST_ADDRESS_2, 0);
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "mint did not return 'null param' error");
+    }
+
     function testMintFailNotMinter() {
         var dmc = new DefaultMintedCurrency(0, TEST_ADDRESS);
         var err = dmc.mint(TEST_ADDRESS_2, TEST_AMOUNT);
         assertErrorsEqual(err, ACCESS_DENIED, "mint returned an error");
+    }
+
+    function testSendSuccess() {
+        var mcd = new MockCurrencyDatabase();
+        var dmc = new DefaultMintedCurrency(mcd, this);
+        var err = dmc.send(TEST_ADDRESS, TEST_AMOUNT);
+        assertErrorsEqual(err, MOCK_RETURN, "mint returned the wrong error");
+    }
+
+    function testSendFailReceiverIsNull() {
+        var mcd = new MockCurrencyDatabase();
+        var dmc = new DefaultMintedCurrency(mcd, this);
+        var err = dmc.send(0, TEST_AMOUNT);
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "mint did not return 'null param' error");
+    }
+
+    function testSendFailAmountIsNull() {
+        var mcd = new MockCurrencyDatabase();
+        var dmc = new DefaultMintedCurrency(mcd, this);
+        var err = dmc.send(TEST_ADDRESS, 0);
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "mint did not return 'null param' error");
     }
 
     function testSetMinterSuccess() {

@@ -8,7 +8,7 @@ import "../../../dao-stl/src/errors/Errors.sol";
 /// Stores an array index (uint) for each entry, in addition to the key and value.
 /// This is for easy lookup, and for making iteration possible.
 /// Order of insertion is not preserved.
-contract DefaultUserDatabase is Database {
+contract DefaultUserDatabase is DefaultDatabase {
 
     struct Element {
         // For backing array.

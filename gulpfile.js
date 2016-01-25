@@ -35,7 +35,7 @@ gulp.task('htmldoc:core', function(cb){
 /************************ dao-currency ***************************/
 
 var daoCurrencyContracts = ['AbstractMintedCurrency', 'CurrencyDatabase', 'DefaultCurrencyDatabase', 'DefaultMintedCurrency', 'MintedCurrency', 'MintedUserCurrency'];
-var daoCurrencyTests = ['DefaultCurrencyDatabaseTest', 'DefaultMintedCurrencyTest'];
+var daoCurrencyTests = ['DefaultCurrencyDatabaseTest', 'DefaultMintedCurrencyTest', 'MintedUserCurrencyTest'];
 var daoCurrencyTestFolder = path.join(__dirname, 'dao-currency', 'contracts', 'build', 'test');
 
 gulp.task('build:currency', function (cb) {

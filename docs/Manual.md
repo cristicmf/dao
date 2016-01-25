@@ -86,10 +86,12 @@ contract Destructible {
     }
     
     function destroy() {
-        if (msg.sender == _owner) selfdestruct(_owner);
+        if (msg.sender == _owner) 
+            selfdestruct(_owner);
     }
     
 }
+
 
 contract IncrediblyUseful is Destructible {
     

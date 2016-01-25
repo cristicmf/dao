@@ -2,7 +2,7 @@
    "author" : "Andreas Olofsson (androlo1980@gmail.com)",
    "methods" : {
       "destroy(address)" : {
-         "details" : "Destroy a contract. No return values since it's a destruction.",
+         "details" : "Destroy a contract. No return values since it's a destruction. Calls 'selfdestruct' on the contract if successful.",
          "params" : {
             "fundReceiver" : "(address) the account that receives the funds."
          }
@@ -36,7 +36,7 @@
          "params" : {
             "dougAddr" : "(address) the address"
          },
-         "return" : "added (bool) true means the address was added successfully (doug implementations should normally not register a contract that returns false."
+         "return" : "added (bool) true means the address was added successfully. Doug implementations should normally not register a contract that returns false."
       },
       "setMinter(address)" : {
          "details" : "Set the minter address.",

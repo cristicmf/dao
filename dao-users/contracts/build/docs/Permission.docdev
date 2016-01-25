@@ -2,7 +2,7 @@
    "author" : "Andreas Olofsson (androlo1980@gmail.com)",
    "methods" : {
       "addOwner(address)" : {
-         "details" : "Add a new owner. Can only be done as root.",
+         "details" : "Add a new owner.",
          "params" : {
             "addr" : "(address) the address of the new owner"
          },
@@ -34,7 +34,7 @@
          "return" : "timestamp (uint) the time when the owner was added|error (uint16) error code"
       },
       "removeOwner(address)" : {
-         "details" : "Remove an owner. Can only be done as root and the owner in question.",
+         "details" : "Remove an owner.",
          "params" : {
             "addr" : "(address) the address of the owner"
          },
@@ -49,7 +49,7 @@
          "return" : "root (address) the address|timeRootAdded (uint) the time when root was added."
       },
       "setRoot(address)" : {
-         "details" : "Set the address of root.",
+         "details" : "Set the root account address.",
          "params" : {
             "newRoot" : "(address) the address"
          },

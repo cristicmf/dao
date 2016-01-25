@@ -60,7 +60,7 @@
          "return" : "identifier (bytes32) the id (or nil)"
       },
       "destroy(address)" : {
-         "details" : "Destroy a contract. No return values since it's a destruction.",
+         "details" : "Destroy a contract. No return values since it's a destruction. Calls 'selfdestruct' on the contract if successful.",
          "params" : {
             "fundReceiver" : "(address) the account that receives the funds."
          }
@@ -82,7 +82,7 @@
          "return" : "numContracts (uint) the number of contracts"
       },
       "permissionAddress()" : {
-         "details" : "Get the address of the permissions-manager.",
+         "details" : "Get the address of the permission contract.",
          "return" : "pmAddress (address) the address"
       },
       "removeActionsContract(bytes32)" : {

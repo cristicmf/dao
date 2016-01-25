@@ -7,7 +7,7 @@
 
 **Specific**
 
-- [Actions and Database Linking](#actions-and-database-linking)
+- [Database Providers](#database-providers)
 
 ## Basic Tutorial
 
@@ -81,25 +81,23 @@ contract CoinActions is DefaultDougEnabled, Errors {
     }
     
     function mint(address receiver, uint amount) returns (uint16 error) {
-        if (msg.sender != _minter) {
+        if (msg.sender != _minter) 
             return ACCESS_DENIED;
-        }
         _balances[receiver] += amount;
     }
     
     function send(address receiver, uint amount) returns (uint16 error) {
-        if (_balances[msg.sender] < amount) {
+        if (_balances[msg.sender] < amount)
             return INSUFFICIENT_SENDER_BALANCE;
-        }
         _balances[msg.sender] -= amount;
         _balances[receiver] += amount;
     }
     
-    function minter() constant returns (address minter){
+    function minter() constant returns (address minter) {
         return _minter;
     }
     
-    function accountBalance(address addr) constant returns (uint balance){
+    function accountBalance(address addr) constant returns (uint balance) {
         return _balances[addr];
     }
     
@@ -117,24 +115,21 @@ contract CoinDb is Database, Errors {
     mapping (address => uint) _balances;
 
     function add(address receiver, uint amount) returns (uint16 error) {
-        if(!_checkCaller()){
+        if(!_checkCaller())
             return ACCESS_DENIED;
-        }
         _balances[receiver] += amount;
     }
     
     function send(address sender, address receiver, uint amount) returns (uint16 error) {
-        if(!_checkCaller()){
+        if(!_checkCaller())
             return ACCESS_DENIED;
-        }
-        if (_balances[sender] < amount) {
+        if (_balances[sender] < amount)
             return INSUFFICIENT_SENDER_BALANCE;
-        }
         _balances[sender] -= amount;
         _balances[receiver] += amount;
     }
     
-    function accountBalance(address addr) constant returns (uint balance){
+    function accountBalance(address addr) constant returns (uint balance) {
         return _balances[addr];
     }
     
@@ -150,15 +145,14 @@ contract CoinActions is DefaultDougEnabled, Errors {
     
     CoinDb _cdb;
     
-    function CoinActions(address coinDb, address minter){
+    function CoinActions(address coinDb, address minter) {
         _cdb = CoinDb(coinDb);
         _minter = minter;
     }
         
     function mint(address receiver, uint amount) returns (uint16 error) {
-        if (msg.sender != _minter) {
+        if (msg.sender != _minter)
             return ACCESS_DENIED;
-        }
         return _cdb.add(receiver, amount);
     }
     
@@ -166,11 +160,11 @@ contract CoinActions is DefaultDougEnabled, Errors {
         return _cdb.send(msg.sender, receiver, amount);
     }
     
-    function minter() constant returns (address minter){
+    function minter() constant returns (address minter) {
         return _minter;
     }
     
-    function destroy(address fundReceiver){}
+    function destroy(address fundReceiver) {}
     
 }
 ```
@@ -188,11 +182,11 @@ We now have to deploy the system and test it. We will do that through the browse
 ```
 contract UserProxy {
 
-    function mint(address coinActions, address receiver, uint amount) returns (uint16 error){
+    function mint(address coinActions, address receiver, uint amount) returns (uint16 error) {
         error = CoinActions(coinActions).mint(receiver,amount);
     }
     
-    function send(address coinActions, address receiver, uint amount) returns (uint16 error){
+    function send(address coinActions, address receiver, uint amount) returns (uint16 error) {
         error = CoinActions(coinActions).send(receiver,amount);
     }
 }
@@ -202,7 +196,7 @@ contract CoinTest {
     Doug _doug;
     UserProxy _proxy;
     
-    function CoinTest(){
+    function CoinTest() {
         _doug = new DefaultDoug(new DefaultPermission(address(this)), false, false);
         var cdb = new CoinDb();
         _doug.addDatabaseContract("minted_coin", cdb);
@@ -211,19 +205,19 @@ contract CoinTest {
         _proxy = new UserProxy();
     }
     
-    function mint(address receiver, uint amount) returns (uint16){
+    function mint(address receiver, uint amount) returns (uint16) {
         return CoinActions(_doug.actionsContractAddress("minted_coin")).mint(receiver,amount);
     }
     
-    function send(address receiver, uint amount) returns (uint16){
+    function send(address receiver, uint amount) returns (uint16) {
          return CoinActions(_doug.actionsContractAddress("minted_coin")).send(receiver,amount);
     }
     
-    function mintAsProxy(address receiver, uint amount) returns (uint16){
+    function mintAsProxy(address receiver, uint amount) returns (uint16) {
         return _proxy.mint(_doug.actionsContractAddress("minted_coin"), receiver, amount);
     }
     
-    function sendAsProxy(address receiver, uint amount) returns (uint16){
+    function sendAsProxy(address receiver, uint amount) returns (uint16) {
          return _proxy.send(_doug.actionsContractAddress("minted_coin"), receiver, amount);
     }
     
@@ -231,11 +225,11 @@ contract CoinTest {
         return CoinDb(_doug.databaseContractAddress("minted_coin")).accountBalance(addr);
     }
     
-    function myAddress() constant returns (address){
+    function myAddress() constant returns (address) {
         return address(this);
     }
         
-    function proxyAddress() constant returns (address){
+    function proxyAddress() constant returns (address) {
         return address(_proxy);
     }
     
@@ -259,36 +253,32 @@ contract UserDb is Database, Errors {
     mapping (bytes32 => address) _usersByName;
     
     function register(address addr, bytes32 name) returns (uint16 error) {
-        if(!_checkCaller()){
+        if (!_checkCaller())
             return ACCESS_DENIED;
-        }
-        if(_usersByAddress[addr] != 0 || _usersByName[name] != 0){
+        if (_usersByAddress[addr] != 0 || _usersByName[name] != 0)
             return RESOURCE_ALREADY_EXISTS;
-        }
         _usersByAddress[addr] = name;
         _usersByName[name] = addr;
     }
     
     function deregister(address addr) returns (uint16 error) {
-        if(!_checkCaller()){
+        if (!_checkCaller())
             return ACCESS_DENIED;
-        }
-        if(_usersByAddress[addr] == 0){
+        if (_usersByAddress[addr] == 0)
             return RESOURCE_NOT_FOUND;
-        }
         _usersByAddress[addr] = name;
         _usersByName[name] = addr;
     }
     
-    function userAddress(bytes32 name) constant returns (address userAddress){
+    function userAddress(bytes32 name) constant returns (address userAddress) {
         return _usersByName[name];
     }
     
-    function userName(address addr) constant returns (bytes32 name){
+    function userName(address addr) constant returns (bytes32 name) {
         return _usersByAddress[addr];
     }
     
-    function usersExist(address user1, address user2) constant returns (bool user1Exists, bool user2Exists){
+    function usersExist(address user1, address user2) constant returns (bool user1Exists, bool user2Exists) {
         user1Exists = _usersByAddress[user1] != 0;
         user2Exists = _usersByAddress[user2] != 0;
     }
@@ -304,15 +294,14 @@ contract UserActions is DefaultDougEnabled, Errors {
     
     UserDb _udb;
     
-    function UserActions(address userDb, address admin){
+    function UserActions(address userDb, address admin) {
         _udb = UserDb(coinDb);
         _admin = admin;
     }
         
     function register(bytes32 name) returns (uint16 error) {
-        if(name == null){
+        if (name == null)
             return NULL_PARAM_NOT_ALLOWED;
-        }
         return _udb.register(msg.sender, name);
     }
     
@@ -321,13 +310,12 @@ contract UserActions is DefaultDougEnabled, Errors {
     }
     
     function deregister(address addr) returns (uint16 error) {
-        if(addr != msg.sender && msg.sender != _admin){
+        if (addr != msg.sender && msg.sender != _admin)
             return ACCESS_DENIED;
-        }
         return _udb.deregister(addr);
     }
         
-    function admin() constant returns (address admin){
+    function admin() constant returns (address admin) {
         return _admin;
     }
     
@@ -351,31 +339,28 @@ contract CoinActions is DefaultDougEnabled, Errors {
     CoinDb _cdb;
     UserDb _udb;
     
-    function CoinActions(address coinDb, address userDb, address minter){
+    function CoinActions(address coinDb, address userDb, address minter) {
         _cdb = CoinDb(coinDb);
         _udb = UserDb(userDb);
         _minter = minter;
     }
         
     function mint(address receiver, uint amount) returns (uint16 error) {
-        if (msg.sender != _minter) {
+        if (msg.sender != _minter)
             return ACCESS_DENIED;
-        }
-        if(receiver != _minter && _udb.userName(receiver) == 0){
+        if (receiver != _minter && _udb.userName(receiver) == 0)
             return RESOURCE_NOT_FOUND;
-        }
         return _cdb.add(receiver, amount);
     }
     
     function send(address receiver, uint amount) returns (uint16 error) {
         var (sE, rE) = _udb.usersExist(msg.sender, receiver);
-        if(!(sE && rE)){
+        if (!(sE && rE))
             return RESOURCE_NOT_FOUND;
-        }
         return _cdb.send(msg.sender, receiver, amount);
     }
     
-    function minter() constant returns (address minter){
+    function minter() constant returns (address minter) {
         return _minter;
     }
     
@@ -408,15 +393,15 @@ This is a good example of why the separation is important. Not having it could l
 
 A better solution could be to allow bulk operations (through arrays), like checking X users, and doing X sends at once. The memory used for that is cheap, and would make sends cost less on average.
 
-## Actions and Database Linking
+## Database Providers
 
-There are several ways in which actions contracts and database contracts can be linked. In the basic and advanced tutorials they are linked by passing the address to the database in the constructor of the actions contract.
+There are several ways in which actions contracts and database contracts can be linked. In the basic and advanced tutorials we are effectively using dependency injection, by passing the address to the database in the constructor of the actions contract.
 
 ```
-function CoinActions(address coinDb, address minter){
-        _cdb = CoinDb(coinDb);
-        _minter = minter;
-    }
+function MintedCoin(address dbAddr, address minter) {
+    _cdb = CoinDatabase(dbAddr);
+    _minter = minter;
+}
 ```
 
 Calls to the database are done using the `_cdb` variable.
@@ -432,28 +417,44 @@ This is fast and simple, but there is a problem. What if we want to replace the 
 The setter will have to use permissions as well. One way of doing it would be to allow anyone with the Doug permission to do it.
  
 ```
-function setCoinDb(address newCoinDb) returns (uint16 error) {
+function setCoinDatabase(address newCoinDb) returns (uint16 error) {
     var perm = Permission(_DOUG.permissionAddress());
-    if(!perm.hasPermission(msg.sender)){
+    if(!perm.hasPermission(msg.sender))
         return ACCESS_DENIED;
-    }
-    _cdb = CoinDb(newCoinDb);
+    _cdb = CoinDatabase(newCoinDb);
     return NO_ERROR;
 }
 ```
 
-Another alternative is to fetch the current database in every call through Doug. All contracts in the system has a reference to Doug, which makes it possible to check the contract registries and permission root/owners. 
+Another alternative is to have the contract discover the database through Doug. All contracts in the system has a reference to Doug, which makes it possible to check the contract registries and permission root/owners. This would have to be done in the `setDougAddress` method as that's when the doug address is set. 
+
+```
+function CoinActions(bytes32 databaseId, address minter){
+    _databaseId = databaseId;
+    _minter = minter;
+}
+
+function setDougAddress(address dougAddress) returns (bool) {
+    // ...
+    var addr = _DOUG.databaseContractAddress(_databaseId);
+    if (addr != 0)
+        _cdb = CoinDatabase(addr);
+}
+```
+
+This works just as well, but will cause the same problem as with injection - what if the database is swapped out?
+
+There is only one way of ensuring that the current database is always used, and that is to fetch it every call.
 
 ```
 function mint(address receiver, uint amount) returns (uint16 error) {
-    if (msg.sender != _minter) {
+    if (msg.sender != _minter)
         return ACCESS_DENIED;
-    }
-    var coinDb = CoinDb(_DOUG.databaseContractAddress("minted_coin"));
+    var coinDb = CoinDatabase(_DOUG.databaseContractAddress(_databaseId));
     return coinDb.add(receiver, amount);
 }
 ```
 
 This means we can be sure it will always use the latest database, and that we don't have to update manually when changing it. The drawback is that this requires both an additional contract call + Doug has to reach into its iterable map to check, so it adds a small gas overhead to each call. It also can cause issues if the name of the database changes.
  
- Finally, replacing databases should not happen very often. That is one of the main reasons for using database contracts to begin with. It's far more likely that an actions contract would change, since they have all of the application specific logic, but the same principle would apply there (i.e. actions calling other actions).
+ Finally, replacing databases should not happen very often. That is one of the main reasons for using database contracts to begin with, so the DI approach makes more sense. It's likely that actions contracts will change, though, and the same principle would apply there.

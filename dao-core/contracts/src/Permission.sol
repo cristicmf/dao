@@ -28,11 +28,18 @@ contract Permission {
     /// @return error (uint16) error code
     function addOwner(address addr) returns (uint16 error);
 
-    /// @notice Permission.addOwner(addr) to remove an owner.
+    /// @notice Permission.removeOwner(addr) to remove an owner.
     /// @dev Remove an owner.
     /// @param addr (address) the address of the owner
     /// @return error (uint16) error code
     function removeOwner(address addr) returns (uint16 error);
+
+    /// @notice Permission.ownerTimestamp(addr) to get the time when the owner was added.
+    /// @dev Get the time when the owner was added.
+    /// @param addr (address) the owner address
+    /// @return timestamp (uint) the time when the owner was added|
+    /// @return error (uint16) error code
+    function ownerTimestamp(address addr) constant returns (uint timestamp, uint16 error);
 
     /// @notice Permission.ownerFromIndex(index) to get the owner with position 'index' in the backing array.
     /// @dev Get the owner with position 'index' in the backing array.
@@ -41,13 +48,6 @@ contract Permission {
     /// @return timestamp (uint) the time when the owner was added|
     /// @return error (uint16) error code
     function ownerFromIndex(uint index) constant returns (address owner, uint timestamp, uint16 error);
-
-    /// @notice Permission.ownerTimestamp(addr) to get the time when the owner was added.
-    /// @dev Get the time when the owner was added.
-    /// @param addr (address) the owner address
-    /// @return timestamp (uint) the time when the owner was added|
-    /// @return error (uint16) error code
-    function ownerTimestamp(address addr) constant returns (uint timestamp, uint16 error);
 
     /// @notice Permission.numOwners() to get the total number of owners.
     /// @dev Get the total number of owners.

@@ -1,4 +1,4 @@
-import "../../../dao-core/contracts/src/Doug.sol";
+import "../../../dao-core/contracts/src/Database.sol";
 
 /// @title UserDatabase
 /// @author Andreas Olofsson (androlo1980@gmail.com)
@@ -7,7 +7,7 @@ import "../../../dao-core/contracts/src/Doug.sol";
 /// 'nickname' (bytes32) - a user nick.
 /// 'timestamp' (uint) - the (unix) time when the user was added.
 /// 'dataHash' (bytes32) - preferably a reference to a file (e.g. bittorent, ipfs, etc.).
-contract UserDatabase is DougEnabled {
+contract UserDatabase is Database {
 
     /// @notice UserDatabase.registerUser(addr, value_nickname, value_timestamp, value_dataHash) to register a new user. Overwriting not allowed.
     /// @dev Register a new user.

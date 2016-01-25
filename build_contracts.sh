@@ -16,11 +16,11 @@ BUILD_TEST_DIR=${BUILD_DIR}/test
 BUILD_DOCS_DIR=${BUILD_DIR}/docs
 
 
-declare -a DaoCoreContracts=('DefaultDoug.sol' 'DefaultPermission.sol')
+declare -a DaoCoreContracts=('DefaultDoug.sol' 'DefaultPermission.sol' 'Database.sol')
 declare -a DaoCoreTest=('DefaultPermissionTest.sol' 'DefaultDougActionsTest.sol' 'DefaultDougDatabaseTest.sol' 'DefaultDougTest.sol' 'DefaultDougEnabledTest.sol')
 
 declare -a DaoCurrencyContracts=('DefaultCurrencyDatabase.sol' 'DefaultMintedCurrency.sol' 'MintedUserCurrency.sol')
-declare -a DaoCurrencyTest=('DefaultCurrencyDatabaseTest.sol' 'DefaultMintedCurrencyTest.sol')
+declare -a DaoCurrencyTest=('DefaultCurrencyDatabaseTest.sol' 'DefaultMintedCurrencyTest.sol' 'MintedUserCurrencyTest.sol')
 
 declare -a DaoUsersContracts=('DefaultUserDatabase.sol' 'UserRegistryAdminReg.sol' 'UserRegistrySelfReg.sol')
 declare -a DaoUsersTest=('DefaultUserDatabaseTest.sol')

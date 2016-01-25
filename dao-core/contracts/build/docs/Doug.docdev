@@ -82,7 +82,7 @@
          "return" : "numContracts (uint) the number of contracts"
       },
       "permissionAddress()" : {
-         "details" : "Get the address of the permissions-manager.",
+         "details" : "Get the address of the permission contract.",
          "return" : "pmAddress (address) the address"
       },
       "removeActionsContract(bytes32)" : {

@@ -3,10 +3,10 @@ import "./Permission.sol";
 /// @title Destructible
 /// @author Andreas Olofsson (andolo1980@gmail.com)
 /// @dev Interface for destroying (deleting) a contract.
-/// Should be implemented by contracts that are used as doug actions or
-/// database contracts, so that the contract can be automatically
-/// destroyed when it is removed from Doug.
+/// Should be implemented by contracts that are used as doug actions or database contracts,
+/// so that the contract can be automatically destroyed when it is removed from Doug.
 contract Destructible {
+
     /// @notice Destructible.destroy() to destroy the contract.
     /// @dev Destroy a contract. No return values since it's a destruction. Calls 'selfdestruct'
     /// on the contract if successful.
@@ -195,12 +195,11 @@ contract Doug is ActionsContractRegistry, DatabaseContractRegistry, Destructible
     function setPermission(address permissionAddress) returns (uint16 error);
 
     /// @notice Doug.permissionsManager() to get the address of the permissions-manager.
-    /// @dev Get the address of the permissions-manager.
+    /// @dev Get the address of the permission contract.
     /// @return pmAddress (address) the address
     function permissionAddress() constant returns (address pmAddress);
 
 }
-
 
 /// @title DefaultDougEnabled
 /// @author Andreas Olofsson (androlo1980@gmail.com)
@@ -209,6 +208,11 @@ contract DefaultDougEnabled is DougEnabled {
 
     Doug _DOUG;
 
+    /// @notice DefaultDougEnabled.setDougAddress(dougAddress) to set the address of the Doug contract.
+    /// @dev Set the address of the Doug contract. Will fail if address is already set, or if input address is 0.
+    /// @param dougAddr (address) the address
+    /// @return added (bool) true means the address was added successfully. Doug implementations
+    /// should normally not register a contract that returns false.
     function setDougAddress(address dougAddr) returns (bool result) {
         // If dougAddr is zero.
         if (dougAddr == 0)
@@ -220,6 +224,9 @@ contract DefaultDougEnabled is DougEnabled {
         return true;
     }
 
+    /// @notice DefaultDougEnabled.getDougAddress() to get the address of the Doug contract.
+    /// @dev Get the address of the Doug contract.
+    /// @return dougAddress (address) the doug address.
     function dougAddress() constant returns (address dougAddress) {
         return _DOUG;
     }

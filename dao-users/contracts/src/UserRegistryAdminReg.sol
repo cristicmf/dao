@@ -10,8 +10,17 @@ contract UserRegistryAdminReg is AbstractSingleAdminUserRegistry {
     function UserRegistryAdminReg(address dbAddress, address admin)
         AbstractSingleAdminUserRegistry(dbAddress, admin) {}
 
+    /// @notice UserRegistryAdminReg.registerSelf(nickname, dataHash) to register a new user.
+    /// @dev Register a new user. This can't be done except by 'admin'.
+    /// @param nickname (bytes32) the user nick.
+    /// @param dataHash (bytes32) hash of the file containing user data.
+    /// @return error (uint16) error code.
     function registerSelf(bytes32 nickname, bytes32 dataHash) returns (uint16 error) {
-        return ACCESS_DENIED;
+        if (nickname == 0)
+            return NULL_PARAM_NOT_ALLOWED;
+        if (msg.sender != _admin)
+            return ACCESS_DENIED;
+        return _udb.registerUser(msg.sender, nickname, block.timestamp, dataHash);
     }
 
 }

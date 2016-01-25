@@ -9,6 +9,11 @@ contract UserRegistrySelfReg is AbstractSingleAdminUserRegistry {
     function UserRegistrySelfReg(address dbAddress, address admin)
         AbstractSingleAdminUserRegistry(dbAddress, admin) {}
 
+    /// @notice UserRegistryAdminReg.registerSelf(nickname, dataHash) to register a new user.
+    /// @dev Register a new user.
+    /// @param nickname (bytes32) the user nick.
+    /// @param dataHash (bytes32) hash of the file containing user data.
+    /// @return error (uint16) error code.
     function registerSelf(bytes32 nickname, bytes32 dataHash) returns (uint16 error) {
         if (nickname == 0)
             return NULL_PARAM_NOT_ALLOWED;

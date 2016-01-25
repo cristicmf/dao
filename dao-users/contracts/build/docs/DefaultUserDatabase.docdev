@@ -1,5 +1,17 @@
 {
    "author" : "Andreas Olofsson (androlo1980@gmail.com)",
-   "methods" : {},
+   "methods" : {
+      "dougAddress()" : {
+         "details" : "Get the address of the Doug contract.",
+         "return" : "dougAddress (address) the doug address."
+      },
+      "setDougAddress(address)" : {
+         "details" : "Set the address of the Doug contract. Will fail if address is already set, or if input address is 0.",
+         "params" : {
+            "dougAddr" : "(address) the address"
+         },
+         "return" : "added (bool) true means the address was added successfully. Doug implementations should normally not register a contract that returns false."
+      }
+   },
    "title" : "DefaultUserDatabase"
 }

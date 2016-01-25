@@ -71,14 +71,6 @@ contract AbstractSingleAdminUserRegistry is UserRegistry, DefaultDougEnabled, Er
         return _udb.updateDataHash(msg.sender, dataHash);
     }
 
-    /// @notice AbstractSingleAdminUserRegistry.destroy() to destroy the contract.
-    /// @dev Destroy a contract. Calls 'selfdestruct' if caller is Doug.
-    /// @param fundReceiver (address) the account that receives the funds.
-    function destroy(address fundReceiver) {
-        if (msg.sender == address(_DOUG))
-            selfdestruct(fundReceiver);
-    }
-
     /// @notice AbstractSingleAdminUserRegistry.setUserDatabase(addr) to set the address of the user database.
     /// @dev Set the address of the user database. Can only be done by 'admin'.
     /// @param dbAddr (address) the database address.

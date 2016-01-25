@@ -34,14 +34,6 @@ contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled, Errors {
         return _minter;
     }
 
-    /// @notice AbstractMintedCurrency.destroy() to destroy the contract.
-    /// @dev Destroy a contract. Calls 'selfdestruct' if caller is Doug.
-    /// @param fundReceiver (address) the account that receives the funds.
-    function destroy(address fundReceiver) {
-        if (msg.sender == address(_DOUG))
-            selfdestruct(fundReceiver);
-    }
-
     /// @notice AbstractMintedCurrency.setCurrencyDatabase(addr) to set the address of the currency database.
     /// @dev Set the address of the currency database. Can only be done by the minter.
     /// @param dbAddr (address) the database address.

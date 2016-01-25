@@ -6,6 +6,8 @@ This is the a light-weight framework for modular systems of [Ethereum](https://e
 
 The contracts are written in the [Solidity](http://solidity.readthedocs.org/en/latest/index.html) language. The purpose of this library as of now is to act as a template for extending, or just as an example of how to write Solidity contracts. This is a **contracts-only library**. There is some javascript to help deploying and testing and such, but all of that is optional, and is really only meant to be used when authoring.
 
+The architecture is a new iteration of the architecture that I outlined in [these tutorials](https://docs.erisindustries.com/tutorials/solidity/solidity-1/), and that I had implemented in a now outdated LLL DApp named [The People's Republic of Doug](https://github.com/androlo/EthereumContracts).
+
 NOTE: Ethereum is still experimental, and so is this code. Using this on a chain where Ether has real value, or in any form of production environment is **not** recommended.
 
 ## Getting started
@@ -60,6 +62,14 @@ This library is only officially supported on 64 bit Ubuntu 14.04+, although it s
 **I don't know how to read the contract code**
 
 http://solidity.readthedocs.org/en/latest/index.html
+
+**I don't understand why I should use this code**
+
+It's useful because it is fairly simple, but has most of the fundamentals like permissions structures, registries, users, currencies, etc. It also pushes the limits on what you can do with Solidity, unit testing, documentation, building, etc. Finally, it is essentially a more well-engineered version of a framework that has been worked on since before Solidity existed, so there's been time to find mistakes and to correct them.
+
+That being said, I would not recommend to start copy-pasting it and include in a project, but would strongly recommend learning the ideas behind it, play around, re-invent and re-implement things etc. I will try and make tutorials and things that makes this a good resource for those who wants to learn how to create non-trivial production ready contract systems.
+
+Maybe it's good for someone, maybe not.
 
 **I can't build the contracts**
 

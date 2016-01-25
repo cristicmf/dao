@@ -368,8 +368,6 @@ contract CoinActions is DefaultDougEnabled, Errors {
 
 The sub-currency module now depends on the user module, because it calls on the user database to do checks before any coins can be minted or transferred.
 
-![2Modules](./images/2modules.png)
-
 Note that the minter does not have to be a user, so the user check in the mint method needs to take that into account (hence the first condition).
 
 It would now be possible to deploy this just as any other contracts.

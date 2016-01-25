@@ -43,4 +43,6 @@ contract MockUserDatabase is UserDatabase {
 
     function destroy(address fundReceiver) {}
 
+    function _checkCaller() constant internal returns (bool) {}
+
 }

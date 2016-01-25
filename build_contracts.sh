@@ -22,7 +22,7 @@ declare -a DaoCoreTest=('DefaultPermissionTest.sol' 'DefaultDougActionsTest.sol'
 declare -a DaoCurrencyContracts=('DefaultCurrencyDatabase.sol' 'DefaultMintedCurrency.sol' 'MintedUserCurrency.sol')
 declare -a DaoCurrencyTest=('DefaultCurrencyDatabaseTest.sol' 'DefaultMintedCurrencyTest.sol' 'MintedUserCurrencyTest.sol')
 
-declare -a DaoUsersContracts=('DefaultUserDatabase.sol' 'UserRegistryAdminReg.sol' 'UserRegistrySelfReg.sol')
+declare -a DaoUsersContracts=('DefaultUserDatabase.sol' 'AdminRegUserRegistry.sol' 'SelfRegUserRegistry.sol')
 declare -a DaoUsersTest=('DefaultUserDatabaseTest.sol')
 
 declare -a DaoVotesContracts=('MintBallot.sol' 'MintBallotManager.sol')

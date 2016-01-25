@@ -1,14 +1,14 @@
-import "./AbstractSingleAdminUserRegistry.sol";
+import "./AbstractUserRegistry.sol";
 
 /// @title UserRegistryAdminReg
 /// @author Andreas Olofsson (androlo1980@gmail.com)
 /// @dev User registry contract. Depends on a 'UserDatabase' contract.
 /// All users must be registered by an administrator, but the users can remove themselves and edit their data.
 /// This contract uses a single admin account.
-contract UserRegistryAdminReg is AbstractSingleAdminUserRegistry {
+contract UserRegistryAdminReg is AbstractUserRegistry {
 
     function UserRegistryAdminReg(address dbAddress, address admin)
-        AbstractSingleAdminUserRegistry(dbAddress, admin) {}
+        AbstractUserRegistry(dbAddress, admin) {}
 
     /// @notice UserRegistryAdminReg.registerSelf(nickname, dataHash) to register a new user.
     /// @dev Register a new user. This can't be done except by 'admin'.

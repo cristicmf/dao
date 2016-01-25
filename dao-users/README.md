@@ -26,6 +26,8 @@ Command-line tool: `$ solunit -d ./dao-users/contracts/build/test`
 
 ## Contracts
 
+![DaoUsersContracts](../docs/images/dao-users-contracts.png)
+
 #### User database
 
 The user database is for storing user data. A user in this system has three properties:
@@ -39,14 +41,14 @@ The contents of the file that the hash points to is application specific, and co
 This is a bare-bones user manager. If more user data is needed, such as reputation or a sub-currency/token balance, one should consider adding that in a separate module before hacking into this one. User data will usually change, and it might be worth keeping things separate.
 
 There is an interface, `UserDatabase` and a default implementation, `DefaultUserDatabase`.
- 
+
 #### User actions
 
-There are two actions contracts, `UserRegistryAdminReg` and `UserRegistrySelfReg` that both extend a third one, `AdminUserRegistry`.
+There are two actions contracts, `AdminRegUserRegistry` and `SelfRegUserRegistry` that both extend a third one, `AbstractUserRegistry`.
 
-`UserRegistryAdminReg` only lets an admin add users. It can be useful when people must be identified before they may join.
+`AdminRegUserRegistry` only lets an admin add users. It can be useful when people must be identified before they may join.
 
-`UserRegistrySelfReg` lets users register themselves.
+`SelfRegUserRegistry` lets users register themselves.
 
 Both registries has a single `admin` account that is allowed to remove users and modify their user data in both registries.
 

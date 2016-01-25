@@ -12,7 +12,7 @@
          "return" : "dougAddress (address) the doug address."
       },
       "setDougAddress(address)" : {
-         "details" : "Set the address of the Doug contract. Will fail if address is already set, or if input address is 0.",
+         "details" : "Set the address of the Doug contract.",
          "params" : {
             "dougAddr" : "(address) the address"
          },

@@ -2,7 +2,7 @@
    "author" : "Andreas Olofsson (androlo1980@gmail.com)",
    "methods" : {
       "destroy(address)" : {
-         "details" : "Destroy a contract. No return values since it's a destruction. Calls 'selfdestruct' on the contract if successful.",
+         "details" : "Destroy a contract. Calls 'selfdestruct' if caller is Doug.",
          "params" : {
             "fundReceiver" : "(address) the account that receives the funds."
          }
@@ -12,12 +12,12 @@
          "return" : "dougAddress (address) the doug address."
       },
       "setDougAddress(address)" : {
-         "details" : "Set the address of the Doug contract.",
+         "details" : "Set the address of the Doug contract. Will fail if address is already set, or if input address is 0.",
          "params" : {
             "dougAddr" : "(address) the address"
          },
          "return" : "added (bool) true means the address was added successfully. Doug implementations should normally not register a contract that returns false."
       }
    },
-   "title" : "Database"
+   "title" : "DefaultDatabase"
 }

@@ -1,4 +1,4 @@
-# DAO manual
+# DAO framework 1.0 manual
 
 ## Table of Contents
 
@@ -9,9 +9,19 @@
 
 ## Overview
 
-![DaoCore](./images/dao-core.png)
+The TL;DR is that smart-contract systems is viewed as a set of actions that users can take. Each action is defined by three separate parts:
+ 
+1. What it does
+2. Who is allowed to do it 
+3. The data it is operating on
 
-The DAO framework uses three main classes of contracts: Libraries, Databases and Actions.
+The DAO framework is made to facilitate actions, and to help in keeping the different parts separate. It does so by dividing contracts up into classes.
+
+### Application architecture
+
+There are three main classes of contracts in a DAO framework application: Libraries, Databases and Actions.
+
+![DaoCore](./images/dao-core.png)
 
 #### Libraries
 
@@ -23,11 +33,23 @@ Database contracts are bare-bones storage contracts. They contain only the funct
 
 #### Actions contracts
 
-Actions contracts contains a number of actions that can be taken by users. There could for example be a 'users' actions contract and a corresponding user database. The actions are functions in the actions contract and could do anything, like for example registering, modifying and removing users. 
+Actions contracts contains a number of actions that can be taken by users. There could for example be a 'users' actions contract and a corresponding user database. The actions are functions in the actions contract and could do anything, like for example registering, modifying and removing users.
+
+#### Modules
+
+A module is a set of actions contracts and/or database contracts that makes up a functional unit. The framework comes with a set of different modules such as `dao-users` and `dao-currency`.
+
+Modules may be self-contained, or depend on other modules. The thing they all have in common is they all depend on the `dao-core` contracts (`Doug` at the very least).
+
+![ModuleView](./images/module-view.png)
+
+There is no special procedure for registering a module. At least not in the first version of the framework. The way you do it is simply by creating a script that deploys the actions and database contracts, register them with Doug, and hook them up with the contracts they depend on. There is nothing in the code that states "this contract is part of module X" - nor is there any logic that depends on any data like that.
 
 #### Notes
 
 This separation is not made with the application / domain layer OO circle-jerk in mind; it's made by necessity, because of how Ethereum contracts and Solidity works. There is more about this in the design philosophy section.
+
+The reason there isn't a separate permissions layer is for efficiency reasons. Permissions are normally part of the actions contract, or put in a separate contract referred to by the actions contract. This may change in the next iteration.
 
 ### DAO permissions model
 
@@ -36,7 +58,7 @@ There are three main types of access in this system:
 1. **Root access**. This is managed by Doug, and handles permissions to add and remove contracts from the system, and changing core properties like whether or not contracts can be overwritten, and replacing the core premissions management system itself.
 
 2. **Database access**. The system automatically gives actions-contracts write access to all the registered databases.
-    
+
 3. **User access**. This includes access to all actions except those that involves Doug. The application maker is in full control over these permissions. It could be handled per-contract or on a system wide basis (or both).
 
 ## Getting Started

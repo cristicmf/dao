@@ -1,13 +1,13 @@
-import "./AbstractSingleAdminUserRegistry.sol";
+import "./AbstractUserRegistry.sol";
 
 /// @title UserRegistrySelfReg
 /// @author Andreas Olofsson (androlo1980@gmail.com)
 /// @dev User registry contract. Depends on a 'UserDatabase' contract.
 /// Users can register themselves.
-contract UserRegistrySelfReg is AbstractSingleAdminUserRegistry {
+contract UserRegistrySelfReg is AbstractUserRegistry {
 
     function UserRegistrySelfReg(address dbAddress, address admin)
-        AbstractSingleAdminUserRegistry(dbAddress, admin) {}
+        AbstractUserRegistry(dbAddress, admin) {}
 
     /// @notice UserRegistryAdminReg.registerSelf(nickname, dataHash) to register a new user.
     /// @dev Register a new user.

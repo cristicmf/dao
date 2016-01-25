@@ -61,7 +61,7 @@ gulp.task('htmldoc:currency', function(cb){
 
 /************************ dao-users ***************************/
 
-var daoUsersContracts = ['AbstractSingleAdminUserRegistry', 'DefaultUserDatabase', 'UserDatabase', 'UserRegistry', 'UserRegistryAdminReg', 'UserRegistrySelfReg'];
+var daoUsersContracts = ['DefaultUserDatabase', 'UserDatabase', 'UserRegistry', 'AbstractUserRegistry', 'AdminRegUserRegistry', 'SelfRegUserRegistry'];
 var daoUsersTests = ['DefaultUserDatabaseTest'];
 var daoUsersTestFolder = path.join(__dirname, 'dao-users', 'contracts', 'build', 'test');
 

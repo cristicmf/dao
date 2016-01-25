@@ -4,7 +4,7 @@ import "./Doug.sol";
 /// @title Database
 /// @author Andreas Olofsson (androlo1980@gmail.com)
 /// @dev Interface for databases. Implements the 'DougEnabled' interface.
-contract DefaultDatabase is DougEnabled {
+contract Database is DougEnabled {
 
     // Check if the caller is an actions contract.
     function _checkCaller() constant internal returns (bool);

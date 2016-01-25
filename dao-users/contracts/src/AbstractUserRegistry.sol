@@ -7,12 +7,12 @@ import "./UserDatabase.sol";
 /// @author Andreas Olofsson (androlo1980@gmail.com)
 /// @dev User registry contract. Depends on a 'UserDatabase' contract.
 /// Base contract for administrated user accounts. The admin can remove users and edit their data.
-contract AbstractSingleAdminUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
+contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
 
     address _admin;
     UserDatabase _udb;
 
-    function AbstractSingleAdminUserRegistry(address dbAddress, address admin) {
+    function AbstractUserRegistry(address dbAddress, address admin) {
         _udb = UserDatabase(dbAddress);
         _admin = admin;
     }

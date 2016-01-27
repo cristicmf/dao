@@ -11,7 +11,7 @@ contract DefaultPermission is Destructible, Permission, Errors {
 
     struct OElement {
         uint _keyIndex;
-        uint _timestamp;
+        uint timestamp;
     }
 
     struct OMap
@@ -40,7 +40,7 @@ contract DefaultPermission is Destructible, Permission, Errors {
             return ACCESS_DENIED;
         _root = newRoot;
         // Remove new root from owner list if he was in there.
-        if (_owners._data[newRoot]._timestamp != 0)
+        if (_owners._data[newRoot].timestamp != 0)
             delete _owners._data[newRoot];
         _timeRootAdded = block.timestamp;
     }
@@ -76,7 +76,7 @@ contract DefaultPermission is Destructible, Permission, Errors {
         if(msg.sender != _root)
             return ACCESS_DENIED;
 
-        var exists = _owners._data[addr]._timestamp != 0;
+        var exists = _owners._data[addr].timestamp != 0;
         if (exists)
             return RESOURCE_ALREADY_EXISTS;
         else {
@@ -100,7 +100,7 @@ contract DefaultPermission is Destructible, Permission, Errors {
 
         var elem = _owners._data[addr];
 
-        var exists = elem._timestamp != 0;
+        var exists = elem.timestamp != 0;
         if (!exists)
             return RESOURCE_NOT_FOUND;
 
@@ -121,7 +121,7 @@ contract DefaultPermission is Destructible, Permission, Errors {
     /// @return timestamp (uint) the time when the owner was added|
     /// @return error (uint16) error code
     function ownerTimestamp(address addr) constant returns (uint timestamp, uint16 error) {
-        timestamp = _owners._data[addr]._timestamp;
+        timestamp = _owners._data[addr].timestamp;
         if (timestamp == 0)
             error = RESOURCE_NOT_FOUND;
     }
@@ -138,7 +138,7 @@ contract DefaultPermission is Destructible, Permission, Errors {
             return;
         }
         owner = _owners._keys[index];
-        timestamp = _owners._data[owner]._timestamp;
+        timestamp = _owners._data[owner].timestamp;
         return;
     }
 
@@ -154,7 +154,7 @@ contract DefaultPermission is Destructible, Permission, Errors {
     /// @param addr (address) the address
     /// @return hasPerm (bool) true if the address is either root or an owner, false otherwise.
     function hasPermission(address addr) constant returns (bool hasPerm) {
-        return addr == _root || _owners._data[addr]._timestamp != 0;
+        return addr == _root || _owners._data[addr].timestamp != 0;
     }
 
     /// @notice DefaultPermission.destroy() to destroy the contract.

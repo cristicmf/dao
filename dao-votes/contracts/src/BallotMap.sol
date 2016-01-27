@@ -2,7 +2,7 @@ contract BallotMap {
 
     struct Element {
         uint _keyIndex;
-        uint8 _value;
+        uint8 value;
     }
 
     struct Map
@@ -22,7 +22,7 @@ contract BallotMap {
 
     function _remove(address key) internal returns (uint8 value, bool removed) {
         var elem = _map._data[key];
-        value = elem._value;
+        value = elem.value;
         var exists = value != 0;
         if (!exists)
             return;
@@ -43,7 +43,7 @@ contract BallotMap {
         if (index >= _map._keys.length)
             return;
         key = _map._keys[index];
-        value = _map._data[key]._value;
+        value = _map._data[key].value;
         exists = true;
     }
 

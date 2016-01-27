@@ -1,17 +1,15 @@
 # Tutorials
 
-**Main thread**
-
 - [Basic Tutorial](#basic-tutorial)
-- [Advanced Tutorial](#advanced-tutorial)
+- [Advanced Tutorial](#advanced-tutorial) (under construction)
 
-**Specific**
+##### Case studies
 
 - [Database Providers](#database-providers)
 
 ## Basic Tutorial
 
-This tutorial shows how to use the dao framework. We're going to start by looking at a regular, simple contract; namely the subcurrency example from the [Solidity webpage](http://solidity.readthedocs.org/en/latest/introduction-to-smart-contracts.html#subcurrency-example). This is how it looks at the time of writing:
+This tutorial shows how to use the dao framework. We're going to start from a simple contract; namely the subcurrency example from the [Solidity webpage](http://solidity.readthedocs.org/en/latest/introduction-to-smart-contracts.html#subcurrency-example). This is how it looks at the time of writing:
 
 ```
 contract Coin {
@@ -52,11 +50,11 @@ This contract has all the basic functionality needed for a subcurrency contract,
 
 The first step is to create a database and an actions contract. We will leave the database empty for now, and put everything into the actions contract. 
 
-We will make a few modifications first. 
+We will make a few modifications first.
 
 - The event is not needed for this example, so it will be removed. 
 
-- Sticking to the coding conventions we will remove the public modifier from `minter` and write the accessor function ourselves so that we can document it and name the return value. We will also put a `_` in front of the variable name since it's not public. This helps us avoid name collisions with functions, and signals to other ÐApp Ðevs that they should never access the variable directly. 
+- Sticking to the coding conventions we will remove the public modifier from `minter` and write the accessor function ourselves so that we can document it and name the return value. We will also put a `_` in front of the variable name since it's not public. This helps us avoid name collisions with functions, and signals to other ÐApp Ðevs that they should never modify the value directly.
 
 - We will do the same thing as above with the `balances` field.
 
@@ -65,7 +63,7 @@ We will make a few modifications first.
 - We will make the minter address a constructor argument instead of automatically assigning `msg.sender`.
 
 ```
-contract CoinDb is Database {
+contract CoinDb is DefaultDatabase {
 
 }
 ```
@@ -110,7 +108,7 @@ The next step is to separate logic from data storage. User permission checks in 
 
 ```
 
-contract CoinDb is Database, Errors {
+contract CoinDb is DefaultDatabase {
     
     mapping (address => uint) _balances;
 
@@ -236,119 +234,37 @@ contract CoinTest {
 }
 ```
 
-What we did here was to set the system up so that we call it from a solidity contract. This is just to make testing simpler. In a normal system, this would be done from a custom web-page or a server (through RPC calls to the ethereum client).
+What we did here was to set the system up so that we call it from a solidity contract. This is just to make testing simpler. In the regular dao framework modules the tests are done using the sol-unit library, and interaction would be done through RPC calls to the blockchain client - usually using something like web3.js.
 
-You may run this yourself by clicking this [link]( https://chriseth.github.io/browser-solidity/?gist=https://gist.github.com/anonymous/55740f9702fbf082c5a3). After the page has loaded, find `CoinTest` in the menu to the right, click `create`, and then play around with the methods. WARNING: It will take a while to load the page and compile the code.
+You may run this yourself in the online compiler by clicking this [link]( https://chriseth.github.io/browser-solidity/?gist=https://gist.github.com/anonymous/e1d8a9d0aeb39a0a969f). After the page has loaded, find `CoinTest` in the menu to the right, click `create`, and then play around with the methods. NOTE: The entire dao-core is added because github imports does not work yet. When it does, it will only contain the contracts from the tutorial and import the rest from the dao github repo. Also it will take a while to load the page and compile the code.
 
 ## Advanced Tutorial
 
 This tutorial builds on the basic tutorial, where we created and deployed a sub-currency using the DAO framework. We are now going to add a user management system that will work together with the currency. Users will no longer be able to just get and transfer money around, but will have to be identified first. 
 
-There are two ways to go about this; one is to add a set of administrators that will vet users off-chain before they add them to the system. It could also be made so that users can register themselves automatically. We will start with the automatic approach, and add a simple user manager that lets people register their account along with a (unique) nickname.
+### Step 1
 
-```
-contract UserDb is Database, Errors {
+Rather then creating the user module itself we will instead use `dao-users`, which already has basic user management functionality.
 
-    mapping (address => bytes32) _usersByAddress;
-    mapping (bytes32 => address) _usersByName;
-    
-    function register(address addr, bytes32 name) returns (uint16 error) {
-        if (!_checkCaller())
-            return ACCESS_DENIED;
-        if (_usersByAddress[addr] != 0 || _usersByName[name] != 0)
-            return RESOURCE_ALREADY_EXISTS;
-        _usersByAddress[addr] = name;
-        _usersByName[name] = addr;
-    }
-    
-    function deregister(address addr) returns (uint16 error) {
-        if (!_checkCaller())
-            return ACCESS_DENIED;
-        if (_usersByAddress[addr] == 0)
-            return RESOURCE_NOT_FOUND;
-        _usersByAddress[addr] = name;
-        _usersByName[name] = addr;
-    }
-    
-    function userAddress(bytes32 name) constant returns (address userAddress) {
-        return _usersByName[name];
-    }
-    
-    function userName(address addr) constant returns (bytes32 name) {
-        return _usersByAddress[addr];
-    }
-    
-    function usersExist(address user1, address user2) constant returns (bool user1Exists, bool user2Exists) {
-        user1Exists = _usersByAddress[user1] != 0;
-        user2Exists = _usersByAddress[user2] != 0;
-    }
-    
-}
-
-```
-
-```
-contract UserActions is DefaultDougEnabled, Errors {
-    
-    address _admin;
-    
-    UserDb _udb;
-    
-    function UserActions(address userDb, address admin) {
-        _udb = UserDb(coinDb);
-        _admin = admin;
-    }
-        
-    function register(bytes32 name) returns (uint16 error) {
-        if (name == null)
-            return NULL_PARAM_NOT_ALLOWED;
-        return _udb.register(msg.sender, name);
-    }
-    
-    function deregister() returns (uint16 error) {
-        return _udb.deregister(msg.sender);
-    }
-    
-    function deregister(address addr) returns (uint16 error) {
-        if (addr != msg.sender && msg.sender != _admin)
-            return ACCESS_DENIED;
-        return _udb.deregister(addr);
-    }
-        
-    function admin() constant returns (address admin) {
-        return _admin;
-    }
-    
-}
-```
-
-This module is very basic. It lets actions-contracts register and deregister users. Note that some input validation is done in the actions contract and some in the database. The rule of thumb is that if the validation requires data from the database (such as checking if a user is already registered), it is best done there.
-
-There are two methods for de-registering users, one that takes no parameter and defaults to `msg.sender`, and another one that takes the address as a param. The second one is for adminstrators who wants to remove users that perhaps has an inappropriate name, or that needs to be removed for some other reason.
-
-Notice that there is an existence check for a pair of users. The reason is because interaction between two registered users would usually be a common thing, so it's good to have a function for quickly checking existence of two users at once (i.e. without having to do two separate calls). 
-
-### Step 2
-
-Next we're going to modify the old coin actions contract. It will now check if the caller is a registered user before letting them send or receive coins. Good thing the coin actions contract is separate from the database, or we would have had to replace the entire system; now we only have to fix the actions contract and re-deploy.
+We will also re-use the code from the basic tutorial, but modify it. The coin actions contract will now check if the caller is a registered user before letting them send or receive coins. Good thing the coin actions contract is separate from the database, or we would have had to replace the entire system; now we only have to fix the actions contract and re-deploy.
 
 contract CoinActions is DefaultDougEnabled, Errors {
     
     address _minter;
     
     CoinDb _cdb;
-    UserDb _udb;
+    UserDatabase _udb;
     
     function CoinActions(address coinDb, address userDb, address minter) {
         _cdb = CoinDb(coinDb);
-        _udb = UserDb(userDb);
+        _udb = UserDatabase(userDb);
         _minter = minter;
     }
         
     function mint(address receiver, uint amount) returns (uint16 error) {
         if (msg.sender != _minter)
             return ACCESS_DENIED;
-        if (receiver != _minter && _udb.userName(receiver) == 0)
+        if (receiver != _minter && _udb.hasUser(receiver))
             return RESOURCE_NOT_FOUND;
         return _cdb.add(receiver, amount);
     }
@@ -366,8 +282,6 @@ contract CoinActions is DefaultDougEnabled, Errors {
     
 }
 
-The sub-currency module now depends on the user module, because it calls on the user database to do checks before any coins can be minted or transferred.
-
 Note that the minter does not have to be a user, so the user check in the mint method needs to take that into account (hence the first condition).
 
 It would now be possible to deploy this just as any other contracts.
@@ -376,20 +290,28 @@ It would now be possible to deploy this just as any other contracts.
 
 Before we go on to test this, we will consider the performance impact of this setup. Let's start by analyzing the call-chain when someone invokes 'send'. It would look like this.
 
-1. User calls Coin actions
-2. Coin actions calls user database (to do user existence check)
-3. Coin actions calls coin database (to alter the balances)
-4. Coin database calls DOUG (to check if caller is an actions contract)
+1. User calls coin actions.
+2. Coin actions calls user database (to do user existence check).
+3. Coin actions calls coin database (to alter the balances).
+4. Coin database calls DOUG (to check if caller is an actions contract).
 
-This means every time a user wants to transfer coins, three contract-to-contract calls will be made. That in itself is not that bad, because a call costs only 40 gas as of now (2016-01-11), but it also involves packing and sending data back and forth so will probably add at least 1000 gas or so to the total. What we could do is to merge steps 2 and 3 by combining the user and coin databases into one, but that is not completely without risk. 
+This means every time a user wants to transfer coins, three contract-to-contract calls will be made. That in itself is not bad, because a call costs only 40 gas as of now (2016-01-11), but it also involves packing and sending data back and forth so will probably add at least several hundred gas to the total.
+
+What we could do is to merge steps 2 and 3 by combining the user and coin databases into one, but that is not completely without risk. 
 
 If all we do is combine the two databases so one could check if a user is registered and what their coin balance is at the same time, then that wouldn't be so bad. That's just an accessor function, and if at some point we want to decouple the two components we can still do that - just stop doing that function in actions contracts. 
 
 If want to automatically check user status **when writing**, i.e. as part of the send function in the database contract, then we're stuck with it until we choose to replace the entire database because that would be the only way to change it back.
 
-This is a good example of why the separation is important. Not having it could lead to hard problems. Maybe in some systems it's worth saving a few hundred gas by lumping everything together, but generally that is not the case. At least not in my experience. A send here involves a transaction plus the altering of two storage slots, and only that costs at least 31000 (21k for tx and 5k per storage slot manipulation). 
+This is a good example of why the separation is important. Not having it could lead to hard problems. Maybe in some systems it's worth saving a few hundred gas by lumping everything together, but generally that is not the case. At least not in my experience. A send here involves a transaction plus the altering of two storage slots, and only that costs at least 31000 (21k for tx and 5k per storage slot manipulation), but possible upwards of 61k. 
 
-A better solution could be to allow bulk operations (through arrays), like checking X users, and doing X sends at once. The memory used for that is cheap, and would make sends cost less on average.
+A better solution could be to allow bulk operations (through arrays), like checking X users, and doing X sends at once. Expanding memory is cheap, and would make sends cost less on average.
+
+### Step 4
+
+Time to deploy. 
+
+TODO
 
 ## Database Providers
 

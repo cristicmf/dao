@@ -18,11 +18,26 @@
          },
          "return" : "has (bool) whether or not the user exists."
       },
+      "hasUser(bytes32)" : {
+         "details" : "Check if a user exists.",
+         "params" : {
+            "nickname" : "(bytes32) the nickname."
+         },
+         "return" : "has (bool) whether or not the user exists."
+      },
       "hasUsers(address,address)" : {
          "details" : "Check if two users exists.",
          "params" : {
             "addr1" : "(address) the address of the first user.",
             "addr2" : "(address) the address of the second user."
+         },
+         "return" : "has1 (bool) whether or not the first user exists|has2 (bool) whether or not the second user exists"
+      },
+      "hasUsers(bytes32,bytes32)" : {
+         "details" : "Check if two users exists.",
+         "params" : {
+            "nickname1" : "(bytes32) the first nickname.",
+            "nickname2" : "(bytes32) the second nickname."
          },
          "return" : "has1 (bool) whether or not the first user exists|has2 (bool) whether or not the second user exists"
       },
@@ -63,9 +78,16 @@
          "return" : "error (uint16) error code."
       },
       "user(address)" : {
-         "details" : "Get user data.",
+         "details" : "Get user data from the user address.",
          "params" : {
             "addr" : "(address) the address."
+         },
+         "return" : "value_nickname (bytes32) the nickname|value_timestamp (uint) the time when the user was added|value_dataHash (bytes32) the data-hash (optional)."
+      },
+      "user(bytes32)" : {
+         "details" : "Get user data from the nickname.",
+         "params" : {
+            "nickname" : "(bytes32) the nickname."
          },
          "return" : "value_nickname (bytes32) the nickname|value_timestamp (uint) the time when the user was added|value_dataHash (bytes32) the data-hash (optional)."
       },

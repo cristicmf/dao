@@ -20,7 +20,7 @@ contract DefaultDoug is Doug, Errors {
     // Element used in NAMap.
     struct NAElement {
         uint _keyIndex;
-        address _value;
+        address value;
     }
 
     // Map that stores id<->address mappings. Can be iterated over.
@@ -74,7 +74,7 @@ contract DefaultDoug is Doug, Errors {
     /// @param identifier (bytes32) the identifier (name)
     /// @return contractAddress (address) the address (or nil)
     function actionsContractAddress(bytes32 identifier) constant returns (address contractAddress) {
-         return _aMap._data[identifier]._value;
+         return _aMap._data[identifier].value;
     }
 
     /// @notice DefaultDoug.actionsContractId(address) to get the id of the contract with the given address.
@@ -155,7 +155,7 @@ contract DefaultDoug is Doug, Errors {
     /// @param identifier (bytes32) the identifier (name)
     /// @return contractAddress (address) the address (or nil)
     function databaseContractAddress(bytes32 identifier) constant returns (address contractAddress) {
-         return _dMap._data[identifier]._value;
+         return _dMap._data[identifier].value;
     }
 
     /// @notice DefaultDoug.databaseContractId(address) to get the id of the contract with the given address.
@@ -246,7 +246,7 @@ contract DefaultDoug is Doug, Errors {
             return;
         }
 
-        var oldAddress = map._data[identifier]._value;
+        var oldAddress = map._data[identifier].value;
         var exists = oldAddress != ADDRESS_NULL;
         if (exists) {
             error = RESOURCE_ALREADY_EXISTS;
@@ -268,7 +268,7 @@ contract DefaultDoug is Doug, Errors {
             map._data[identifier] = NAElement(keyIndex, contractAddress);
         }
         else
-            map._data[identifier]._value = contractAddress;
+            map._data[identifier].value = contractAddress;
         // Register ID under the given address.
         map._aToN[contractAddress] = identifier;
     }
@@ -284,7 +284,7 @@ contract DefaultDoug is Doug, Errors {
             return;
         }
         var elem = map._data[identifier];
-        addr = elem._value;
+        addr = elem.value;
         var exists = addr != ADDRESS_NULL;
         if (!exists) {
             error = RESOURCE_NOT_FOUND;
@@ -309,7 +309,7 @@ contract DefaultDoug is Doug, Errors {
             return;
         }
         identifier = map._keys[index];
-        contractAddress = map._data[identifier]._value;
+        contractAddress = map._data[identifier].value;
     }
 
     // Check if the caller has doug permissions.

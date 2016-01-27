@@ -18,33 +18,33 @@ contract AbstractMintedCurrencyTest is DaoAsserter {
     address constant TEST_ADDRESS_2 = 0x54321;
 
     function testSetMinterSuccess() {
-        var dmc = new AbstractMintedCurrencyImpl(0, this);
-        var err = dmc.setMinter(TEST_ADDRESS);
+        var amci = new AbstractMintedCurrencyImpl(0, this);
+        var err = amci.setMinter(TEST_ADDRESS);
         assertNoError(err, "setMinter returned error");
-        var minter = dmc.minter();
-        assertAddressesEqual(dmc.minter(), TEST_ADDRESS, "minter returns the wrong address");
+        var minter = amci.minter();
+        assertAddressesEqual(amci.minter(), TEST_ADDRESS, "minter returns the wrong address");
     }
 
     function testSetMinterFailAccessDenied() {
-        var dmc = new AbstractMintedCurrencyImpl(0, TEST_ADDRESS);
-        var err = dmc.setMinter(TEST_ADDRESS_2);
+        var amci = new AbstractMintedCurrencyImpl(0, TEST_ADDRESS);
+        var err = amci.setMinter(TEST_ADDRESS_2);
         assertErrorsEqual(err, ACCESS_DENIED, "setMinter returned no 'access denied' error");
-        assertAddressesEqual(dmc.minter(), TEST_ADDRESS, "minter returns the wrong address");
+        assertAddressesEqual(amci.minter(), TEST_ADDRESS, "minter returns the wrong address");
     }
 
     function testSetCurrencyDatabaseSuccess() {
-        var dmc = new AbstractMintedCurrencyImpl(0, this);
-        var err = dmc.setCurrencyDatabase(TEST_ADDRESS);
+        var amci = new AbstractMintedCurrencyImpl(0, this);
+        var err = amci.setCurrencyDatabase(TEST_ADDRESS);
         assertNoError(err, "setCurrencyDatabase returned an error");
-        var cd = dmc.currencyDatabase();
+        var cd = amci.currencyDatabase();
         assertAddressesEqual(cd, TEST_ADDRESS, "currencyDatabase returns the wrong address");
     }
 
     function testSetCurrencyDatabaseFailNotMinter() {
-        var dmc = new AbstractMintedCurrencyImpl(TEST_ADDRESS, TEST_ADDRESS_2);
-        var err = dmc.setCurrencyDatabase(this);
+        var amci = new AbstractMintedCurrencyImpl(TEST_ADDRESS, TEST_ADDRESS_2);
+        var err = amci.setCurrencyDatabase(this);
         assertErrorsEqual(err, ACCESS_DENIED, "setCurrencyDatabase did not return 'access denied' error");
-        var cd = dmc.currencyDatabase();
+        var cd = amci.currencyDatabase();
         assertAddressesEqual(cd, TEST_ADDRESS, "currencyDatabase returns the wrong address");
     }
 

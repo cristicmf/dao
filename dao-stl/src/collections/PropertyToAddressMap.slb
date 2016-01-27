@@ -10,7 +10,7 @@ library PropertyToAddressMap {
 
     struct Element {
         uint _keyIndex;
-        address _value;
+        address value;
     }
 
     struct Map
@@ -38,7 +38,7 @@ library PropertyToAddressMap {
     /// @return oldValue (address) the old value (if any).
     /// @return added (bool) whether or not the entry was added.
     function insert(Map storage map, bytes32 key, address value, bool overwrite) returns (address oldValue, bool added) {
-        var exists = map._data[key]._value != 0;
+        var exists = map._data[key].value != 0;
 
         if (!exists) {
             var keyIndex = map._keys.length++;
@@ -47,8 +47,8 @@ library PropertyToAddressMap {
             added = true;
         }
         else if (overwrite) {
-            oldValue = map._data[key]._value;
-            map._data[key]._value = value;
+            oldValue = map._data[key].value;
+            map._data[key].value = value;
             added = true;
         }
     }
@@ -61,7 +61,7 @@ library PropertyToAddressMap {
     /// @return removed (bool) whether or not the key was removed (false means that the key wasn't found).
     function remove(Map storage map, bytes32 key) returns (address value, bool removed) {
         var elem = map._data[key];
-        value = elem._value;
+        value = elem.value;
         var exists = value != 0;
         if (!exists) return;
 
@@ -84,7 +84,7 @@ library PropertyToAddressMap {
     /// @param key (bytes32) the key.
     /// @return value (address) the value.
     function get(Map storage map, bytes32 key) constant returns (address value) {
-        return map._data[key]._value;
+        return map._data[key].value;
     }
 
     /// @notice PropertyToAddressMap.hasKey(map, key) to check if a key exists.
@@ -93,7 +93,7 @@ library PropertyToAddressMap {
     /// @param key (bytes32) the key.
     /// @return has (bool) whether or not the key exists.
     function hasKey(Map storage map, bytes32 key) constant returns (bool has) {
-        return map._data[key]._value != 0;
+        return map._data[key].value != 0;
     }
 
     /// @notice PropertyToAddressMap.keyFromIndex(map, index) to get a key by its index in the backing array.
@@ -117,7 +117,7 @@ library PropertyToAddressMap {
     function entryFromIndex(Map storage map, uint index) constant returns (bytes32 key, address value, bool exists) {
         if(index >= map._keys.length) return;
         key = map._keys[index];
-        value = map._data[key]._value;
+        value = map._data[key].value;
         exists = true;
     }
 

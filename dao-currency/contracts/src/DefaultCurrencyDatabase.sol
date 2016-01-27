@@ -51,12 +51,4 @@ contract DefaultCurrencyDatabase is CurrencyDatabase, DefaultDatabase {
         return _balances[addr];
     }
 
-    /// @notice DefaultCurrencyDatabase.destroy() to destroy the contract.
-    /// @dev Destroy a contract. Calls 'selfdestruct' if caller is Doug.
-    /// @param fundReceiver (address) the account that receives the funds.
-    function destroy(address fundReceiver) {
-        if (msg.sender == address(_DOUG))
-            selfdestruct(fundReceiver);
-    }
-
 }

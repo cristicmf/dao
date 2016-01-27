@@ -32,18 +32,32 @@ contract UserDatabase is Database {
     function removeUser(address addr) returns (uint16 error);
 
     /// @notice UserDatabase.user(addr) to get user data.
-    /// @dev Get user data.
+    /// @dev Get user data from the user address.
     /// @param addr (address) the address.
     /// @return value_nickname (bytes32) the nickname|
     /// @return value_timestamp (uint) the time when the user was added|
     /// @return value_dataHash (bytes32) the data-hash (optional).
     function user(address addr) constant returns (bytes32 value_nickname, uint value_timestamp, bytes32 value_dataHash);
 
+    /// @notice UserDatabase.user(nickname) to get user data.
+    /// @dev Get user data from the nickname.
+    /// @param nickname (bytes32) the nickname.
+    /// @return value_nickname (bytes32) the nickname|
+    /// @return value_timestamp (uint) the time when the user was added|
+    /// @return value_dataHash (bytes32) the data-hash (optional).
+    function user(bytes32 nickname) constant returns (bytes32 value_nickname, uint value_timestamp, bytes32 value_dataHash);
+
     /// @notice UserDatabase.hasUser(addr) to check if a user exists.
     /// @dev Check if a user exists.
     /// @param addr (address) the address.
     /// @return has (bool) whether or not the user exists.
     function hasUser(address addr) constant returns (bool has);
+
+    /// @notice UserDatabase.hasUser(nickname) to check if a user exists.
+    /// @dev Check if a user exists.
+    /// @param nickname (bytes32) the nickname.
+    /// @return has (bool) whether or not the user exists.
+    function hasUser(bytes32 nickname) constant returns (bool has);
 
     /// @notice UserDatabase.hasUsers(addr1, addr2) to check if two users exists.
     /// Convenience function for user-to-user interaction checks.
@@ -53,6 +67,15 @@ contract UserDatabase is Database {
     /// @return has1 (bool) whether or not the first user exists|
     /// @return has2 (bool) whether or not the second user exists
     function hasUsers(address addr1, address addr2) constant returns (bool has1, bool has2);
+
+    /// @notice UserDatabase.hasUsers(addr1, addr2) to check if two users exists.
+    /// Convenience function for user-to-user interaction checks.
+    /// @dev Check if two users exists.
+    /// @param nickname1 (bytes32) the first nickname.
+    /// @param nickname2 (bytes32) the second nickname.
+    /// @return has1 (bool) whether or not the first user exists|
+    /// @return has2 (bool) whether or not the second user exists
+    function hasUsers(bytes32 nickname1, bytes32 nickname2) constant returns (bool has1, bool has2);
 
     /// @notice UserDatabase.userAddressFromIndex(index) to get a user address by its index in the backing array.
     /// @dev Get a user address by its index in the backing array.

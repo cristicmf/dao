@@ -67,6 +67,10 @@
             "dataHash" : "(bytes32) hash of the file containing user data."
          },
          "return" : "error (uint16) error code."
+      },
+      "userDatabase()" : {
+         "details" : "Get the address of the user database.",
+         "return" : "dbAddr (address) the database address."
       }
    },
    "title" : "AbstractSingleAdminUserRegistry"

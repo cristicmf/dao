@@ -22,11 +22,24 @@ contract MockUserDatabase is UserDatabase {
         value_timestamp = _joined;
     }
 
+    function user(bytes32 nickname) constant returns (bytes32 value_nickname, uint value_timestamp, bytes32 value_dataHash) {
+        value_timestamp = _joined;
+    }
+
     function hasUser(address addr) constant returns (bool has) {
         return _has;
     }
 
+    function hasUser(bytes32 nickname) constant returns (bool has) {
+        return _has;
+    }
+
     function hasUsers(address addr1, address addr2) constant returns (bool has1, bool has2) {
+        has1 = _has;
+        has2 = _has;
+    }
+
+    function hasUsers(bytes32 nickname1, bytes32 nickname2) constant returns (bool has1, bool has2) {
         has1 = _has;
         has2 = _has;
     }

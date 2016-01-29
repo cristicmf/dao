@@ -1,21 +1,14 @@
 /// @title Asserter
 /// @author Andreas Olofsson (androlo1980@gmail.com)
 /// DESCRIPTION:
-/// Assertions for unit testing contracts.
+/// Assertions for unit testing contracts. All assertions are internal but that is only to make things more efficient
+/// (not needed in test contract abi), but the _ in front of the function name is still omitted. This is just for convenience.
 contract Asserter {
 
     /// @dev The test event is used to read the test results.
     /// @param result Whether or not the assertion holds. The result is always a boolean.
     /// @param message A message to write if the assertion fails.
     event TestEvent(bool indexed result, string message);
-
-    /// @dev used internally to trigger the event.
-    function report(bool result, string message) internal constant {
-        if(result)
-            TestEvent(true, "");
-        else
-            TestEvent(false, message);
-    }
 
     // ************************************** strings **************************************
 
@@ -25,7 +18,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertStringsEqual(string A, string B, string message) internal constant returns (bool result) {
         result = _stringsEqual(A, B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the two strings A and B are not equal.
@@ -34,7 +27,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertStringsNotEqual(string A, string B, string message) internal constant returns (bool result) {
         result = !_stringsEqual(A, B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the string 'str' is empty.
@@ -42,7 +35,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertStringIsEmpty(string str, string message) internal constant returns (bool result) {
         result = _stringsEqual(str, "");
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the string 'str' is not empty.
@@ -50,7 +43,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertStringIsNotEmpty(string str, string message) internal constant returns (bool result) {
         result = !_stringsEqual(str, "");
-        report(result, message);
+        _report(result, message);
     }
 
     // ************************************** bytes32 **************************************
@@ -61,7 +54,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertBytes32Equal(bytes32 A, bytes32 B, string message) internal constant returns (bool result) {
         result = (A == B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the two bytes32 A and B are not equal.
@@ -70,7 +63,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertBytes32NotEqual(bytes32 A, bytes32 B, string message) internal constant returns (bool result) {
         result = (A != B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the bytes32 'bts' is zero.
@@ -78,7 +71,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertBytes32Zero(bytes32 bts, string message) internal constant returns (bool result) {
         result = (bts == 0);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the bytes32 'bts' is not zero.
@@ -86,7 +79,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertBytes32NotZero(bytes32 bts, string message) internal constant returns (bool result) {
         result = (bts != 0);
-        report(result, message);
+        _report(result, message);
     }
 
     // ************************************** address **************************************
@@ -97,7 +90,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertAddressesEqual(address A, address B, string message) internal constant returns (bool result) {
         result = (A == B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the two addresses A and B are not equal.
@@ -106,7 +99,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertAddressesNotEqual(address A, address B, string message) internal constant returns (bool result) {
         result = (A != B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the address 'addr' is zero.
@@ -114,7 +107,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertAddressZero(address addr, string message) internal constant returns (bool result) {
         result = (addr == 0);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the address 'addr' is not zero.
@@ -122,7 +115,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertAddressNotZero(address addr, string message) internal constant returns (bool result) {
         result = (addr != 0);
-        report(result, message);
+        _report(result, message);
     }
 
     // ************************************** bool **************************************
@@ -133,7 +126,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertBoolsEqual(bool A, bool B, string message) internal constant returns (bool result) {
         result = (A == B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the two booleans A and B are not equal.
@@ -142,7 +135,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertBoolsNotEqual(bool A, bool B, string message) internal constant returns (bool result) {
         result = (A != B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the boolean b is true.
@@ -150,7 +143,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertTrue(bool b, string message) internal constant returns (bool result) {
         result = b;
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the boolean b is false.
@@ -158,7 +151,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertFalse(bool b, string message) internal constant returns (bool result) {
         result = !b;
-        report(result, message);
+        _report(result, message);
     }
 
     // ************************************** uint **************************************
@@ -169,7 +162,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertUintsEqual(uint A, uint B, string message) internal constant returns (bool result) {
         result = (A == B);
-        report(result, message);
+        _report(result, message);
     }
 
 
@@ -180,7 +173,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertUintsNotEqual(uint A, uint B, string message) internal constant returns (bool result) {
         result = (A != B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the uint (256) A is larger then B.
@@ -189,7 +182,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertUintLargerThen(uint A, uint B, string message) internal constant returns (bool result) {
         result = (A > B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the uint (256) A is larger then or equal to B.
@@ -198,7 +191,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertUintLargerThenOrEqual(uint A, uint B, string message) internal constant returns (bool result) {
         result = (A >= B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the uint (256) A is smaller then B.
@@ -207,7 +200,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertUintSmallerThen(uint A, uint B, string message) internal constant returns (bool result) {
         result = (A < B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the uint (256) A is smaller then or equal to B.
@@ -216,7 +209,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertUintSmallerThenOrEqual(uint A, uint B, string message) internal constant returns (bool result) {
         result = (A <= B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the uint (256) number is 0.
@@ -224,7 +217,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertUintZero(uint number, string message) internal constant returns (bool result) {
         result = (number == 0);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the uint (256) number is not 0.
@@ -232,7 +225,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertUintNotZero(uint number, string message) internal constant returns (bool result) {
         result = (number != 0);
-        report(result, message);
+        _report(result, message);
     }
 
     // ************************************** int **************************************
@@ -243,7 +236,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertIntsEqual(int A, int B, string message) internal constant returns (bool result) {
         result = (A == B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the two ints (256) A and B are not equal.
@@ -252,7 +245,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertIntsNotEqual(int A, int B, string message) internal constant returns (bool result) {
         result = (A != B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the int (256) A is larger then B.
@@ -261,7 +254,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertIntLargerThen(int A, int B, string message) internal constant returns (bool result) {
         result = (A > B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the int (256) A is larger then or equal to B.
@@ -270,7 +263,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertIntLargerThenOrEqual(int A, int B, string message) internal constant returns (bool result) {
         result = (A >= B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the int (256) A is smaller then B.
@@ -279,7 +272,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertIntSmallerThen(int A, int B, string message) internal constant returns (bool result) {
         result = (A < B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the int (256) A is smaller then or equal to B.
@@ -288,7 +281,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertIntSmallerThenOrEqual(int A, int B, string message) internal constant returns (bool result) {
         result = (A <= B);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the int (256) number is 0.
@@ -296,7 +289,7 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertIntZero(int number, string message) internal constant returns (bool result) {
         result = (number == 0);
-        report(result, message);
+        _report(result, message);
     }
 
     /// @dev Assert that the int (256) number is not 0.
@@ -304,7 +297,17 @@ contract Asserter {
     /// @param message The message to display if the assertion fails.
     function assertIntNotZero(int number, string message) internal constant returns (bool result) {
         result = (number != 0);
-        report(result, message);
+        _report(result, message);
+    }
+
+    /******************************** internal ********************************/
+
+    /// @dev used internally to trigger the event.
+    function _report(bool result, string message) internal constant {
+        if(result)
+            TestEvent(true, "");
+        else
+            TestEvent(false, message);
     }
 
     /// @dev Does a byte-by-byte lexicographical comparison of two strings.

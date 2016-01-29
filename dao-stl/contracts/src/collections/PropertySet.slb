@@ -69,10 +69,10 @@ library PropertySet {
     /// @return index (uint) the index
     /// @return exists (bool) true if the element exists, false otherwise. Used because of index=0 ambiguity.
     function valueFromIndex(Set storage set, uint index) constant returns (bytes32 value, bool exists) {
-        if(index >= set._values.length) return;
-
-        value = set._values[index];
-        exists = true;
+        if (index >= set._values.length)
+            return;
+        else
+            return (set._values[index], true);
     }
 
     /// @notice PropertySet.size(set) to get the size of the set.

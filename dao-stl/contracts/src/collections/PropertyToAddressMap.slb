@@ -100,9 +100,10 @@ library PropertyToAddressMap {
     /// @return key (bytes32) the key.
     /// @return exists (bool) true if the key exists (used to avoid nil value ambiguity).
     function keyFromIndex(Map storage map, uint index) constant returns (bytes32 key, bool exists) {
-        if(index >= map._keys.length) return;
-        key = map._keys[index];
-        exists = true;
+        if (index >= map._keys.length)
+            return;
+        else
+            return (map._keys[index], true);
     }
 
     /// @notice PropertyToAddressMap.keyFromIndex(map, index) to get a key by its index in the backing array.
@@ -112,10 +113,10 @@ library PropertyToAddressMap {
     /// @return key (bytes32) the key.
     /// @return exists (bool) true if the key exists (used to avoid nil value ambiguity).
     function entryFromIndex(Map storage map, uint index) constant returns (bytes32 key, address value, bool exists) {
-        if(index >= map._keys.length) return;
-        key = map._keys[index];
-        value = map._data[key].value;
-        exists = true;
+        if (index >= map._keys.length)
+            return;
+        else
+            return (map._keys[index], map._data[key].value, true);
     }
 
     /// @notice PropertyToAddressMap.size(map) to get the number of entries in the map.

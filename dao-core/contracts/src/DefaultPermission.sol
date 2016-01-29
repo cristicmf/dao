@@ -99,8 +99,7 @@ contract DefaultPermission is Destructible, Permission, Errors {
             timeRootAdded (uint) - The unix timestamp of when the address was set.
     */
     function rootData() constant returns (address root, uint timeRootAdded) {
-        root = _root;
-        timeRootAdded = _timeRootAdded;
+        return (_root, _timeRootAdded);
     }
 
     /*
@@ -202,9 +201,7 @@ contract DefaultPermission is Destructible, Permission, Errors {
             error = ARRAY_INDEX_OUT_OF_BOUNDS;
             return;
         }
-        owner = _owners._keys[index];
-        timestamp = _owners._data[owner].timestamp;
-        return;
+        return (_owners._keys[index], _owners._data[owner].timestamp, NO_ERROR);
     }
 
     /*

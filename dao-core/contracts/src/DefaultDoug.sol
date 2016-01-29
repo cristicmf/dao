@@ -460,8 +460,7 @@ contract DefaultDoug is Doug, Errors {
             error = ARRAY_INDEX_OUT_OF_BOUNDS;
             return;
         }
-        identifier = map._keys[index];
-        contractAddress = map._data[identifier].value;
+        return (map._keys[index], map._data[identifier].value, NO_ERROR);
     }
 
     // Check if the caller has doug permissions.

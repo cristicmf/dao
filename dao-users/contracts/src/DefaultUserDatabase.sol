@@ -120,9 +120,7 @@ contract DefaultUserDatabase is DefaultDatabase {
     */
     function user(address addr) constant returns (bytes32 value_nickname, uint value_timestamp, bytes32 value_dataHash) {
         var elem = _data[addr];
-        value_nickname = elem.nickname;
-        value_timestamp = elem.timestamp;
-        value_dataHash = elem.dataHash;
+        return (elem.nickname, elem.timestamp, elem.dataHash);
     }
 
     /*
@@ -143,9 +141,7 @@ contract DefaultUserDatabase is DefaultDatabase {
         if (addr == 0)
             return;
         var elem = _data[addr];
-        value_nickname = elem.nickname;
-        value_timestamp = elem.timestamp;
-        value_dataHash = elem.dataHash;
+        return (elem.nickname, elem.timestamp, elem.dataHash);
     }
 
     /*
@@ -192,8 +188,7 @@ contract DefaultUserDatabase is DefaultDatabase {
             has2 (bool) - Whether or not the second user exists.
     */
     function hasUsers(address addr1, address addr2) constant returns (bool has1, bool has2) {
-        has1 = _data[addr1].nickname != 0;
-        has2 = _data[addr2].nickname != 0;
+        return(_data[addr1].nickname != 0, _data[addr2].nickname != 0);
     }
 
     /*
@@ -210,8 +205,7 @@ contract DefaultUserDatabase is DefaultDatabase {
             has2 (bool) - Whether or not the second user exists.
     */
     function hasUsers(bytes32 nickname1, bytes32 nickname2) constant returns (bool has1, bool has2) {
-        has1 = _nToA[nickname1] != 0;
-        has2 = _nToA[nickname2] != 0;
+        return(_nToA[nickname1] != 0, _nToA[nickname2] != 0);
     }
 
     /*

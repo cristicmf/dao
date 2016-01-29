@@ -51,11 +51,8 @@ contract DefaultUserDatabase is DefaultDatabase {
         var exists = _data[addr].nickname != 0 || _nToA[value_nickname] != 0;
         if (exists)
             return RESOURCE_ALREADY_EXISTS;
-        else {
-            var keyIndex = _keys.length++;
-            _data[addr] = Element(keyIndex, value_nickname, value_timestamp, value_dataHash);
-            _keys[keyIndex] = addr;
-        }
+        else
+            _data[addr] = Element(_keys.push(addr) - 1, value_nickname, value_timestamp, value_dataHash);
     }
 
     /*

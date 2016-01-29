@@ -3,7 +3,6 @@ var path = require('path');
 var process = require('child_process');
 var solUnit = require('sol-unit');
 var async = require('async');
-var natdoc2html = require('./script/natdoc2html/natdoc2html');
 
 /************************ dao-core ***************************/
 

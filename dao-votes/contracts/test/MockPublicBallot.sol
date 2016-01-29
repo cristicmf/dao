@@ -1,6 +1,6 @@
-import "../src/PublicBallot.sol";
+import "../src/AbstractPublicBallot.sol";
 
-contract MockPublicBallot is PublicBallot {
+contract MockPublicBallot is AbstractPublicBallot {
 
     function MockPublicBallot(
         uint id,
@@ -9,7 +9,7 @@ contract MockPublicBallot is PublicBallot {
         uint durationInSeconds,
         uint8 quorum,
         uint numEligibleVoters
-    ) PublicBallot(
+    ) AbstractPublicBallot(
         id,
         userDatabase,
         creator,

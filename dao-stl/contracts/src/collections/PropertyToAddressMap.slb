@@ -41,12 +41,8 @@ library PropertyToAddressMap {
     function insert(Map storage map, bytes32 key, address value, bool overwrite) returns (address oldValue, bool added) {
         var exists = map._data[key].value != 0;
 
-        if (!exists) {
-            var keyIndex = map._keys.length++;
-            map._keys[keyIndex] = key;
-            map._data[key] = Element(keyIndex, value);
-            added = true;
-        }
+        if (!exists)
+            map._data[key] = Element(map._keys.push(key) - 1, value);
         else if (overwrite) {
             oldValue = map._data[key].value;
             map._data[key].value = value;

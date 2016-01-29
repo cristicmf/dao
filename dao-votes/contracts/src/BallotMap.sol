@@ -14,9 +14,7 @@ contract BallotMap {
     Map _map;
 
     function _insert(address key, uint8 value) internal returns (bool added) {
-        var keyIndex = _map._keys.length++;
-        _map._keys[keyIndex] = key;
-        _map._data[key] = Element(keyIndex, value);
+        _map._data[key] = Element(_map._keys.push(key) - 1, value);
         return true;
     }
 

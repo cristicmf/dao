@@ -123,15 +123,11 @@ contract DefaultPermission is Destructible, Permission, Errors {
         // If sender isn't root they can't add new owners.
         if(msg.sender != _root)
             return ACCESS_DENIED;
-
-        var exists = _owners._data[addr].timestamp != 0;
-        if (exists)
+        // If owner exists
+        if (_owners._data[addr].timestamp != 0)
             return RESOURCE_ALREADY_EXISTS;
-        else {
-            var keyIndex = _owners._keys.length++;
-            _owners._data[addr] = OElement(keyIndex, block.timestamp);
-            _owners._keys[keyIndex] = addr;
-        }
+        else
+            _owners._data[addr] = OElement(_owners._keys.push(addr) - 1, block.timestamp);
     }
 
     /*

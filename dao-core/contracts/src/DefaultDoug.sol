@@ -391,6 +391,7 @@ contract DefaultDoug is Doug, Errors {
 
     // Add a contract to the given map.
     function _addContract(NAMap storage map, bytes32 identifier, address contractAddress) internal returns (uint16 error) {
+
         if (!_hasDougPermission()) {
             error = ACCESS_DENIED;
             return;
@@ -403,6 +404,7 @@ contract DefaultDoug is Doug, Errors {
 
         var oldAddress = map._data[identifier].value;
         var exists = oldAddress != ADDRESS_NULL;
+
         if (exists) {
             error = RESOURCE_ALREADY_EXISTS;
             return;
@@ -416,14 +418,9 @@ contract DefaultDoug is Doug, Errors {
             error = PARAMETER_ERROR;
             return;
         }
+
         // Register address under the given ID.
-        if (!exists) {
-            var keyIndex = map._keys.length++;
-            map._keys[keyIndex] = identifier;
-            map._data[identifier] = NAElement(keyIndex, contractAddress);
-        }
-        else
-            map._data[identifier].value = contractAddress;
+        map._data[identifier] = NAElement(map._keys.push(identifier) - 1, contractAddress);
         // Register ID under the given address.
         map._aToN[contractAddress] = identifier;
     }

@@ -27,9 +27,7 @@ library PropertySet {
     /// @return added (bool) true if the bytes32 was added, false if not (meaning the value already exists).
     function insert(Set storage set, bytes32 val) returns (bool added) {
         if (!set._data[val]._exists)
-            var valIndex = set._values.length++;
-            set._data[val] = Element(valIndex, true);
-            set._values[valIndex] = val;
+            set._data[val] = Element(set._values.push(val) - 1, true);
             return true;
         }
     }

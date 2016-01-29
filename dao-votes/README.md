@@ -14,11 +14,15 @@ Gulp: `$ gulp build:votes`
 
 #### Testing
 
-From the dao project root:
+Gulp: `$ gulp test:votes` 
 
-Gulp: `$ gulp test:votes`
+Command-line tool: `$ solunit -d ./dao-votes/contracts/build/test`
 
-Command-line tool: `$ solunit -d ./dao-users/contracts/build/test`
+#### Docs
+
+Shell script: `$ ./build_docs.sh dao-votes`
+
+Gulp: `$ gulp htmldoc:votes`
 
 #### Usage
 

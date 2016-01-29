@@ -1,4 +1,4 @@
-import "../../../dao-stl/src/errors/Errors.sol";
+import "../../../dao-stl/contracts/src/errors/Errors.sol";
 import "../../../dao-core/contracts/src/Doug.sol";
 import "../../../dao-users/contracts/src/UserDatabase.sol";
 import "../../../dao-currency/contracts/src/MintedCurrency.sol";
@@ -44,13 +44,13 @@ contract MintBallotManager is BallotMap, DefaultDougEnabled, Errors {
 
     function mint(address receiver, uint amount) returns (uint16 error) {
         // Check if caller is a registered ballot.
-        if (_map._data[msg.sender]._value == 0)
+        if (_map._data[msg.sender].value == 0)
             return ACCESS_DENIED;
         // This is a valid call. Clear if flag is set.
         if (_removeClosed)
             _remove(msg.sender);
         else
-            _map._data[msg.sender]._value = 2;
+            _map._data[msg.sender].value = 2;
         // Check that user still exists.
         if (!_userDatabase.hasUser(receiver))
             return RESOURCE_NOT_FOUND;

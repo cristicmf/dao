@@ -1,0 +1,8 @@
+1.52
+Solidity
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/AbstractPublicBallot.sol	1454037877	0	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/AbstractPublicBallot.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/PublicBallot.sol	1454038776	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/PublicBallot.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/MintBallotManager.sol	1454037245	0	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/MintBallotManager.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/MintBallot.sol	1454037877	0	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/MintBallot.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/BallotMap.sol	1453747324	0	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/BallotMap.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/BallotManager.sol	1453492549	0	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/BallotManager.sol

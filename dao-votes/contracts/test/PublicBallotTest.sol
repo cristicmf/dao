@@ -1,7 +1,7 @@
 import "./MockPublicBallot.sol";
-import "./MockUserDatabase.sol";
-import "../../../dao-stl/src/errors/Errors.sol";
-import "../../../dao-stl/src/assertions/DaoAsserter.sol";
+import "../../../dao-users/contracts/test/MockUserDatabase.sol";
+import "../../../dao-stl/contracts/src/errors/Errors.sol";
+import "../../../dao-stl/contracts/src/assertions/DaoAsserter.sol";
 
 contract PublicBallotTest is DaoAsserter {
 

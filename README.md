@@ -10,11 +10,26 @@ The architecture is a new iteration of the architecture that I outlined in [thes
 
 NOTE: Ethereum is still experimental, and so is this code. Using this on a chain where Ether has real value, or in any form of production environment is **not** recommended.
 
+## Table of Content
+
+- [Getting Started](#getting-started)
+- [Dependencies and Tools](#dependencies-and-tools)
+- [Building, Testing and Documentation](#btd)
+- [Structure](#structure)
+- [DAO framework?](#dao-framework)
+- [Troubleshooting](#troubleshooting)
+- [Business](#business)
+- [Licence](#licence)
+
 ## Getting started
 
 The best way to get started is reading the [User Manual](./docs/Manual.md).
 
-## Dependencies and tools
+Each module has a README file that explains what it does, which is also useful. They are all referenced in the [Structure](#structure) section of this document.
+
+HTML documentation for the contracts in each module can be found in `docs/contracts/<module name>/index.html`. This goes for the standard library code as well.
+
+## Dependencies and Tools
 
 The tools are only tested on 64 bit Ubuntu 14.04+
 
@@ -22,15 +37,34 @@ The tools are only tested on 64 bit Ubuntu 14.04+
 
 Command-line [Gulp](http://gulpjs.com/) is optional, but has tasks for building and deploying.
 
-You need [sol-unit](https://github.com/smartcontractproduction/sol-unit) to run the contract unit-tests that comes with the framework.
-
 You need [solc](https://github.com/ethereum/solidity) on your path to compile locally (latest dev).
+
+You need [NaturalDocs](http://www.naturaldocs.org/) on your path to build html documentation (shell script version, not .bat).
 
 **Formal proofs**
 
 You need [why3](http://why3.lri.fr/) (latest release).
 
 Solidity to why3 is still experimental, and is not required for normal usage.
+
+<a name="btd">
+## Building, Testing, and Documentation
+
+Building, testing and doc generation can be done for each module separately. Check the README in each folder for instructions. It can also be done for the entire framework at once using Gulp.
+
+NOTE: This requires that the dependencies are in place.
+
+##### Building
+
+Gulp: `$ gulp build:core`
+
+##### Testing
+
+Gulp: `$ gulp test:all`
+
+##### Docs
+
+Gulp: `$ gulp htmldoc:votes`
 
 ## Structure
 
@@ -47,7 +81,7 @@ These are the different parts of the framework.
 
 - [dao-stl](https://github.com/smartcontractproduction/dao/blob/master/dao-stl/README.md) - shared, standard contracts.
 
-## DAO framework?
+## DAO framework
 
 Yes, this is a framework for DAOs (Decentralized Autonomous Organizations), although one could argue that it is not, because if there are administrator accounts then the organization is not really autonomous. This is correct, but it is *possible* to create autonomous systems, or those that are "somewhat autonomous" (through the use of voting and other mechanisms).
 
@@ -55,7 +89,7 @@ It really works like Ethereum contracts. Ethereum contracts are often called sma
 
 ## Troubleshooting
 
-This library is open source only to show some working Solidity code, because there is not a lot of resources around. I look into issues, but there's no official support, or feature-request system. 
+This library is open source only to show some working Solidity code, because there is not a lot of resources around. I look into issues, but there's no official support or feature-request system. 
 
 This library is only officially supported on 64 bit Ubuntu 14.04+, although it should work on recent OSX versions. I will look into building on Windows when I have time.
 
@@ -63,11 +97,17 @@ This library is only officially supported on 64 bit Ubuntu 14.04+, although it s
 
 http://solidity.readthedocs.org/en/latest/index.html
 
-**I don't understand why I should use this code**
+**I understand Solidity syntax, but not the purpose of the contracts**
 
-It's useful because it is fairly simple, but has most of the fundamentals like permissions structures, registries, users, currencies, etc. It also pushes the limits on what you can do with Solidity, unit testing, documentation, building, etc. Finally, it is essentially a more well-engineered version of a framework that has been worked on since before Solidity existed, so there's been time to find mistakes and to correct them.
+This is probably because this is a framework, and much of the code are architectural elements. Also there is lots of imports and such. To understand it, you might want to read the overview section of the [User Manual](./docs/Manual.md#overview), and the README for each component. There are explanations and diagrams that shows how it works. The [Permission Analysis](./docs/Permission_Analysis.md) is a good read as well.
 
-That being said, I would not recommend to start copy-pasting it and include in a project, but would strongly recommend learning the ideas behind it, play around, re-invent and re-implement things etc. I will try and make tutorials and things that makes this a good resource for those who wants to learn how to create non-trivial production ready contract systems.
+If you have checked it out and still don't get it, then it's probably because the documentation is not clear. It will improve over time.
+
+**I understand what the code does, but I don't understand why I should use it**
+
+The framework is useful because it is fairly simple, but has most of the fundamentals like permissions structures, registries, tests, docs, etc. The quality requirements both in terms of code and design are very high. It pushes the limits on what you can do with Ethereum contracts and Solidity. Finally, it is essentially a more well-engineered version of a framework that has been worked on since before Solidity existed, so there's been time to find mistakes, and to correct them.
+
+The bad thing is it's a framework that I (the author) made to use in my own projects, which have higher priority then the framework itself. This means that development can be slow at times, and support might not be good.
 
 Maybe it's good for someone, maybe not.
 
@@ -81,7 +121,7 @@ This is normally because the contract build folders has been tampered with, or b
 
 **I can't build html documentation**
 
-This could be because the contract build folders has been tampered with.
+This could be because you don't have [NaturalDocs](http://www.naturaldocs.org/) on your path.
 
 ## Business
 

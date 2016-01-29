@@ -14,11 +14,15 @@ Gulp: `$ gulp build:currency`
 
 #### Testing
 
-From the dao project root:
-
-Gulp: `$ gulp test:users`
+Gulp: `$ gulp test:currency` 
 
 Command-line tool: `$ solunit -d ./dao-currency/contracts/build/test`
+
+#### Docs
+
+Shell script: `$ ./build_docs.sh dao-currency`
+
+Gulp: `$ gulp htmldoc:currency`
 
 #### Usage
 

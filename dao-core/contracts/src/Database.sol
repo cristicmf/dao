@@ -1,23 +1,44 @@
-import "../../../dao-stl/src/errors/Errors.sol";
+import "../../../dao-stl/contracts/src/errors/Errors.sol";
 import "./Doug.sol";
 
-/// @title Database
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// @dev Interface for databases. Implements the 'DougEnabled' interface.
+/*
+    Interface: Database
+
+    Interface for databases.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 contract Database is DougEnabled {
 
-    // Check if the caller is an actions contract.
+    /*
+        Function: _checkCaller
+
+        Method that implementations should use to check if an address is a valid caller.
+
+        Returns:
+            (bool) - True means the address was set successfully.
+    */
     function _checkCaller() constant internal returns (bool);
 
 }
 
-/// @title DefaultDatabase
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// @dev Base contract for databases. Implements the 'DougEnabled' interface,
-/// and provides an internal method for checking if caller is an actions contract.
+/*
+    Contract: DefaultDatabase
+
+    Base contract for databases. Provides an internal method for checking if caller is an actions contract.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 contract DefaultDatabase is Database, DefaultDougEnabled, Errors {
 
-    // Check if the caller is an actions contract.
+    /*
+        Function: _checkCaller
+
+        Check if the caller is registered as an actions contract in doug.
+
+        Returns:
+            (bool) - True means the address was set successfully.
+    */
     function _checkCaller() constant internal returns (bool) {
         return _DOUG.actionsContractId(msg.sender) != 0;
     }

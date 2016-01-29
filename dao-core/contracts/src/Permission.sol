@@ -1,63 +1,124 @@
-/// @title Permission
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// @dev Interface for a simple permissions contract with a root and any number of owners.
+/*
+    Interface: Permission
+
+    Interface for a simple permissions contract with a root and any number of owners.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 contract Permission {
 
     // TODO this should really be two interfaces.
 
-    /// @notice Permission.setRoot(newRoot) to set the root account address.
-    /// @dev Set the root account address.
-    /// @param newRoot (address) the address
-    /// @return error (uint16) error code
+    /*
+        Function: setRoot
+
+        Set the root account address.
+
+        Params:
+            newRoot (address) - The new root-address.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function setRoot(address newRoot) constant returns (uint16 error);
 
-    /// @notice Permission.root() to get the root address.
-    /// @dev Get the root address.
-    /// @return root (address) the address of root.
+    /*
+        Function: root
+
+        Get the root address.
+
+        Returns:
+            root (address) - The root-address.
+    */
     function root() constant returns (address root);
 
-    /// @notice Permission.rootData() to get the address of root, and the time they were added.
-    /// @dev Get the address of root, and the time they were created.
-    /// @return root (address) the address|
-    /// @return timeRootAdded (uint) the time when root was added.
+    /*
+        Function: rootData
+
+        Get the root data.
+
+        Returns:
+            root (address) - The root-address.
+            timeRootAdded (uint) - The unix timestamp of when the address was set.
+    */
     function rootData() constant returns (address root, uint timeRootAdded);
 
-    /// @notice Permission.addOwner(addr) to add a new owner.
-    /// @dev Add a new owner.
-    /// @param addr (address) the address of the new owner
-    /// @return error (uint16) error code
+    /*
+        Function: addOwner
+
+        Add a new owner.
+
+        Params:
+            addr (address) - The address of the owner.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function addOwner(address addr) returns (uint16 error);
 
-    /// @notice Permission.removeOwner(addr) to remove an owner.
-    /// @dev Remove an owner.
-    /// @param addr (address) the address of the owner
-    /// @return error (uint16) error code
+    /*
+        Function: removeOwner
+
+        Remove an owner.
+
+        Params:
+            addr (address) - The address of the owner.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function removeOwner(address addr) returns (uint16 error);
 
-    /// @notice Permission.ownerTimestamp(addr) to get the time when the owner was added.
-    /// @dev Get the time when the owner was added.
-    /// @param addr (address) the owner address
-    /// @return timestamp (uint) the time when the owner was added|
-    /// @return error (uint16) error code
+    /*
+        Function: ownerTimestamp
+
+        Get the time when the owner was added.
+
+        Params:
+            addr (address) - The address of the owner.
+
+        Returns:
+            timestamp (uint) - The unix timestamp of when the owner was added.
+            error (uint16) - An error code.
+    */
     function ownerTimestamp(address addr) constant returns (uint timestamp, uint16 error);
 
-    /// @notice Permission.ownerFromIndex(index) to get the owner with position 'index' in the backing array.
-    /// @dev Get the owner with position 'index' in the backing array.
-    /// @param index (uint) the index.
-    /// @return owner (address) the owner address|
-    /// @return timestamp (uint) the time when the owner was added|
-    /// @return error (uint16) error code
+    /*
+        Function: ownerFromIndex
+
+        Get the owner with position 'index' in the backing array.
+
+        Params:
+            index (uint) - The index.
+
+        Returns:
+            owner (address) - The owner address.
+            timestamp (uint) - The unix timestamp of when the owner was added.
+            error (uint16) - An error code.
+    */
     function ownerFromIndex(uint index) constant returns (address owner, uint timestamp, uint16 error);
 
-    /// @notice Permission.numOwners() to get the total number of owners.
-    /// @dev Get the total number of owners.
-    /// @return numOwners (uint) the number of owners
+    /*
+        Function: numOwners
+
+        Get the total number of owners.
+
+        Returns:
+            numOwners (uint) - The number of owners.
+    */
     function numOwners() constant returns (uint numOwners);
 
-    /// @notice Permission.hasPermission(addr) to check if an address has this permission.
-    /// @dev Check if an address has this permission.
-    /// @param addr (address) the address
-    /// @return hasPerm (bool) true if the address is either root or an owner, false otherwise.
+    /*
+        Function: hasPermission
+
+        Check if an account has this permission. That means they're either an owner or root.
+
+        Params:
+            addr (address) - The account address.
+
+        Returns:
+            hasPerm (bool) - 'true' if the address is either root or an owner, otherwise 'false'.
+    */
     function hasPermission(address addr) constant returns (bool hasPerm);
 
 }

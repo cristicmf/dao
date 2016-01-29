@@ -7,7 +7,6 @@ var natdoc2html = require('./script/natdoc2html/natdoc2html');
 
 /************************ dao-core ***************************/
 
-var daoCoreContracts = ['Database', 'Doug', 'DefaultDoug', 'Permission', 'DefaultPermission'];
 var daoCoreTests = ['DefaultPermissionTest', 'DefaultDougTest', 'DefaultDougEnabledTest', 'DefaultDougActionsTest', 'DefaultDougDatabaseTest'];
 var daoCoreTestFolder = path.join(__dirname, 'dao-core', 'contracts', 'build', 'test');
 
@@ -29,12 +28,15 @@ gulp.task('test:core', function (cb) {
 });
 
 gulp.task('htmldoc:core', function(cb){
-    natdoc2html('dao-core', daoCoreContracts, './dao-core/contracts/build/docs', './docs/contracts/dao-core', cb);
+    process.exec('./build_docs.sh dao-core', function (error) {
+        if (error)
+            throw new Error(error);
+        cb(error);
+    });
 });
 
 /************************ dao-currency ***************************/
 
-var daoCurrencyContracts = ['AbstractMintedCurrency', 'CurrencyDatabase', 'DefaultCurrencyDatabase', 'DefaultMintedCurrency', 'MintedCurrency', 'MintedUserCurrency'];
 var daoCurrencyTests = ['DefaultCurrencyDatabaseTest', 'AbstractMintedCurrencyTest', 'DefaultMintedCurrencyTest', 'MintedUserCurrencyTest'];
 var daoCurrencyTestFolder = path.join(__dirname, 'dao-currency', 'contracts', 'build', 'test');
 
@@ -56,12 +58,15 @@ gulp.task('test:currency', function (cb) {
 });
 
 gulp.task('htmldoc:currency', function(cb){
-    natdoc2html('dao-currency', daoCurrencyContracts, './dao-currency/contracts/build/docs', './docs/contracts/dao-currency', cb);
+    process.exec('./build_docs.sh dao-currency', function (error) {
+        if (error)
+            throw new Error(error);
+        cb(error);
+    });
 });
 
 /************************ dao-users ***************************/
 
-var daoUsersContracts = ['DefaultUserDatabase', 'UserDatabase', 'UserRegistry', 'AbstractUserRegistry', 'AdminRegUserRegistry', 'SelfRegUserRegistry'];
 var daoUsersTests = ['DefaultUserDatabaseTest'];
 var daoUsersTestFolder = path.join(__dirname, 'dao-users', 'contracts', 'build', 'test');
 
@@ -83,12 +88,15 @@ gulp.task('test:users', function (cb) {
 });
 
 gulp.task('htmldoc:users', function(cb){
-    natdoc2html('dao-users', daoUsersContracts, './dao-users/contracts/build/docs', './docs/contracts/dao-users', cb);
+    process.exec('./build_docs.sh dao-users', function (error) {
+        if (error)
+            throw new Error(error);
+        cb(error);
+    });
 });
 
 /************************ dao-votes ***************************/
 
-var daoVotesContracts = ['Ballot', 'BallotManager', 'BallotMap', 'MintBallot', 'MintBallotManager', 'PublicBallot'];
 var daoVotesTests = ['PublicBallotTest'];
 var daoVotesTestFolder = path.join(__dirname, 'dao-votes', 'contracts', 'build', 'test');
 
@@ -110,7 +118,11 @@ gulp.task('test:votes', function (cb) {
 });
 
 gulp.task('htmldoc:votes', function(cb){
-    natdoc2html('dao-votes', daoVotesContracts, './dao-votes/contracts/build/docs', './docs/contracts/dao-votes', cb);
+    process.exec('./build_docs.sh dao-votes', function (error) {
+        if (error)
+            throw new Error(error);
+        cb(error);
+    });
 });
 
 /************************ all ***************************/

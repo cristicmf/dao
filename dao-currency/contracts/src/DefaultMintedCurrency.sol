@@ -1,18 +1,36 @@
 import "./AbstractMintedCurrency.sol";
 import "./CurrencyDatabase.sol";
 
-/// @title DefaultMintedCurrency
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// @dev Default implementation of a minted currency.
+/*
+    Contract: DefaultMintedCurrency
+
+    Default implementation of 'MintedCurrency'.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 contract DefaultMintedCurrency is AbstractMintedCurrency {
 
+    /*
+        Constructor: DefaultMintedCurrency
+
+        Params:
+            currencyDatabase (address) - The address to the currency database.
+            minter (address) - The address of the minter.
+    */
     function DefaultMintedCurrency(address currencyDatabase, address minter) AbstractMintedCurrency(currencyDatabase, minter) {}
 
-    /// @notice DefaultMintedCurrency.mint(receiver, amount) to mint new coins and add to an account.
-    /// @dev Mint new coins and add to an account.
-    /// @param receiver (address) the receiver account
-    /// @param amount (uint) the amount
-    /// @return error (uint16) error code
+    /*
+        Function: mint
+
+        Mint new coins and add to an account. Minter is automatically set to 'msg.sender'.
+
+        Params:
+            receiver (address) - The receiver account.
+            amount (int) - The amount. Use a negative value to subtract.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function mint(address receiver, uint amount) returns (uint16 error) {
         if (receiver == 0 || amount == 0)
             return NULL_PARAM_NOT_ALLOWED;
@@ -21,11 +39,18 @@ contract DefaultMintedCurrency is AbstractMintedCurrency {
         return _cdb.add(receiver, int(amount));
     }
 
-    /// @notice DefaultMintedCurrency.send(receiver, amount) to send coins from caller account to receiver.
-    /// @dev Send coins from caller to receiver.
-    /// @param receiver (address) the receiver account
-    /// @param amount (uint) the amount.
-    /// @return error (uint16) error code
+    /*
+        Function: send
+
+        Send currency between accounts. Sender is automatically set to 'msg.sender'.
+
+        Params:
+            receiver (address) - The receiver account.
+            amount (int) - The amount. Use a negative value to subtract.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function send(address receiver, uint amount) returns (uint16 error) {
         if (receiver == 0 || amount == 0)
             return NULL_PARAM_NOT_ALLOWED;

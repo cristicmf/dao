@@ -1,5 +1,5 @@
 import "./MockUserDatabase.sol";
-import "../../../dao-stl/src/assertions/DaoAsserter.sol";
+import "../../../dao-stl/contracts/src/assertions/DaoAsserter.sol";
 import "../src/AbstractUserRegistry.sol";
 
 contract AbstractUserRegistryImpl is AbstractUserRegistry {

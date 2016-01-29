@@ -1,29 +1,54 @@
 import "../../../dao-core/contracts/src/Database.sol";
 
-/// @title CurrencyDatabase
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// @dev CurrencyDatabase keeps track of users currency balance.
+/*
+    Interface: CurrencyDatabase
+
+    CurrencyDatabase keeps track of users currency balance.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 contract CurrencyDatabase is Database {
 
-    /// @notice CurrencyDatabase.add(receiver, amount) to add currency to an account.
-    /// @dev Add currency to an account.
-    /// @param receiver (address) the receiver account
-    /// @param amount (int) the amount. Use a negative value to subtract.
-    /// @return error (uint16) error code.
+    /*
+        Function: add
+
+        Add currency to an account.
+
+        Params:
+            receiver (address) - The receiver account.
+            amount (int) - The amount. Use a negative value to subtract.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function add(address receiver, int amount) returns (uint16 error);
 
-    /// @notice CurrencyDatabase.send(sender, receiver, amount) to send currency from one account to another.
-    /// @dev Send currency between accounts.
-    /// @param sender (address) the sender account
-    /// @param receiver (address) the receiver account
-    /// @param amount (uint) the amount.
-    /// @return error (uint16) error code.
+    /*
+        Function: send
+
+        Send currency between accounts.
+
+        Params:
+            sender (address) - The sender account.
+            receiver (address) - The receiver account.
+            amount (int) - The amount. Use a negative value to subtract.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function send(address sender, address receiver, uint amount) returns (uint16 error);
 
-    /// @notice CurrencyDatabase.accountBalance(addr) get the balance of an account.
-    /// @dev Get the balance of an account.
-    /// @param addr (address) the account address
-    /// @return balance (uint) the balance
+    /*
+        Function: accountBalance
+
+        Get the current balance of an account.
+
+        Params:
+            addr (address) - The account address.
+
+        Returns:
+            balance (uint) - The balance.
+    */
     function accountBalance(address addr) constant returns (uint balance);
 
 }

@@ -1,7 +1,7 @@
-import "./PublicBallot.sol";
+import "./AbstractPublicBallot.sol";
 import "./MintBallotManager.sol";
 
-contract MintBallot is PublicBallot {
+contract MintBallot is AbstractPublicBallot {
 
     MintBallotManager _ballotManager;
 
@@ -18,7 +18,7 @@ contract MintBallot is PublicBallot {
         uint numEligibleVoters,
         address receiver,
         uint amount
-    ) PublicBallot(
+    ) AbstractPublicBallot(
         id,
         userDatabase,
         creator,

@@ -14,11 +14,15 @@ Gulp: `$ gulp build:users`
 
 #### Testing
 
-From the dao project root:
-
-Gulp: `$ gulp test:users`
+Gulp: `$ gulp test:users` 
 
 Command-line tool: `$ solunit -d ./dao-users/contracts/build/test`
+
+#### Docs
+
+Shell script: `$ ./build_docs.sh dao-users`
+
+Gulp: `$ gulp htmldoc:users`
 
 #### Usage
 

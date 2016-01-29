@@ -1,19 +1,37 @@
-import "../../../dao-stl/src/errors/Errors.sol";
+import "../../../dao-stl/contracts/src/errors/Errors.sol";
 import "./Permission.sol";
 import "./Doug.sol";
 
-/// @title DefaultPermission
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// @dev Default permission contract. Implements the 'Permission' interface.
-/// Root is the only account allowed to add and and remove owners.
-/// Root and owners all pass the 'isPermission' check.
+/*
+    Contract: DefaultPermission
+
+    Default permission contract.
+
+    Root is the only account allowed to add and and remove owners.
+
+    Root and owners all pass the 'isPermission' check.
+
+    All addresses must be valid. If root is not valid, root can not be changed so the entire system breaks down.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 contract DefaultPermission is Destructible, Permission, Errors {
 
+    /*
+        Struct: OElement
+
+        Element type for OMap. Keeps a key index for iteration, and the timestamp of the owner as data.
+    */
     struct OElement {
         uint _keyIndex;
         uint timestamp;
     }
 
+    /*
+        Struct: OMap
+
+        Keeps an address -> OElement mapping, and an array of keys (addresses) to enable iteration.
+    */
     struct OMap
     {
         mapping(address => OElement) _data;
@@ -25,16 +43,29 @@ contract DefaultPermission is Destructible, Permission, Errors {
 
     OMap _owners;
 
-    // Constructor
+    /*
+        Constructor:  DefaultDoug
+
+        Params:
+            root (address) - The initial root-address.
+
+    */
     function DefaultPermission(address root) {
         _root = root;
         _timeRootAdded = block.timestamp;
     }
 
-    /// @notice DefaultPermission.setRoot(newRoot) to set the root account address.
-    /// @dev Set the root account address. Can only be done when caller is 'root'.
-    /// @param newRoot (address) the address
-    /// @return error (uint16) error code
+    /*
+        Function: setRoot
+
+        Set the root account address. Can only be done when caller is 'root'.
+
+        Params:
+            newRoot (address) - The new root-address.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function setRoot(address newRoot) constant returns (uint16 error) {
         if (msg.sender != _root)
             return ACCESS_DENIED;
@@ -46,26 +77,43 @@ contract DefaultPermission is Destructible, Permission, Errors {
     }
 
 
-    /// @notice DefaultPermission.root() to get the root address.
-    /// @dev Get the root address.
-    /// @return root (address) the address of root.
+    /*
+        Function: root
+
+        Get the root address.
+
+        Returns:
+            root (address) - The root-address.
+    */
     function root() constant returns (address root) {
         return _root;
     }
 
-    /// @notice DefaultPermission.rootData() to get the address of root, and the time they were added.
-    /// @dev Get the address of root, and the time they were created.
-    /// @return root (address) the address|
-    /// @return timeRootAdded (uint) the time when root was added.
+    /*
+        Function: rootData
+
+        Get the root data.
+
+        Returns:
+            root (address) - The root-address.
+            timeRootAdded (uint) - The unix timestamp of when the address was set.
+    */
     function rootData() constant returns (address root, uint timeRootAdded) {
         root = _root;
         timeRootAdded = _timeRootAdded;
     }
 
-    /// @notice DefaultPermission.addOwner(addr) to add a new owner.
-    /// @dev Add a new owner. Can only be done by 'root'.
-    /// @param addr (address) the address of the new owner
-    /// @return error (uint16) error code
+    /*
+        Function: addOwner
+
+        Add a new owner. Can only be done by 'root'.
+
+        Params:
+            addr (address) - The address of the owner.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function addOwner(address addr) returns (uint16 error) {
         // Basic check for null value.
         if(addr == 0)
@@ -86,10 +134,17 @@ contract DefaultPermission is Destructible, Permission, Errors {
         }
     }
 
-    /// @notice DefaultPermission.removeOwner(addr) to remove an owner.
-    /// @dev Remove an owner. Can only be done by 'root' and the owner himself.
-    /// @param addr (address) the address of the owner
-    /// @return error (uint16) error code
+    /*
+        Function: removeOwner
+
+        Remove an owner. Can only be done by 'root' and the owner himself.
+
+        Params:
+            addr (address) - The address of the owner.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function removeOwner(address addr) returns (uint16 error) {
         // Basic check for null value.
         if (addr == 0)
@@ -115,23 +170,37 @@ contract DefaultPermission is Destructible, Permission, Errors {
         _owners._keys.length--;
     }
 
-    /// @notice DefaultPermission.ownerTimestamp(addr) to get the time when the owner was added.
-    /// @dev Get the time when the owner was added.
-    /// @param addr (address) the owner address
-    /// @return timestamp (uint) the time when the owner was added|
-    /// @return error (uint16) error code
+    /*
+        Function: ownerTimestamp
+
+        Get the time when the owner was added.
+
+        Params:
+            addr (address) - The address of the owner.
+
+        Returns:
+            timestamp (uint) - The unix timestamp of when the owner was added.
+            error (uint16) - An error code.
+    */
     function ownerTimestamp(address addr) constant returns (uint timestamp, uint16 error) {
         timestamp = _owners._data[addr].timestamp;
         if (timestamp == 0)
             error = RESOURCE_NOT_FOUND;
     }
 
-    /// @notice DefaultPermission.ownerFromIndex(index) to get the owner with position 'index' in the backing array.
-    /// @dev Get the owner with position 'index' in the backing array.
-    /// @param index (uint) the index.
-    /// @return owner (address) the owner address|
-    /// @return timestamp (uint) the time when the owner was added|
-    /// @return error (uint16) error code
+    /*
+        Function: ownerFromIndex
+
+        Get the owner with position 'index' in the backing array.
+
+        Params:
+            index (uint) - The index.
+
+        Returns:
+            owner (address) - The owner address.
+            timestamp (uint) - The unix timestamp of when the owner was added.
+            error (uint16) - An error code.
+    */
     function ownerFromIndex(uint index) constant returns (address owner, uint timestamp, uint16 error) {
         if (index >= _owners._keys.length){
             error = ARRAY_INDEX_OUT_OF_BOUNDS;
@@ -142,24 +211,43 @@ contract DefaultPermission is Destructible, Permission, Errors {
         return;
     }
 
-    /// @notice DefaultPermission.numOwners() to get the total number of owners.
-    /// @dev Get the total number of owners.
-    /// @return numOwners (uint) the number of owners
+    /*
+        Function: numOwners
+
+        Get the total number of owners.
+
+        Returns:
+            numOwners (uint) - The number of owners.
+    */
     function numOwners() constant returns (uint numOwners) {
         return _owners._keys.length;
     }
 
-    /// @notice DefaultPermission.hasPermission(addr) to check if an address has this permission.
-    /// @dev Check if an address has this permission.
-    /// @param addr (address) the address
-    /// @return hasPerm (bool) true if the address is either root or an owner, false otherwise.
+    /*
+        Function: hasPermission
+
+        Check if an account has this permission. That means they're either an owner or root.
+
+        Params:
+            addr (address) - The account address.
+
+        Returns:
+            hasPerm (bool) - 'true' if the address is either root or an owner, otherwise 'false'.
+    */
     function hasPermission(address addr) constant returns (bool hasPerm) {
         return addr == _root || _owners._data[addr].timestamp != 0;
     }
 
-    /// @notice DefaultPermission.destroy() to destroy the contract.
-    /// @dev Calls 'selfdestruct' if caller is root.
-    /// @param fundReceiver (address) the account that receives the funds.
+     /*
+        Function: destroy
+
+        Destroys the contract if the caller has root permission.
+
+        WARNING: May lock down any system that depends on this contract for permissions management.
+
+        Params:
+            fundReceiver (address) - The account that receives the funds.
+    */
     function destroy(address fundReceiver) {
         if (msg.sender == _root)
             selfdestruct(fundReceiver);

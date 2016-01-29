@@ -5,6 +5,11 @@ if [[ -z $(command -v solc) ]]; then
     exit 1
 fi
 
+if [[ -z $1 ]]; then
+    echo "No argument provided"
+    exit 1
+fi
+
 MODULE=$1
 
 BUILD_DIR="./${MODULE}/contracts/build"
@@ -13,7 +18,6 @@ TEST_DIR="./${MODULE}/contracts/test"
 
 BUILD_RELEASE_DIR=${BUILD_DIR}/release
 BUILD_TEST_DIR=${BUILD_DIR}/test
-BUILD_DOCS_DIR=${BUILD_DIR}/docs
 
 
 declare -a DaoCoreContracts=('DefaultDoug.sol' 'DefaultPermission.sol' 'Database.sol')
@@ -37,7 +41,6 @@ rm -rf ${BUILD_DIR}
 mkdir -p ${BUILD_DIR}
 mkdir -p ${BUILD_RELEASE_DIR}
 mkdir -p ${BUILD_TEST_DIR}
-mkdir -p ${BUILD_DOCS_DIR}
 
 if [ ${MODULE} = "dao-core" ]; then
 	CONTRACTS="${DaoCoreContracts[@]/#/${SRC_DIR}/}"
@@ -55,4 +58,3 @@ fi
 
 solc --bin --abi -o ${BUILD_RELEASE_DIR} ${CONTRACTS}
 solc --bin --abi -o ${BUILD_TEST_DIR} ${TEST_CONTRACTS}
-solc --devdoc -o ${BUILD_DOCS_DIR} ${CONTRACTS}

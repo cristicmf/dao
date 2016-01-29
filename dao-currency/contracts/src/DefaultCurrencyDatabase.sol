@@ -1,19 +1,30 @@
 import "./CurrencyDatabase.sol";
 import "../../../dao-core/contracts/src/Database.sol";
 
-/// @title DefaultCurrencyDatabase
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// @dev Default implementation of CurrencyDatabase.
+/*
+    Contract: DefaultCurrencyDatabase
+
+    Default implementation of CurrencyDatabase. To save sapce, the balance mapping is not iterable.
+    Applications are expected to already have an iterable collection of users (such as 'DefaultUserDatabase') which can be used instead.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 contract DefaultCurrencyDatabase is CurrencyDatabase, DefaultDatabase {
 
-    // No iterable mapping here. Iterate over users instead.
     mapping (address => uint) _balances;
 
-    /// @notice DefaultCurrencyDatabase.add(receiver, amount) to add currency to an account.
-    /// @dev Add currency to an account.
-    /// @param receiver (address) the receiver account
-    /// @param amount (int) the amount. Use a negative value to subtract.
-    /// @return error (uint16) error code.
+    /*
+        Function: add
+
+        Add currency to an account.
+
+        Params:
+            receiver (address) - The receiver account.
+            amount (int) - The amount. Use a negative value to subtract.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function add(address receiver, int amount) returns (uint16 error) {
         if (!_checkCaller()) {
             return ACCESS_DENIED;
@@ -28,12 +39,19 @@ contract DefaultCurrencyDatabase is CurrencyDatabase, DefaultDatabase {
             _balances[receiver] += uint(amount);
     }
 
-    /// @notice DefaultCurrencyDatabase.send(sender, receiver, amount) to send currency from one account to another.
-    /// @dev Send currency between accounts.
-    /// @param sender (address) the sender account
-    /// @param receiver (address) the receiver account
-    /// @param amount (uint) the amount.
-    /// @return error (uint16) error code.
+    /*
+        Function: send
+
+        Send currency between accounts.
+
+        Params:
+            sender (address) - The sender account.
+            receiver (address) - The receiver account.
+            amount (int) - The amount. Use a negative value to subtract.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function send(address sender, address receiver, uint amount) returns (uint16 error) {
         if (!_checkCaller())
             return ACCESS_DENIED;
@@ -43,10 +61,17 @@ contract DefaultCurrencyDatabase is CurrencyDatabase, DefaultDatabase {
         _balances[receiver] += amount;
     }
 
-    /// @notice DefaultCurrencyDatabase.accountBalance(addr) get the balance of an account.
-    /// @dev Get the balance of an account.
-    /// @param addr (address) the account address
-    /// @return balance (uint) the balance
+    /*
+        Function: accountBalance
+
+        Get the current balance of an account.
+
+        Params:
+            addr (address) - The account address.
+
+        Returns:
+            balance (uint) - The balance.
+    */
     function accountBalance(address addr) constant returns (uint balance) {
         return _balances[addr];
     }

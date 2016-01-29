@@ -1,44 +1,86 @@
 import "../../../dao-core/contracts/src/Doug.sol";
 
-/// @title MintedCurrency
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// @dev Interface for currency actions contracts that has a minter.
+/*
+    Interface: MintedCurrency
+
+    Interface for currency actions contracts that has a minter.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 contract MintedCurrency is DougEnabled {
 
-    /// @notice MintedCurrency.mint(receiver, amount) to mint new coins and add to an account.
-    /// @dev Mint new coins and add to an account.
-    /// @param receiver (address) the receiver account
-    /// @param amount (uint) the amount
-    /// @return error (uint16) error code
+    /*
+        Function: mint
+
+        Mint new coins and add to an account. Minter is automatically set to 'msg.sender'.
+
+        Params:
+            receiver (address) - The receiver account.
+            amount (int) - The amount. Use a negative value to subtract.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function mint(address receiver, uint amount) returns (uint16 error);
 
-    /// @notice MintedCurrency.send(receiver, amount) to send coins from caller account to receiver.
-    /// @dev Send coins from caller to receiver.
-    /// @param receiver (address) the receiver account
-    /// @param amount (uint) the amount.
-    /// @return error (uint16) error code
+    /*
+        Function: send
+
+        Send currency between accounts. Sender is automatically set to 'msg.sender'.
+
+        Params:
+            receiver (address) - The receiver account.
+            amount (int) - The amount. Use a negative value to subtract.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function send(address receiver, uint amount) returns (uint16 error);
 
-    /// @notice MintedCurrency.setMinter(minter) to set the minter address.
-    /// @dev Set the minter address.
-    /// @param minter (address) the minter
-    /// @return error (uint16) error code
+    /*
+        Function: setMinter
+
+        Set the minter address.
+
+        Params:
+            minter (address) - The address of the new minter.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function setMinter(address minter) returns (uint16 error);
 
-    /// @notice MintedCurrency.minter() to get the minter account address.
-    /// @dev Get minter account address.
-    /// @return minter (address) the minter
+    /*
+        Function: minter
+
+        Get the minter address.
+
+        Returns:
+            minter (address) - The address.
+    */
     function minter() constant returns (address minter);
 
-    /// @notice MintedCurrency.setCurrencyDatabase(addr) to set the address of the currency database.
-    /// @dev Set the address of the currency database.
-    /// @param dbAddr (address) the database address.
-    /// @return error (uint16) error code
+    /*
+        Function: setCurrencyDatabase
+
+        Set the address of the currency database.
+
+        Params:
+            dbAddr (address) - The new currency database address.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function setCurrencyDatabase(address dbAddr) returns (uint16 error);
 
-    /// @notice MintedCurrency.currencyDatabase() to get the address of the currency database.
-    /// @dev Get the address of the currency database.
-    /// @return dbAddr (address) the database address.
+    /*
+        Function: currencyDatabase
+
+        Get the address of the currency database.
+
+        Returns:
+            dbAddr (address) - The address.
+    */
     function currencyDatabase() returns (address dbAddr);
 
 }

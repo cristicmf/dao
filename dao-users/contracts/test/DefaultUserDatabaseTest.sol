@@ -1,5 +1,5 @@
 import "../src/DefaultUserDatabase.sol";
-import "../../../dao-stl/src/assertions/DaoAsserter.sol";
+import "../../../dao-stl/contracts/src/assertions/DaoAsserter.sol";
 import "../../../dao-core/contracts/test/MockDatabaseDoug.sol";
 
 contract DefaultUserDatabaseTest is DaoAsserter {

@@ -1,4 +1,4 @@
-import "../../../dao-stl/src/assertions/DaoAsserter.sol";
+import "../../../dao-stl/contracts/src/assertions/DaoAsserter.sol";
 import "./MockCurrencyDatabase.sol";
 import "../src/DefaultMintedCurrency.sol";
 

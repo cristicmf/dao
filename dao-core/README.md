@@ -24,11 +24,15 @@ Gulp: `$ gulp build:core`
 
 #### Testing
 
-From the dao project root:
-
 Gulp: `$ gulp test:core` 
 
 Command-line tool: `$ solunit -d ./dao-core/contracts/build/test`
+
+#### Docs
+
+Shell script: `$ ./build_docs.sh dao-core`
+
+Gulp: `$ gulp htmldoc:core`
 
 ### Contracts
 

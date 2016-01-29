@@ -1,0 +1,88 @@
+/// @title AddressSet
+/// @author Andreas Olofsson (androlo1980@gmail.com)
+/// CONTRACT:
+/// AddressSet is a set backed by an iterable map with (address, bool) entries.
+/// O(1) insert, find, and remove.
+/// Stores a boolean, and an array index (uint) for each element, in addition to the address.
+/// This is for easy lookup, and for making iteration possible.
+/// Order of insertion is not preserved.
+library AddressSet {
+
+    // Less annoying to use a boolean then having to worry about array indices etc.
+    struct Element {
+        uint _valIndex;
+        bool _exists;
+    }
+
+    struct Set
+    {
+        mapping(address => Element) _data;
+        address[] _values;
+    }
+
+    /// @notice AddressSet.insert(set, address) to add a value to the set.
+    /// @dev Add values to the set.
+    /// @param set (AddressSet.Set) storage reference to the set.
+    /// @param val (address) the address
+    /// @return added (bool) true if the address was added, false if not (meaning the value already exists).
+    function insert(Set storage set, address val) returns (bool added) {
+        if (!set._data[val]._exists) {
+            var valIndex = set._values.length++;
+            set._data[val] = Element(valIndex, true);
+            set._values[valIndex] = val;
+            return true;
+        }
+    }
+
+    /// @notice AddressSet.remove(set, address) to remove a value from the set.
+    /// @dev Remove a value from the set.
+    /// @param set (AddressSet.Set) storage reference to the set.
+    /// @param val (address) the address
+    /// @return removed (bool) true if the address was removed, false if not (meaning the value wasn't found).
+    function remove(Set storage set, address val) returns (bool removed) {
+        var elem = set._data[val];
+        if (!elem._exists) return false;
+
+        var valIndex = elem._valIndex;
+        delete set._data[val];
+        var len = set._values.length;
+        if (valIndex != len - 1) {
+            var swap = set._values[len - 1];
+            set._values[valIndex] = swap;
+            set._data[swap]._valIndex = valIndex;
+        }
+        set._values.length--;
+        return true;
+    }
+
+    /// @notice AddressSet.hasValue(set, address) to check if a value is contained in the set.
+    /// @dev Check if a value exists.
+    /// @param set (AddressSet.Set) storage reference to the set.
+    /// @param val (address) the address
+    /// @return has (bool) true if the address was found, false otherwise
+    function hasValue(Set storage set, address val) constant returns (bool has) {
+        return set._data[val]._exists;
+    }
+
+    /// @notice AddressSet.valueFromIndex(set, address) to get a value from backing array index. Useful when iterating.
+    /// @dev Get value from index in backing array.
+    /// @param set (AddressSet.Set) storage reference to the set.
+    /// @param index (uint) the address
+    /// @return index (uint) the index
+    /// @return exists (bool) true if the element exists, false otherwise. Used because of index=0 ambiguity.
+    function valueFromIndex(Set storage set, uint index) constant returns (address value, bool exists) {
+        if (index >= set._values.length) return;
+
+        value = set._values[index];
+        exists = true;
+    }
+
+    /// @notice AddressSet.size(set) to get the size of the set.
+    /// @dev Get size of set.
+    /// @param set (AddressSet.Set) storage reference to the set.
+    /// @return size (uint) the size
+    function size(Set storage set) constant returns (uint size){
+        return set._values.length;
+    }
+
+}

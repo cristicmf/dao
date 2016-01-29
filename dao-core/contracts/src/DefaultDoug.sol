@@ -1,12 +1,23 @@
-import "../../../dao-stl/src/errors/Errors.sol";
-import {Doug, DougEnabled, Destructible} from "./Doug.sol";
+import "../../../dao-stl/contracts/src/errors/Errors.sol";
+import "./Doug.sol";
 import "./Permission.sol";
 
-/// @title DefaultDoug
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// @dev Default implementation of the 'Doug' interface-contract.
-/// Most collections work is done internally, rather then through a library.
-/// Method documentation is in the 'Doug' interface contract.
+/*
+    Interface: DefaultDoug
+
+    Default implementation of the 'Doug' interface-contract.
+
+    Contracts are registered using a bi-directional bytes32<->address map, and can be referenced
+    either by ID or by address. There is also an array of IDs that enables iteration.
+
+    Adding, removing and getting contracts from the registries are all O(1).
+
+    Contracts can only be given one id, and each id is unique.
+
+    Most collections work is done internally rather then through a library.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 contract DefaultDoug is Doug, Errors {
 
     address constant ADDRESS_NULL = 0;
@@ -17,13 +28,22 @@ contract DefaultDoug is Doug, Errors {
 
     Permission _permission;
 
-    // Element used in NAMap.
+    /*
+        Struct: NAElement
+
+        Element type for NAMap
+    */
     struct NAElement {
         uint _keyIndex;
         address value;
     }
 
-    // Map that stores id<->address mappings. Can be iterated over.
+    /*
+        Struct: NAMap
+
+        Keeps bi-directoinal mappings between contract ids (bytes32) and addresses.
+        Also keeps an array of all ids for iteration.
+    */
     struct NAMap
     {
         mapping(address => bytes32) _aToN;
@@ -34,7 +54,17 @@ contract DefaultDoug is Doug, Errors {
     NAMap _aMap;
     NAMap _dMap;
 
-    // Constructor
+    /*
+        Constructor:  DefaultDoug
+
+        Check if the caller is registered as an actions contract in doug.
+
+        Params:
+            permissionAddress (address) - The address to the permission contract.
+            destroyActions (bool) - Whether or not actions-contracts should be destroyed when removed.
+            destroyDatabases (bool) - Whether or not database-contracts should be destroyed when removed.
+
+    */
     function DefaultDoug(address permissionAddress, bool destroyActions, bool destroyDatabases) {
         _permission = Permission(permissionAddress);
         _destroyRemovedActions = destroyActions;
@@ -43,22 +73,39 @@ contract DefaultDoug is Doug, Errors {
 
     // *********************************** Actions contracts ************************************
 
-    /// @notice DefaultDoug.addActionsContract(identifier, contractAddress) to add a new contract to the registry.
-    /// @dev Add a new contract to the registry. Fires off 'ActionsContractAdded' event if successful.
-    /// @param identifier (bytes32) the identifier (name)
-    /// @param contractAddress (address) the contract address
-    /// @return error (uint16) an error code
+    /*
+        Function: addActionsContract
+
+        Add a new contract to the registry.
+
+        Fires off an <ActionsContractRegistry.ActionsContractAdded> event if successful.
+
+        Params:
+            identifier (bytes32) - The identifier (name).
+            contractAddress (address) - The contract address.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function addActionsContract(bytes32 identifier, address contractAddress) external returns (uint16 error) {
         error = _addContract(_aMap, identifier, contractAddress);
         if (error == NO_ERROR)
             ActionsContractAdded(identifier, contractAddress);
     }
 
-    /// @notice DefaultDoug.removeActionsContract(identifier) to remove a contract from the registry.
-    /// @dev Remove a contract from the registry. Fires an 'ActionsContractRemoved' event if successful.
-    /// Will also invoke 'Destructible.destroy' on the contract if automatic destruction on removal is set.
-    /// @param identifier (bytes32) the identifier (name)
-    /// @return error (uint16) an error code
+    /*
+        Function: removeActionsContract
+
+        Remove a contract from the registry.
+
+        Fires off an <ActionsContractRegistry.ActionsContractRemoved> event if successful.
+
+        Params:
+            identifier (bytes32) - The identifier (name).
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function removeActionsContract(bytes32 identifier) external returns (uint16 error) {
         var (addr, err) = _removeContract(_aMap, identifier);
         if (err == NO_ERROR) {
@@ -69,77 +116,129 @@ contract DefaultDoug is Doug, Errors {
         return err;
     }
 
-    /// @notice DefaultDoug.actionsContractAddress(identifier) to get the address of the contract with the given id.
-    /// @dev Get the address of the contract with the given Id.
-    /// @param identifier (bytes32) the identifier (name)
-    /// @return contractAddress (address) the address (or nil)
+    /*
+        Function: actionsContractAddress
+
+        Get the address of the contract with the given id.
+
+        Params:
+            identifier (bytes32) - The identifier (name).
+
+        Returns:
+            contractAddress (address) - The address (can be null).
+    */
     function actionsContractAddress(bytes32 identifier) constant returns (address contractAddress) {
          return _aMap._data[identifier].value;
     }
 
-    /// @notice DefaultDoug.actionsContractId(address) to get the id of the contract with the given address.
-    /// @dev Get the id of the contract with the given address.
-    /// @param contractAddress (address) the contract address
-    /// @return identifier (bytes32) the id (or nil)
+    /*
+        Function: actionsContractId
+
+        Get the id of the contract with the given address.
+
+        Params:
+            contractAddress (address) - The contract address.
+
+        Returns:
+            identifier (bytes32) - The id (can be null).
+    */
     function actionsContractId(address contractAddress) constant returns (bytes32 identifier) {
          return _aMap._aToN[contractAddress];
     }
 
-    /// @notice DefaultDoug.actionsContractFromIndex(index) to get the id and address of the contract with the given index.
-    /// @dev Get the id and address of the contract with the given index.
-    /// @param index (uint) the index
-    /// @return identifier (bytes32) the id|
-    /// @return contractAddress (bytes32) the address|
-    /// @return error (uint16) error code
+    /*
+        Function: actionsContractFromIndex
+
+        Get the id and address of the contract with the given index.
+
+        Params:
+            index (uint) - The index.
+
+        Returns:
+            identifier (bytes32) - The id (can be null).
+            contractAddress (address) - The address (can be null).
+            error (uint16) - An error code.
+    */
     function actionsContractFromIndex(uint index) constant returns (bytes32 identifier, address contractAddress, uint16 error) {
         return _contractFromIndex(_aMap, index);
     }
 
-    /// @notice DefaultDoug.numActionsContracts() to get the number of contracts in the registry.
-    /// @dev Get the number of contracts in the registry
-    /// @return numContracts (uint) the number of contracts
+    /*
+        Function: numActionsContracts
+
+        Get the number of contracts in the registry.
+
+        Returns:
+            numContracts (uint) - The number of actions-contracts.
+    */
     function numActionsContracts() constant returns (uint numContracts) {
         return _aMap._keys.length;
     }
 
-    /// @notice DefaultDoug.setDestroyRemovedActions(destroyRemovedActions) to
-    /// set if 'destroy' should be called automatically when a contract is removed.
-    /// @dev Enable to call 'destroy' method on contracts.
-    /// when they are removed.
-    /// @param destroyRemovedActions (bool) whether or not contracts should be overwritable
-    /// @return error (uint16) error code
+    /*
+        Function: setDestroyRemovedActions
+
+        Enable to call 'destroy' method on contracts.
+
+        Params:
+            destroyRemovedActions (bool) - Whether or not actions-contracts is destroyed when removed.
+
+        Returns:
+            error - (uint16) An error code.
+    */
     function setDestroyRemovedActions(bool destroyRemovedActions) returns (uint16 error) {
         if (!_hasDougPermission())
             return ACCESS_DENIED;
         _destroyRemovedActions = destroyRemovedActions;
     }
 
-    /// @notice DefaultDoug.destroyRemovedActions() to check if contracts are automatically destroyed when removed.
-    /// @dev Check if contracts are automatically destroyed when removed
-    /// @return destroyRemovedActions (bool) whether or not 'destroy' should be called on contracts
-    /// when they are removed.
+    /*
+        Function: destroyRemovedActions
+
+        Check if contracts are automatically destroyed when removed.
+
+        Returns:
+            destroyRemovedActions (bool) - Whether or not actions-contracts is destroyed when removed.
+    */
     function destroyRemovedActions() constant returns (bool destroyRemovedActions) {
         return _destroyRemovedActions;
     }
 
     // *********************************** Database contracts ************************************
 
-    /// @notice DefaultDoug.addDatabaseContract(identifier, contractAddress) to add a new contract to the registry.
-    /// @dev Add a new contract to the registry. Fires off 'DatabaseContractAdded' event if successful.
-    /// @param identifier (bytes32) the identifier (name)
-    /// @param contractAddress (address) the contract address
-    /// @return error (uint16) an error code
+    /*
+        Function: addDatabaseContract
+
+        Add a new contract to the registry.
+
+        Fires off an <DatabaseContractRegistry.DatabaseContractAdded> event if successful.
+
+        Params:
+            identifier (bytes32) - The identifier (name).
+            contractAddress (address) - The contract address.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function addDatabaseContract(bytes32 identifier, address contractAddress) external returns (uint16 error) {
         error = _addContract(_dMap, identifier, contractAddress);
         if (error == NO_ERROR)
             DatabaseContractAdded(identifier, contractAddress);
     }
 
-    /// @notice DefaultDoug.removeDatabaseContract(identifier) to remove a contract from the registry.
-    /// @dev Remove a contract from the registry. Fires off 'DatabaseContractRemoved' event if successful.
-    /// Will also invoke 'Destructible.destroy' on the contract if automatic destruction on removal is set.
-    /// @param identifier (bytes32) the identifier (name)
-    /// @return error (uint16) an error code
+    /*
+        Function: removeDatabaseContract
+
+        Remove a contract from the registry.
+
+        Fires off an <DatabaseContractRegistry.DatabaseContractRemoved> event if successful.
+
+        Params:
+            identifier (bytes32) - The identifier (name).
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function removeDatabaseContract(bytes32 identifier) external returns (uint16 error) {
         var (addr, err) = _removeContract(_dMap, identifier);
         if (err == NO_ERROR) {
@@ -150,65 +249,107 @@ contract DefaultDoug is Doug, Errors {
         return err;
     }
 
-    /// @notice DefaultDoug.databaseContractAddress(identifier) to get the address of the contract with the given id.
-    /// @dev Get the address of the contract with the given Id.
-    /// @param identifier (bytes32) the identifier (name)
-    /// @return contractAddress (address) the address (or nil)
+    /*
+        Function: databaseContractAddress
+
+        Get the address of the contract with the given id.
+
+        Params:
+            identifier (bytes32) - The identifier (name).
+
+        Returns:
+            contractAddress (address) - The address (can be null).
+    */
     function databaseContractAddress(bytes32 identifier) constant returns (address contractAddress) {
          return _dMap._data[identifier].value;
     }
 
-    /// @notice DefaultDoug.databaseContractId(address) to get the id of the contract with the given address.
-    /// @dev Get the id of the contract with the given address.
-    /// @param contractAddress (address) the contract address
-    /// @return identifier (bytes32) the id (or nil)
+    /*
+        Function: databaseContractId
+
+        Get the id of the contract with the given address.
+
+        Params:
+            contractAddress (address) - The contract address.
+
+        Returns:
+            identifier (bytes32) - The id (can be null).
+    */
     function databaseContractId(address contractAddress) constant returns (bytes32 identifier) {
          return _dMap._aToN[contractAddress];
     }
 
-    /// @notice DefaultDoug.databaseContractFromIndex(index) to get the id and address of the contract with the given index.
-    /// @dev Get the id and address of the contract with the given index.
-    /// @param index (uint) the index
-    /// @return identifier (bytes32) the id|
-    /// @return contractAddress (bytes32) the address|
-    /// @return error (uint16) error code
+    /*
+        Function: databaseContractFromIndex
+
+        Get the id and address of the contract with the given index.
+
+        Params:
+            index (uint) - The index.
+
+        Returns:
+            identifier (bytes32) - The id (can be null).
+            contractAddress (address) - The address (can be null).
+            error (uint16) - An error code.
+    */
     function databaseContractFromIndex(uint index) constant returns (bytes32 identifier, address contractAddress, uint16 error) {
         return _contractFromIndex(_dMap, index);
     }
 
-    /// @notice DefaultDoug.numDatabaseContracts() to get the number of contracts in the registry.
-    /// @dev Get the number of contracts in the registry.
-    /// @return numContracts (uint) the number of contracts
+    /*
+        Function: numDatabaseContracts
+
+        Get the number of contracts in the registry.
+
+        Returns:
+            numContracts (uint) - The number of contracts.
+    */
     function numDatabaseContracts() constant returns (uint numContracts) {
         return _dMap._keys.length;
     }
 
-    /// @notice DefaultDoug.setDestroyRemovedDatabases(destroyRemovedDatabases) to
-    /// set if 'destroy' should be called automatically when a contract is removed.
-    /// @dev Enable to call 'destroy' method on contracts.
-    /// when they are removed.
-    /// @param destroyRemovedDatabases (bool) whether or not contracts should be destroyed when removed
-    /// @return error (uint16) error code
+    /*
+        Function: setDestroyRemovedDatabases
+
+        Enable to call 'destroy' method on contracts.
+
+        Params:
+            destroyRemovedDatabases (bool) - Whether or not database-contracts are destroyed when removed.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function setDestroyRemovedDatabases(bool destroyRemovedDatabases) returns (uint16 error) {
         if (!_hasDougPermission())
             return ACCESS_DENIED;
         _destroyRemovedDatabases = destroyRemovedDatabases;
     }
 
-    /// @notice DefaultDoug.destroyRemovedDatabases() to check if contracts are automatically destroyed when removed.
-    /// @dev Check if contracts are automatically destroyed when removed
-    /// @return destroyRemovedDatabases (bool) whether or not 'destroy' should be called on contracts
-    /// when they are removed.
+    /*
+        Function: destroyRemovedDatabase
+
+        Check if contracts are automatically destroyed when removed.
+
+        Returns:
+            destroyRemovedDatabase (bool) - Whether or not database-contracts are destroyed when removed.
+    */
     function destroyRemovedDatabases() constant returns (bool destroyRemovedDatabases) {
         return _destroyRemovedDatabases;
     }
 
     // *********************************** Doug specific ************************************
 
-    /// @notice DefaultDoug.setPermission(permissionAddress) to set the permission contract address.
-    /// @dev Set the permission contract address;
-    /// @param permissionAddress (address) the address to the permission contract.
-    /// @return error (uint16) error code
+    /*
+        Function: setPermission
+
+        Set the permission contract address.
+
+        Params:
+            permissionAddress (address) - The address to the permission contract.
+
+        Returns:
+            error (uint16) - An error code.
+    */
     function setPermission(address permissionAddress) returns (uint16 error) {
         // Only allow
         if (address(_permission) != ADDRESS_NULL && msg.sender != _permission.root())
@@ -216,17 +357,31 @@ contract DefaultDoug is Doug, Errors {
         _permission = Permission(permissionAddress);
     }
 
-    /// @notice DefaultDoug.permissionsManager() to get the address of the permissions-manager.
-    /// @dev Get the address of the permission contract.
-    /// @return pmAddress (address) the address
+    /*
+        Function: permissionAddress
+
+        Get the address of the permission contract.
+
+        Params:
+            permissionAddress (address) the address to the permission contract.
+
+        Returns:
+            pmAddress (address) - The address of the permissions contract.
+    */
     function permissionAddress() constant returns (address pmAddress) {
         return _permission;
     }
 
-    /// @notice DefaultDoug.destroy() to destroy the contract.
-    /// @dev Calls 'selfdestruct' if caller is the account set as permission root.
-    /// on the contract if successful.
-    /// @param fundReceiver (address) the account that receives the funds.
+     /*
+        Function: destroy
+
+        Destroys the contract if the caller has root permission.
+
+        WARNING: Will destroy the entire system. Should not be done until all managed contracts are destroyed.
+
+        Params:
+            fundReceiver (address) - The account that receives the funds.
+    */
     function destroy(address fundReceiver) {
         if (msg.sender == _permission.root())
             selfdestruct(fundReceiver);

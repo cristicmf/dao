@@ -1,92 +1,162 @@
 import "../../../dao-core/contracts/src/Database.sol";
 
-/// @title UserDatabase
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// @dev UserDatabase keeps an iterable record of users.
-/// User data needs to contain:
-/// 'nickname' (bytes32) - a user nick.
-/// 'timestamp' (uint) - the (unix) time when the user was added.
-/// 'dataHash' (bytes32) - preferably a reference to a file (e.g. bittorent, ipfs, etc.).
+/*
+    Interface: UserDatabase
+
+    UserDatabase keeps an iterable record of users.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 contract UserDatabase is Database {
 
-    /// @notice UserDatabase.registerUser(addr, value_nickname, value_timestamp, value_dataHash) to register a new user. Overwriting not allowed.
-    /// @dev Register a new user.
-    /// @param addr (address) the address.
-    /// @param value_nickname (bytes32) the user name.
-    /// @param value_timestamp (uint) the unix timestamp.
-    /// @param value_dataHash (bytes32) hash of the file containing (optional) user data.
-    /// @return error (uint16) error code.
+    /*
+        Function: registerUser
+
+        Register a new user.
+
+        Params:
+            addr (address) - The address.
+            value_nickname (bytes32) - The users nickname.
+            value_timestamp (uint) - A unix timestamp.
+            value_dataHash (bytes32) - Hash of the file containing (optional) user data.
+        Returns:
+            error (uint16) An error code.
+    */
     function registerUser(address addr, bytes32 value_nickname, uint value_timestamp, bytes32 value_dataHash) returns (uint16 error);
 
-    /// @notice UserDatabase.updateDataHash(addr, dataHash) to register a new data-hash for a user.
-    /// @dev Register a new data hash for a user.
-    /// @param addr (address) the address.
-    /// @param dataHash (bytes32) hash of the file containing user data.
-    /// @return error (uint16) error code.
+    /*
+        Function: updateDataHash
+
+        Update a users data-hash.
+
+        Params:
+            addr (address) - The address.
+            dataHash (bytes32) - Hash of the file containing (optional) user data.
+        Returns:
+            error (uint16) An error code.
+    */
     function updateDataHash(address addr, bytes32 dataHash) returns (uint16 error);
 
-    /// @notice UserDatabase.removeUser(addr) to remove a user.
-    /// @dev Remove a user.
-    /// @param addr (address) the user address.
-    /// @return error (uint16) error code.
+    /*
+        Function: removeUser
+
+        Remove a user.
+
+        Params:
+            addr (address) - The user address.
+        Returns:
+            error (uint16) An error code.
+    */
     function removeUser(address addr) returns (uint16 error);
 
-    /// @notice UserDatabase.user(addr) to get user data.
-    /// @dev Get user data from the user address.
-    /// @param addr (address) the address.
-    /// @return value_nickname (bytes32) the nickname|
-    /// @return value_timestamp (uint) the time when the user was added|
-    /// @return value_dataHash (bytes32) the data-hash (optional).
+    /*
+        Function: user(address)
+
+        Get user data from the user address.
+
+        Params:
+            addr (address) - The address.
+
+        Returns:
+            value_nickname (bytes32) - The users nickname.
+            value_timestamp (uint) - The unix time of when the user was added.
+            value_dataHash (bytes32) - Hash of the file containing (optional) user data.
+    */
     function user(address addr) constant returns (bytes32 value_nickname, uint value_timestamp, bytes32 value_dataHash);
 
-    /// @notice UserDatabase.user(nickname) to get user data.
-    /// @dev Get user data from the nickname.
-    /// @param nickname (bytes32) the nickname.
-    /// @return value_nickname (bytes32) the nickname|
-    /// @return value_timestamp (uint) the time when the user was added|
-    /// @return value_dataHash (bytes32) the data-hash (optional).
+    /*
+        Function: user(bytes32)
+
+        Get user data from the nickname.
+
+        Params:
+            nickname (bytes32) - The nickname.
+
+        Returns:
+            value_nickname (bytes32) - The users nickname.
+            value_timestamp (uint) - The unix time of when the user was added.
+            value_dataHash (bytes32) - Hash of the file containing (optional) user data.
+    */
     function user(bytes32 nickname) constant returns (bytes32 value_nickname, uint value_timestamp, bytes32 value_dataHash);
 
-    /// @notice UserDatabase.hasUser(addr) to check if a user exists.
-    /// @dev Check if a user exists.
-    /// @param addr (address) the address.
-    /// @return has (bool) whether or not the user exists.
+    /*
+        Function: hasUser(address)
+
+        Check if a user exists.
+
+        Params:
+            addr (address) - The address.
+
+        Returns:
+            has (bool) - Whether or not the user exists.
+    */
     function hasUser(address addr) constant returns (bool has);
 
-    /// @notice UserDatabase.hasUser(nickname) to check if a user exists.
-    /// @dev Check if a user exists.
-    /// @param nickname (bytes32) the nickname.
-    /// @return has (bool) whether or not the user exists.
+    /*
+        Function: hasUser(bytes32)
+
+        Check if a user exists.
+
+        Params:
+            nickname (bytes32) - The nickname.
+
+        Returns:
+            has (bool) - Whether or not the user exists.
+    */
     function hasUser(bytes32 nickname) constant returns (bool has);
 
-    /// @notice UserDatabase.hasUsers(addr1, addr2) to check if two users exists.
-    /// Convenience function for user-to-user interaction checks.
-    /// @dev Check if two users exists.
-    /// @param addr1 (address) the address of the first user.
-    /// @param addr2 (address) the address of the second user.
-    /// @return has1 (bool) whether or not the first user exists|
-    /// @return has2 (bool) whether or not the second user exists
+    /*
+        Function: hasUsers(address, address)
+
+        Check if two users exists. Convenience function for user-to-user interaction checks.
+
+        Params:
+            addr1 (address) - The address of the first user.
+            addr2 (address) - The address of the second user.
+
+        Returns:
+            has1 (bool) - Whether or not the first user exists.
+            has2 (bool) - Whether or not the second user exists.
+    */
     function hasUsers(address addr1, address addr2) constant returns (bool has1, bool has2);
 
-    /// @notice UserDatabase.hasUsers(addr1, addr2) to check if two users exists.
-    /// Convenience function for user-to-user interaction checks.
-    /// @dev Check if two users exists.
-    /// @param nickname1 (bytes32) the first nickname.
-    /// @param nickname2 (bytes32) the second nickname.
-    /// @return has1 (bool) whether or not the first user exists|
-    /// @return has2 (bool) whether or not the second user exists
+    /*
+        Function: hasUser(bytes32, bytes32)
+
+        Check if two users exists. Convenience function for user-to-user interaction checks.
+
+        Params:
+            nickname1 (bytes32) - The nickname of the first user.
+            nickname2 (bytes32) - The nickname of the second user.
+
+        Returns:
+            has1 (bool) - Whether or not the first user exists.
+            has2 (bool) - Whether or not the second user exists.
+    */
     function hasUsers(bytes32 nickname1, bytes32 nickname2) constant returns (bool has1, bool has2);
 
-    /// @notice UserDatabase.userAddressFromIndex(index) to get a user address by its index in the backing array.
-    /// @dev Get a user address by its index in the backing array.
-    /// @param index (uint) the index.
-    /// @return key (address) the key|
-    /// @return error (uint16) error code
+    /*
+        Function: userAddressFromIndex
+
+        Get a user address from their index in the backing array.
+
+        Params:
+            index (uint) - The index.
+
+        Returns:
+            addr (address) - The user address
+            error (uint16) - An error code.
+    */
     function userAddressFromIndex(uint index) constant returns (address addr, uint16 error);
 
-    /// @notice UserDatabase.size() to get the number of users.
-    /// @dev Get the number of users.
-    /// @return size (uint) the number of users.
+    /*
+        Function: size
+
+        Get the total number of users.
+
+        Returns:
+            size (uint) - The size of the collection of users.
+    */
     function size() constant returns (uint size);
 
 }

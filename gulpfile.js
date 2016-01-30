@@ -96,7 +96,7 @@ gulp.task('htmldoc:stl', function(cb){
 
 /************************ dao-users ***************************/
 
-var daoUsersTests = ['DefaultUserDatabaseTest'];
+var daoUsersTests = ['DefaultUserDatabaseTest', 'AbstractUserRegistryTest', 'AdminRegUserRegistryTest', 'SelfRegUserRegistryTest'];
 var daoUsersTestFolder = path.join(__dirname, 'dao-users', 'contracts', 'build', 'test');
 
 gulp.task('build:users', function (cb) {

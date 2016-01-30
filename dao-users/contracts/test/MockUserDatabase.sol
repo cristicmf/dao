@@ -2,6 +2,8 @@ import "../../../dao-users/contracts/src/UserDatabase.sol";
 
 contract MockUserDatabase is UserDatabase {
 
+    uint16 constant MOCK_RETURN = 0x1111;
+
     uint _joined;
     uint _size;
     bool _has;
@@ -12,11 +14,17 @@ contract MockUserDatabase is UserDatabase {
         _size = size;
     }
 
-    function registerUser(address addr, bytes32 value_nickname, uint value_timestamp, bytes32 value_dataHash) returns (uint16 error) {}
+    function registerUser(address addr, bytes32 value_nickname, uint value_timestamp, bytes32 value_dataHash) returns (uint16 error) {
+        return MOCK_RETURN;
+    }
 
-    function updateDataHash(address addr, bytes32 dataHash) returns (uint16 error) {}
+    function updateDataHash(address addr, bytes32 dataHash) returns (uint16 error) {
+        return MOCK_RETURN;
+    }
 
-    function removeUser(address addr) returns (uint16 error) {}
+    function removeUser(address addr) returns (uint16 error) {
+        return MOCK_RETURN;
+    }
 
     function user(address addr) constant returns (bytes32 value_nickname, uint value_timestamp, bytes32 value_dataHash) {
         value_timestamp = _joined;
@@ -52,7 +60,9 @@ contract MockUserDatabase is UserDatabase {
 
     function setDougAddress(address dougAddr) returns (bool result) {}
 
-    function dougAddress() constant returns (address dougAddress) {}
+    function dougAddress() constant returns (address dougAddress) {
+        return MOCK_RETURN;
+    }
 
     function destroy(address fundReceiver) {}
 

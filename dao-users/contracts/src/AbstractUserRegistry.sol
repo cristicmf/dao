@@ -149,4 +149,34 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
         return _udb;
     }
 
+
+    /*
+        Function: setAdmin
+
+        Set the admin account. Can only be done by the current admin.
+
+        Params:
+            addr (address) - The admin address.
+
+        Returns:
+            error (uint16) - An error code.
+    */
+    function setAdmin(address addr) returns (uint16 error) {
+        if (msg.sender != _admin)
+            return ACCESS_DENIED;
+        _admin = addr;
+    }
+
+    /*
+        Function: admin
+
+        Get the admin account.
+
+        Returns:
+            addr (address) - The admin address.
+    */
+    function admin() returns (address addr) {
+        return _admin;
+    }
+
 }

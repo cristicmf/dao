@@ -111,4 +111,27 @@ contract UserRegistry is DougEnabled {
     */
     function userDatabase() returns (address dbAddr);
 
+    /*
+        Function: setAdmin
+
+        Set the admin account.
+
+        Params:
+            addr (address) - The admin address.
+
+        Returns:
+            error (uint16) - An error code.
+    */
+    function setAdmin(address addr) returns (uint16 error);
+
+    /*
+        Function: admin
+
+        Get the admin account.
+
+        Returns:
+            addr (address) - The admin address.
+    */
+    function admin() returns (address addr);
+
 }

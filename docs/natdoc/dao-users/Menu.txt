@@ -25,7 +25,7 @@ Footer: Copyright (C) 2015 Andreas Olofsson
 # These are indexes you deleted, so Natural Docs will not add them again
 # unless you remove them from this line.
 
-Don't Index: Structs, Events, Authors
+Don't Index: Authors, Structs, Events
 
 
 # --------------------------------------------------------------------------
@@ -58,7 +58,6 @@ File: UserRegistry.sol  (UserRegistry.sol)
 Group: Index  {
 
    Index: Everything
-   Interface Index: Interfaces
    Function Index: Functions
    File Index: Files
    Constructor Index: Constructors

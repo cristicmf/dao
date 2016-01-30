@@ -10,6 +10,8 @@ contract AbstractMintedCurrencyImpl is AbstractMintedCurrency {
 
     function send(address receiver, uint amount) returns (uint16 error) {}
 
+    function send(address sender, address receiver, uint amount) returns (uint16 error) {}
+
 }
 
 contract AbstractMintedCurrencyTest is DaoAsserter {
@@ -46,5 +48,7 @@ contract AbstractMintedCurrencyTest is DaoAsserter {
         var cd = amci.currencyDatabase();
         assertAddressesEqual(cd, TEST_ADDRESS, "currencyDatabase returns the wrong address");
     }
+
+
 
 }

@@ -47,21 +47,56 @@ contract DefaultMintedCurrencyTest is DaoAsserter {
         var mcd = new MockCurrencyDatabase();
         var dmc = new DefaultMintedCurrency(mcd, this);
         var err = dmc.send(TEST_ADDRESS, TEST_AMOUNT);
-        assertErrorsEqual(err, MOCK_RETURN, "mint returned the wrong error");
+        assertErrorsEqual(err, MOCK_RETURN, "send returned the wrong error");
     }
 
     function testSendFailReceiverIsNull() {
         var mcd = new MockCurrencyDatabase();
         var dmc = new DefaultMintedCurrency(mcd, this);
         var err = dmc.send(0, TEST_AMOUNT);
-        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "mint did not return 'null param' error");
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "send did not return 'null param' error");
     }
 
     function testSendFailAmountIsNull() {
         var mcd = new MockCurrencyDatabase();
         var dmc = new DefaultMintedCurrency(mcd, this);
         var err = dmc.send(TEST_ADDRESS, 0);
-        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "mint did not return 'null param' error");
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "send did not return 'null param' error");
+    }
+
+    function testAdminSendSuccess() {
+        var mcd = new MockCurrencyDatabase();
+        var dmc = new DefaultMintedCurrency(mcd, this);
+        var err = dmc.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_AMOUNT);
+        assertErrorsEqual(err, MOCK_RETURN, "send returned the wrong error");
+    }
+
+    function testAdminSendFailNotAdmin() {
+        var mcd = new MockCurrencyDatabase();
+        var dmc = new DefaultMintedCurrency(mcd, TEST_ADDRESS);
+        var err = dmc.send(this, TEST_ADDRESS_2, TEST_AMOUNT);
+        assertErrorsEqual(err, ACCESS_DENIED, "send did not return 'access denied' error");
+    }
+
+    function testAdminSendFailSenderIsNull() {
+        var mcd = new MockCurrencyDatabase();
+        var dmc = new DefaultMintedCurrency(mcd, this);
+        var err = dmc.send(0, TEST_ADDRESS, TEST_AMOUNT);
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "send did not return 'null param' error");
+    }
+
+    function testAdminSendFailReceiverIsNull() {
+        var mcd = new MockCurrencyDatabase();
+        var dmc = new DefaultMintedCurrency(mcd, this);
+        var err = dmc.send(TEST_ADDRESS, 0, TEST_AMOUNT);
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "send did not return 'null param' error");
+    }
+
+    function testAdminSendFailAmountIsNull() {
+        var mcd = new MockCurrencyDatabase();
+        var dmc = new DefaultMintedCurrency(mcd, this);
+        var err = dmc.send(TEST_ADDRESS, TEST_ADDRESS_2, 0);
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "send did not return 'null param' error");
     }
 
 }

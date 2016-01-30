@@ -1,9 +1,9 @@
 import "../../../dao-core/contracts/src/Database.sol";
 
 /*
-    Interface: UserDatabase
+    Contract: UserDatabase
 
-    UserDatabase keeps an iterable record of users.
+    UserDatabase is an interface for contracts that keeps an iterable record of users.
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */

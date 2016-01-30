@@ -1,7 +1,7 @@
 /*
-    Interface: PublicBallot
+    Contract: PublicBallot
 
-    An interface for public ballots.
+    An interface contract for public ballots.
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */

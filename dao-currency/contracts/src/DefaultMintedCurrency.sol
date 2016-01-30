@@ -36,11 +36,13 @@ contract DefaultMintedCurrency is AbstractMintedCurrency {
             return NULL_PARAM_NOT_ALLOWED;
         if (msg.sender != _minter)
             return ACCESS_DENIED;
-        return _cdb.add(receiver, int(amount));
+        error = _cdb.add(receiver, int(amount));
+        if (error == NO_ERROR)
+            CoinsMinted(receiver, amount);
     }
 
     /*
-        Function: send
+        Function: send(address, uint)
 
         Send currency between accounts. Sender is automatically set to 'msg.sender'.
 
@@ -54,7 +56,32 @@ contract DefaultMintedCurrency is AbstractMintedCurrency {
     function send(address receiver, uint amount) returns (uint16 error) {
         if (receiver == 0 || amount == 0)
             return NULL_PARAM_NOT_ALLOWED;
-        return _cdb.send(msg.sender, receiver, amount);
+        error = _cdb.send(msg.sender, receiver, amount);
+        if (error == NO_ERROR)
+            CoinsTransferred(msg.sender, receiver, amount);
+    }
+
+    /*
+        Function: send(address, address, amount)
+
+        Send currency between accounts. Can only be used by the administrator (minter).
+
+        Params:
+            sender (address) - The sender account.
+            receiver (address) - The receiver account.
+            amount (int) - The amount. Use a negative value to subtract.
+
+        Returns:
+            error (uint16) - An error code.
+    */
+    function send(address sender, address receiver, uint amount) returns (uint16 error) {
+        if (sender == 0 || receiver == 0 || amount == 0)
+            return NULL_PARAM_NOT_ALLOWED;
+        if (msg.sender != _minter)
+            return ACCESS_DENIED;
+        error = _cdb.send(msg.sender, receiver, amount);
+        if (error == NO_ERROR)
+            CoinsTransferred(sender, receiver, amount);
     }
 
 }

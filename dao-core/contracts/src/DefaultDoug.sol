@@ -3,7 +3,7 @@ import "./Doug.sol";
 import "./Permission.sol";
 
 /*
-    Interface: DefaultDoug
+    Contract: DefaultDoug
 
     Default implementation of the 'Doug' interface-contract.
 

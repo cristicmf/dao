@@ -58,7 +58,6 @@ File: MintedUserCurrency.sol  (MintedUserCurrency.sol)
 Group: Index  {
 
    Index: Everything
-   Interface Index: Interfaces
    Function Index: Functions
    File Index: Files
    Constructor Index: Constructors

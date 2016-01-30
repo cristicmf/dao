@@ -1,9 +1,9 @@
 import "./Permission.sol";
 
 /*
-    Interface: Destructible
+    Contract: Destructible
 
-    Interface for destroying (deleting) a contract.
+    Interface for destructible (deletable) contracts.
     Should be implemented by contracts that are used as doug actions or database contracts,
     so that the contract can be automatically destroyed when it is removed from Doug.
 
@@ -25,7 +25,7 @@ contract Destructible {
 
 
 /*
-    Interface: DougEnabled
+    Contract: DougEnabled
 
     This interface must be implemented by contracts that are used as doug
     actions or database contracts.
@@ -62,9 +62,9 @@ contract DougEnabled is Destructible {
 
 
 /*
-    Interface: ActionsContractRegistry
+    Contract: ActionsContractRegistry
 
-    The ActionsContractRegistry has a registry for actions contracts.
+    The ActionsContractRegistry is an interface for contracts that has an iterable registry of actions contracts.
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
@@ -196,9 +196,9 @@ contract ActionsContractRegistry {
 }
 
 /*
-    Interface: DatabaseContractRegistry
+    Contract: DatabaseContractRegistry
 
-    The DatabaseContractRegistry has a registry for database contracts.
+    The DatabaseContractRegistry is an interface for contracts that has an iterable registry of database contracts.
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
@@ -330,10 +330,10 @@ contract DatabaseContractRegistry {
 }
 
 /*
-    Interface: Doug
+    Contract: Doug
 
-    Doug is the top level contract in a DApp. It has registries for contracts and a permissions manager.
-    Contract IDs are 32 byte strings (bytes32).
+    Doug is an interface for the top level contract in a DApp. It has registries for contracts
+    and a permissions manager. Contract IDs are 32 byte strings (bytes32).
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */

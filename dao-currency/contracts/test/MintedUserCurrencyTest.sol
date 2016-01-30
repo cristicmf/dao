@@ -87,4 +87,52 @@ contract MintedUserCurrencyTest is DaoAsserter {
         assertErrorsEqual(err, RESOURCE_NOT_FOUND, "mint did not return 'resource not found' error");
     }
 
+    function testAdminSendSuccess() {
+        var mcd = new MockCurrencyDatabase();
+        var mud = new MockUserDatabase(0, true, 0);
+        var muc = new MintedUserCurrency(mcd, mud, this);
+        var err = muc.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_AMOUNT);
+        assertErrorsEqual(err, MOCK_RETURN, "send returned the wrong error");
+    }
+
+    function testAdminSendFailNotAdmin() {
+        var mcd = new MockCurrencyDatabase();
+        var mud = new MockUserDatabase(0, true, 0);
+        var muc = new MintedUserCurrency(mcd, mud,TEST_ADDRESS);
+        var err = muc.send(this, TEST_ADDRESS_2, TEST_AMOUNT);
+        assertErrorsEqual(err, ACCESS_DENIED, "send did not return 'access denied' error");
+    }
+
+    function testAdminSendFailSenderIsNull() {
+        var mcd = new MockCurrencyDatabase();
+        var mud = new MockUserDatabase(0, true, 0);
+        var muc = new MintedUserCurrency(mcd, mud, this);
+        var err = muc.send(0, TEST_ADDRESS, TEST_AMOUNT);
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "send did not return 'null param' error");
+    }
+
+    function testAdminSendFailReceiverIsNull() {
+        var mcd = new MockCurrencyDatabase();
+        var mud = new MockUserDatabase(0, true, 0);
+        var muc = new MintedUserCurrency(mcd, mud, this);
+        var err = muc.send(TEST_ADDRESS, 0, TEST_AMOUNT);
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "send did not return 'null param' error");
+    }
+
+    function testAdminSendFailAmountIsNull() {
+        var mcd = new MockCurrencyDatabase();
+        var mud = new MockUserDatabase(0, true, 0);
+        var muc = new MintedUserCurrency(mcd, mud, this);
+        var err = muc.send(TEST_ADDRESS, TEST_ADDRESS_2, 0);
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "send did not return 'null param' error");
+    }
+
+    function testAdminSendFailSenderAndReceiverNotUsers() {
+        var mcd = new MockCurrencyDatabase();
+        var mud = new MockUserDatabase(0, false, 0);
+        var muc = new MintedUserCurrency(mcd, mud, this);
+        var err = muc.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_AMOUNT);
+        assertErrorsEqual(err, RESOURCE_NOT_FOUND, "mint did not return 'resource not found' error");
+    }
+
 }

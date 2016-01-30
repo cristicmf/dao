@@ -1,9 +1,9 @@
 import "../../../dao-core/contracts/src/Doug.sol";
 
 /*
-    Interface: UserRegistry
+    Contract: UserRegistry
 
-    A contract that works with a user database to register and manage users.
+    An interface for contracts that works with a user database to register and manage users.
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */

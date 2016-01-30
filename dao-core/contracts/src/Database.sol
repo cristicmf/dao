@@ -2,7 +2,7 @@ import "../../../dao-stl/contracts/src/errors/Errors.sol";
 import "./Doug.sol";
 
 /*
-    Interface: Database
+    Contract: Database
 
     Interface for databases.
 

@@ -1,7 +1,7 @@
 /*
-    Interface: Permission
+    Contract: Permission
 
-    Interface for a simple permissions contract with a root and any number of owners.
+    Interface for permission contracts with a root user and a number of permission owners.
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */

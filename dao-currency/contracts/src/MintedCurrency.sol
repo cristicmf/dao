@@ -1,13 +1,36 @@
 import "../../../dao-core/contracts/src/Doug.sol";
 
 /*
-    Interface: MintedCurrency
+    Contract: MintedCurrency
 
-    Interface for currency actions contracts that has a minter.
+    MintedCurrency is an interface for currency actions-contracts that has a minter.
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract MintedCurrency is DougEnabled {
+
+    /*
+        Event: CoinsMinted
+
+        Can be fired when coins are minted.
+
+        Params:
+            receiver (address) - The receiver.
+            amount (uint) - The amount.
+    */
+    event CoinsMinted(address indexed receiver, uint indexed amount);
+
+    /*
+        Event: CoinsTransferred
+
+        Can be fired when coins are transferred between accounts.
+
+        Params:
+            sender (address) - The sender.
+            receiver (address) - The receiver.
+            amount (uint) - The amount.
+    */
+    event CoinsTransferred(address indexed sender, address indexed receiver, uint indexed amount);
 
     /*
         Function: mint
@@ -24,7 +47,7 @@ contract MintedCurrency is DougEnabled {
     function mint(address receiver, uint amount) returns (uint16 error);
 
     /*
-        Function: send
+        Function: send(address, amount)
 
         Send currency between accounts. Sender is automatically set to 'msg.sender'.
 
@@ -36,6 +59,21 @@ contract MintedCurrency is DougEnabled {
             error (uint16) - An error code.
     */
     function send(address receiver, uint amount) returns (uint16 error);
+
+    /*
+        Function: send(address, address, amount)
+
+        Send currency between accounts.
+
+        Params:
+            sender (address) - The sender account.
+            receiver (address) - The receiver account.
+            amount (int) - The amount. Use a negative value to subtract.
+
+        Returns:
+            error (uint16) - An error code.
+    */
+    function send(address sender, address receiver, uint amount) returns (uint16 error);
 
     /*
         Function: setMinter

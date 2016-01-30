@@ -1,9 +1,9 @@
 import "../../../dao-core/contracts/src/Database.sol";
 
 /*
-    Interface: CurrencyDatabase
+    Contract: CurrencyDatabase
 
-    CurrencyDatabase keeps track of users currency balance.
+    CurrencyDatabase is an interface for contracts that keeps track of currency balance.
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */

@@ -53,148 +53,165 @@ contract PropertyToAddressTest is Asserter {
     bytes32 constant TEST_BYTES32_2 = 2;
     bytes32 constant TEST_BYTES32_3 = 3;
 
-    function testInsert() returns (bool has, bool firstIsCorrect, bool firstIndexIsCorrect, bool sizeIsCorrect) {
+    function testInsert() {
         PropertyToAddressDb padb = new PropertyToAddressDb();
-        padb.insert(TEST_BYTES32, TEST_ADDRESS);
-        has = padb.hasKey(TEST_BYTES32);
+        var old = padb.insert(TEST_BYTES32, TEST_ADDRESS);
+
+        assertAddressZero(old, "insert returns wrong old address");
+        assertTrue(padb.hasKey(TEST_BYTES32), "hasKey does not return true");
         var (b, e) = padb.keyFromIndex(0);
-        firstIndexIsCorrect = e && b == TEST_BYTES32;
-        firstIsCorrect = padb.get(TEST_BYTES32) == TEST_ADDRESS;
-        sizeIsCorrect = padb.size() == 1;
-        return;
+        assertTrue(e, "keyFromIndex exist is false");
+        assertBytes32Equal(b, TEST_BYTES32, "keyFromIndex returns the wrong address");
+        assertAddressesEqual(padb.get(TEST_BYTES32), TEST_ADDRESS, "get returns the wrong address");
+        assertUintsEqual(padb.size(), 1, "size is not 1");
     }
 
-    function testOverwriteSuccess() returns (bool oldCorrect, bool addedCorrect, bool valCorrect, bool sizeIsCorrect) {
+    function testOverwriteSuccess() {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         var (old, added) = padb.insert(TEST_BYTES32, TEST_ADDRESS_2, true);
-        oldCorrect = old == TEST_ADDRESS;
-        addedCorrect = added;
-        valCorrect = padb.get(TEST_BYTES32) == TEST_ADDRESS_2;
-        sizeIsCorrect = padb.size() == 1;
+        assertAddressesEqual(old, TEST_ADDRESS, "insert returns wrong old address");
+        assertTrue(added, "added is not true");
+        assertAddressesEqual(padb.get(TEST_BYTES32), TEST_ADDRESS_2, "get returns the wrong address");
+        assertUintsEqual(padb.size(), 1, "size is not 1");
     }
 
-    function testOverwriteFail() returns (bool oldCorrect, bool addedCorrect, bool valCorrect, bool sizeIsCorrect) {
+    function testOverwriteFail() {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         var (old, added) = padb.insert(TEST_BYTES32, TEST_ADDRESS_2, false);
-        oldCorrect = old == 0;
-        addedCorrect = !added;
-        valCorrect = padb.get(TEST_BYTES32) == TEST_ADDRESS;
-        sizeIsCorrect = padb.size() == 1;
+        assertAddressZero(old, "insert returns wrong old address");
+        assertFalse(added, "added is true");
+        assertAddressesEqual(padb.get(TEST_BYTES32), TEST_ADDRESS, "get returns the wrong address");
+        assertUintsEqual(padb.size(), 1, "size is not 1");
     }
 
-    function testEntryFromIndex() returns (bool keyCorrect, bool valueCorrect, bool existsCorrect) {
+    function testEntryFromIndex() {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         var (k, v, e) = padb.entryFromIndex(0);
-        keyCorrect = k == TEST_BYTES32;
-        valueCorrect = v == TEST_ADDRESS;
-        existsCorrect = e;
-        return;
+        assertBytes32Equal(k, TEST_BYTES32, "entryFromIndex returns the wrong key");
+        assertAddressesEqual(v, TEST_ADDRESS, "entryFromIndex returns the wrong value");
+        assertTrue(e, "entryFromIndex returns the wrong existence value");
     }
 
-    function testEntryFromIndexFail() returns (bool keyCorrect, bool valueCorrect, bool existsCorrect) {
+    function testEntryFromIndexFail() {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         var (k, v, e) = padb.entryFromIndex(0);
-        keyCorrect = k == 0;
-        valueCorrect = v == 0;
-        existsCorrect = !e;
-        return;
+        assertBytes32Zero(k, "entryFromIndex returns the wrong key");
+        assertAddressZero(v, "entryFromIndex returns the wrong value");
+        assertFalse(e, "entryFromIndex returns the wrong existence value");
     }
 
-    function testRemove() returns (bool removed, bool firstIsCorrect, bool sizeIsCorrect) {
+    function testRemove() {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
-        padb.remove(TEST_BYTES32);
-        removed = !padb.hasKey(TEST_BYTES32);
+        var (addr, removed) = padb.remove(TEST_BYTES32);
+        assertAddressesEqual(addr, TEST_ADDRESS, "remove returns the wrong address");
+        assertTrue(removed, "remove returns the wrong result");
+        assertFalse(padb.hasKey(TEST_BYTES32), "hasKey returns true");
         var (b, e) = padb.keyFromIndex(0);
-        firstIsCorrect = !e && b == 0;
-        sizeIsCorrect = padb.size() == 0;
+        assertBytes32Zero(b, "keyFromIndex returns the wrong key");
+        assertFalse(e, "keyFromIndex returns the wrong existence value");
+        assertUintZero(padb.size(), "size is not 0");
     }
 
-    function testAddTwo() returns (bool hasFirst, bool hasSecond, bool firstIndexIsCorrect,
-                bool secondIndexIsCorrect, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
+    function testAddTwo() {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         padb.insert(TEST_BYTES32_2, TEST_ADDRESS_2);
-        hasFirst = padb.hasKey(TEST_BYTES32);
-        hasSecond = padb.hasKey(TEST_BYTES32_2);
+
+        assertTrue(padb.hasKey(TEST_BYTES32), "hasKey does not return true for first key.");
+        assertTrue(padb.hasKey(TEST_BYTES32), "hasKey does not return true for second key.");
+
+        assertAddressesEqual(padb.get(TEST_BYTES32), TEST_ADDRESS, "get returns the wrong value for first entry.");
+        assertAddressesEqual(padb.get(TEST_BYTES32_2), TEST_ADDRESS_2, "get returns the wrong value for second entry.");
+
         var (b, e) = padb.keyFromIndex(0);
-        firstIndexIsCorrect = e && b == TEST_BYTES32;
-        firstIsCorrect = padb.get(TEST_BYTES32) == TEST_ADDRESS;
+        assertTrue(e, "keyFromIndex exist is false for first entry.");
+        assertBytes32Equal(b, TEST_BYTES32, "keyFromIndex returns the wrong key for the first entry.");
+
         (b, e) = padb.keyFromIndex(1);
-        secondIndexIsCorrect = e && b == TEST_BYTES32_2;
-        secondIsCorrect = padb.get(TEST_BYTES32_2) == TEST_ADDRESS_2;
-        sizeIsCorrect = padb.size() == 2;
+        assertTrue(e, "keyFromIndex exist is false for second entry.");
+        assertBytes32Equal(b, TEST_BYTES32_2, "keyFromIndex returns the wrong key for second entry.");
+
+        assertUintsEqual(padb.size(), 2, "size is not 2");
     }
 
-    function testAddTwoRemoveLast() returns (bool hasFirst, bool secondRemoved, bool firstIndexIsCorrect,
-                bool secondIndexIsCorrect, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
+    function testAddTwoRemoveLast() {
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         padb.insert(TEST_BYTES32_2, TEST_ADDRESS_2);
         padb.remove(TEST_BYTES32_2);
 
-        hasFirst = padb.hasKey(TEST_BYTES32);
-        secondRemoved = !padb.hasKey(TEST_BYTES32_2);
+        assertTrue(padb.hasKey(TEST_BYTES32), "hasKey does not return true for first key.");
+        assertFalse(padb.hasKey(TEST_BYTES32_2), "hasKey does not return false for second key.");
+
+        assertAddressesEqual(padb.get(TEST_BYTES32), TEST_ADDRESS, "get returns the wrong value for first entry.");
+        assertAddressZero(padb.get(TEST_BYTES32_2), "get returns the wrong value for second entry.");
 
         var (b, e) = padb.keyFromIndex(0);
-        firstIndexIsCorrect = e && b == TEST_BYTES32;
-        firstIsCorrect = padb.get(TEST_BYTES32) == TEST_ADDRESS;
+        assertTrue(e, "keyFromIndex exist is false for first entry.");
+        assertBytes32Equal(b, TEST_BYTES32, "keyFromIndex returns the wrong key for the first entry.");
         (b, e) = padb.keyFromIndex(1);
-        secondIndexIsCorrect = !e && b == 0;
-        secondIsCorrect = padb.get(TEST_BYTES32_2) == 0;
+        assertFalse(e, "keyFromIndex exist is false for second entry.");
+        assertBytes32Zero(b, "keyFromIndex returns the wrong key for second entry.");
 
-        sizeIsCorrect = padb.size() == 1;
+        assertUintsEqual(padb.size(), 1, "size is not 1");
     }
 
-    function testAddTwoRemoveFirst() returns (bool firstRemoved, bool hasSecond, bool firstIndexIsCorrect,
-                bool secondIndexIsCorrect, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
-                    PropertyToAddressDb padb = new PropertyToAddressDb();
+    function testAddTwoRemoveFirst() {
+        PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         padb.insert(TEST_BYTES32_2, TEST_ADDRESS_2);
         padb.remove(TEST_BYTES32);
 
-        firstRemoved = !padb.hasKey(TEST_BYTES32);
-        hasSecond = padb.hasKey(TEST_BYTES32_2);
+        assertFalse(padb.hasKey(TEST_BYTES32), "hasKey does not return false for first key.");
+        assertTrue(padb.hasKey(TEST_BYTES32_2), "hasKey does not return true for second key.");
+
+        assertAddressZero(padb.get(TEST_BYTES32), "get returns the wrong value for first entry.");
+        assertAddressesEqual(padb.get(TEST_BYTES32_2), TEST_ADDRESS_2, "get returns the wrong value for second entry.");
+
 
         var (b, e) = padb.keyFromIndex(0);
-        firstIndexIsCorrect = e && b == TEST_BYTES32_2;
-        firstIsCorrect = padb.get(TEST_BYTES32) == 0;
+        assertTrue(e, "keyFromIndex exist is false for first entry.");
+        assertBytes32Equal(b, TEST_BYTES32_2, "keyFromIndex returns the wrong key for the first entry.");
         (b, e) = padb.keyFromIndex(1);
-        secondIndexIsCorrect = !e && b == 0;
-        secondIsCorrect = padb.get(TEST_BYTES32_2) == TEST_ADDRESS_2;
+        assertFalse(e, "keyFromIndex exist is false for second entry.");
+        assertBytes32Zero(b, "keyFromIndex returns the wrong key for second entry.");
 
-        sizeIsCorrect = padb.size() == 1;
+        assertUintsEqual(padb.size(), 1, "size is not 1");
     }
 
-    function testAddThreeRemoveMiddle() returns (bool hasFirst, bool secondRemoved, bool hasThird,
-                bool firstIndexIsCorrect, bool secondIndexIsCorrect, bool thirdIndexIsCorrect,
-                bool firstIsCorrect, bool secondIsCorrect, bool thirdIsCorrect, bool sizeIsCorrect) {
+    function testAddThreeRemoveMiddle() {
+
         PropertyToAddressDb padb = new PropertyToAddressDb();
         padb.insert(TEST_BYTES32, TEST_ADDRESS);
         padb.insert(TEST_BYTES32_2, TEST_ADDRESS_2);
         padb.insert(TEST_BYTES32_3, TEST_ADDRESS_3);
         padb.remove(TEST_BYTES32_2);
 
-        hasFirst = padb.hasKey(TEST_BYTES32);
-        secondRemoved = !padb.hasKey(TEST_BYTES32_2);
-        hasThird = padb.hasKey(TEST_BYTES32_3);
+        assertTrue(padb.hasKey(TEST_BYTES32), "hasKey does not return false for first key.");
+        assertFalse(padb.hasKey(TEST_BYTES32_2), "hasKey does not return false for second key.");
+        assertTrue(padb.hasKey(TEST_BYTES32_3), "hasKey does not return true for first key.");
+
+        assertAddressesEqual(padb.get(TEST_BYTES32), TEST_ADDRESS, "get returns the wrong value for first entry.");
+        assertAddressZero(padb.get(TEST_BYTES32_2), "get returns the wrong value for second entry.");
+        assertAddressesEqual(padb.get(TEST_BYTES32_3), TEST_ADDRESS_3, "get returns the wrong value for third entry.");
 
         var (b, e) = padb.keyFromIndex(0);
-        firstIndexIsCorrect = e && b == TEST_BYTES32;
-        firstIsCorrect = padb.get(TEST_BYTES32) == TEST_ADDRESS;
+        assertTrue(e, "keyFromIndex exist is false for first entry.");
+        assertBytes32Equal(b, TEST_BYTES32, "keyFromIndex returns the wrong key for the first entry.");
 
         (b, e) = padb.keyFromIndex(1);
-        secondIndexIsCorrect = e && b == TEST_BYTES32_3;
-        secondIsCorrect = padb.get(TEST_BYTES32_2) == 0;
+        assertTrue(e, "keyFromIndex exist is false for second entry.");
+        assertBytes32Equal(b, TEST_BYTES32_3, "keyFromIndex returns the wrong key for the second entry.");
 
         (b, e) = padb.keyFromIndex(2);
-        thirdIndexIsCorrect = !e && b == 0;
-        thirdIsCorrect = padb.get(TEST_BYTES32_3) == TEST_ADDRESS_3;
+        assertFalse(e, "keyFromIndex exist is false for third entry.");
+        assertBytes32Zero(b, "keyFromIndex returns the wrong key for third entry.");
 
-        sizeIsCorrect = padb.size() == 2;
+        assertUintsEqual(padb.size(), 2, "size is not 2");
     }
 
 }

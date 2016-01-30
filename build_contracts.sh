@@ -61,11 +61,9 @@ elif [ ${MODULE} = "dao-votes" ]; then
 fi
 
 if [[ ! -z ${CONTRACTS} ]]; then
-    echo "solc --bin --abi -o ${BUILD_RELEASE_DIR} ${CONTRACTS}"
     solc --bin --abi -o ${BUILD_RELEASE_DIR} ${CONTRACTS}
 fi
 
 if [[ ! -z ${TEST_CONTRACTS} ]]; then
-    echo "solc --bin --abi -o ${BUILD_TEST_DIR} ${TEST_CONTRACTS}"
     solc --bin --abi -o ${BUILD_TEST_DIR} ${TEST_CONTRACTS}
 fi

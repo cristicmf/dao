@@ -188,8 +188,10 @@ library PropertyToAddressMap {
     function entryFromIndex(Map storage map, uint index) constant returns (bytes32 key, address value, bool exists) {
         if (index >= map._keys.length)
             return;
-        else
-            return (map._keys[index], map._data[key].value, true);
+        else {
+            var k = map._keys[index];
+            return (k, map._data[k].value, true);
+        }
     }
 
     /*

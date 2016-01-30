@@ -1,8 +1,6 @@
 import "../../src/collections/AddressSet.slb";
 import "../../src/assertions/Asserter.sol";
 
-// TODO sol-unit format
-
 contract AddressSetDb {
 
     using AddressSet for AddressSet.Set;
@@ -38,91 +36,104 @@ contract AddressSetTest is Asserter {
     address constant TEST_ADDRESS_3 = 0xC0FFEE;
 
     function testInsert() {
-        AddressSetDb asdb = new AddressSetDb();
+        var asdb = new AddressSetDb();
         var added = asdb.addAddress(TEST_ADDRESS);
         assertTrue(added, "addAddress does not return true");
         assertTrue(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return true");
         var (a, e) = asdb.addressFromIndex(0);
         assertTrue(e, "addressFromIndex exist is false");
         assertAddressesEqual(a, TEST_ADDRESS, "addressFromIndex returns the wrong address");
-        return;
     }
 
-    function testRemoveAddress() returns (bool removed, bool firstIsCorrect, bool sizeIsCorrect) {
-        AddressSetDb asdb = new AddressSetDb();
+    function testRemoveAddress() {
+        var asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
-        asdb.removeAddress(TEST_ADDRESS);
-        removed = !asdb.hasAddress(TEST_ADDRESS);
+        var removed = asdb.removeAddress(TEST_ADDRESS);
+        assertTrue(removed, "removeAddress does not return true");
+        assertFalse(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return false");
         var (a, e) = asdb.addressFromIndex(0);
-        firstIsCorrect = !e && a == 0;
-        sizeIsCorrect = asdb.numAddresses() == 0;
+        assertFalse(e, "addressFromIndex exist is true");
+        assertAddressZero(a, "addressFromIndex returns non-zero address");
+        assertUintZero(asdb.numAddresses(), "size is not zero");
     }
 
-    function testAddTwoAddresses() returns (bool hasFirst, bool hasSecond, bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
-        AddressSetDb asdb = new AddressSetDb();
+    function testAddTwoAddresses() {
+        var asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
-        asdb.addAddress(TEST_ADDRESS_2);
-        hasFirst = asdb.hasAddress(TEST_ADDRESS);
-        hasSecond = asdb.hasAddress(TEST_ADDRESS_2);
+        var added = asdb.addAddress(TEST_ADDRESS_2);
+        assertTrue(added, "addAddress does not return true for second element");
+        assertTrue(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return true for first element");
+        assertTrue(asdb.hasAddress(TEST_ADDRESS_2), "hasAddress does not return true for second element");
         var (a, e) = asdb.addressFromIndex(0);
-        firstIsCorrect = e && a == TEST_ADDRESS;
+        assertTrue(e, "addressFromIndex exist is false for first element");
+        assertAddressesEqual(a, TEST_ADDRESS, "addressFromIndex returns the wrong address for first element");
         (a, e) = asdb.addressFromIndex(1);
-        secondIsCorrect = e && a == TEST_ADDRESS_2;
+        assertTrue(e, "addressFromIndex exist is false for second element");
+        assertAddressesEqual(a, TEST_ADDRESS_2, "addressFromIndex returns the wrong address for second element");
 
-        sizeIsCorrect = asdb.numAddresses() == 2;
+        assertUintsEqual(asdb.numAddresses(), 2, "size is not 2");
     }
 
-    function testAddTwoAddressesRemoveLast() returns (bool hasFirst, bool secondRemoved, bool firstIsCorrect,
-                bool secondIsCorrect, bool sizeIsCorrect) {
-        AddressSetDb asdb = new AddressSetDb();
+    function testAddTwoAddressesRemoveLast() {
+        var asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
         asdb.addAddress(TEST_ADDRESS_2);
         asdb.removeAddress(TEST_ADDRESS_2);
 
-        hasFirst = asdb.hasAddress(TEST_ADDRESS);
-        secondRemoved = !asdb.hasAddress(TEST_ADDRESS_2);
+        assertTrue(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return true for first element");
+        assertFalse(asdb.hasAddress(TEST_ADDRESS_2), "hasAddress does not return false for second element");
 
         var (a, e) = asdb.addressFromIndex(0);
-        firstIsCorrect = e && a == TEST_ADDRESS;
+        assertTrue(e, "addressFromIndex exist is false for first element");
+        assertAddressesEqual(a, TEST_ADDRESS, "addressFromIndex returns the wrong address for first element");
         (a, e) = asdb.addressFromIndex(1);
-        secondIsCorrect = !e && a == 0;
-        sizeIsCorrect = asdb.numAddresses() == 1;
+        assertFalse(e, "addressFromIndex exist is true for second element");
+        assertAddressZero(a, "addressFromIndex returns the wrong address for second element");
+
+        assertUintsEqual(asdb.numAddresses(), 1, "size is not 1");
     }
 
-    function testAddTwoAddressesRemoveFirst() returns (bool firstRemoved, bool hasSecond, bool firstIsCorrect,
-                bool secondIsCorrect, bool sizeIsCorrect) {
-        AddressSetDb asdb = new AddressSetDb();
+    function testAddTwoAddressesRemoveFirst() {
+        var asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
         asdb.addAddress(TEST_ADDRESS_2);
         asdb.removeAddress(TEST_ADDRESS);
 
-        firstRemoved = !asdb.hasAddress(TEST_ADDRESS);
-        hasSecond = asdb.hasAddress(TEST_ADDRESS_2);
+        assertFalse(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return false for first element");
+        assertTrue(asdb.hasAddress(TEST_ADDRESS_2), "hasAddress does not return true for second element");
 
         var (a, e) = asdb.addressFromIndex(0);
-        firstIsCorrect = e && a == TEST_ADDRESS_2;
+        assertTrue(e, "addressFromIndex exist is false for first element");
+        assertAddressesEqual(a, TEST_ADDRESS_2, "addressFromIndex returns the wrong address for first element");
         (a, e) = asdb.addressFromIndex(1);
-        secondIsCorrect = !e && a == 0;
-        sizeIsCorrect = asdb.numAddresses() == 1;
+        assertFalse(e, "addressFromIndex exist is true for second element");
+        assertAddressZero(a, "addressFromIndex returns the wrong address for second element");
+
+        assertUintsEqual(asdb.numAddresses(), 1, "size is not 1");
     }
 
-    function testAddThreeAddressesRemoveMiddle() returns (bool hasFirst, bool secondRemoved, bool hasThird,
-                bool firstIsCorrect, bool secondIsCorrect, bool sizeIsCorrect) {
-        AddressSetDb asdb = new AddressSetDb();
+    function testAddThreeAddressesRemoveMiddle() {
+        var asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
         asdb.addAddress(TEST_ADDRESS_2);
         asdb.addAddress(TEST_ADDRESS_3);
         asdb.removeAddress(TEST_ADDRESS_2);
 
-        hasFirst = asdb.hasAddress(TEST_ADDRESS);
-        secondRemoved = !asdb.hasAddress(TEST_ADDRESS_2);
-        hasThird = asdb.hasAddress(TEST_ADDRESS_3);
+        assertTrue(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return true for first element");
+        assertFalse(asdb.hasAddress(TEST_ADDRESS_2), "hasAddress does not return false for second element");
+        assertTrue(asdb.hasAddress(TEST_ADDRESS_3), "hasAddress does not return true for third element");
 
         var (a, e) = asdb.addressFromIndex(0);
-        firstIsCorrect = e && a == TEST_ADDRESS;
+        assertTrue(e, "addressFromIndex exist is false for first element");
+        assertAddressesEqual(a, TEST_ADDRESS, "addressFromIndex returns the wrong address for first element");
+
         (a, e) = asdb.addressFromIndex(1);
-        secondIsCorrect = e && a == TEST_ADDRESS_3;
-        sizeIsCorrect = asdb.numAddresses() == 2;
+        assertTrue(e, "addressFromIndex exist is false for second element");
+        assertAddressesEqual(a, TEST_ADDRESS_3, "addressFromIndex returns the wrong address for second element");
+
+        (a, e) = asdb.addressFromIndex(2);
+        assertFalse(e, "addressFromIndex exist is true for third element");
+        assertAddressZero(a, "addressFromIndex returns the wrong address for third element");
     }
 
 }

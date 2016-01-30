@@ -25,7 +25,7 @@ Footer: Copyright (C) 2015 Andreas Olofsson
 # These are indexes you deleted, so Natural Docs will not add them again
 # unless you remove them from this line.
 
-Don't Index: Functions, Contracts, Interfaces, Authors, General, Structs, Events, Files, Constructors
+Don't Index: Authors
 
 
 # --------------------------------------------------------------------------
@@ -52,6 +52,18 @@ File: assertions/Asserter.sol  (assertions/Asserter.sol)
 File: assertions/DaoAsserter.sol  (assertions/DaoAsserter.sol)
 File: collections/AddressSet.slb  (collections/AddressSet.slb)
 File: collections/PropertySet.slb  (collections/PropertySet.slb)
-Constant Index: Constants
+File: collections/PropertyToAddressMap.slb  (collections/PropertyToAddressMap.slb)
 File: errors/Errors.sol  (errors/Errors.sol)
-Library Index: Library Index
+
+Group: Index  {
+
+   Index: Everything
+   Constant Index: Constants
+   Contract Index: Contracts
+   Event Index: Events
+   File Index: Files
+   Function Index: Functions
+   Library Index: Libraries
+   Struct Index: Structs
+   }  # Group: Index
+

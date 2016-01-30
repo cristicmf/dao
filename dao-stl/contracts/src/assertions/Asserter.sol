@@ -35,8 +35,14 @@
 */
 contract Asserter {
 
+    // Constant: ADDRESS_NULL
+    // The null address: 0
     address constant ADDRESS_NULL = 0;
+    // Constant: BYTES32_NULL
+    // The null bytes32: 0
     bytes32 constant BYTES32_NULL = 0;
+    // Constant: STRING_NULL
+    // The null string: ""
     string constant STRING_NULL = "";
 
     /*

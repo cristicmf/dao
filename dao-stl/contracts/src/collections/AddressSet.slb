@@ -34,7 +34,7 @@ library AddressSet {
     /*
         Struct: Set
 
-        Contains mappings of 'bytes32' -> <Element>, and an array with all values for iteration.
+        Contains mappings of 'address' -> <Element>, and an array with all values for iteration.
     */
     struct Set
     {

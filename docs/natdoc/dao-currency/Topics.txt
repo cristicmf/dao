@@ -86,7 +86,6 @@ Topic Type: Contract
    Plural: Contracts
    Scope: Start
    Class Hierarchy: Yes
-   Can Group With: Libraries, Interfaces
 
    Keywords:
       contract, contracts
@@ -97,7 +96,6 @@ Topic Type: Library
    Plural: Libraries
    Scope: Start
    Class Hierarchy: Yes
-   Can Group With: Contracts, Interfaces
 
    Keywords:
       library, libraries
@@ -108,7 +106,6 @@ Alter Topic Type: Interface
    Plural: Interfaces
    Scope: Start
    Class Hierarchy: Yes
-   Can Group With: Contracts, Libraries
 
    Add Keywords:
       interface, interfaces

@@ -1,43 +1,80 @@
-/// @title PropertyToAddressMap
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// CONTRACT:
-/// PropertyToAddressMap is an iterable map with (bytes32, address) entries.
-/// Overwrites previous entries by default.
-/// O(1) insert, find, and remove.
-/// Stores an array index (uint) for each entry, in addition to the key and value.
-/// This is for easy lookup, and for making iteration possible.
-/// Order of insertion is not preserved.
+/*
+    Library: PropertyToAddressMap
+
+    PropertyToAddressMap is an iterable map with (bytes32, address) entries.
+
+    Overwrites previous values by default.
+
+    Insertion, finding, and removing elements are all O(1).
+
+    Stores a boolean, and an array index (uint) for each element, in addition to the key and value.
+    This is for easy lookup, and for making iteration possible.
+
+    Order of insertion is not preserved.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 library PropertyToAddressMap {
 
+    /*
+        Struct: Element
+
+        Element type for the map.
+
+        Members:
+
+        _keyIndex - The index of the key in the backing array.
+        value - The value.
+
+    */
     struct Element {
         uint _keyIndex;
         address value;
     }
 
+    /*
+        Struct: Map
+
+        Contains mappings of 'bytes32' -> <Element>, and an array with all values for iteration.
+    */
     struct Map
     {
         mapping(bytes32 => Element) _data;
         bytes32[] _keys;
     }
 
-    /// @notice PropertyToAddressMap.insert(map, key, value) to add an entry to the map. Overwrites existing values.
-    /// @dev Add an entry to the map.
-    /// @param map (PropertyToAddressMap.Map) storage reference to the map.
-    /// @param key (address) the key.
-    /// @param value (bytes32) the value.
-    /// @return oldValue (address) the old value (if any).
+    /*
+        Function: insert(Map, bytes32, address)
+
+        Add an entry to the map.
+
+        Params:
+            map (Map) - Storage reference to the map.
+            key (bytes32) - The key.
+            value (address) - The value.
+
+        Returns:
+            oldValue (address) - The old value, if any.
+    */
     function insert(Map storage map, bytes32 key, address value) returns (address oldValue) {
         (oldValue,) = insert(map, key, value, true);
     }
 
-    /// @notice PropertyToAddressMap.insert(map, key, value, overwrite) to add an entry to the map.
-    /// @dev Add an entry to the map.
-    /// @param map (PropertyToAddressMap.Map) storage reference to the map.
-    /// @param key (address) the key.
-    /// @param value (bytes32) the value.
-    /// @param overwrite (bool) whether or not to overwrite existing values.
-    /// @return oldValue (address) the old value (if any).
-    /// @return added (bool) whether or not the entry was added.
+    /*
+        Function: insert(Map, bytes32, address, bool)
+
+        Add an entry to the map.
+
+        Params:
+            map (Map) - Storage reference to the map.
+            key (bytes32) - The key.
+            value (address) - The value.
+            overwrite (bool) - Whether or not to overwrite existing values.
+
+        Returns:
+            oldValue (address) - The old value, if any.
+            added (bool) - Whether or not the entry was added.
+    */
     function insert(Map storage map, bytes32 key, address value, bool overwrite) returns (address oldValue, bool added) {
         var exists = map._data[key].value != 0;
 
@@ -50,12 +87,19 @@ library PropertyToAddressMap {
         }
     }
 
-    /// @notice PropertyToAddressMap.remove(map, key) to remove an entry from the map.
-    /// @dev Remove an entry from the map.
-    /// @param map (PropertyToAddressMap.Map) storage reference to the map.
-    /// @param key (bytes32) the key.
-    /// @return value (address) The value stored at the given key (if any).
-    /// @return removed (bool) whether or not the key was removed (false means that the key wasn't found).
+    /*
+        Function: remove
+
+        Remove an entry from the map.
+
+        Params:
+            map (Map) - Storage reference to the map.
+            key (bytes32) - The key.
+
+        Returns:
+            address (value) - The value that was removed, if any.
+            removed (bool) - 'true' if the entry was removed, 'false' if not.
+    */
     function remove(Map storage map, bytes32 key) returns (address value, bool removed) {
         var elem = map._data[key];
         value = elem.value;
@@ -75,30 +119,51 @@ library PropertyToAddressMap {
         removed = true;
     }
 
-    /// @notice PropertyToAddressMap.get(map, key) get a value by key.
-    /// @dev Get a value by key.
-    /// @param map (PropertyToAddressMap.Map) storage reference to the map.
-    /// @param key (bytes32) the key.
-    /// @return value (address) the value.
+    /*
+        Function: get
+
+        Get a value by key.
+
+        Params:
+            map (Map) - Storage reference to the map.
+            key (bytes32) - The key.
+
+        Returns:
+            address (value) - The value.
+    */
     function get(Map storage map, bytes32 key) constant returns (address value) {
         return map._data[key].value;
     }
 
-    /// @notice PropertyToAddressMap.hasKey(map, key) to check if a key exists.
-    /// @dev Check if a key exists.
-    /// @param map (PropertyToAddressMap.Map) storage reference to the map.
-    /// @param key (bytes32) the key.
-    /// @return has (bool) whether or not the key exists.
+    /*
+        Function: hasKey
+
+        Check if a key exists.
+
+        Params:
+            map (Map) - Storage reference to the map.
+            key (bytes32) - The key.
+
+        Returns:
+            has (bool) - 'true' if the key exists, otherwise 'false'.
+    */
     function hasKey(Map storage map, bytes32 key) constant returns (bool has) {
         return map._data[key].value != 0;
     }
 
-    /// @notice PropertyToAddressMap.keyFromIndex(map, index) to get a key by its index in the backing array.
-    /// @dev Get a key by its index in the backing array.
-    /// @param map (PropertyToAddressMap.Map) storage reference to the map.
-    /// @param index (uint) the index.
-    /// @return key (bytes32) the key.
-    /// @return exists (bool) true if the key exists (used to avoid nil value ambiguity).
+    /*
+        Function: keyFromIndex
+
+        Get a key by its index in the backing array. Used when iterating.
+
+        Params:
+            map (Map) - Storage reference to the map.
+            index (uint) - The index.
+
+        Returns:
+            key (bytes32) - The key.
+            exists (bool) - Whether or not the key exists. 'false' only if 'index' is illegal.
+    */
     function keyFromIndex(Map storage map, uint index) constant returns (bytes32 key, bool exists) {
         if (index >= map._keys.length)
             return;
@@ -106,12 +171,20 @@ library PropertyToAddressMap {
             return (map._keys[index], true);
     }
 
-    /// @notice PropertyToAddressMap.keyFromIndex(map, index) to get a key by its index in the backing array.
-    /// @dev Get a key by its index in the backing array.
-    /// @param map (PropertyToAddressMap.Map) storage reference to the map.
-    /// @param index (uint) the index.
-    /// @return key (bytes32) the key.
-    /// @return exists (bool) true if the key exists (used to avoid nil value ambiguity).
+    /*
+        Function: entryFromIndex
+
+        Get an entry by its index in the backing array. Used when iterating.
+
+        Params:
+            map (Map) - Storage reference to the map.
+            index (uint) - The index.
+
+        Returns:
+            key (bytes32) - The key.
+            value (address) - The value.
+            exists (bool) - Whether or not the key exists. 'false' only if 'index' is illegal.
+    */
     function entryFromIndex(Map storage map, uint index) constant returns (bytes32 key, address value, bool exists) {
         if (index >= map._keys.length)
             return;
@@ -119,10 +192,17 @@ library PropertyToAddressMap {
             return (map._keys[index], map._data[key].value, true);
     }
 
-    /// @notice PropertyToAddressMap.size(map) to get the number of entries in the map.
-    /// @dev Get the number of entries in the map.
-    /// @param map (PropertyToAddressMap.Map) storage reference to the map.
-    /// @return size (uint) the number of entries.
+    /*
+        Function: size
+
+        Get the size of the map.
+
+        Params:
+            map (Map) - Storage reference to the map.
+
+        Returns:
+            size (uint) - The size.
+    */
     function size(Map storage map) constant returns (uint size) {
         return map._keys.length;
     }

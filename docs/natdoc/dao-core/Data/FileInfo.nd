@@ -1,7 +1,7 @@
 1.52
 Solidity
-/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Database.sol	1453936155	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Database.sol
+/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultPermission.sol	1454091637	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultPermission.sol
 /home/andreas/WebstormProjects/dao/dao-core/contracts/src/Permission.sol	1453996479	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Permission.sol
-/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultDoug.sol	1453996194	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultDoug.sol
-/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultPermission.sol	1453996479	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultPermission.sol
-/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Doug.sol	1453996095	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Doug.sol
+/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Doug.sol	1454037131	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Doug.sol
+/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Database.sol	1453998315	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Database.sol
+/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultDoug.sol	1454091565	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultDoug.sol

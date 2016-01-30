@@ -56,7 +56,9 @@ NOTE: This requires that the dependencies are in place.
 
 ##### Building
 
-Gulp: `$ gulp build:core`
+NOTE: Requires `solc` on path. If this fails it will mess up the build folders, so you need to download again, or `git stash`.
+
+Gulp: `$ gulp build:all`
 
 ##### Testing
 
@@ -64,7 +66,7 @@ Gulp: `$ gulp test:all`
 
 ##### Docs
 
-Gulp: `$ gulp htmldoc:votes`
+Gulp: `$ gulp htmldoc:all`
 
 ## Structure
 

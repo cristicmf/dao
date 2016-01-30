@@ -64,6 +64,36 @@ gulp.task('htmldoc:currency', function(cb){
     });
 });
 
+/************************ dao-stl ***************************/
+
+var daoSTLTests = ['AddressSetTest', 'PropertySetTest', 'PropertyToAddressTest'];
+var daoSTLTestFolder = path.join(__dirname, 'dao-stl', 'contracts', 'build', 'test');
+
+gulp.task('build:stl', function (cb) {
+    process.exec('./build_contracts.sh dao-stl', function (error) {
+        if (error)
+            throw new Error(error);
+        cb(error);
+    });
+});
+
+gulp.task('test:stl', function (cb) {
+    solUnit.runTests(daoSTLTests, daoSTLTestFolder, true, function (stats) {
+        var failed = stats.total - stats.successful;
+        if (failed !== 0)
+            throw new Error("Tests failed: " + failed);
+        cb();
+    });
+});
+
+gulp.task('htmldoc:stl', function(cb){
+    process.exec('./build_docs.sh dao-stl', function (error) {
+        if (error)
+            throw new Error(error);
+        cb(error);
+    });
+});
+
 /************************ dao-users ***************************/
 
 var daoUsersTests = ['DefaultUserDatabaseTest'];
@@ -126,7 +156,7 @@ gulp.task('htmldoc:votes', function(cb){
 
 /************************ all ***************************/
 
-gulp.task('build:all', ['build:core', 'build:currency', 'build:users', 'build:votes']);
+gulp.task('build:all', ['build:core', 'build:currency', 'build:stl', 'build:users', 'build:votes']);
 
 gulp.task('test:all', function (cb) {
     var total = 0;
@@ -141,6 +171,12 @@ gulp.task('test:all', function (cb) {
                 });
             }, function (cb) {
                 solUnit.runTests(daoCurrencyTests, daoCurrencyTestFolder, true, function (stats) {
+                    total += stats.total;
+                    successful += stats.successful;
+                    cb();
+                });
+            }, function (cb) {
+                solUnit.runTests(daoSTLTests, daoSTLTestFolder, true, function (stats) {
                     total += stats.total;
                     successful += stats.successful;
                     cb();
@@ -168,4 +204,4 @@ gulp.task('test:all', function (cb) {
 
 });
 
-gulp.task('htmldoc:all', ['htmldoc:core', 'htmldoc:currency', 'htmldoc:users', 'htmldoc:votes']);
+gulp.task('htmldoc:all', ['htmldoc:core', 'htmldoc:currency', 'htmldoc:stl', 'htmldoc:users', 'htmldoc:votes']);

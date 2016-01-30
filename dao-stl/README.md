@@ -2,6 +2,30 @@
 
 Standard contracts used throughout the entire framework.
 
+## Installation and Usage
+
+#### Building/rebuilding of contracts
+
+NOTE: Requires `solc`. Will only build tests (nothing else to build).
+
+Shell script: `$ ./build_contracts.sh dao-stl`
+
+Gulp: `$ gulp build:stl`
+
+#### Testing
+
+Gulp: `$ gulp test:stl`
+
+Command-line tool: `$ solunit -d ./dao-stl/contracts/build/test`
+
+#### Docs
+
+Shell script: `$ ./build_docs.sh dao-stl`
+
+Gulp: `$ gulp htmldoc:stl`
+
+## Packages
+
 * [Assertions](#assertions)
 * [Collections](#collections)
 * [Errors](#errors)
@@ -12,7 +36,7 @@ Contracts needed for making assertions (sol-unit compatible).
 
 ### Collections
 
-A set of standard collections. The key and value types are mostly `address` and `bytes32`. `bytes32` is a fixed size byte array, which can serve as a string, number or other things, and is therefore referred to as `property` in this library.
+A few standard collections. The key and value types are mostly `address` and `bytes32`. `bytes32` is a fixed size byte array, which can serve as a string, number or other things, and is therefore referred to as `property` in this library.
 
 ### Errors
 

@@ -1,4 +1,5 @@
 import "../../src/collections/AddressSet.slb";
+import "../../src/assertions/Asserter.sol";
 
 // TODO sol-unit format
 
@@ -16,15 +17,11 @@ contract AddressSetDb {
         return _set.remove(addr);
     }
 
-    function removeAllAddresses() returns (uint numRemoved) {
-        return _set.removeAll();
-    }
-
     function hasAddress(address addr) constant returns (bool has) {
         return _set.hasValue(addr);
     }
 
-    function getAddressFromIndex(uint index) constant returns (address addr, bool has) {
+    function addressFromIndex(uint index) constant returns (address addr, bool has) {
         return _set.valueFromIndex(index);
     }
 
@@ -34,18 +31,20 @@ contract AddressSetDb {
 }
 
 
-contract AddressSetTest {
+contract AddressSetTest is Asserter {
 
     address constant TEST_ADDRESS = 0x12345;
     address constant TEST_ADDRESS_2 = 0xABCDEF;
     address constant TEST_ADDRESS_3 = 0xC0FFEE;
 
-    function testInsert() returns (bool has, bool firstIsCorrect) {
+    function testInsert() {
         AddressSetDb asdb = new AddressSetDb();
-        asdb.addAddress(TEST_ADDRESS);
-        has = asdb.hasAddress(TEST_ADDRESS);
-        var (a, e) = asdb.getAddressFromIndex(0);
-        firstIsCorrect = e && a == TEST_ADDRESS;
+        var added = asdb.addAddress(TEST_ADDRESS);
+        assertTrue(added, "addAddress does not return true");
+        assertTrue(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return true");
+        var (a, e) = asdb.addressFromIndex(0);
+        assertTrue(e, "addressFromIndex exist is false");
+        assertAddressesEqual(a, TEST_ADDRESS, "addressFromIndex returns the wrong address");
         return;
     }
 
@@ -54,7 +53,7 @@ contract AddressSetTest {
         asdb.addAddress(TEST_ADDRESS);
         asdb.removeAddress(TEST_ADDRESS);
         removed = !asdb.hasAddress(TEST_ADDRESS);
-        var (a, e) = asdb.getAddressFromIndex(0);
+        var (a, e) = asdb.addressFromIndex(0);
         firstIsCorrect = !e && a == 0;
         sizeIsCorrect = asdb.numAddresses() == 0;
     }
@@ -65,9 +64,9 @@ contract AddressSetTest {
         asdb.addAddress(TEST_ADDRESS_2);
         hasFirst = asdb.hasAddress(TEST_ADDRESS);
         hasSecond = asdb.hasAddress(TEST_ADDRESS_2);
-        var (a, e) = asdb.getAddressFromIndex(0);
+        var (a, e) = asdb.addressFromIndex(0);
         firstIsCorrect = e && a == TEST_ADDRESS;
-        (a, e) = asdb.getAddressFromIndex(1);
+        (a, e) = asdb.addressFromIndex(1);
         secondIsCorrect = e && a == TEST_ADDRESS_2;
 
         sizeIsCorrect = asdb.numAddresses() == 2;
@@ -83,9 +82,9 @@ contract AddressSetTest {
         hasFirst = asdb.hasAddress(TEST_ADDRESS);
         secondRemoved = !asdb.hasAddress(TEST_ADDRESS_2);
 
-        var (a, e) = asdb.getAddressFromIndex(0);
+        var (a, e) = asdb.addressFromIndex(0);
         firstIsCorrect = e && a == TEST_ADDRESS;
-        (a, e) = asdb.getAddressFromIndex(1);
+        (a, e) = asdb.addressFromIndex(1);
         secondIsCorrect = !e && a == 0;
         sizeIsCorrect = asdb.numAddresses() == 1;
     }
@@ -100,9 +99,9 @@ contract AddressSetTest {
         firstRemoved = !asdb.hasAddress(TEST_ADDRESS);
         hasSecond = asdb.hasAddress(TEST_ADDRESS_2);
 
-        var (a, e) = asdb.getAddressFromIndex(0);
+        var (a, e) = asdb.addressFromIndex(0);
         firstIsCorrect = e && a == TEST_ADDRESS_2;
-        (a, e) = asdb.getAddressFromIndex(1);
+        (a, e) = asdb.addressFromIndex(1);
         secondIsCorrect = !e && a == 0;
         sizeIsCorrect = asdb.numAddresses() == 1;
     }
@@ -119,26 +118,11 @@ contract AddressSetTest {
         secondRemoved = !asdb.hasAddress(TEST_ADDRESS_2);
         hasThird = asdb.hasAddress(TEST_ADDRESS_3);
 
-        var (a, e) = asdb.getAddressFromIndex(0);
+        var (a, e) = asdb.addressFromIndex(0);
         firstIsCorrect = e && a == TEST_ADDRESS;
-        (a, e) = asdb.getAddressFromIndex(1);
+        (a, e) = asdb.addressFromIndex(1);
         secondIsCorrect = e && a == TEST_ADDRESS_3;
         sizeIsCorrect = asdb.numAddresses() == 2;
-    }
-
-    function testRemoveAllAddresses() returns (bool firstRemoved, bool secondRemoved, bool thirdRemoved,
-                bool sizeIsNil) {
-        AddressSetDb asdb = new AddressSetDb();
-        asdb.addAddress(TEST_ADDRESS);
-        asdb.addAddress(TEST_ADDRESS_2);
-        asdb.addAddress(TEST_ADDRESS_3);
-        asdb.removeAllAddresses();
-
-        firstRemoved = !asdb.hasAddress(TEST_ADDRESS);
-        secondRemoved = !asdb.hasAddress(TEST_ADDRESS_2);
-        thirdRemoved = !asdb.hasAddress(TEST_ADDRESS_3);
-
-        sizeIsNil = asdb.numAddresses() == 0;
     }
 
 }

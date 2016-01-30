@@ -1,7 +1,8 @@
 1.52
 Solidity
-/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Doug.sol	1453996095	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Doug.sol
-/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Permission.sol	1453996479	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Permission.sol
-/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultPermission.sol	1453996479	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultPermission.sol
-/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Database.sol	1453936155	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/Database.sol
-/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultDoug.sol	1453996194	1	/home/andreas/WebstormProjects/dao/dao-core/contracts/src/DefaultDoug.sol
+/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/assertions/DaoAsserter.sol	1454102195	1	/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/assertions/DaoAsserter.sol
+/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/collections/PropertySet.slb	1454105616	1	/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/collections/PropertySet.slb
+/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/collections/PropertyToAddressMap.slb	1454092301	0	/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/collections/PropertyToAddressMap.slb
+/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/errors/Errors.sol	1454104579	1	/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/errors/Errors.sol
+/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/assertions/Asserter.sol	1454103642	1	/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/assertions/Asserter.sol
+/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/collections/AddressSet.slb	1454105697	1	/home/andreas/WebstormProjects/dao/dao-stl/contracts/src/collections/AddressSet.slb

@@ -1,4 +1,5 @@
 import "../../src/collections/PropertySet.slb";
+import "../../src/assertions/Asserter.sol";
 
 // TODO sol-unit format
 
@@ -16,10 +17,6 @@ contract PropertySetDb {
         return _set.remove(prop);
     }
 
-    function removeAllProperties() returns (uint numRemoved) {
-        return _set.removeAll();
-    }
-
     function hasProperty(bytes32 prop) constant returns (bool has) {
         return _set.hasValue(prop);
     }
@@ -34,7 +31,7 @@ contract PropertySetDb {
 }
 
 
-contract PropertySetTest {
+contract PropertySetTest is Asserter {
 
     bytes32 constant TEST_PROPERTY = 0x12345;
     bytes32 constant TEST_PROPERTY_2 = 0xABCDEF;
@@ -124,21 +121,6 @@ contract PropertySetTest {
         (a, e) = psdb.getPropertyFromIndex(1);
         secondIsCorrect = e && a == TEST_PROPERTY_3;
         sizeIsCorrect = psdb.numProperties() == 2;
-    }
-
-    function testRemoveAllProperties() returns (bool firstRemoved, bool secondRemoved, bool thirdRemoved,
-                bool sizeIsNil) {
-        PropertySetDb psdb = new PropertySetDb();
-        psdb.addProperty(TEST_PROPERTY);
-        psdb.addProperty(TEST_PROPERTY_2);
-        psdb.addProperty(TEST_PROPERTY_3);
-        psdb.removeAllProperties();
-
-        firstRemoved = !psdb.hasProperty(TEST_PROPERTY);
-        secondRemoved = !psdb.hasProperty(TEST_PROPERTY_2);
-        thirdRemoved = !psdb.hasProperty(TEST_PROPERTY_3);
-
-        sizeIsNil = psdb.numProperties() == 0;
     }
 
 }

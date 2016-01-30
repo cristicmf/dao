@@ -1,4 +1,5 @@
-import "../../src/collections/PropertyToAddressDb.sol";
+import "../../src/collections/PropertyToAddressMap.slb";
+import "../../src/assertions/Asserter.sol";
 
 // TODO sol-unit format
 
@@ -24,10 +25,6 @@ contract PropertyToAddressDb {
         return _map.remove(key);
     }
 
-    function removeAll() returns (uint numRemoved) {
-        return _map.removeAll();
-    }
-
     function hasKey(bytes32 key) constant returns (bool has) {
         return _map.hasKey(key);
     }
@@ -46,7 +43,7 @@ contract PropertyToAddressDb {
 }
 
 
-contract PropertyToAddressTest {
+contract PropertyToAddressTest is Asserter {
 
     address constant TEST_ADDRESS = 0x12345;
     address constant TEST_ADDRESS_2 = 0xABCDEF;
@@ -198,21 +195,6 @@ contract PropertyToAddressTest {
         thirdIsCorrect = padb.get(TEST_BYTES32_3) == TEST_ADDRESS_3;
 
         sizeIsCorrect = padb.size() == 2;
-    }
-
-    function testRemoveAll() returns (bool firstRemoved, bool secondRemoved, bool thirdRemoved, bool sizeIsNil) {
-        PropertyToAddressDb padb = new PropertyToAddressDb();
-        padb.insert(TEST_BYTES32, TEST_ADDRESS);
-        padb.insert(TEST_BYTES32_2, TEST_ADDRESS_2);
-        padb.insert(TEST_BYTES32_3, TEST_ADDRESS_3);
-
-        padb.removeAll();
-
-        firstRemoved = !padb.hasKey(TEST_BYTES32);
-        secondRemoved = !padb.hasKey(TEST_BYTES32_2);
-        thirdRemoved = !padb.hasKey(TEST_BYTES32_3);
-
-        sizeIsNil = padb.size() == 0;
     }
 
 }

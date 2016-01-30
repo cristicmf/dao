@@ -1,30 +1,59 @@
-/// @title AddressSet
-/// @author Andreas Olofsson (androlo1980@gmail.com)
-/// CONTRACT:
-/// AddressSet is a set backed by an iterable map with (address, bool) entries.
-/// O(1) insert, find, and remove.
-/// Stores a boolean, and an array index (uint) for each element, in addition to the address.
-/// This is for easy lookup, and for making iteration possible.
-/// Order of insertion is not preserved.
+/*
+    Library: AddressSet
+
+    AddressSet is a set backed by an iterable map with (address, bool) entries.
+
+    Insertion, finding, and removing elements are all O(1).
+
+    Stores a boolean, and an array index (uint) for each element, in addition to the address.
+    This is for easy lookup, and for making iteration possible.
+
+    Order of insertion is not preserved.
+
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 library AddressSet {
 
-    // Less annoying to use a boolean then having to worry about array indices etc.
+    /*
+        Struct: Element
+
+        Element type for the set.
+        Members should not be accessed directly.
+
+        Members:
+
+        _valIndex - The index of the value in the backing array.
+        _exists - Whether or not the element exists (used for null-checks).
+
+    */
     struct Element {
         uint _valIndex;
         bool _exists;
     }
 
+    /*
+        Struct: Set
+
+        Contains mappings of 'bytes32' -> <Element>, and an array with all values for iteration.
+    */
     struct Set
     {
         mapping(address => Element) _data;
         address[] _values;
     }
 
-    /// @notice AddressSet.insert(set, address) to add a value to the set.
-    /// @dev Add values to the set.
-    /// @param set (AddressSet.Set) storage reference to the set.
-    /// @param val (address) the address
-    /// @return added (bool) true if the address was added, false if not (meaning the value already exists).
+    /*
+        Function: insert
+
+        Add a value to the set.
+
+        Params:
+            set (Set) - Storage reference to the set.
+            val (address) - The value.
+
+        Returns:
+            added (bool) - 'true' if the bytes32 was added, 'false' if not.
+    */
     function insert(Set storage set, address val) returns (bool added) {
         if (!set._data[val]._exists) {
             set._data[val] = Element(set._values.push(val) - 1, true);
@@ -32,11 +61,18 @@ library AddressSet {
         }
     }
 
-    /// @notice AddressSet.remove(set, address) to remove a value from the set.
-    /// @dev Remove a value from the set.
-    /// @param set (AddressSet.Set) storage reference to the set.
-    /// @param val (address) the address
-    /// @return removed (bool) true if the address was removed, false if not (meaning the value wasn't found).
+    /*
+        Function: remove
+
+        Remove a value from the set.
+
+        Params:
+            set (Set) - Storage reference to the set.
+            val (address) - The value.
+
+        Returns:
+            removed (bool) - 'true' if the bytes32 was removed, 'false' if not.
+    */
     function remove(Set storage set, address val) returns (bool removed) {
         var elem = set._data[val];
         if (!elem._exists) return false;
@@ -53,21 +89,35 @@ library AddressSet {
         return true;
     }
 
-    /// @notice AddressSet.hasValue(set, address) to check if a value is contained in the set.
-    /// @dev Check if a value exists.
-    /// @param set (AddressSet.Set) storage reference to the set.
-    /// @param val (address) the address
-    /// @return has (bool) true if the address was found, false otherwise
+    /*
+        Function: hasValue
+
+        Check if a value exists.
+
+        Params:
+            set (Set) - Storage reference to the set.
+            val (address) - The value.
+
+        Returns:
+            has (bool) 'true' if the value was found, 'false' otherwise.
+    */
     function hasValue(Set storage set, address val) constant returns (bool has) {
         return set._data[val]._exists;
     }
 
-    /// @notice AddressSet.valueFromIndex(set, address) to get a value from backing array index. Useful when iterating.
-    /// @dev Get value from index in backing array.
-    /// @param set (AddressSet.Set) storage reference to the set.
-    /// @param index (uint) the address
-    /// @return index (uint) the index
-    /// @return exists (bool) true if the element exists, false otherwise. Used because of index=0 ambiguity.
+    /*
+        Function: valueFromIndex
+
+        Get a value by its index in the backing array.
+
+        Params:
+            set (Set) - Storage reference to the set.
+            index (uint) - The index.
+
+        Returns:
+            value (address) - The value.
+            exists (bool) 'true' if the value was found, 'false' otherwise. Workaround for when index is out of bounds.
+    */
     function valueFromIndex(Set storage set, uint index) constant returns (address value, bool exists) {
         if (index >= set._values.length)
             return;
@@ -75,10 +125,17 @@ library AddressSet {
             return (set._values[index], true);
     }
 
-    /// @notice AddressSet.size(set) to get the size of the set.
-    /// @dev Get size of set.
-    /// @param set (AddressSet.Set) storage reference to the set.
-    /// @return size (uint) the size
+    /*
+        Function: size
+
+        Get the size of the set. The size is the number of elements currently stored in the set.
+
+        Params:
+            set (Set) - Storage reference to the set.
+
+        Returns:
+            size (uint) - The size.
+    */
     function size(Set storage set) constant returns (uint size){
         return set._values.length;
     }

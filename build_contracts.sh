@@ -26,13 +26,15 @@ declare -a DaoCoreTest=('DefaultPermissionTest.sol' 'DefaultDougActionsTest.sol'
 declare -a DaoCurrencyContracts=('DefaultCurrencyDatabase.sol' 'DefaultMintedCurrency.sol' 'MintedUserCurrency.sol')
 declare -a DaoCurrencyTest=('DefaultCurrencyDatabaseTest.sol' 'AbstractMintedCurrencyTest.sol' 'DefaultMintedCurrencyTest.sol' 'MintedUserCurrencyTest.sol')
 
+declare -a DaoSTLTest=('collections/AddressSetTest.sol' 'collections/PropertySetTest.sol' 'collections/PropertyToAddressTest.sol')
+
 declare -a DaoUsersContracts=('DefaultUserDatabase.sol' 'AdminRegUserRegistry.sol' 'SelfRegUserRegistry.sol')
 declare -a DaoUsersTest=('DefaultUserDatabaseTest.sol')
 
 declare -a DaoVotesContracts=('MintBallot.sol' 'MintBallotManager.sol')
 declare -a DaoVotesTest=('PublicBallotTest.sol')
 
-if [ ${MODULE} != "dao-core" ] && [ ${MODULE} != "dao-users" ] && [ ${MODULE} != "dao-currency" ] && [ ${MODULE} != "dao-votes" ]; then
+if [ ${MODULE} != "dao-core" ] && [ ${MODULE} != "dao-users" ] && [ ${MODULE} != "dao-currency" ] && [ ${MODULE} != "dao-votes" ] && [ ${MODULE} != "dao-stl" ]; then
     echo "Param not recognized: ${MODULE}"
     exit 2
 fi
@@ -48,13 +50,22 @@ if [ ${MODULE} = "dao-core" ]; then
 elif [ ${MODULE} = "dao-currency" ]; then
     CONTRACTS="${DaoCurrencyContracts[@]/#/${SRC_DIR}/}"
 	TEST_CONTRACTS="${DaoCurrencyTest[@]/#/${TEST_DIR}/}"
+elif [ ${MODULE} = "dao-stl" ]; then
+    CONTRACTS="${DaoSTLContracts[@]/#/${SRC_DIR}/}"
+	TEST_CONTRACTS="${DaoSTLTest[@]/#/${TEST_DIR}/}"
 elif [ ${MODULE} = "dao-users" ]; then
     CONTRACTS="${DaoUsersContracts[@]/#/${SRC_DIR}/}"
 	TEST_CONTRACTS="${DaoUsersTest[@]/#/${TEST_DIR}/}"
 elif [ ${MODULE} = "dao-votes" ]; then
-    CONTRACTS="${DaoVotesContracts[@]/#/${SRC_DIR}/}"
 	TEST_CONTRACTS="${DaoVotesTest[@]/#/${TEST_DIR}/}"
 fi
 
-solc --bin --abi -o ${BUILD_RELEASE_DIR} ${CONTRACTS}
-solc --bin --abi -o ${BUILD_TEST_DIR} ${TEST_CONTRACTS}
+if [[ ! -z ${CONTRACTS} ]]; then
+    echo "solc --bin --abi -o ${BUILD_RELEASE_DIR} ${CONTRACTS}"
+    solc --bin --abi -o ${BUILD_RELEASE_DIR} ${CONTRACTS}
+fi
+
+if [[ ! -z ${TEST_CONTRACTS} ]]; then
+    echo "solc --bin --abi -o ${BUILD_TEST_DIR} ${TEST_CONTRACTS}"
+    solc --bin --abi -o ${BUILD_TEST_DIR} ${TEST_CONTRACTS}
+fi

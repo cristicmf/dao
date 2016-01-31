@@ -135,6 +135,83 @@ contract Asserter {
         result = !_stringsEqual(str, STRING_NULL);
         _report(result, message);
     }
+    
+/*
+        Function: assertEqual(string)
+
+        Assert that two strings are equal.
+
+        : _stringsEqual(A, B) == true
+
+        Params:
+            A (string) - The first string.
+            B (string) - The second string.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertEqual(string A, string B) internal constant returns (bool result) {
+        result = _stringsEqual(A, B);
+    }
+
+    /*
+        Function: assertNotEqual(string)
+
+        Assert that two strings are not equal.
+
+        : _stringsEqual(A, B) == false
+
+        Params:
+            A (string) - The first string.
+            B (string) - The second string.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotEqual(string A, string B, string message) internal constant returns (bool result) {
+        result = !_stringsEqual(A, B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertEmpty(string)
+
+        Assert that a string is empty.
+
+        : _stringsEqual(str, STRING_NULL) == true
+
+        Params:
+            str (string) - The string.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertEmpty(string str, string message) internal constant returns (bool result) {
+        result = _stringsEqual(str, STRING_NULL);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertNotEmpty(string)
+
+        Assert that a string is not empty.
+
+        : _stringsEqual(str, STRING_NULL) == false
+
+        Params:
+            str (string) - The string.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotEmpty(string str, string message) internal constant returns (bool result) {
+        result = !_stringsEqual(str, STRING_NULL);
+        _report(result, message);
+    }
 
     // ************************************** bytes32 **************************************
 
@@ -159,7 +236,7 @@ contract Asserter {
     }
 
     /*
-        Function: assertBytes32Equal
+        Function: assertBytes32NotEqual
 
         Assert that two 'bytes32' are not equal.
 
@@ -212,6 +289,84 @@ contract Asserter {
             result (bool) - The result.
     */
     function assertBytes32NotZero(bytes32 bts, string message) internal constant returns (bool result) {
+        result = (bts != BYTES32_NULL);
+        _report(result, message);
+    }
+    
+    /*
+        Function: assertEqual(bytes32)
+
+        Assert that two 'bytes32' are equal.
+
+        : A == B
+
+        Params:
+            A (bytes32) - The first 'bytes32'.
+            B (bytes32) - The second 'bytes32'.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertEqual(bytes32 A, bytes32 B, string message) internal constant returns (bool result) {
+        result = (A == B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertNotEqual(bytes32)
+
+        Assert that two 'bytes32' are not equal.
+
+        : A != B
+
+        Params:
+            A (bytes32) - The first 'bytes32'.
+            B (bytes32) - The second 'bytes32'.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotEqual(bytes32 A, bytes32 B, string message) internal constant returns (bool result) {
+        result = (A != B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertZero(bytes32)
+
+        Assert that a 'bytes32' is zero.
+
+        : bts == BYTES32_NULL
+
+        Params:
+            bts (bytes32) - The 'bytes32'.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertZero(bytes32 bts, string message) internal constant returns (bool result) {
+        result = (bts == BYTES32_NULL);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertNotZero(bytes32)
+
+        Assert that a 'bytes32' is not zero.
+
+        : bts != BYTES32_NULL
+
+        Params:
+            bts (bytes32) - The 'bytes32'.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotZero(bytes32 bts, string message) internal constant returns (bool result) {
         result = (bts != BYTES32_NULL);
         _report(result, message);
     }
@@ -294,6 +449,83 @@ contract Asserter {
         result = (addr != ADDRESS_NULL);
         _report(result, message);
     }
+    
+    /*
+        Function: assertEqual(address)
+
+        Assert that two addresses are equal.
+
+        : A == B
+
+        Params:
+            A (address) - The first address.
+            B (address) - The second address.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertEqual(address A, address B, string message) internal constant returns (bool result) {
+        result = (A == B);
+        _report(result, message);
+    }
+    /*
+        Function: assertNotEqual(address)
+
+        Assert that two addresses are not equal.
+
+        : A != B
+
+        Params:
+            A (address) - The first address.
+            B (address) - The second address.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotEqual(address A, address B, string message) internal constant returns (bool result) {
+        result = (A != B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertZero(address)
+
+        Assert that an address is zero.
+
+        : addr == ADDRESS_NULL
+
+        Params:
+            addr (address) - The address.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertZero(address addr, string message) internal constant returns (bool result) {
+        result = (addr == ADDRESS_NULL);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertNotZero(address)
+
+        Assert that an address is not zero.
+
+        : addr != ADDRESS_NULL
+
+        Params:
+            addr (address) - The address.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotZero(address addr, string message) internal constant returns (bool result) {
+        result = (addr != ADDRESS_NULL);
+        _report(result, message);
+    }
 
     // ************************************** bool **************************************
 
@@ -357,6 +589,25 @@ contract Asserter {
     }
 
     /*
+        Function: assert
+
+        Shorthand for 'assertTrue'
+
+        : b == true
+
+        Params:
+            b (bool) - The boolean.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assert(bool b, string message) internal constant returns (bool result) {
+        result = b;
+        _report(result, message);
+    }
+
+    /*
         Function: assertFalse
 
         Assert that a boolean is 'false'.
@@ -372,6 +623,46 @@ contract Asserter {
     */
     function assertFalse(bool b, string message) internal constant returns (bool result) {
         result = !b;
+        _report(result, message);
+    }
+
+    /*
+        Function: assertEqual(bool)
+
+        Assert that two booleans are equal.
+
+        : A == B
+
+        Params:
+            A (bool) - The first boolean.
+            B (bool) - The second boolean.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertEqual(bool A, bool B, string message) internal constant returns (bool result) {
+        result = (A == B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertNotEqual(bool)
+
+        Assert that two booleans are not equal.
+
+        : A != B
+
+        Params:
+            A (bool) - The first boolean.
+            B (bool) - The second boolean.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotEqual(bool A, bool B, string message) internal constant returns (bool result) {
+        result = (A != B);
         _report(result, message);
     }
 
@@ -534,11 +825,9 @@ contract Asserter {
         result = (number != 0);
         _report(result, message);
     }
-
-    // ************************************** int **************************************
-
+    
     /*
-        Function: assertUintsEqual
+        Function: assertEqual(uint)
 
         Assert that two (256 bit) unsigned integers are equal.
 
@@ -547,6 +836,166 @@ contract Asserter {
         Params:
             A (uint) - The first uint.
             B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertEqual(uint A, uint B, string message) internal constant returns (bool result) {
+        result = (A == B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertNotEqual(uint)
+
+        Assert that two (256 bit) unsigned integers are not equal.
+
+        : A != B
+
+        Params:
+            A (uint) - The first uint.
+            B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotEqual(uint A, uint B, string message) internal constant returns (bool result) {
+        result = (A != B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertGT(uint)
+
+        Assert that the uint 'A' is greater than the uint 'B'.
+
+        : A > B
+
+        Params:
+            A (uint) - The first uint.
+            B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertGT(uint A, uint B, string message) internal constant returns (bool result) {
+        result = (A > B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertGTOE(uint)
+
+        Assert that the uint 'A' is greater than or equal to the uint 'B'.
+
+        : A >= B
+
+        Params:
+            A (uint) - The first uint.
+            B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertGTOE(uint A, uint B, string message) internal constant returns (bool result) {
+        result = (A >= B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertLT(uint)
+
+        Assert that the uint 'A' is lesser than the uint 'B'.
+
+        : A < B
+
+        Params:
+            A (uint) - The first uint.
+            B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertLT(uint A, uint B, string message) internal constant returns (bool result) {
+        result = (A < B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertLTOE(uint)
+
+        Assert that the uint 'A' is lesser than or equal to the uint 'B'.
+
+        : A <= B
+
+        Params:
+            A (uint) - The first uint.
+            B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertLTOE(uint A, uint B, string message) internal constant returns (bool result) {
+        result = (A <= B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertZero(uint)
+
+        Assert that a (256 bit) unsigned integer is 0.
+
+        : number == 0
+
+        Params:
+            number (uint) - The uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertZero(uint number, string message) internal constant returns (bool result) {
+        result = (number == 0);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertNotZero(uint)
+
+        Assert that a (256 bit) unsigned integer is not 0.
+
+        : number != 0
+
+        Params:
+            number (uint) - The uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotZero(uint number, string message) internal constant returns (bool result) {
+        result = (number != 0);
+        _report(result, message);
+    }
+
+    // ************************************** int **************************************
+
+    /*
+        Function: assertUIntsEqual
+
+        Assert that two (256 bit) signed integers are equal.
+
+        : A == B
+
+        Params:
+            A (uint) - The first int.
+            B (uint) - The second int.
             message (string) - A message that is sent if the assertion fails.
 
         Returns:
@@ -692,6 +1141,284 @@ contract Asserter {
     */
     function assertIntNotZero(int number, string message) internal constant returns (bool result) {
         result = (number != 0);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertEqual(int)
+
+        Assert that two (256 bit) signed integers are equal.
+
+        : A == B
+
+        Params:
+            A (uint) - The first uint.
+            B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertEqual(int A, int B, string message) internal constant returns (bool result) {
+        result = (A == B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertNotEqual(int)
+
+        Assert that two (256 bit) signed integers are not equal.
+
+        : A != B
+
+        Params:
+            A (uint) - The first uint.
+            B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotEqual(int A, int B, string message) internal constant returns (bool result) {
+        result = (A != B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertGT(int)
+
+        Assert that the int 'A' is greater than the int 'B'.
+
+        : A > B
+
+        Params:
+            A (uint) - The first uint.
+            B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertGT(int A, int B, string message) internal constant returns (bool result) {
+        result = (A > B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertGTOE(int)
+
+        Assert that the int 'A' is greater than or equal to the int 'B'.
+
+        : A >= B
+
+        Params:
+            A (uint) - The first uint.
+            B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertGTOE(int A, int B, string message) internal constant returns (bool result) {
+        result = (A >= B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertLT(int)
+
+        Assert that the int 'A' is lesser than the int 'B'.
+
+        : A < B
+
+        Params:
+            A (uint) - The first uint.
+            B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertLT(int A, int B, string message) internal constant returns (bool result) {
+        result = (A < B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertLTOE(int)
+
+        Assert that the int 'A' is lesser than or equal to the int 'B'.
+
+        : A <= B
+
+        Params:
+            A (uint) - The first uint.
+            B (uint) - The second uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertLTOE(int A, int B, string message) internal constant returns (bool result) {
+        result = (A <= B);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertZero(int)
+
+        Assert that a (256 bit) signed integer is 0.
+
+        : number == 0
+
+        Params:
+            number (uint) - The uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertZero(int number, string message) internal constant returns (bool result) {
+        result = (number == 0);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertNotZero(int)
+
+        Assert that a (256 bit) signed integer is not 0.
+
+        : number != 0
+
+        Params:
+            number (uint) - The uint.
+            message (string) - A message that is sent if the assertion fails.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotZero(int number, string message) internal constant returns (bool result) {
+        result = (number != 0);
+        _report(result, message);
+    }
+
+    /******************************** errors ********************************/
+
+    /*
+        Function: assertErrorsEqual
+
+        Assert that two error codes (uint16) are equal.
+
+        : errorCode1 == errorCode2
+
+        Params:
+            errorCode1 (uint16) - the first error code.
+            errorCode2 (uint16) - the second error code.
+            message (string) - A message to display if the assertion does not hold.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertErrorsEqual(uint16 errorCode1, uint16 errorCode2, string message) internal constant returns (bool result) {
+        result = (errorCode1 == errorCode2);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertErrorsNotEqual
+
+        Assert that two error codes (uint16) are not equal.
+
+        : errorCode1 != errorCode2
+
+        Params:
+            errorCode1 (uint16) - the first error code.
+            errorCode2 (uint16) - the second error code.
+            message (string) - A message to display if the assertion does not hold.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertErrorsNotEqual(uint16 errorCode1, uint16 errorCode2, string message) internal constant returns (bool result) {
+        result = (errorCode1 != errorCode2);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertEqual(uint16)
+
+        Assert that two error codes (uint16) are equal.
+
+        : errorCode1 == errorCode2
+
+        Params:
+            errorCode1 (uint16) - the first error code.
+            errorCode2 (uint16) - the second error code.
+            message (string) - A message to display if the assertion does not hold.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertEqual(uint16 errorCode1, uint16 errorCode2, string message) internal constant returns (bool result) {
+        result = (errorCode1 == errorCode2);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertNotEqual(uint16)
+
+        Assert that two error codes (uint16) are not equal.
+
+        : errorCode1 != errorCode2
+
+        Params:
+            errorCode1 (uint16) - the first error code.
+            errorCode2 (uint16) - the second error code.
+            message (string) - A message to display if the assertion does not hold.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNotEqual(uint16 errorCode1, uint16 errorCode2, string message) internal constant returns (bool result) {
+        result = (errorCode1 != errorCode2);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertError
+
+        Assert that the code (uint16) is not the null error.
+
+        : errorCode != 0
+
+        Params:
+            errorCode (uint16) - the error code.
+            message (string) - A message to display if the assertion does not hold.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertError(uint16 errorCode, string message) internal constant returns (bool result) {
+        result = (errorCode != 0);
+        _report(result, message);
+    }
+
+    /*
+        Function: assertError
+
+        Assert that the code (uint16) is the null error.
+
+        : errorCode == 0
+
+        Params:
+            errorCode (uint16) - the error code.
+            message (string) - A message to display if the assertion does not hold.
+
+        Returns:
+            result (bool) - The result.
+    */
+    function assertNoError(uint16 errorCode, string message) internal constant returns (bool result) {
+        result = (errorCode == 0);
         _report(result, message);
     }
 

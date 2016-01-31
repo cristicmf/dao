@@ -1,7 +1,10 @@
 /*
     Contract: PublicBallot
 
-    An interface contract for public ballots.
+    An interface contract for public ballots. This is a very complex vote
+    that requires its own contract. It allows for any number of voters.
+    Simpler voting contracts done by a handful of voters can be done wih a
+    struct + library combination instead.
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
@@ -43,12 +46,14 @@ contract PublicBallot {
         Called to cast a vote.
 
         Params:
+            voter (address) - The voter address.
             vote (uint8) - The vote. See <Vote>.
+            timestamp (uint) - The time when the vote is made.
 
         Returns:
             error (uint16) - An error code.
     */
-    function vote(uint8 vote) returns (uint16 error);
+    function vote(address voter, uint8 vote, uint timestamp) returns (uint16 error);
 
     /*
         Function: finalize
@@ -63,19 +68,33 @@ contract PublicBallot {
     function finalize() returns (bool passed, uint16 error, uint16 execError);
 
     /*
-        Function: voteDataFromIndex
+        Function: voteData
 
-        Called to cast a vote.
+        Get voter data from their account address.
 
         Params:
-            index (uint) - Get vote data from its index in the backing array. Used for iterating.
+            index (uint) - The index.
+
+        Returns:
+            vote (uint8) - The vote. See <Vote>.
+            error (uint16) - An error code.
+    */
+    function voterData(address voterAddress) constant returns (uint8 vote, uint16 error);
+
+    /*
+        Function: voteDataFromIndex
+
+        Get voter data from their index in the backing array. Used for iterating.
+
+        Params:
+            index (uint) - The index.
 
         Returns:
             addr (address) - The voter address.
             vote (uint8) - The vote. See <Vote>.
             error (uint16) - An error code.
     */
-    function voteDataFromIndex(uint index) internal constant returns (address addr, uint8 vote, uint16 error);
+    function voterDataFromIndex(uint index) constant returns (address addr, uint8 vote, uint16 error);
 
     /*
         Function: id
@@ -96,6 +115,16 @@ contract PublicBallot {
             userDatabase (address) - The address.
     */
     function userDatabase() constant returns (address userDatabase);
+
+    /*
+        Function: opened
+
+        Get the time when the ballot is/was opened.
+
+        Returns:
+            opened (uint) - A unix timestamp.
+    */
+    function opened() constant returns (uint opened);
 
     /*
         Function: durationInSeconds

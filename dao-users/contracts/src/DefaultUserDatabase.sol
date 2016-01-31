@@ -18,6 +18,12 @@ contract DefaultUserDatabase is DefaultDatabase {
         Struct: Element
 
         Element type for the user map.
+
+        Members:
+            _keyIndex - Used for iteration.
+            nickname - The user nickname.
+            timestamp - The (unix) time when the user was registered.
+            dataHash - The hash to the file containing user data.
     */
     struct Element {
         // For backing array.

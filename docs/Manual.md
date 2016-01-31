@@ -3,7 +3,6 @@
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Getting started](#getting-started)
 3. [Ðevelopment](#develop)
 4. [Ðesign philosophy](#design)
 
@@ -15,7 +14,7 @@ The TL;DR is that smart-contract systems is viewed as a set of actions that user
 2. Who is allowed to do it 
 3. The data it is operating on
 
-The DAO framework is made to facilitate actions, and to help in keeping the different parts separate. It does so by dividing contracts up into classes.
+The DAO framework is made to facilitate actions, and to help keep the different parts separate. It does so by dividing contracts up into classes.
 
 ### Application architecture
 
@@ -60,12 +59,6 @@ There are three main types of access in this system:
 2. **Database access**. The system automatically gives actions-contracts write access to all the registered databases.
 
 3. **User access**. This includes access to all actions except those that involves Doug. The application maker is in full control over these permissions. It could be handled per-contract or on a system wide basis (or both).
-
-## Getting Started
-
-The easiest way to get started is by looking at the [contracts](https://github.com/smartcontractproduction/dao/tree/master/dao-core/contracts) in `dao-core`. The contracts can also be deployed to a running Ethereum node using the deployment script in `dao-core/script/ethereum`.
-
-There are also [tutorials](https://github.com/smartcontractproduction/dao/blob/master/docs/Tutorials.md). They teach how to write contracts and integrate them with the framework.
 
 <a name="develop"></a>
 ## Ðevelopment

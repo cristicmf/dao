@@ -234,9 +234,11 @@ contract CoinTest {
 }
 ```
 
-What we did here was to set the system up so that we call it from a solidity contract. This is just to make testing simpler. In the regular dao framework modules the tests are done using the sol-unit library, and interaction would be done through RPC calls to the blockchain client - usually using something like web3.js.
+What we did here was to set the system up so that we call it from a solidity contract. This is just to make testing simpler. In the regular dao framework modules the tests are done using the sol-unit library, and interaction would be done through RPC calls to the blockchain client - usually through javascript libraries like web3.js.
 
-You may run this yourself in the online compiler by clicking this [link]( https://chriseth.github.io/browser-solidity/?gist=https://gist.github.com/anonymous/e1d8a9d0aeb39a0a969f). After the page has loaded, find `CoinTest` in the menu to the right, click `create`, and then play around with the methods. NOTE: The entire dao-core is added because github imports does not work yet. When it does, it will only contain the contracts from the tutorial and import the rest from the dao github repo. Also it will take a while to load the page and compile the code.
+You may run this yourself in the online compiler by clicking this [link]( https://chriseth.github.io/browser-solidity/?gist=https://gist.github.com/anonymous/e1d8a9d0aeb39a0a969f). After the page has loaded, find `CoinTest` in the menu to the right, click `create`, and then play around with the methods. 
+
+NOTE: The entire dao-core is added to the gist because github imports does not work yet. When it does, it will only contain the contracts from the tutorial and import the rest from the dao github repo. Also it will take a while to load the page and compile the code.
 
 ## Advanced Tutorial
 

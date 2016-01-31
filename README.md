@@ -23,7 +23,7 @@ NOTE: Ethereum is still experimental, and so is this code. Using this on a chain
 
 ## Getting started
 
-The best way to get started is reading the [User Manual](./docs/Manual.md).
+There are [Tutorials](./docs/Tutorials.md).
 
 Each module has a README file that explains what it does, which is also useful. They are all referenced in the [Structure](#structure) section of this document.
 

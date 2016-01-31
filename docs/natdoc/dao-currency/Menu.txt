@@ -62,5 +62,6 @@ Group: Index  {
    File Index: Files
    Constructor Index: Constructors
    Contract Index: Contracts
+   Event Index: Events
    }  # Group: Index
 

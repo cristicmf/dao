@@ -48,12 +48,23 @@ Don't Index: Authors
 # --------------------------------------------------------------------------
 
 
-File: assertions/Asserter.sol  (assertions/Asserter.sol)
-File: assertions/DaoAsserter.sol  (assertions/DaoAsserter.sol)
-File: collections/AddressSet.slb  (collections/AddressSet.slb)
-File: collections/PropertySet.slb  (collections/PropertySet.slb)
-File: collections/PropertyToAddressMap.slb  (collections/PropertyToAddressMap.slb)
-File: errors/Errors.sol  (errors/Errors.sol)
+Group: Assertions  {
+
+   File: Asserter.sol  (assertions/Asserter.sol)
+   File: Assertions.sol  (assertions/Assertions.sol)
+   File: DaoAsserter.sol  (assertions/DaoAsserter.sol)
+   File: DaoTest.sol  (assertions/DaoTest.sol)
+   File: Test.sol  (assertions/Test.sol)
+   }  # Group: Assertions
+
+Group: Collections  {
+
+   File: AddressSet.slb  (collections/AddressSet.slb)
+   File: PropertySet.slb  (collections/PropertySet.slb)
+   File: PropertyToAddressMap.slb  (collections/PropertyToAddressMap.slb)
+   }  # Group: Collections
+
+File: Errors.sol  (errors/Errors.sol)
 
 Group: Index  {
 

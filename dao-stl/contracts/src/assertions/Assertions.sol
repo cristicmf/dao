@@ -267,7 +267,7 @@ library Assertions {
     */
     function assertNotEqual(address A, address B, string message) constant returns (bool result) {
         result = (A != B);
-        _report(result, message);
+         _report(result, message);
     }
 
     /*
@@ -884,7 +884,8 @@ library Assertions {
         bytes memory ba = bytes(a);
         bytes memory bb = bytes(b);
         uint minLength = ba.length;
-        if (bb.length < minLength) minLength = bb.length;
+        if (bb.length < minLength)
+            minLength = bb.length;
         //@todo unroll the loop into increments of 32 and do full 32 byte comparisons
         for (uint i = 0; i < minLength; i ++)
             if (ba[i] < bb[i])

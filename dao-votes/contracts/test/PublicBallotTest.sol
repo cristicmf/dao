@@ -163,7 +163,7 @@ contract PublicBallotTest is DaoTest {
         mpb.numVotes().assertEqual(1, "numVotes returned the wrong number of votes");
         uint state = mpb.state();
         state.assertEqual(2, "state returns the wrong value.");
-        mpb.execError().assertNoError("execError is wrong");
+        mpb.execError().assertNoError( "execError is wrong");
     }
 
     function testManualFinalizeFailAlreadyClosed() {

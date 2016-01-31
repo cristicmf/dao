@@ -47,7 +47,7 @@ As can be seen, there is a `_DOUG` field in the contract which stores an account
 1. An account address is stored in a contract.
 2. When a function is called, it will check if the address of the calling account is equal to that address. If not, the function will return to prevent the code from being run.
 
-The permission can be implemented in many different ways; for example, there could be a check against a collection of addresses rather then just one, or it could be based on some other property of the calling accounts, but everything is fine so long as it divides accounts up into two distinct classes - those that are allowed to run the guarded code and those that are not. The `DefaultPermission` contract in `dao-core` is an example of a more advanced account permission handler; it is an entire contract that stores a root user account, a set of owners, and has functions for adding and removing addresses, and checking whether or not an address is registered.
+The permission can be implemented in many different ways; for example, there could be a check against a collection of addresses rather then just one, or it could be based on some other property of the calling accounts, but everything is fine so long as it divides accounts up into two distinct classes - those that are allowed to run the guarded code and those that are not. The `DefaultPermission` contract in `dao-core` is an example of a more advanced account permission handler; it is an entire contract that stores a root user address, a set of owners, and has functions for adding, removing, and checking if addresses are registered.
 
 Finally, contract accounts and user (a.k.a. external) accounts both have addresses, and there is no distinction between them. In the `DefaultDougEnabled` contract, `_DOUG` could be the address of a user account or a contract account, and would still work the same way.
 
@@ -104,10 +104,10 @@ Note that if a contract is in a `blocking` or `degenerate` state, it is not `acc
 `transient` states can come about when init-like functions are used in code, e.g. 
 
 ```
-var c = new Contract(); 
-// c is in state A 
+var c = new Contract();
+// c is in state A
 c.init(params);
-// c immediately and irrevocably goes to state B
+// c immediately and irrevocably transitions to state B
 ```
 
 ##### Contracts

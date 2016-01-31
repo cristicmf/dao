@@ -1,6 +1,6 @@
 # The DAO framework
 
-**Initial release scheduled on Jan 31**
+**Initial release scheduled on ~~Jan 31~~ Feb 2**
 
 This is the a light-weight framework for modular systems of [Ethereum](https://ethereum.org/) contracts. It is meant to be used with Ethereum, or other chains that supports Ethereum contracts. It will get a better name.
 

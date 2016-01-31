@@ -29,6 +29,8 @@ Each module has a README file that explains what it does, which is also useful. 
 
 HTML documentation for the contracts in each module can be found in `docs/contracts/<module name>/index.html`. This goes for the standard library code as well.
 
+To understand how systems are kept intact, maybe take a look at the document on [Permission Analysis](./docs/Permission_Analysis.md).
+
 ## Dependencies and Tools
 
 The tools are only tested on 64 bit Ubuntu 14.04+
@@ -95,6 +97,10 @@ This library is open source only to show some working Solidity code, because the
 
 This library is only officially supported on 64 bit Ubuntu 14.04+, although it should work on recent OSX versions. I will look into building on Windows when I have time.
 
+**I don't know what any of this is**
+
+https://ethereum.org/
+
 **I don't know how to read the contract code**
 
 http://solidity.readthedocs.org/en/latest/index.html
@@ -124,6 +130,7 @@ This is normally because the contract build folders has been tampered with, or b
 **I can't build html documentation**
 
 This could be because you don't have [NaturalDocs](http://www.naturaldocs.org/) on your path.
+
 
 ## Business
 

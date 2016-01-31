@@ -2,13 +2,15 @@
 
 This is a brief description of the analysis used to check if the framework (and systems of contracts in general) is intact. It will be formalized later.
 
+This system is applied (manually) to the DAO framework contracts to find weaknesses in the system. For example, lets say the root Doug permission is set to a bad address. That would make it impossible to change it, since root is the only account that is allowed to set a new root address. It would also make it impossible to add or remove contracts to and from the system if there are no other owners in the doug Permission contract.
+
 The reader must be familiar with the [Ethereum protocol](https://github.com/ethereum/wiki/wiki/White-Paper), and the [Solidity language](http://solidity.readthedocs.org/).
 
 ## Table of content
 
 * [Introduction to Contracts and Account Permissions](#introduction-to-contracts-and-account-permissions)
 * [Systems of contracts](#systems-of-contracts)
-* [The DAO Framework](#the-dao-framework)
+* [Summary](#summary)
 
 ## Introduction to Contracts and Account Permissions
 
@@ -40,18 +42,18 @@ contract DefaultDougEnabled is DougEnabled {
 }
 ```
 
-As can be seen there is a `_DOUG` field in the contract which stores an account address. There is also a guard in the `destroy` function that checks if the calling account is the same as `_DOUG`. This is a very common form of permission in Ethereum contracts: 
+As can be seen, there is a `_DOUG` field in the contract which stores an account address. There is also a guard in the `destroy` function that checks if the calling account is the same as `_DOUG`. This is a very common form of permission in Ethereum contracts: 
 
 1. An account address is stored in a contract.
 2. When a function is called, it will check if the address of the calling account is equal to that address. If not, the function will return to prevent the code from being run.
 
-The permission can be implemented in many different ways; for example, there could be a check against a collection of addresses rather then just one, or it could be based on some other property of the calling accounts, but everything is fine so long as it divides accounts up into two distinct classes - those that are allowed to call the function and those that are not. The `DefaultPermission` contract in `dao-core` is an example of a more advanced account permission handler; it is an entire contract that stores a root user account, a set of owners, and has functions for adding and removing addresses, and checking whether or not an address is registered.
+The permission can be implemented in many different ways; for example, there could be a check against a collection of addresses rather then just one, or it could be based on some other property of the calling accounts, but everything is fine so long as it divides accounts up into two distinct classes - those that are allowed to run the guarded code and those that are not. The `DefaultPermission` contract in `dao-core` is an example of a more advanced account permission handler; it is an entire contract that stores a root user account, a set of owners, and has functions for adding and removing addresses, and checking whether or not an address is registered.
 
-Finally, contract accounts and user (external) accounts both have addresses, and there is no distinction between them. In the `DefaultDougEnabled` contract, `_DOUG` could be the address of a user account or a contract account, and would still work the same way.
+Finally, contract accounts and user (a.k.a. external) accounts both have addresses, and there is no distinction between them. In the `DefaultDougEnabled` contract, `_DOUG` could be the address of a user account or a contract account, and would still work the same way.
 
 ## Permissions and contract states
 
-Adding permissions to a contract will obviously change its behavior. For example, if we remove the Doug permission from `DefaultDougEnabled` (meaning the `_DOUG` field and the guard), all we have left is the destroy function that any account can call. It would have one single state that is entered into by creating the contract, and exited from by calling destroy. It becomes a bit more complicated with the Doug permission. With the Doug permission in place we have to set the Doug address before we can destroy the contract, and destroying can only be done by the account with the Doug address. This means we now have two states:
+Adding permissions to a contract will obviously change its behavior. For example, if we remove the Doug permission from `DefaultDougEnabled` (meaning the `_DOUG` field and the guard), all we have left is the destroy function that any account can call. It would have one single state that is entered into by creating the contract, and exited from by calling destroy. It becomes a bit more complicated with the Doug permission. With the Doug permission in place we have to set the Doug address before we can destroy the contract, and destroying can only be done by the Doug account. This means we now have two states:
 
 1. Locked - Before the doug address has been set, destroy can't be called by anyone, because the null account cannot make transactions.
 
@@ -59,7 +61,7 @@ Adding permissions to a contract will obviously change its behavior. For example
 
 ![DefaultDougEnabledStateDiagram](./images/default-doug-enabled-state-diagram.png)
 
-We can of course make a state diagram like this for any contract, where we map out the different states and events and get a clear view of how the permissions affects the contract. Notice that there is no way to go back from unlocked to locked, because the `setDougAddress` function (`set_doug` in the diagram) does not allow the address to be null. Also, if an address that is not Doug tries to set the Doug address nothing will happen, so it can only ever go from unlocked to unlocked (i.e. `_DOUG` is not null).
+We can of course make a state diagram like this for any contract, where we map out the different states and events and get a clear view of how the permissions affects the contract. Notice that there is no way to go back from unlocked to locked, because the `setDougAddress` function (`set_doug` in the diagram) does not allow the address to be null. Also, if an address that is not Doug tries to set the Doug address nothing will happen, so it can only ever go from unlocked to unlocked.
 
  Does this mean we can say with certainty that once the Doug address is set, this contract will always be functional (destructible)? The answer is no. The only thing we check is that the `_DOUG` address is not null. That does not mean the value is a proper account address. It is also possible that the address is of a contract account that does not have the code needed to make the call, so adding it effectively makes the selfdestruct call un-reachable.
 
@@ -93,8 +95,6 @@ Next are some definition of terms that will be used from now on. These are tempo
 
 - A `degenerate state` is a state in which a contract (or system of contracts) is is not fully `accessible`, and no transition (or series of transitions) will take it to an `accessible state`. A degenerate state that has no available transitions is a `degenerate end-state`.
 
-- A `safe` state is an `accessible` or `blocking` state with no transitions leading to a `degenerate` state.
-
 - A `transient` state is a state that exists but always change before any code that depends on the current state can be run.
 
 - States that depend on all extra conditions to be met is called `conditional`, e.g. `conditionally blocking`.
@@ -107,12 +107,12 @@ Note that if a contract is in a `blocking` or `degenerate` state, it is not `acc
 var c = new Contract(); 
 // c is in state A 
 c.init(params);
-// c immediately goes to state B
+// c immediately and irrevocably goes to state B
 ```
 
 ##### Contracts
 
-- A `working` contract (or system of contracts) is one where no state is `degenerate`, meaning it only has `accessible` and `blocking` states. If there are extra conditions, the contract/system is called `conditionally working`. 
+- A `working` contract (or system of contracts) is one where no reachable state is `degenerate`, meaning it only has `accessible` and `blocking` states, and that cannot change. If there are extra conditions, the contract/system is called `conditionally working`. 
 
 - A `perfect` contract (or system of contracts) is one where every state is a `non conditional accessible state`. It has no extra conditions and is always `accessible`.
 
@@ -139,7 +139,7 @@ contract Perfect {
 
 An example of a `conditionally working` contract is `DefaultDougEnabled`. It works as long as the Doug address is set in accordance with the conditions.
 
-An example of a `degenerate state` would be the initial state of `DefaultDougEnabled` if the `setDougAddress` function was removed. The Doug address would be null, and there would be no way to change it, meaning the `destroy` check would always fail.
+An example of a `degenerate state` would be the initial state of `DefaultDougEnabled` if the `setDougAddress` function was removed. The Doug address would be null, and there would be no way to change it, meaning the check inside the `destroy` function would always fail.
 
 An example of a `conditionally degenerate state` is the `unlocked` state of `DefaultDougEnabled`. If the Doug address is an invalid address, no account could ever call `setDougAddress` or `destroy` and be successful.
 
@@ -149,7 +149,7 @@ Extra conditions are added to let developers know that some condition must be me
 
 A strong check for external accounts is to prove that they have done **at least one transaction**. If that can be shown (for example by using, or somehow deriving the address from a `tx.origin` reference), it will satisfy the condition of being a valid account. Whether that account will actually make the call, or is even capable of doing it (maybe the owner lost their private key) is not considered.
 
-Checking contracts that are added by address is usually not possible.
+Type-checking contracts that are added by address is usually not possible.
 
 ## Systems of contracts
 
@@ -218,7 +218,7 @@ contract Manager {
 }
 ```
 
-The contract has a simple user registry and provides a simple service for the users. On its own, this is a `perfect` contract, because at least one valid account can get past the guard in `createDestructible` from the start; namely the account that originated the call-chain that lead to the creation of `Manager`. It also remains in that state forever, because users can't be removed. Also, there are no extra conditions since the addresses used are taken from `tx.origin`, which is guaranteed to be a proper external account.
+The contract has a basic user registry and provides a simple service for its users. On its own, this is a `perfect` contract, because at least one valid account can get past the guard in `createDestructible` from the start; namely the account that originated the call-chain that lead to the instantiation of the `Manager` contract. It also remains in that state forever, because users can't be removed. Also, there are no extra conditions since the addresses used are taken from `tx.origin`, so they are guaranteed to be proper external accounts.
 
 If we removed the constructor, things get a little more complicated.
   
@@ -311,6 +311,7 @@ The behavior of contracts is not only tied to their types, but instances as well
 
 The previous section included constructors and gave examples of contracts calling other contracts who's constructor parameters impacts the behavior of the contract (from a permissions standpoint). This is just one case of contract functions being invoked by other contracts though, and the general case is not that different. Let's look at `DefaultDougEnabled` again:
 
+```
 contract DefaultDougEnabled is DougEnabled {
 
     Doug _DOUG;
@@ -334,8 +335,9 @@ contract DefaultDougEnabled is DougEnabled {
     }
 
 }
+```
 
-It is a `conditionally working` contract, producing `conditionally working instances`. The condition is applied to the `setDougAddress` function, meaning there is a degenerate state until that function has been called in such a way that the extra conditions were met.
+It is a `conditionally working` contract, producing `conditionally working instances`. The condition is applied to the `setDougAddress` function, meaning there is a degenerate state until that function has been called in such a way that the extra conditions are met.
 
 Now let's look at `Manager` again. If we were to change the service from a `Destructible` factory to a `DefaultDougEnabled` factory, this is what it would look like.
 
@@ -376,10 +378,8 @@ function createDefaultDougEnabled() returns (address addr) {
 
 This means the condition will automatically be met right after the new contract instance is created. Also, because of how code is executed, there is nothing that could happen in-between the creation and calling of the `setDougAddress` function, meaning the `blocking state` is `transient` and can essentially be ignored. Calling `createDefaultDougEnabled` no longer puts the system in a blocked state.
 
-## The DAO framework
+## Summary
 
-This system is applied to the DAO framework contracts, to find weaknesses in the system. For example, lets say the root Doug permission is set to a bad address. That would make it impossible to change it, since root is the only account that is allowed to set the root address. It would also make it impossible to add or remove contracts to and from the system if there are no other owners in the doug Permission contract.
-
-Generally speaking, degenerate states cause systems (or parts of systems) to fail completely, and there could be no way of reverting. Also, DAOs usually comes with rules for changing the rules, and it can sometimes be hard to predict what a rules update may lead to. The examples in this document shows that even simple setups can be quite tricky at times.
+It is important to check that bad permission schemes are not used. Generally speaking, degenerate states cause systems (or parts of systems) to fail completely, and there could be no way of reverting. Also, DAOs usually comes with rules for changing the rules, and it can sometimes be hard to predict what a rules update may lead to. The examples in this document shows that even simple setups can be quite tricky at times.
 
 This is mostly useful when systems grow large and complex. In smaller systems, common sense applies, and it would probably be enough to point out that devs should use proper addresses for permissions.

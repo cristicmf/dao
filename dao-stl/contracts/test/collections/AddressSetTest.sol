@@ -3,16 +3,21 @@ import "../../src/assertions/Asserter.sol";
 
 contract AddressSetDb {
 
+    event AddAddress(bool indexed had);
+    event RemoveAddress(bool indexed removed);
+
     using AddressSet for AddressSet.Set;
 
     AddressSet.Set _set;
 
     function addAddress(address addr) returns (bool had) {
-        return _set.insert(addr);
+        had = _set.insert(addr);
+        AddAddress(had);
     }
 
     function removeAddress(address addr) returns (bool removed) {
-        return _set.remove(addr);
+        removed = _set.remove(addr);
+        RemoveAddress(removed);
     }
 
     function hasAddress(address addr) constant returns (bool has) {

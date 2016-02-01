@@ -155,7 +155,6 @@ contract AbstractPublicBallot is PublicBallot, Errors {
                     return;
                 _execError = _execute();
             }
-
         }
         else
             return INVALID_PARAM_VALUE;
@@ -245,6 +244,18 @@ contract AbstractPublicBallot is PublicBallot, Errors {
     */
     function id() constant returns (uint id){
         return _id;
+    }
+
+    /*
+        Function: creator
+
+        Get the address of the creator.
+
+        Returns:
+            creator (address) - The address of the creator.
+    */
+    function creator() constant returns (address creator) {
+        return _creator;
     }
 
     /*

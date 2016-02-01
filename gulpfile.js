@@ -126,7 +126,7 @@ gulp.task('htmldoc:users', function(cb){
 
 /************************ dao-votes ***************************/
 
-var daoVotesTests = ['PublicBallotTest'];
+var daoVotesTests = ['BallotMapTest', 'PublicBallotTest', 'PublicMintingBallotTest', 'PublicCurrencyTest'];
 var daoVotesTestFolder = path.join(__dirname, 'dao-votes', 'contracts', 'build', 'test');
 
 gulp.task('build:votes', function (cb) {
@@ -195,9 +195,12 @@ gulp.task('test:all', function (cb) {
                 });
             }], function () {
             console.log("");
+            console.log("****************************************");
             console.log("Total tests: " + total);
             console.log("Successful: " + successful);
             console.log("Failed: " + (total - successful).toString());
+            console.log("****************************************");
+            console.log("");
             cb();
         }
     );

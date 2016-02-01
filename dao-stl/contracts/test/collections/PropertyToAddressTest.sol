@@ -1,8 +1,6 @@
 import "../../src/collections/PropertyToAddressMap.slb";
 import "../../src/assertions/Asserter.sol";
 
-// TODO sol-unit format
-
 contract PropertyToAddressDb {
 
     using PropertyToAddressMap for PropertyToAddressMap.Map;

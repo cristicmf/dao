@@ -19,7 +19,7 @@ import "./UserDatabase.sol";
 contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
 
     address _admin;
-    UserDatabase _udb;
+    UserDatabase _userDatabase;
 
     /*
         Constructor: AbstractUserRegistry
@@ -29,7 +29,7 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
             admin (address) - The address of the admin account.
     */
     function AbstractUserRegistry(address dbAddress, address admin) {
-        _udb = UserDatabase(dbAddress);
+        _userDatabase = UserDatabase(dbAddress);
         _admin = admin;
     }
 
@@ -51,7 +51,7 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
             return ACCESS_DENIED;
         if (addr == 0 || nickname == 0)
             return NULL_PARAM_NOT_ALLOWED;
-        return _udb.registerUser(addr, nickname, block.timestamp, dataHash);
+        return _userDatabase.registerUser(addr, nickname, block.timestamp, dataHash);
     }
 
     /*
@@ -70,7 +70,7 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
             return ACCESS_DENIED;
         if (addr == 0)
             return NULL_PARAM_NOT_ALLOWED;
-        return _udb.removeUser(addr);
+        return _userDatabase.removeUser(addr);
     }
 
     /*
@@ -82,7 +82,7 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
             error (uint16) - An error code.
     */
     function removeSelf() returns (uint16 error) {
-        return _udb.removeUser(msg.sender);
+        return _userDatabase.removeUser(msg.sender);
     }
 
     /*
@@ -102,7 +102,7 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
             return ACCESS_DENIED;
         if (addr == 0)
             return NULL_PARAM_NOT_ALLOWED;
-        return _udb.updateDataHash(addr, dataHash);
+        return _userDatabase.updateDataHash(addr, dataHash);
     }
 
     /*
@@ -117,7 +117,7 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
             error (uint16) - An error code.
     */
     function updateMyDataHash(bytes32 dataHash) returns (uint16 error) {
-        return _udb.updateDataHash(msg.sender, dataHash);
+        return _userDatabase.updateDataHash(msg.sender, dataHash);
     }
 
     /*
@@ -134,7 +134,7 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
     function setUserDatabase(address dbAddr) returns (uint16 error) {
         if (msg.sender != _admin)
             return ACCESS_DENIED;
-        _udb = UserDatabase(dbAddr);
+        _userDatabase = UserDatabase(dbAddr);
     }
 
     /*
@@ -146,7 +146,7 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
             dbAddr (address) - The database address.
     */
     function userDatabase() returns (address dbAddr) {
-        return _udb;
+        return _userDatabase;
     }
 
 

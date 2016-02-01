@@ -37,7 +37,7 @@ contract AdminRegUserRegistry is AbstractUserRegistry {
             return NULL_PARAM_NOT_ALLOWED;
         if (msg.sender != _admin)
             return ACCESS_DENIED;
-        return _udb.registerUser(msg.sender, nickname, block.timestamp, dataHash);
+        return _userDatabase.registerUser(msg.sender, nickname, block.timestamp, dataHash);
     }
 
 }

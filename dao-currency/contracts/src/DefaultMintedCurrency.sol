@@ -36,7 +36,7 @@ contract DefaultMintedCurrency is AbstractMintedCurrency {
             return NULL_PARAM_NOT_ALLOWED;
         if (msg.sender != _minter)
             return ACCESS_DENIED;
-        error = _cdb.add(receiver, int(amount));
+        error = _currencyDatabase.add(receiver, int(amount));
         if (error == NO_ERROR)
             CoinsMinted(receiver, amount);
     }
@@ -56,7 +56,7 @@ contract DefaultMintedCurrency is AbstractMintedCurrency {
     function send(address receiver, uint amount) returns (uint16 error) {
         if (receiver == 0 || amount == 0)
             return NULL_PARAM_NOT_ALLOWED;
-        error = _cdb.send(msg.sender, receiver, amount);
+        error = _currencyDatabase.send(msg.sender, receiver, amount);
         if (error == NO_ERROR)
             CoinsTransferred(msg.sender, receiver, amount);
     }
@@ -79,7 +79,7 @@ contract DefaultMintedCurrency is AbstractMintedCurrency {
             return NULL_PARAM_NOT_ALLOWED;
         if (msg.sender != _minter)
             return ACCESS_DENIED;
-        error = _cdb.send(msg.sender, receiver, amount);
+        error = _currencyDatabase.send(msg.sender, receiver, amount);
         if (error == NO_ERROR)
             CoinsTransferred(sender, receiver, amount);
     }

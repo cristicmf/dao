@@ -36,7 +36,7 @@ struct MapElement {
 
 * Contracts that are not purely abstract usually has the word `Abstract` in front of the contract name, e.g. `AbstractUserDatabase`. They are implementations of interfaces that leaves one or more methods out.
 
-* Contracts that makes use of other contracts normally uses the most abstract representation that is possible.
+* Contracts that makes use of other contracts normally uses the most abstract representation possible (often an interface).
 
 #### Testing
 

@@ -1,15 +1,11 @@
-import "../errors/Errors.sol";
-
 /*
-    Contract: Assertions
+    Library: Assertions
 
     Assertions for unit testing contracts. Tests are run with the
     <solUnit at https://github.com/smartcontractproduction/sol-unit>
     unit-testing framework.
 
     Test contracts can do assertions via this library rather then extending <DaoAsserter>.
-
-    The library is meant to be extended by test contracts, e.g.
 
     (start code)
     contract ModAdder {
@@ -914,7 +910,16 @@ library Assertions {
              result (int) - 'true' if the strings are equal, otherwise 'false'.
     */
     function _stringsEqual(string a, string b) internal returns (bool result) {
-        return _compareStrings(a, b) == 0;
+        bytes memory ba = bytes(a);
+        bytes memory bb = bytes(b);
+
+        if (ba.length != bb.length)
+            return false;
+        for (uint i = 0; i < ba.length; i ++) {
+            if (ba[i] != bb[i])
+                return false;
+        }
+        return true;
     }
 
 }

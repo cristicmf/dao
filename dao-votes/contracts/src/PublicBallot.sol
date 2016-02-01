@@ -107,6 +107,16 @@ contract PublicBallot {
     function id() constant returns (uint id);
 
     /*
+        Function: creator
+
+        Get the address of the creator.
+
+        Returns:
+            creator (address) - The address of the creator.
+    */
+    function creator() constant returns (address creator);
+
+    /*
         Function: userDatabase
 
         Get the address of the user database.

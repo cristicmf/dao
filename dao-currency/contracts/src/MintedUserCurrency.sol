@@ -13,7 +13,7 @@ import "./CurrencyDatabase.sol";
 */
 contract MintedUserCurrency is AbstractMintedCurrency {
 
-    UserDatabase _udb;
+    UserDatabase _userDatabase;
 
     /*
         Constructor: MintedUserCurrency
@@ -25,7 +25,7 @@ contract MintedUserCurrency is AbstractMintedCurrency {
     */
     function MintedUserCurrency(address currencyDatabase, address userDatabase, address minter
     ) AbstractMintedCurrency(currencyDatabase, minter) {
-        _udb = UserDatabase(userDatabase);
+        _userDatabase = UserDatabase(userDatabase);
     }
 
     /*
@@ -47,9 +47,9 @@ contract MintedUserCurrency is AbstractMintedCurrency {
             return NULL_PARAM_NOT_ALLOWED;
         if (msg.sender != _minter)
             return ACCESS_DENIED;
-        if (!_udb.hasUser(receiver))
+        if (!_userDatabase.hasUser(receiver))
             return RESOURCE_NOT_FOUND;
-        error = _cdb.add(receiver, int(amount));
+        error = _currencyDatabase.add(receiver, int(amount));
         if (error == NO_ERROR)
             CoinsMinted(receiver, amount);
     }
@@ -71,10 +71,10 @@ contract MintedUserCurrency is AbstractMintedCurrency {
     function send(address receiver, uint amount) returns (uint16 error) {
         if (receiver == 0 || amount == 0)
             return NULL_PARAM_NOT_ALLOWED;
-        var (u1, u2) = _udb.hasUsers(msg.sender, receiver);
+        var (u1, u2) = _userDatabase.hasUsers(msg.sender, receiver);
         if (!(u1 && u2))
             return RESOURCE_NOT_FOUND;
-        error = _cdb.send(msg.sender, receiver, amount);
+        error = _currencyDatabase.send(msg.sender, receiver, amount);
         if (error == NO_ERROR)
             CoinsTransferred(msg.sender, receiver, amount);
     }
@@ -97,12 +97,24 @@ contract MintedUserCurrency is AbstractMintedCurrency {
             return NULL_PARAM_NOT_ALLOWED;
         if (msg.sender != _minter)
             return ACCESS_DENIED;
-        var (u1, u2) = _udb.hasUsers(msg.sender, receiver);
+        var (u1, u2) = _userDatabase.hasUsers(msg.sender, receiver);
         if (!(u1 && u2))
             return RESOURCE_NOT_FOUND;
-        error = _cdb.send(msg.sender, receiver, amount);
+        error = _currencyDatabase.send(msg.sender, receiver, amount);
         if (error == NO_ERROR)
             CoinsTransferred(sender, receiver, amount);
+    }
+    
+    /*
+        Function: userDatabase
+
+        Get the address of the user database.
+
+        Returns:
+            dbAddr (address) - The database address.
+    */
+    function userDatabase() returns (address dbAddr) {
+        return _userDatabase;
     }
 
 }

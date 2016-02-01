@@ -10,7 +10,7 @@ node.js is needed to run the helper scripts.
 
 #### Deployment
 
-Deployment to an Ethereum chain can be done using `dao-core/script/ethereum/deploy.js`.
+Deployment to an Ethereum chain can be done using `dao-core/script/ethereum/deployer.js`.
  
 There will be more deployment options later.
 

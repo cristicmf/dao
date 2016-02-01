@@ -13,7 +13,7 @@ import "./CurrencyDatabase.sol";
 contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled, Errors {
 
     address _minter;
-    CurrencyDatabase _cdb;
+    CurrencyDatabase _currencyDatabase;
 
     /*
         Constructor: AbstractMintedCurrency
@@ -22,7 +22,7 @@ contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled, Errors {
             currencyDatabase (address) - The address to the currency database.
     */
     function AbstractMintedCurrency(address currencyDatabase, address minter) {
-        _cdb = CurrencyDatabase(currencyDatabase);
+        _currencyDatabase = CurrencyDatabase(currencyDatabase);
         _minter = minter;
     }
 
@@ -70,7 +70,7 @@ contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled, Errors {
     function setCurrencyDatabase(address dbAddr) returns (uint16 error) {
         if (msg.sender != _minter)
             return ACCESS_DENIED;
-        _cdb = CurrencyDatabase(dbAddr);
+        _currencyDatabase = CurrencyDatabase(dbAddr);
     }
 
     /*
@@ -82,7 +82,7 @@ contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled, Errors {
             dbAddr (address) - The address.
     */
     function currencyDatabase() returns (address dbAddr) {
-        return _cdb;
+        return _currencyDatabase;
     }
 
 }

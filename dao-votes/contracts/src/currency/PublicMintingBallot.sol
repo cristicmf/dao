@@ -61,7 +61,31 @@ contract PublicMintingBallot is AbstractPublicBallot {
             error (uint16) - An error code.
     */
     function _execute() internal returns (uint16 error) {
-        return PublicCurrency(_registry).mintRequest(_receiver, _amount);
+        return PublicCurrency(_registry).mint(_receiver, _amount);
+    }
+
+    /*
+        Function: receiver
+
+        Get the address of the receiver.
+
+        Returns:
+            receiver (address) - The address.
+    */
+    function receiver() constant returns (address userDatabase) {
+        return _receiver;
+    }
+
+    /*
+        Function: amount
+
+        Get the amount of coins the receiver will get.
+
+        Returns:
+            amount (uint) - The amount.
+    */
+    function amount() constant returns (uint amount) {
+        return _amount;
     }
 
 }

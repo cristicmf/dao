@@ -1,7 +1,5 @@
 # The DAO framework
 
-**Initial release scheduled on ~~Jan 31~~ Feb 2**
-
 This is the a light-weight framework for modular systems of [Ethereum](https://ethereum.org/) contracts. It is meant to be used with Ethereum, or other chains that supports Ethereum contracts. It will get a better name.
 
 The contracts are written in the [Solidity](http://solidity.readthedocs.org/en/latest/index.html) language. The purpose of this library as of now is to act as a template for extending, or just as an example of how to write Solidity contracts. This is a **contracts-only library**. There is some javascript to help deploying and testing and such, but all of that is optional, and is really only meant to be used when authoring.

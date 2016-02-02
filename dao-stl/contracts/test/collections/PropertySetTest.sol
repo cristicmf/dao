@@ -7,7 +7,7 @@ contract PropertySetDb {
 
     PropertySet.Set _set;
 
-    function addProperty(bytes32 prop) returns (bool had) {
+    function addProperty(bytes32 prop) returns (bool added) {
         return _set.insert(prop);
     }
 

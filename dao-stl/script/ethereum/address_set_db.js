@@ -7,47 +7,25 @@ function AddressSetDb(contract, gas) {
 }
 
 AddressSetDb.prototype.addAddress = function (address, cb) {
-
     var that = this;
-    var hash;
-    var event = that.contract.AddAddress();
-
-    event.watch(function(error, data){
-        if(hash && hash === data.transactionHash) {
-            event.stopWatching();
-            cb(null, data.args.had);
-        }
+    this.contract.removeAddress(address, {gas: this.gas}, function(error, txHash){
+        if(error) return cb(error);
+        that.waitFor('AddAddress', txHash, function(error, data){
+            if(error) return cb(error);
+            cb(null, args.added);
+        })
     });
-
-    this.contract.addAddress(address, {gas: this.gas}, function(error, txHash){
-        hash = txHash;
-        if(error) {
-            event.stopWatching();
-            return cb(error);
-        }
-    })
 };
 
 AddressSetDb.prototype.removeAddress = function (address, cb) {
-
     var that = this;
-    var hash;
-    var event = that.contract.RemoveAddress();
-
-    event.watch(function(error, data){
-        if(hash && hash === data.transactionHash) {
-            event.stopWatching();
-            cb(null, data.args.removed);
-        }
-    });
-
     this.contract.removeAddress(address, {gas: this.gas}, function(error, txHash){
-        hash = txHash;
-        if(error) {
-            event.stopWatching();
-            return cb(error);
-        }
-    })
+        if(error) return cb(error);
+        that.waitFor('RemoveAddress', txHash, function(error, data){
+            if(error) return cb(error);
+            cb(null, args.removed);
+        })
+    });
 };
 
 AddressSetDb.prototype.hasAddress = function (address, cb) {
@@ -89,6 +67,26 @@ AddressSetDb.prototype.values = function(cb){
 
     });
 
+};
+
+AddressSetDb.prototype.waitFor = function(eventName, hash, cb) {
+    var event;
+    try {
+        event = this.contract['']();
+    } catch (error) {
+        return cb(error);
+    }
+
+    event.watch(function(error, data){
+        if(hash === data.transactionHash) {
+            if (timeout) clearTimeout(timeout);
+            event.stopWatching();
+            cb(null, data.args);
+
+        }
+    });
+
+    var timeout = setTimeout(function(){event.stopWatching();} , 120000);
 };
 
 module.exports = AddressSetDb;

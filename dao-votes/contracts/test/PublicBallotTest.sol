@@ -179,7 +179,6 @@ contract PublicBallotTest is DaoTest {
         passed.assertFalse("finalize return wrong passed value");
         error.assertErrorsEqual(INVALID_STATE, "finalize return wrong error value");
         execError.assertNoError("finalize return wrong execError value");
-        mpb.concluded().assertEqual(0, "concluded returned the wrong value");
     }
 
     function testManualFinalizeFailTimeNotUp() {

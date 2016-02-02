@@ -1,26 +1,10 @@
-import "../../../dao-stl/contracts/src/assertions/DaoTest.sol";
+import "./PublicCurrencyBase.sol";
 import "../src/currency/PublicCurrency.sol";
+import "../src/currency/PublicMintingBallot.sol";
 import "../../../dao-users/contracts/test/MockUserDatabase.sol";
 import "../../../dao-currency/contracts/test/MockCurrencyDatabase.sol";
 
-contract PublicCurrencyTest is DaoTest {
-
-    uint    constant TEST_ID                    = 1;
-    uint    constant TEST_ID_2                  = 2;
-    uint    constant TEST_DURATION              = 1 days;
-    uint8   constant TEST_QUORUM                = 50;
-    uint    constant TEST_NUM_ELIGIBLE_VOTERS   = 1;
-    uint16  constant MCD_RETURN                 = 0x1111;
-    address constant TEST_ADDRESS               = 0x12345;
-    address constant TEST_ADDRESS_2             = 0x54321;
-
-    function testCreate() {
-        var pc = new PublicCurrency(TEST_ADDRESS, TEST_ADDRESS_2);
-        pc.currencyDatabase().assertEqual(TEST_ADDRESS, "currency database address not correct");
-        pc.userDatabase().assertEqual(TEST_ADDRESS_2, "user database address not correct");
-        pc.minter().assertEqual(pc, "minter returns wrong address");
-
-    }
+contract PublicCurrencyMintingTest is PublicCurrencyBase {
 
     function testCreateMintBallotSuccess() {
         var mdb = new MockUserDatabase(block.timestamp, true, TEST_NUM_ELIGIBLE_VOTERS);

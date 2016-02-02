@@ -22,6 +22,10 @@ contract MockPublicBallot is AbstractPublicBallot {
         numEligibleVoters
     ) {}
 
+    function ballotType() constant returns (bytes32 ballotType) {
+        return "mock";
+    }
+
     function _execute() internal returns (uint16 error) {
         return MPB_RETURN;
     }

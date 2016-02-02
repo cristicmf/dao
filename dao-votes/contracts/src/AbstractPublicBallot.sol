@@ -52,6 +52,7 @@ contract AbstractPublicBallot is PublicBallot, Errors {
 
     uint _opened;
     uint _durationInSeconds;
+    uint _concluded;
 
     uint _numEligibleVoters;
     int _result;
@@ -150,6 +151,7 @@ contract AbstractPublicBallot is PublicBallot, Errors {
             // automatically passed (100% of voters voted), state must be 'Open', and time must be fine.
             if (_votes._keys.length == _numEligibleVoters) {
                 _state = State.Closed;
+                _concluded = block.timestamp;
                 // If vote failed. Note it needs a majority of yes votes to succeed.
                 if (_result <= 0)
                     return;
@@ -172,26 +174,24 @@ contract AbstractPublicBallot is PublicBallot, Errors {
     */
     function finalize() returns (bool passed, uint16 error, uint16 execError) {
         // Voting was already finalized.
-        if (_state != State.Open){
+        if (_state != State.Open)
             error = INVALID_STATE;
-            return;
-        }
         // The only requirement for a vote to be finalized is that the time has passed.
-        if (block.timestamp <= _opened + _durationInSeconds) {
+        else if (block.timestamp <= _opened + _durationInSeconds)
             error = INVALID_STATE;
-            return;
-        }
         // If a quorum is set and not enough people voted.
-        if (_quorum != 0 && (_votes._keys.length * 100) / _numEligibleVoters < _quorum) {
+        else if (_quorum != 0 && (_votes._keys.length * 100) / _numEligibleVoters < _quorum)
             error = ERROR;
-            return;
+        else {
+            _state = State.Closed;
+            _concluded = block.timestamp;
+            // If vote failed. Note it needs a majority of yes votes to succeed.
+            if (_result > 0) {
+                _execError = execError = _execute();
+                passed = true;
+            }
         }
-        _state = State.Closed;
-        // If vote failed. Note it needs a majority of yes votes to succeed.
-        if (_result <= 0)
-            return;
-        _execError = execError = _execute();
-        passed = true;
+        Finalize(passed, error, execError);
     }
 
     /*
@@ -328,6 +328,18 @@ contract AbstractPublicBallot is PublicBallot, Errors {
     */
     function state() constant returns (uint8 state){
         return uint8(_state);
+    }
+
+    /*
+        Function: concluded
+
+        Get the time when the vote was concluded.
+
+        Returns:
+            concluded (uint) - The time when the vote was concluded.
+    */
+    function concluded() constant returns (uint concluded) {
+        return _concluded;
     }
 
     /*

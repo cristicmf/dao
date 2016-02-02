@@ -121,6 +121,7 @@ contract PublicBallotTest is DaoTest {
         uint state = mpb.state();
         state.assertEqual(2, "state returns the wrong value.");
         mpb.execError().assertErrorsEqual(MPB_RETURN, "execError is wrong");
+        mpb.concluded().assertEqual(block.timestamp, "concluded returned the wrong value");
     }
 
     function testAutoFinalizeVoteDidNotPass() {
@@ -134,6 +135,7 @@ contract PublicBallotTest is DaoTest {
         uint state = mpb.state();
         state.assertEqual(2, "state returns the wrong value.");
         mpb.execError().assertErrorsEqual(NO_ERROR, "execError is wrong");
+        mpb.concluded().assertEqual(block.timestamp, "concluded returned the wrong value");
     }
 
     function testManualFinalizeSuccessPassed() {
@@ -149,6 +151,7 @@ contract PublicBallotTest is DaoTest {
         uint state = mpb.state();
         state.assertEqual(2, "state returns the wrong value.");
         mpb.execError().assertErrorsEqual(MPB_RETURN, "execError is wrong");
+        mpb.concluded().assertEqual(block.timestamp, "concluded returned the wrong value");
     }
 
     function testManualFinalizeSuccessDidNotPass() {
@@ -164,6 +167,7 @@ contract PublicBallotTest is DaoTest {
         uint state = mpb.state();
         state.assertEqual(2, "state returns the wrong value.");
         mpb.execError().assertNoError( "execError is wrong");
+        mpb.concluded().assertEqual(block.timestamp, "concluded returned the wrong value");
     }
 
     function testManualFinalizeFailAlreadyClosed() {
@@ -175,6 +179,7 @@ contract PublicBallotTest is DaoTest {
         passed.assertFalse("finalize return wrong passed value");
         error.assertErrorsEqual(INVALID_STATE, "finalize return wrong error value");
         execError.assertNoError("finalize return wrong execError value");
+        mpb.concluded().assertEqual(0, "concluded returned the wrong value");
     }
 
     function testManualFinalizeFailTimeNotUp() {
@@ -185,6 +190,7 @@ contract PublicBallotTest is DaoTest {
         passed.assertFalse("finalize return wrong passed value");
         error.assertErrorsEqual(INVALID_STATE, "finalize return wrong error value");
         execError.assertNoError("finalize return wrong execError value");
+        mpb.concluded().assertEqual(0, "concluded returned the wrong value");
     }
 
     function testManualFinalizeFailQuorum() {
@@ -195,6 +201,7 @@ contract PublicBallotTest is DaoTest {
         passed.assertFalse("finalize return wrong passed value");
         error.assertErrorsEqual(ERROR, "finalize return wrong error value");
         execError.assertNoError("finalize return wrong execError value");
+        mpb.concluded().assertEqual(0, "concluded returned the wrong value");
     }
 
 

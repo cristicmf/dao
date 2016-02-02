@@ -8,7 +8,7 @@ These are some conventions used throughout this library.
 
 Official solidity [style guide](http://solidity.readthedocs.org/en/latest/style-guide.html).
 
-* All names are camel-cased. Functions and variables start with a lower case letter, structs, contracts and libraries with an upper case letter. `uint radius`, `int64 xCoord`, `function addInts(int numOne, numTwo)`, `struct Map`, `contract Coin`, `library StringUtils`. The exception is constant variables which written in all-caps, separated by floors, e.g. `MAX_VALUE`, `RESOURCE_NOT_FOUND`.
+* All names are camel-cased. Functions and variables start with a lower case letter, events, structs, contracts and libraries with an upper case letter. `uint radius`, `int64 xCoord`, `function addInts(int numOne, numTwo)`, `struct Map`, `contract Coin`, `library StringUtils`. The exception is constant variables which written in all-caps, separated by floors, e.g. `MAX_VALUE`, `RESOURCE_NOT_FOUND`.
 
 * The `get` in accessor functions is omitted, e.g. `owner()`, not `getOwner()`.
 
@@ -31,6 +31,10 @@ struct MapElement {
 * Functions always returns a value (if nothing else then an error code). The exception is functions that calls `selfdestruct`.
 
 * Function modifiers are not used since they don't play well with return values.
+
+* Events normally has the same name as the function they are called in except with the first letter capitalized, e.g. `function setData` - `event SetData`. If an event is called in many functions it normally has a name that explains what it does.
+
+* Event params are normally some or all of the input and output parameters of the function it is fired in, including the returned error code.
 
 * Contracts generally has interfaces (purely abstract versions). Implementation names usually contain the interface name. Example: A user database interface could be `UserDatabase`, and one that allow users to register themselves could be `SelfRegUserDatabase`.
 

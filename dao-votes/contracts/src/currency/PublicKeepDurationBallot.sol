@@ -2,19 +2,18 @@ import "../AbstractPublicBallot.sol";
 import "./PublicCurrency.sol";
 
 /*
-    Contract: PublicMintingBallot
+    Contract: PublicKeepDurationBallot
 
-    Public ballot that mints coins upon successful votes.
+    Public ballot that sets vote durations upon successful votes.
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
-contract PublicMintingBallot is AbstractPublicBallot {
+contract PublicKeepDurationBallot is AbstractPublicBallot {
 
-    address _receiver;
-    uint _amount;
+    uint _keepDuration;
 
     /*
-        Constructor: PublicMintingBallot
+        Constructor: PublicKeepDurationBallot
 
         Params:
             id (uint) - The ballot id.
@@ -24,10 +23,9 @@ contract PublicMintingBallot is AbstractPublicBallot {
             durationInSeconds (uint) - The duration from when the ballot opened to when it closes, in seconds.
             quorum (uint8) - A number between 0 and 100 (inclusive). Used as a percentage.
             numEligibleVoters (uint) - The number of eligible voters at the time of creation.
-            receiver (address) - The receiver of the minted coins.
-            amount (uint) - The amount of coins to be minted.
+            keepDuration (uint) - The keep-duration.
     */
-    function PublicMintingBallot(
+    function PublicKeepDurationBallot(
         uint id,
         address userDatabase,
         address creator,
@@ -35,8 +33,7 @@ contract PublicMintingBallot is AbstractPublicBallot {
         uint durationInSeconds,
         uint8 quorum,
         uint numEligibleVoters,
-        address receiver,
-        uint amount
+        uint keepDuration
     ) AbstractPublicBallot(
         id,
         userDatabase,
@@ -46,8 +43,7 @@ contract PublicMintingBallot is AbstractPublicBallot {
         quorum,
         numEligibleVoters
     ) {
-        _receiver = receiver;
-        _amount = amount;
+        _keepDuration = keepDuration;
     }
 
     /*
@@ -59,42 +55,31 @@ contract PublicMintingBallot is AbstractPublicBallot {
             ballotType (bytes32) - The ballot type.
     */
     function ballotType() constant returns (bytes32 ballotType) {
-        return "minting";
+        return "keepDuration";
     }
 
     /*
-        Function: receiver
+        Function: keepDuration
 
-        Get the address of the receiver.
-
-        Returns:
-            receiver (address) - The address.
-    */
-    function receiver() constant returns (address receiver) {
-        return _receiver;
-    }
-
-    /*
-        Function: amount
-
-        Get the amount of coins the receiver will get.
+        Get the keep duration.
 
         Returns:
-            amount (uint) - The amount.
+            keepDuration (uint) - The new duration.
     */
-    function amount() constant returns (uint amount) {
-        return _amount;
+    function keepDuration() constant returns (uint keepDuration) {
+        return _keepDuration;
     }
 
     /*
         Function: _execute
 
-        Calls 'mint' on the registry (a public currency contract) if a vote succeeds.
+        Calls 'setDuration' on the registry (a public currency contract) if a vote succeeds.
 
         Returns:
             error (uint16) - An error code.
     */
     function _execute() internal returns (uint16 error) {
-        return PublicCurrency(_registry).mint(_receiver, _amount);
+        return PublicCurrency(_registry).setKeepDuration(_keepDuration);
     }
+
 }

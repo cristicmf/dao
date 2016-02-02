@@ -4,11 +4,11 @@ import "../../../dao-stl/contracts/src/assertions/Asserter.sol";
 
 contract BallotMapImpl is BallotMap {
 
-    function insert(address key, uint8 value) returns (bool added) {
+    function insert(address key, bytes32 value) returns (bool added) {
         return _insert(key, value);
     }
 
-    function remove(address key) returns (uint8 value, bool removed) {
+    function remove(address key) returns (bytes32 value, bool removed) {
         return _remove(key);
     }
 }
@@ -20,14 +20,14 @@ contract BallotMapTest is Asserter {
     address constant TEST_KEY_2 = 0xABCDEF;
     address constant TEST_KEY_3 = 0xC0FFEE;
 
-    uint8 constant TEST_VALUE   = 1;
-    uint8 constant TEST_VALUE_2 = 2;
-    uint8 constant TEST_VALUE_3 = 3;
+    bytes32 constant TEST_VALUE   = 0x1;
+    bytes32 constant TEST_VALUE_2 = 0x2;
+    bytes32 constant TEST_VALUE_3 = 0x3;
 
     function testInsert() {
         BallotMapImpl bmi = new BallotMapImpl();
         bmi.insert(TEST_KEY, TEST_VALUE);
-        assertUintsEqual(bmi.ballot(TEST_KEY), TEST_VALUE, "ballot returns the wrong value");
+        assertBytes32Equal(bmi.ballot(TEST_KEY), TEST_VALUE, "ballot returns the wrong value");
         var (addr, value, exists) = bmi.ballotFromIndex(0);
         assertTrue(exists, "ballotFromIndex exist is false");
         assertAddressesEqual(addr, TEST_KEY, "ballotFromIndex returns the wrong address");
@@ -38,10 +38,10 @@ contract BallotMapTest is Asserter {
         BallotMapImpl bmi = new BallotMapImpl();
         bmi.insert(TEST_KEY, TEST_VALUE);
         var (val, removed) = bmi.remove(TEST_KEY);
-        assertUintsEqual(val, TEST_VALUE, "remove returns the wrong address");
+        assertBytes32Equal(val, TEST_VALUE, "remove returns the wrong address");
         assertTrue(removed, "remove returns the wrong result");
 
-        assertUintZero(bmi.ballot(TEST_KEY), "ballot returns the wrong value");
+        assertBytes32Zero(bmi.ballot(TEST_KEY), "ballot returns the wrong value");
         var (addr, value, exists) = bmi.ballotFromIndex(0);
         assertAddressZero(addr, "ballotFromIndex returns the wrong key");
         assertFalse(exists, "ballotFromIndex returns the wrong existence value");
@@ -53,8 +53,8 @@ contract BallotMapTest is Asserter {
         bmi.insert(TEST_KEY, TEST_VALUE);
         bmi.insert(TEST_KEY_2, TEST_VALUE_2);
 
-        assertUintsEqual(bmi.ballot(TEST_KEY), TEST_VALUE, "ballot returns the wrong value for the first entry");
-        assertUintsEqual(bmi.ballot(TEST_KEY_2), TEST_VALUE_2, "ballot returns the wrong value for the second entry");
+        assertBytes32Equal(bmi.ballot(TEST_KEY), TEST_VALUE, "ballot returns the wrong value for the first entry");
+        assertBytes32Equal(bmi.ballot(TEST_KEY_2), TEST_VALUE_2, "ballot returns the wrong value for the second entry");
 
         var (addr, value, exists) = bmi.ballotFromIndex(0);
         assertTrue(exists, "ballotFromIndex exist is false for first entry.");
@@ -73,8 +73,8 @@ contract BallotMapTest is Asserter {
         bmi.insert(TEST_KEY_2, TEST_VALUE_2);
         bmi.remove(TEST_KEY_2);
 
-        assertUintsEqual(bmi.ballot(TEST_KEY), TEST_VALUE, "ballot returns the wrong value for the first entry");
-        assertUintZero(bmi.ballot(TEST_KEY_2), "ballot returns the wrong value for the second entry");
+        assertBytes32Equal(bmi.ballot(TEST_KEY), TEST_VALUE, "ballot returns the wrong value for the first entry");
+        assertBytes32Zero(bmi.ballot(TEST_KEY_2), "ballot returns the wrong value for the second entry");
 
         var (addr, value, exists) = bmi.ballotFromIndex(0);
         assertTrue(exists, "ballotFromIndex exist is false for first entry.");
@@ -92,8 +92,8 @@ contract BallotMapTest is Asserter {
         bmi.insert(TEST_KEY_2, TEST_VALUE_2);
         bmi.remove(TEST_KEY);
 
-        assertUintZero(bmi.ballot(TEST_KEY), "ballot returns the wrong value for the first entry");
-        assertUintsEqual(bmi.ballot(TEST_KEY_2), TEST_VALUE_2, "ballot returns the wrong value for the second entry");
+        assertBytes32Zero(bmi.ballot(TEST_KEY), "ballot returns the wrong value for the first entry");
+        assertBytes32Equal(bmi.ballot(TEST_KEY_2), TEST_VALUE_2, "ballot returns the wrong value for the second entry");
 
         var (addr, value, exists) = bmi.ballotFromIndex(0);
         assertTrue(exists, "ballotFromIndex exist is false for first entry.");
@@ -113,9 +113,9 @@ contract BallotMapTest is Asserter {
         bmi.insert(TEST_KEY_3, TEST_VALUE_3);
         bmi.remove(TEST_KEY_2);
 
-        assertUintsEqual(bmi.ballot(TEST_KEY), TEST_VALUE, "ballot returns the wrong value for the first entry");
-        assertUintZero(bmi.ballot(TEST_KEY_2), "ballot returns the wrong value for the second entry");
-        assertUintsEqual(bmi.ballot(TEST_KEY_3), TEST_VALUE_3, "ballot returns the wrong value for the third entry");
+        assertBytes32Equal(bmi.ballot(TEST_KEY), TEST_VALUE, "ballot returns the wrong value for the first entry");
+        assertBytes32Zero(bmi.ballot(TEST_KEY_2), "ballot returns the wrong value for the second entry");
+        assertBytes32Equal(bmi.ballot(TEST_KEY_3), TEST_VALUE_3, "ballot returns the wrong value for the third entry");
 
         var (addr, value, exists) = bmi.ballotFromIndex(0);
         assertTrue(exists, "ballotFromIndex exist is false for first entry.");

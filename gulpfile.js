@@ -126,7 +126,7 @@ gulp.task('htmldoc:users', function(cb){
 
 /************************ dao-votes ***************************/
 
-var daoVotesTests = ['BallotMapTest', 'PublicBallotTest', 'PublicMintingBallotTest', 'PublicCurrencyTest'];
+var daoVotesTests = ['BallotMapTest', 'PublicBallotTest', 'PublicMintingBallotTest', 'PublicCurrencyBasicTest', 'PublicCurrencyMintingTest', 'PublicCurrencyDurationTest', 'PublicCurrencyQuorumTest', 'PublicCurrencyKeepDurationTest'];
 var daoVotesTestFolder = path.join(__dirname, 'dao-votes', 'contracts', 'build', 'test');
 
 gulp.task('build:votes', function (cb) {

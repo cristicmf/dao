@@ -107,6 +107,16 @@ contract PublicBallot {
     function voterDataFromIndex(uint index) constant returns (address addr, uint8 vote, uint16 error);
 
     /*
+        Function: ballotType
+
+        Get the type of the ballot.
+
+        Returns:
+            ballotType (bytes32) - The ballot type.
+    */
+    function ballotType() constant returns (bytes32 ballotType);
+
+    /*
         Function: id
 
         Get the ballot id.
@@ -215,6 +225,16 @@ contract PublicBallot {
             numVotes (uint) - The current number of votes.
     */
     function numVotes() constant returns (uint numVotes);
+
+    /*
+        Function: concluded
+
+        Get the time when the vote was concluded.
+
+        Returns:
+            concluded (uint) - The time when the vote was concluded.
+    */
+    function concluded() constant returns (uint concluded);
 
     /*
         Function: _execute

@@ -7,6 +7,33 @@
 */
 contract Permission {
 
+    /*
+        Event: SetRoot
+
+        Params:
+            newRoot (address) - The new root-address.
+            error (uint16) - An error code.
+    */
+    event SetRoot(address indexed newRoot, uint16 indexed error);
+
+    /*
+        Event: AddOwner
+
+        Params:
+            addr (address) - The address.
+            error (uint16) - An error code.
+    */
+    event AddOwner(address indexed newRoot, uint16 indexed error);
+
+    /*
+        Event: RemoveOwner
+
+        Params:
+            addr (address) - The address.
+            error (uint16) - An error code.
+    */
+    event RemoveOwner(address indexed newRoot, uint16 indexed error);
+
     // TODO this should really be two interfaces.
 
     /*

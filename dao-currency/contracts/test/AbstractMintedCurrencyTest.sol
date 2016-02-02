@@ -26,6 +26,13 @@ contract AbstractMintedCurrencyTest is DaoAsserter {
         assertAddressesEqual(amci.minter(), TEST_ADDRESS, "minter returns the wrong address");
     }
 
+    function testSetMinterFailMinterNull() {
+        var amci = new AbstractMintedCurrencyImpl(0, TEST_ADDRESS);
+        var err = amci.setMinter(0);
+        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "setMinter returned no 'null param' error");
+        assertAddressesEqual(amci.minter(), TEST_ADDRESS, "minter returns the wrong address");
+    }
+
     function testSetMinterFailAccessDenied() {
         var amci = new AbstractMintedCurrencyImpl(0, TEST_ADDRESS);
         var err = amci.setMinter(TEST_ADDRESS_2);

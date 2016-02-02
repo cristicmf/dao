@@ -41,6 +41,16 @@ contract PublicBallot {
     enum Vote {Null, Yes, No, Abstain}
 
     /*
+        Event: Finalize
+
+        Params:
+            passed (bool) - Whether or not the vote passed.
+            error (uint16) - Error code for the function.
+            execError (uint16) - Error code for the action triggered by the vote.
+    */
+    event Finalize(bool indexed passed, uint16 indexed error, uint16 indexed execError);
+
+    /*
         Function: vote
 
         Called to cast a vote.
@@ -63,7 +73,7 @@ contract PublicBallot {
         Returns:
             passed (bool) - Whether or not the vote passed.
             error (uint16) - Error code for the function.
-            error (uint16) - Error code for the action triggered by the vote.
+            execError (uint16) - Error code for the action triggered by the vote.
     */
     function finalize() returns (bool passed, uint16 error, uint16 execError);
 

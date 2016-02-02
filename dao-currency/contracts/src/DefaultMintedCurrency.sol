@@ -33,12 +33,13 @@ contract DefaultMintedCurrency is AbstractMintedCurrency {
     */
     function mint(address receiver, uint amount) returns (uint16 error) {
         if (receiver == 0 || amount == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        if (msg.sender != _minter)
-            return ACCESS_DENIED;
-        error = _currencyDatabase.add(receiver, int(amount));
-        if (error == NO_ERROR)
-            CoinsMinted(receiver, amount);
+            error = NULL_PARAM_NOT_ALLOWED;
+        else if (msg.sender != _minter)
+            error = ACCESS_DENIED;
+        else
+            error = _currencyDatabase.add(receiver, int(amount));
+
+        Mint(receiver, amount, error);
     }
 
     /*
@@ -55,10 +56,11 @@ contract DefaultMintedCurrency is AbstractMintedCurrency {
     */
     function send(address receiver, uint amount) returns (uint16 error) {
         if (receiver == 0 || amount == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        error = _currencyDatabase.send(msg.sender, receiver, amount);
-        if (error == NO_ERROR)
-            CoinsTransferred(msg.sender, receiver, amount);
+            error = NULL_PARAM_NOT_ALLOWED;
+        else
+            error = _currencyDatabase.send(msg.sender, receiver, amount);
+
+        Send(msg.sender, receiver, amount, error);
     }
 
     /*
@@ -76,12 +78,13 @@ contract DefaultMintedCurrency is AbstractMintedCurrency {
     */
     function send(address sender, address receiver, uint amount) returns (uint16 error) {
         if (sender == 0 || receiver == 0 || amount == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        if (msg.sender != _minter)
-            return ACCESS_DENIED;
-        error = _currencyDatabase.send(msg.sender, receiver, amount);
-        if (error == NO_ERROR)
-            CoinsTransferred(sender, receiver, amount);
+            error = NULL_PARAM_NOT_ALLOWED;
+        else if (msg.sender != _minter)
+            error = ACCESS_DENIED;
+        else
+            error = _currencyDatabase.send(msg.sender, receiver, amount);
+
+        Send(sender, receiver, amount, error);
     }
 
 }

@@ -1,4 +1,3 @@
-import "../../../dao-stl/contracts/src/errors/Errors.sol";
 import "./Doug.sol";
 
 /*
@@ -29,7 +28,7 @@ contract Database is DougEnabled {
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
-contract DefaultDatabase is Database, DefaultDougEnabled, Errors {
+contract DefaultDatabase is Database, DefaultDougEnabled {
 
     /*
         Function: _checkCaller

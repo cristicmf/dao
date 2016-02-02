@@ -1,4 +1,3 @@
-import "../../../dao-stl/contracts/src/errors/Errors.sol";
 import "../../../dao-core/contracts/src/Doug.sol";
 import "./UserRegistry.sol";
 import "./UserDatabase.sol";
@@ -16,7 +15,7 @@ import "./UserDatabase.sol";
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
-contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
+contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled {
 
     address _admin;
     UserDatabase _userDatabase;
@@ -36,7 +35,7 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
     /*
         Function: registerUser
 
-        Register a new user. Must be 'admin'.
+        Register a new user. Must be 'admin'. Fires a <UserRegistry.RegisterUser> event.
 
         Params:
             addr (address) - The address.
@@ -48,10 +47,13 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
     */
     function registerUser(address addr, bytes32 nickname, bytes32 dataHash) returns (uint16 error) {
         if (msg.sender != _admin)
-            return ACCESS_DENIED;
-        if (addr == 0 || nickname == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        return _userDatabase.registerUser(addr, nickname, block.timestamp, dataHash);
+            error = ACCESS_DENIED;
+        else if (addr == 0 || nickname == 0)
+            error = NULL_PARAM_NOT_ALLOWED;
+        else
+            error = _userDatabase.registerUser(addr, nickname, block.timestamp, dataHash);
+
+        RegisterUser(addr, nickname, dataHash, error);
     }
 
     /*
@@ -67,10 +69,13 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
     */
     function removeUser(address addr) returns (uint16 error) {
         if (msg.sender != _admin && msg.sender != addr)
-            return ACCESS_DENIED;
-        if (addr == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        return _userDatabase.removeUser(addr);
+            error = ACCESS_DENIED;
+        else if (addr == 0)
+            error = NULL_PARAM_NOT_ALLOWED;
+        else
+            error = _userDatabase.removeUser(addr);
+
+        RemoveUser(addr, error);
     }
 
     /*
@@ -82,7 +87,8 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
             error (uint16) - An error code.
     */
     function removeSelf() returns (uint16 error) {
-        return _userDatabase.removeUser(msg.sender);
+        error = _userDatabase.removeUser(msg.sender);
+        RemoveUser(msg.sender, error);
     }
 
     /*
@@ -99,10 +105,13 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
     */
     function updateDataHash(address addr, bytes32 dataHash) returns (uint16 error) {
         if (msg.sender != _admin && msg.sender != addr)
-            return ACCESS_DENIED;
-        if (addr == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        return _userDatabase.updateDataHash(addr, dataHash);
+            error = ACCESS_DENIED;
+        else if (addr == 0)
+            error = NULL_PARAM_NOT_ALLOWED;
+        else
+            error =  _userDatabase.updateDataHash(addr, dataHash);
+
+        UpdateDataHash(addr, dataHash, error);
     }
 
     /*
@@ -117,7 +126,8 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
             error (uint16) - An error code.
     */
     function updateMyDataHash(bytes32 dataHash) returns (uint16 error) {
-        return _userDatabase.updateDataHash(msg.sender, dataHash);
+        error = _userDatabase.updateDataHash(msg.sender, dataHash);
+        UpdateDataHash(msg.sender, dataHash, error);
     }
 
     /*
@@ -133,8 +143,11 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
     */
     function setUserDatabase(address dbAddr) returns (uint16 error) {
         if (msg.sender != _admin)
-            return ACCESS_DENIED;
-        _userDatabase = UserDatabase(dbAddr);
+            error = ACCESS_DENIED;
+        else
+            _userDatabase = UserDatabase(dbAddr);
+
+        SetUserDatabase(dbAddr, error);
     }
 
     /*
@@ -163,8 +176,11 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled, Errors {
     */
     function setAdmin(address addr) returns (uint16 error) {
         if (msg.sender != _admin)
-            return ACCESS_DENIED;
-        _admin = addr;
+            error = ACCESS_DENIED;
+        else
+            _admin = addr;
+
+        SetAdmin(addr, error);
     }
 
     /*

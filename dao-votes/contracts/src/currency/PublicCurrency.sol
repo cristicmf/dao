@@ -16,6 +16,26 @@ import "../BallotMap.sol";
 */
 contract PublicCurrency is BallotMap, MintedUserCurrency {
 
+    /*
+        Event: Vote
+
+        Params:
+            ballotAddress (address) - The ballot address.
+            vote (uint8) - The vote value.
+            error (uint16) - An error code.
+    */
+    event Vote(address indexed ballotAddress, uint8 indexed vote, uint16 indexed error);
+
+    /*
+        Event: CreateMintBallot
+
+        Params:
+            receiver (address) - The receiver address.
+            amount (uint) - The amount.
+            error (uint16) - An error code.
+    */
+    event CreateMintBallot(address indexed receiver, uint indexed amount, uint16 indexed error);
+
     // Constant: DEFAULT_DURATION
     // The ballot-duration used by default (1 day in seconds).
     uint constant DEFAULT_DURATION = 1 days;
@@ -50,10 +70,13 @@ contract PublicCurrency is BallotMap, MintedUserCurrency {
     function vote(address ballotAddress, uint8 vote) returns (uint16 error) {
         var ballotState = _ballotMap._data[ballotAddress].value;
         if (ballotState == 0)
-            return RESOURCE_NOT_FOUND;
-        if (ballotState != 1)
-            return INVALID_STATE;
-        return PublicMintingBallot(ballotAddress).vote(msg.sender, vote, block.timestamp);
+            error = RESOURCE_NOT_FOUND;
+        else if (ballotState != 1)
+            error = INVALID_STATE;
+        else
+            error = PublicMintingBallot(ballotAddress).vote(msg.sender, vote, block.timestamp);
+
+        Vote(ballotAddress, vote, error);
     }
 
     /*
@@ -71,23 +94,26 @@ contract PublicCurrency is BallotMap, MintedUserCurrency {
     */
     function createMintBallot(address receiver, uint amount) returns (uint16 error) {
         if (receiver == 0 || amount == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        if (!_userDatabase.hasUser(receiver))
-            return RESOURCE_NOT_FOUND;
-        var id = _currentId++;
-        var ballot = new PublicMintingBallot(
-            id,
-            _userDatabase,
-            msg.sender,
-            block.timestamp,
-            DEFAULT_DURATION,
-            DEFAULT_QUORUM,
-            _userDatabase.size(),
-            receiver,
-            amount
-        );
-        // Initial state is always "open".
-        _insert(ballot, 1);
+            error = NULL_PARAM_NOT_ALLOWED;
+        else if (!_userDatabase.hasUser(receiver))
+            error = RESOURCE_NOT_FOUND;
+        else {
+            var id = _currentId++;
+            var ballot = new PublicMintingBallot(
+                id,
+                _userDatabase,
+                msg.sender,
+                block.timestamp,
+                DEFAULT_DURATION,
+                DEFAULT_QUORUM,
+                _userDatabase.size(),
+                receiver,
+                amount
+            );
+            // Initial state is always "open".
+            _insert(ballot, 1);
+        }
+        CreateMintBallot(receiver, amount, error);
     }
 
     /*
@@ -108,16 +134,17 @@ contract PublicCurrency is BallotMap, MintedUserCurrency {
     function mint(address receiver, uint amount) returns (uint16 error) {
         // Check if caller is a registered ballot.
         if (_ballotMap._data[msg.sender].value == 0)
-            return ACCESS_DENIED;
-        // Set state of vote to 2.
-        _ballotMap._data[msg.sender].value = 2;
-        // Make sure the user is still registered.
-        if (!_userDatabase.hasUser(receiver))
-            return RESOURCE_NOT_FOUND;
-        error = _currencyDatabase.add(receiver, int(amount));
-        if (error == NO_ERROR)
-            CoinsMinted(receiver, amount);
-        return error;
+            error = ACCESS_DENIED;
+        else {
+            // Set state of vote to 2.
+            _ballotMap._data[msg.sender].value = 2;
+            // Make sure the user is still registered.
+            if (!_userDatabase.hasUser(receiver))
+                error = RESOURCE_NOT_FOUND;
+            else
+                error = _currencyDatabase.add(receiver, int(amount));
+        }
+        Mint(receiver, amount, error);
     }
 
 }

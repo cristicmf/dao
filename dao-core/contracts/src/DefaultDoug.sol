@@ -78,7 +78,7 @@ contract DefaultDoug is Doug, Errors {
 
         Add a new contract to the registry.
 
-        Fires off an <ActionsContractRegistry.ActionsContractAdded> event if successful.
+        Fires off an <ActionsContractRegistry.AddActionsContract> event if successful.
 
         Params:
             identifier (bytes32) - The identifier (name).
@@ -89,8 +89,7 @@ contract DefaultDoug is Doug, Errors {
     */
     function addActionsContract(bytes32 identifier, address contractAddress) external returns (uint16 error) {
         error = _addContract(_aMap, identifier, contractAddress);
-        if (error == NO_ERROR)
-            ActionsContractAdded(identifier, contractAddress);
+        AddActionsContract(identifier, contractAddress, error);
     }
 
     /*
@@ -98,7 +97,7 @@ contract DefaultDoug is Doug, Errors {
 
         Remove a contract from the registry.
 
-        Fires off an <ActionsContractRegistry.ActionsContractRemoved> event if successful.
+        Fires off an <ActionsContractRegistry.RemoveActionsContract> event if successful.
 
         Params:
             identifier (bytes32) - The identifier (name).
@@ -109,10 +108,10 @@ contract DefaultDoug is Doug, Errors {
     function removeActionsContract(bytes32 identifier) external returns (uint16 error) {
         var (addr, err) = _removeContract(_aMap, identifier);
         if (err == NO_ERROR) {
-            ActionsContractRemoved(identifier, addr);
             if (_destroyRemovedActions)
                 Destructible(addr).destroy(_permission.root());
         }
+        RemoveActionsContract(identifier, addr, err);
         return err;
     }
 
@@ -188,8 +187,10 @@ contract DefaultDoug is Doug, Errors {
     */
     function setDestroyRemovedActions(bool destroyRemovedActions) returns (uint16 error) {
         if (!_hasDougPermission())
-            return ACCESS_DENIED;
-        _destroyRemovedActions = destroyRemovedActions;
+            error = ACCESS_DENIED;
+        else
+            _destroyRemovedActions = destroyRemovedActions;
+        SetDestroyRemovedActions(destroyRemovedActions, error);
     }
 
     /*
@@ -211,7 +212,7 @@ contract DefaultDoug is Doug, Errors {
 
         Add a new contract to the registry.
 
-        Fires off an <DatabaseContractRegistry.DatabaseContractAdded> event if successful.
+        Fires off an <DatabaseContractRegistry.AddDatabaseContract> event if successful.
 
         Params:
             identifier (bytes32) - The identifier (name).
@@ -222,8 +223,7 @@ contract DefaultDoug is Doug, Errors {
     */
     function addDatabaseContract(bytes32 identifier, address contractAddress) external returns (uint16 error) {
         error = _addContract(_dMap, identifier, contractAddress);
-        if (error == NO_ERROR)
-            DatabaseContractAdded(identifier, contractAddress);
+        AddDatabaseContract(identifier, contractAddress, error);
     }
 
     /*
@@ -231,7 +231,7 @@ contract DefaultDoug is Doug, Errors {
 
         Remove a contract from the registry.
 
-        Fires off an <DatabaseContractRegistry.DatabaseContractRemoved> event if successful.
+        Fires off an <DatabaseContractRegistry.RemoveDatabaseContract> event if successful.
 
         Params:
             identifier (bytes32) - The identifier (name).
@@ -242,10 +242,10 @@ contract DefaultDoug is Doug, Errors {
     function removeDatabaseContract(bytes32 identifier) external returns (uint16 error) {
         var (addr, err) = _removeContract(_dMap, identifier);
         if (err == NO_ERROR) {
-            DatabaseContractRemoved(identifier, addr);
             if (_destroyRemovedDatabases)
                 Destructible(addr).destroy(_permission.root());
         }
+        RemoveDatabaseContract(identifier, addr, err);
         return err;
     }
 
@@ -321,8 +321,10 @@ contract DefaultDoug is Doug, Errors {
     */
     function setDestroyRemovedDatabases(bool destroyRemovedDatabases) returns (uint16 error) {
         if (!_hasDougPermission())
-            return ACCESS_DENIED;
-        _destroyRemovedDatabases = destroyRemovedDatabases;
+            error = ACCESS_DENIED;
+        else
+            _destroyRemovedDatabases = destroyRemovedDatabases;
+        SetDestroyRemovedDatabases(destroyRemovedDatabases, error);
     }
 
     /*
@@ -353,8 +355,10 @@ contract DefaultDoug is Doug, Errors {
     function setPermission(address permissionAddress) returns (uint16 error) {
         // Only allow
         if (address(_permission) != ADDRESS_NULL && msg.sender != _permission.root())
-            return ACCESS_DENIED;
-        _permission = Permission(permissionAddress);
+            error = ACCESS_DENIED;
+        else
+            _permission = Permission(permissionAddress);
+        SetPermission(permissionAddress, error);
     }
 
     /*
@@ -375,7 +379,7 @@ contract DefaultDoug is Doug, Errors {
      /*
         Function: destroy
 
-        Destroys the contract if the caller has root permission.
+        Destroys the contract if the caller has root permission. Fires a <Destructible.Destroy> event.
 
         WARNING: Will destroy the entire system. Should not be done until all managed contracts are destroyed.
 
@@ -383,8 +387,12 @@ contract DefaultDoug is Doug, Errors {
             fundReceiver (address) - The account that receives the funds.
     */
     function destroy(address fundReceiver) {
-        if (msg.sender == _permission.root())
+        if (msg.sender == _permission.root()) {
+            Destroy(fundReceiver, this.balance, NO_ERROR);
             selfdestruct(fundReceiver);
+        }
+        else
+            Destroy(fundReceiver, 0, ACCESS_DENIED);
     }
 
     // *********************************** Internal ************************************

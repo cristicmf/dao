@@ -10,6 +10,55 @@ import "../../../dao-core/contracts/src/Doug.sol";
 contract UserRegistry is DougEnabled {
 
     /*
+        Event: RegisterUser
+
+        Params:
+            addr (address) - The address.
+            nickname (bytes32) - The users nickname.
+            dataHash (bytes32) - Hash of the file containing (optional) user data.
+            error (uint16) - An error code.
+    */
+    event RegisterUser(address indexed addr, bytes32 indexed nickname, bytes32 indexed dataHash, uint16 error);
+
+
+    /*
+        Event: RemoveUser
+
+        Params:
+            addr (address) - The user address.
+            error (uint16) - An error code.
+    */
+    event RemoveUser(address indexed addr, uint16 indexed error);
+
+    /*
+        Event: UpdateDataHash
+
+        Params:
+            addr (address) - The address.
+            dataHash (bytes32) - Hash of the file containing (optional) user data.
+            error (uint16) - An error code.
+    */
+    event UpdateDataHash(address indexed addr, bytes32 indexed dataHash, uint16 indexed error);
+
+    /*
+        Event: SetUserDatabase
+
+        Params:
+            dbAddr (address) - The address.
+            error (uint16) - An error code.
+    */
+    event SetUserDatabase(address indexed dbAddr, uint16 indexed error);
+
+    /*
+        Event: SetAdmin
+
+        Params:
+            dbAddr (address) - The address.
+            error (uint16) - An error code.
+    */
+    event SetAdmin(address indexed dbAddr, uint16 indexed error);
+
+    /*
         Function: registerUser
 
         Register a new user.

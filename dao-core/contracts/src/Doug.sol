@@ -1,4 +1,5 @@
 import "./Permission.sol";
+import "../../../dao-stl/contracts/src/errors/Errors.sol";
 
 /*
     Contract: Destructible
@@ -10,6 +11,16 @@ import "./Permission.sol";
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract Destructible {
+
+    /*
+        Event: Destroy
+
+        Params:
+            fundReceiver (address) - The account that receives the funds.
+            value (uint) - The value of the contract account.
+            error (uint16) - An error code.
+    */
+    event Destroy(address indexed fundReceiver, uint value, uint16 indexed error);
 
     /*
         Function: destroy
@@ -71,26 +82,33 @@ contract DougEnabled is Destructible {
 contract ActionsContractRegistry {
 
     /*
-        Event: ActionsContractAdded
-
-        Fired when a new contract is added to Doug.
+        Event: AddActionsContract
 
         Params:
             contractId (bytes32) - The id of the contract.
             contractAddress (address) - The address of the contract.
+            error (uint16) - An error code.
     */
-    event ActionsContractAdded(bytes32 indexed contractId, address indexed contractAddress);
+    event AddActionsContract(bytes32 indexed contractId, address indexed contractAddress, uint16 indexed error);
 
     /*
-        Event: ActionsContractRemoved
-
-        Fired when a new contract is removed from Doug.
+        Event: RemovedActionsContract
 
         Params:
             contractId (bytes32) - The id of the contract.
             contractAddress (address) - The address of the contract.
+            error (uint16) - An error code.
     */
-    event ActionsContractRemoved(bytes32 indexed contractId, address indexed contractAddress);
+    event RemoveActionsContract(bytes32 indexed contractId, address indexed contractAddress, uint16 indexed error);
+
+    /*
+        Event: SetDestroyRemovedActions
+
+        Params:
+            destroyRemovedActions (bool) - Whether or not to destroy removed actions.
+            error (uint16) - An error code.
+    */
+    event SetDestroyRemovedActions(bool indexed destroyRemovedActions, uint16 indexed error);
 
     /*
         Function: addActionsContract
@@ -205,26 +223,33 @@ contract ActionsContractRegistry {
 contract DatabaseContractRegistry {
 
     /*
-        Event: DatabaseContractAdded
-
-        Fired when a new database contract is added to Doug.
+        Event: AddDatabaseContract
 
         Params:
             contractId (bytes32) - The id of the contract.
             contractAddress (address) - The address of the contract.
+            error (uint16) - An error code.
     */
-    event DatabaseContractAdded(bytes32 indexed contractId, address indexed contractAddress);
+    event AddDatabaseContract(bytes32 indexed contractId, address indexed contractAddress, uint16 indexed error);
 
     /*
-        Event: DatabaseContractRemoved
-
-        Fired when a new database contract is removed from Doug.
+        Event: RemoveDatabaseContract
 
         Params:
             contractId (bytes32) - The id of the contract.
             contractAddress (address) - The address of the contract.
+            error (uint16) - An error code.
     */
-    event DatabaseContractRemoved(bytes32 indexed contractId, address indexed contractAddress);
+    event RemoveDatabaseContract(bytes32 indexed contractId, address indexed contractAddress, uint16 indexed error);
+
+    /*
+        Event: SetDestroyRemovedDatabases
+
+        Params:
+            destroyRemovedDatabases (bool) - Whether or not to destroy removed databases.
+            error (uint16) - An error code.
+    */
+    event SetDestroyRemovedDatabases(bool indexed destroyRemovedDatabases, uint16 indexed error);
 
     /*
         Function: addDatabaseContract
@@ -340,6 +365,15 @@ contract DatabaseContractRegistry {
 contract Doug is ActionsContractRegistry, DatabaseContractRegistry, Destructible {
 
     /*
+        Event: SetPermission
+
+        Params:
+            permissionAddress (address) - The address of the contract.
+            error (uint16) - An error code.
+    */
+    event SetPermission(address indexed permissionAddress, uint16 indexed error);
+
+    /*
         Function: setPermission
 
         Set the permission contract address.
@@ -374,7 +408,7 @@ contract Doug is ActionsContractRegistry, DatabaseContractRegistry, Destructible
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
-contract DefaultDougEnabled is DougEnabled {
+contract DefaultDougEnabled is DougEnabled, Errors {
 
     Doug _DOUG;
 
@@ -416,14 +450,18 @@ contract DefaultDougEnabled is DougEnabled {
         Function: destroy
 
         Destroy a contract. No return values since it's a destruction. Calls 'selfdestruct'
-        on the contract if successful.
+        on the contract if successful. Fires off a <Destroy> event.
 
         Params:
             fundReceiver (address) - The account that receives the funds.
     */
     function destroy(address fundReceiver) {
-        if (msg.sender == address(_DOUG))
+        if (msg.sender == address(_DOUG)) {
+            Destroy(fundReceiver, this.balance, NO_ERROR);
             selfdestruct(fundReceiver);
+        }
+        else
+            Destroy(fundReceiver, 0, ACCESS_DENIED);
     }
 
 }

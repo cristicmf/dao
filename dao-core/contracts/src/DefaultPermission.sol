@@ -68,12 +68,15 @@ contract DefaultPermission is Destructible, Permission, Errors {
     */
     function setRoot(address newRoot) constant returns (uint16 error) {
         if (msg.sender != _root)
-            return ACCESS_DENIED;
-        _root = newRoot;
-        // Remove new root from owner list if he was in there.
-        if (_owners._data[newRoot].timestamp != 0)
-            delete _owners._data[newRoot];
-        _timeRootAdded = block.timestamp;
+            error = ACCESS_DENIED;
+         else {
+            _root = newRoot;
+            // Remove new root from owner list if he was in there.
+            if (_owners._data[newRoot].timestamp != 0)
+                delete _owners._data[newRoot];
+            _timeRootAdded = block.timestamp;
+        }
+        SetRoot(newRoot, error);
     }
 
 
@@ -115,18 +118,19 @@ contract DefaultPermission is Destructible, Permission, Errors {
     */
     function addOwner(address addr) returns (uint16 error) {
         // Basic check for null value.
-        if(addr == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        if(addr == _root)
-            return INVALID_PARAM_VALUE;
+        if (addr == 0)
+            error = NULL_PARAM_NOT_ALLOWED;
+        else if (addr == _root)
+            error = INVALID_PARAM_VALUE;
         // If sender isn't root they can't add new owners.
-        if(msg.sender != _root)
-            return ACCESS_DENIED;
+        else if (msg.sender != _root)
+            error = ACCESS_DENIED;
         // If owner exists
-        if (_owners._data[addr].timestamp != 0)
-            return RESOURCE_ALREADY_EXISTS;
+        else if (_owners._data[addr].timestamp != 0)
+            error = RESOURCE_ALREADY_EXISTS;
         else
             _owners._data[addr] = OElement(_owners._keys.push(addr) - 1, block.timestamp);
+        AddOwner(addr, error);
     }
 
     /*
@@ -143,26 +147,29 @@ contract DefaultPermission is Destructible, Permission, Errors {
     function removeOwner(address addr) returns (uint16 error) {
         // Basic check for null value.
         if (addr == 0)
-            return NULL_PARAM_NOT_ALLOWED;
+            error = NULL_PARAM_NOT_ALLOWED;
         // If sender isn't an owner of 'perm' (or root) they can't add new owners.
-        if (msg.sender != _root && msg.sender != addr)
-            return ACCESS_DENIED;
+        else if (msg.sender != _root && msg.sender != addr)
+            error = ACCESS_DENIED;
+        else {
+            var elem = _owners._data[addr];
 
-        var elem = _owners._data[addr];
-
-        var exists = elem.timestamp != 0;
-        if (!exists)
-            return RESOURCE_NOT_FOUND;
-
-        var keyIndex = elem._keyIndex;
-        delete _owners._data[addr];
-        var len = _owners._keys.length;
-        if (keyIndex != len - 1) {
-            var swap = _owners._keys[len - 1];
-            _owners._keys[keyIndex] = swap;
-            _owners._data[swap]._keyIndex = keyIndex;
+            var exists = elem.timestamp != 0;
+            if (!exists)
+                error = RESOURCE_NOT_FOUND;
+            else {
+                var keyIndex = elem._keyIndex;
+                delete _owners._data[addr];
+                var len = _owners._keys.length;
+                if (keyIndex != len - 1) {
+                    var swap = _owners._keys[len - 1];
+                    _owners._keys[keyIndex] = swap;
+                    _owners._data[swap]._keyIndex = keyIndex;
+                }
+            }
+            _owners._keys.length--;
         }
-        _owners._keys.length--;
+        RemoveOwner(addr, error);
     }
 
     /*
@@ -234,7 +241,7 @@ contract DefaultPermission is Destructible, Permission, Errors {
      /*
         Function: destroy
 
-        Destroys the contract if the caller has root permission.
+        Destroys the contract if the caller has root permission. Fires a <Destructible.Destroy> event.
 
         WARNING: May lock down any system that depends on this contract for permissions management.
 
@@ -242,8 +249,12 @@ contract DefaultPermission is Destructible, Permission, Errors {
             fundReceiver (address) - The account that receives the funds.
     */
     function destroy(address fundReceiver) {
-        if (msg.sender == _root)
+        if (msg.sender == _root) {
+            Destroy(fundReceiver, this.balance, NO_ERROR);
             selfdestruct(fundReceiver);
+        }
+        else
+            Destroy(fundReceiver, 0, ACCESS_DENIED);
     }
 
 }

@@ -10,27 +10,43 @@ import "../../../dao-core/contracts/src/Doug.sol";
 contract MintedCurrency is DougEnabled {
 
     /*
-        Event: CoinsMinted
-
-        Can be fired when coins are minted.
+        Event: Mint
 
         Params:
             receiver (address) - The receiver.
             amount (uint) - The amount.
+            error (uint16) - An error code.
     */
-    event CoinsMinted(address indexed receiver, uint indexed amount);
+    event Mint(address indexed receiver, uint indexed amount, uint16 indexed error);
 
     /*
         Event: CoinsTransferred
-
-        Can be fired when coins are transferred between accounts.
 
         Params:
             sender (address) - The sender.
             receiver (address) - The receiver.
             amount (uint) - The amount.
+            error (uint16) - An error code.
     */
-    event CoinsTransferred(address indexed sender, address indexed receiver, uint indexed amount);
+    event Send(address indexed sender, address indexed receiver, uint indexed amount, uint16 error);
+
+    /*
+        Event: SetCurrencyDatabase
+
+        Params:
+            dbAddr (address) - The address.
+            error (uint16) - An error code.
+    */
+    event SetCurrencyDatabase(address indexed dbAddr, uint16 indexed error);
+
+    /*
+        Event: SetMinter
+
+        Params:
+            minter (address) - The new minter address.
+            error (uint16) - An error code.
+    */
+    event SetMinter(address indexed minter, uint16 indexed error);
 
     /*
         Function: mint

@@ -34,8 +34,11 @@ contract SelfRegUserRegistry is AbstractUserRegistry {
     */
     function registerSelf(bytes32 nickname, bytes32 dataHash) returns (uint16 error) {
         if (nickname == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        return _userDatabase.registerUser(msg.sender, nickname, block.timestamp, dataHash);
+            error = NULL_PARAM_NOT_ALLOWED;
+        else
+            error = _userDatabase.registerUser(msg.sender, nickname, block.timestamp, dataHash);
+
+        RegisterUser(msg.sender, nickname, dataHash, error);
     }
 
 }

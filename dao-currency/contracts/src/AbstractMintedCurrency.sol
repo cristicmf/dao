@@ -1,4 +1,3 @@
-import "../../../dao-stl/contracts/src/errors/Errors.sol";
 import "../../../dao-core/contracts/src/Doug.sol";
 import "./MintedCurrency.sol";
 import "./CurrencyDatabase.sol";
@@ -10,7 +9,7 @@ import "./CurrencyDatabase.sol";
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
-contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled, Errors {
+contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled {
 
     address _minter;
     CurrencyDatabase _currencyDatabase;
@@ -38,10 +37,14 @@ contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled, Errors {
             error (uint16) - An error code.
     */
     function setMinter(address minter) returns (uint16 error) {
-        // TODO null check.
-        if (msg.sender != _minter)
-            return ACCESS_DENIED;
-        _minter = minter;
+        if (minter == 0)
+            error = NULL_PARAM_NOT_ALLOWED;
+        else if (msg.sender != _minter)
+            error = ACCESS_DENIED;
+        else
+            _minter = minter;
+
+        SetMinter(minter, error);
     }
 
     /*
@@ -69,8 +72,11 @@ contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled, Errors {
     */
     function setCurrencyDatabase(address dbAddr) returns (uint16 error) {
         if (msg.sender != _minter)
-            return ACCESS_DENIED;
-        _currencyDatabase = CurrencyDatabase(dbAddr);
+            error = ACCESS_DENIED;
+        else
+            _currencyDatabase = CurrencyDatabase(dbAddr);
+
+        SetCurrencyDatabase(dbAddr, error);
     }
 
     /*

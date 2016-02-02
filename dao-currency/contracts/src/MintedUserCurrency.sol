@@ -13,6 +13,15 @@ import "./CurrencyDatabase.sol";
 */
 contract MintedUserCurrency is AbstractMintedCurrency {
 
+    /*
+        Event: SetUserDatabase
+
+        Params:
+            dbAddr (address) - The address.
+            error (uint16) - An error code.
+    */
+    event SetUserDatabase(address indexed dbAddr, uint16 indexed error);
+
     UserDatabase _userDatabase;
 
     /*
@@ -44,14 +53,15 @@ contract MintedUserCurrency is AbstractMintedCurrency {
     */
     function mint(address receiver, uint amount) returns (uint16 error) {
         if (receiver == 0 || amount == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        if (msg.sender != _minter)
-            return ACCESS_DENIED;
-        if (!_userDatabase.hasUser(receiver))
-            return RESOURCE_NOT_FOUND;
-        error = _currencyDatabase.add(receiver, int(amount));
-        if (error == NO_ERROR)
-            CoinsMinted(receiver, amount);
+            error = NULL_PARAM_NOT_ALLOWED;
+        else if (msg.sender != _minter)
+            error = ACCESS_DENIED;
+        else if (!_userDatabase.hasUser(receiver))
+            error = RESOURCE_NOT_FOUND;
+        else
+            error = _currencyDatabase.add(receiver, int(amount));
+
+        Mint(receiver, amount, error);
     }
 
     /*
@@ -70,13 +80,16 @@ contract MintedUserCurrency is AbstractMintedCurrency {
     */
     function send(address receiver, uint amount) returns (uint16 error) {
         if (receiver == 0 || amount == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        var (u1, u2) = _userDatabase.hasUsers(msg.sender, receiver);
-        if (!(u1 && u2))
-            return RESOURCE_NOT_FOUND;
-        error = _currencyDatabase.send(msg.sender, receiver, amount);
-        if (error == NO_ERROR)
-            CoinsTransferred(msg.sender, receiver, amount);
+            error =  NULL_PARAM_NOT_ALLOWED;
+        else {
+            var (u1, u2) = _userDatabase.hasUsers(msg.sender, receiver);
+            if (!(u1 && u2))
+                error = RESOURCE_NOT_FOUND;
+            else
+                error = _currencyDatabase.send(msg.sender, receiver, amount);
+        }
+
+        Send(msg.sender, receiver, amount, error);
     }
 
     /*
@@ -94,15 +107,18 @@ contract MintedUserCurrency is AbstractMintedCurrency {
     */
     function send(address sender, address receiver, uint amount) returns (uint16 error) {
         if (sender == 0 || receiver == 0 || amount == 0)
-            return NULL_PARAM_NOT_ALLOWED;
-        if (msg.sender != _minter)
-            return ACCESS_DENIED;
-        var (u1, u2) = _userDatabase.hasUsers(msg.sender, receiver);
-        if (!(u1 && u2))
-            return RESOURCE_NOT_FOUND;
-        error = _currencyDatabase.send(msg.sender, receiver, amount);
-        if (error == NO_ERROR)
-            CoinsTransferred(sender, receiver, amount);
+            error = NULL_PARAM_NOT_ALLOWED;
+        else if (msg.sender != _minter)
+            error = ACCESS_DENIED;
+        else {
+            var (u1, u2) = _userDatabase.hasUsers(msg.sender, receiver);
+            if (!(u1 && u2))
+                error = RESOURCE_NOT_FOUND;
+            else
+                error = _currencyDatabase.send(msg.sender, receiver, amount);
+        }
+
+        Send(sender, receiver, amount, error);
     }
     
     /*

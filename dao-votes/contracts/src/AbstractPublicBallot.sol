@@ -1,6 +1,6 @@
 import "./PublicBallot.sol";
-import "../../../dao-stl/contracts/src/errors/Errors.sol";
 import "../../../dao-users/contracts/src/UserDatabase.sol";
+import "../../../dao-stl/contracts/src/errors/Errors.sol";
 
 /*
     Contract: AbstractPublicBallot

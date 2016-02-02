@@ -1,8 +1,8 @@
 1.52
 Solidity
-/home/andreas/WebstormProjects/dao/dao-users/contracts/src/SelfRegUserRegistry.sol	1454035516	1	/home/andreas/WebstormProjects/dao/dao-users/contracts/src/SelfRegUserRegistry.sol
-/home/andreas/WebstormProjects/dao/dao-users/contracts/src/UserRegistry.sol	1454178028	1	/home/andreas/WebstormProjects/dao/dao-users/contracts/src/UserRegistry.sol
-/home/andreas/WebstormProjects/dao/dao-users/contracts/src/AdminRegUserRegistry.sol	1454035241	1	/home/andreas/WebstormProjects/dao/dao-users/contracts/src/AdminRegUserRegistry.sol
-/home/andreas/WebstormProjects/dao/dao-users/contracts/src/AbstractUserRegistry.sol	1454171523	1	/home/andreas/WebstormProjects/dao/dao-users/contracts/src/AbstractUserRegistry.sol
-/home/andreas/WebstormProjects/dao/dao-users/contracts/src/DefaultUserDatabase.sol	1454201915	1	/home/andreas/WebstormProjects/dao/dao-users/contracts/src/DefaultUserDatabase.sol
+/home/andreas/WebstormProjects/dao/dao-users/contracts/src/AbstractUserRegistry.sol	1454379289	1	/home/andreas/WebstormProjects/dao/dao-users/contracts/src/AbstractUserRegistry.sol
 /home/andreas/WebstormProjects/dao/dao-users/contracts/src/UserDatabase.sol	1454178028	1	/home/andreas/WebstormProjects/dao/dao-users/contracts/src/UserDatabase.sol
+/home/andreas/WebstormProjects/dao/dao-users/contracts/src/UserRegistry.sol	1454377913	1	/home/andreas/WebstormProjects/dao/dao-users/contracts/src/UserRegistry.sol
+/home/andreas/WebstormProjects/dao/dao-users/contracts/src/DefaultUserDatabase.sol	1454201915	1	/home/andreas/WebstormProjects/dao/dao-users/contracts/src/DefaultUserDatabase.sol
+/home/andreas/WebstormProjects/dao/dao-users/contracts/src/AdminRegUserRegistry.sol	1454378081	1	/home/andreas/WebstormProjects/dao/dao-users/contracts/src/AdminRegUserRegistry.sol
+/home/andreas/WebstormProjects/dao/dao-users/contracts/src/SelfRegUserRegistry.sol	1454378081	1	/home/andreas/WebstormProjects/dao/dao-users/contracts/src/SelfRegUserRegistry.sol

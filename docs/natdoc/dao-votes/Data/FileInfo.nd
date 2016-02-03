@@ -1,7 +1,10 @@
 1.52
 Solidity
-/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/PublicBallot.sol	1454380699	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/PublicBallot.sol
-/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicCurrency.sol	1454380699	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicCurrency.sol
-/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/BallotMap.sol	1454301161	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/BallotMap.sol
-/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicMintingBallot.sol	1454306821	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicMintingBallot.sol
-/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/AbstractPublicBallot.sol	1454380775	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/AbstractPublicBallot.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicMintingBallot.sol	1454394754	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicMintingBallot.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/PublicBallot.sol	1454465812	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/PublicBallot.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/BallotMap.sol	1454394917	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/BallotMap.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicDurationBallot.sol	1454396667	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicDurationBallot.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicCurrency.sol	1454466094	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicCurrency.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicKeepDurationBallot.sol	1454439305	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicKeepDurationBallot.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicQuorumBallot.sol	1454396690	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/currency/PublicQuorumBallot.sol
+/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/AbstractPublicBallot.sol	1454465744	1	/home/andreas/WebstormProjects/dao/dao-votes/contracts/src/AbstractPublicBallot.sol

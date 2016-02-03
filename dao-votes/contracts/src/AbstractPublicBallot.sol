@@ -13,7 +13,7 @@ import "../../../dao-stl/contracts/src/errors/Errors.sol";
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
-contract AbstractPublicBallot is PublicBallot, Errors {
+contract AbstractPublicBallot is PublicBallot,  Errors {
 
     /*
         Struct: Element
@@ -376,6 +376,25 @@ contract AbstractPublicBallot is PublicBallot, Errors {
     */
     function numVotes() constant returns (uint numVotes){
         return _votes._keys.length;
+    }
+
+    /*
+        Function: destroy
+
+        Destroy a contract. No return values since it's a destruction. Calls 'selfdestruct'
+        on the contract if successful. Can only be called by the creator of the ballot.
+        Fires off a <Destroy> event.
+
+        Params:
+            fundReceiver (address) - The account that receives the funds.
+    */
+    function destroy(address fundReceiver) {
+        if (msg.sender == _registry) {
+            Destroy(fundReceiver, this.balance, NO_ERROR);
+            selfdestruct(fundReceiver);
+        }
+        else
+            Destroy(fundReceiver, 0, ACCESS_DENIED);
     }
 
 }

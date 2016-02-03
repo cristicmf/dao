@@ -7,28 +7,27 @@ contract DefaultDougEnabledTest is DaoAsserter {
 
     function testSetDougSuccess() {
         var dds = new DefaultDougSettable(0);
-        var result = dds.setDougAddress(TEST_ADDRESS);
-        assertTrue(result, "setDougAddress returned false");
+        var ret = dds.setDougAddress(TEST_ADDRESS);
+        assertAddressesEqual(ret, TEST_ADDRESS, "setDougAddress returned false");
         assertAddressesEqual(dds.dougAddress(), TEST_ADDRESS, "dougAddress returns wrong address.");
     }
 
     function testSetDougFailNullArgument() {
         var dds = new DefaultDougSettable(0);
-        var result = dds.setDougAddress(0);
-        assertFalse(result, "setDougAddress returned true");
+        var ret = dds.setDougAddress(0);
+        assertAddressZero(ret, "setDougAddress returned wrong value");
     }
 
     function testSetDougFailAlreadySet() {
-        var dds = new DefaultDougSettable(TEST_ADDRESS_2);
-        var result = dds.setDougAddress(TEST_ADDRESS);
-        assertFalse(result, "setDougAddress returned true");
-        assertAddressesEqual(dds.dougAddress(), TEST_ADDRESS_2, "dougAddress returns wrong address.");
+        var dds = new DefaultDougSettable(TEST_ADDRESS);
+        var ret = dds.setDougAddress(TEST_ADDRESS_2);
+        assertAddressesEqual(ret, TEST_ADDRESS, "setDougAddress returned wrong value");
     }
 
     function testSetDougSuccessDougIsCaller() {
         var dds = new DefaultDougSettable(address(this));
-        var result = dds.setDougAddress(TEST_ADDRESS);
-        assertTrue(result, "setDougAddress returned false");
+        var ret = dds.setDougAddress(TEST_ADDRESS);
+        assertAddressesEqual(ret, TEST_ADDRESS, "setDougAddress returned false");
         assertAddressesEqual(dds.dougAddress(), TEST_ADDRESS, "dougAddress returns wrong address.");
     }
 

@@ -1,50 +1,52 @@
 var async = require('async');
+var util = require('util');
 
-function AddressSetDb(contract, gas) {
-    this.eth = contract._eth;
-    this.contract = contract;
-    this.gas = gas;
+var ContractService = require('../../../script/contract_service');
+
+function AddressSetDb(web3, contract, gas) {
+    ContractService.call(this, web3, contract, gas);
 }
+
+util.inherits(AddressSetDb, ContractService);
 
 AddressSetDb.prototype.addAddress = function (address, cb) {
     var that = this;
-    this.contract.removeAddress(address, {gas: this.gas}, function(error, txHash){
+    this._contract.addAddress(address, {gas: this._gas}, function(error, txHash){
         if(error) return cb(error);
-        that.waitFor('AddAddress', txHash, function(error, data){
-            if(error) return cb(error);
-            cb(null, args.added);
-        })
+        that.waitForArgs('AddAddress', txHash, cb);
     });
 };
 
 AddressSetDb.prototype.removeAddress = function (address, cb) {
     var that = this;
-    this.contract.removeAddress(address, {gas: this.gas}, function(error, txHash){
+    this._contract.removeAddress(address, {gas: this._gas}, function(error, txHash){
         if(error) return cb(error);
-        that.waitFor('RemoveAddress', txHash, function(error, data){
-            if(error) return cb(error);
-            cb(null, args.removed);
-        })
+        that.waitForArgs('RemoveAddress', txHash, cb);
     });
 };
 
 AddressSetDb.prototype.hasAddress = function (address, cb) {
-    this.contract.hasAddress(address, cb);
+    this._contract.hasAddress(address, cb);
 };
 
 AddressSetDb.prototype.addressFromIndex = function (index, cb) {
-    this.contract.addressFromIndex(index, cb);
+    this._contract.addressFromIndex(index, function(err, ret) {
+        if (err) return cb(err);
+        var addr = ret[0];
+        var exists = ret[1];
+        cb(null, addr, exists);
+    })
 };
 
 AddressSetDb.prototype.numAddresses = function (cb) {
-    this.contract.numAddresses(cb);
+    this._contract.numAddresses(cb);
 };
 
 AddressSetDb.prototype.values = function(cb){
 
     var that = this;
 
-    this.contract.numAddresses(function(error, num){
+    this._contract.numAddresses(function(error, num){
         if (error) return cb(error);
         var size = num.toNumber();
         var addresses = [];
@@ -54,10 +56,13 @@ AddressSetDb.prototype.values = function(cb){
                 return i < size;
             },
             function (cb) {
-                that.contract.addressFromIndex(i, function(error, address){
-                    addresses.push(address);
+                that.addressFromIndex(i, function(error, address, exists){
+                    if(error) return cb(error);
+                    if(exists) {
+                        addresses.push(address);
+                    }
                     i++;
-                    cb(error);
+                    cb();
                 });
             },
             function (err) {
@@ -67,26 +72,6 @@ AddressSetDb.prototype.values = function(cb){
 
     });
 
-};
-
-AddressSetDb.prototype.waitFor = function(eventName, hash, cb) {
-    var event;
-    try {
-        event = this.contract['']();
-    } catch (error) {
-        return cb(error);
-    }
-
-    event.watch(function(error, data){
-        if(hash === data.transactionHash) {
-            if (timeout) clearTimeout(timeout);
-            event.stopWatching();
-            cb(null, data.args);
-
-        }
-    });
-
-    var timeout = setTimeout(function(){event.stopWatching();} , 120000);
 };
 
 module.exports = AddressSetDb;

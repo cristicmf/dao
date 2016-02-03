@@ -374,13 +374,16 @@ contract PublicCurrency is BallotMap, MintedUserCurrency {
             if (ballotType == 0)
                 error = RESOURCE_NOT_FOUND;
             else {
-                var concluded = PublicBallot(ballotAddress).concluded();
+                var ballot = PublicBallot(ballotAddress);
+                var concluded = ballot.concluded();
                 if (block.timestamp < concluded + _keepDuration)
                     error = INVALID_STATE;
                 else {
                     var (, removed) = _remove(ballotAddress);
                     if (!removed)
                         error = RESOURCE_NOT_FOUND;
+                    else
+                        ballot.destroy(msg.sender);
                 }
             }
         }

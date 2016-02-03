@@ -14,6 +14,7 @@ NOTE: Ethereum is still experimental, and so is this code. Using this on a chain
 - [Dependencies and Tools](#dependencies-and-tools)
 - [Building, Testing and Documentation](#btd)
 - [Structure](#structure)
+- [Javascript Utilities](#javascript-utilities)
 - [DAO framework?](#dao-framework)
 - [Troubleshooting](#troubleshooting)
 - [Business](#business)
@@ -82,6 +83,32 @@ These are the different parts of the framework.
 **Utilities**
 
 - [dao-stl](https://github.com/smartcontractproduction/dao/blob/master/dao-stl/README.md) - shared, standard contracts.
+
+## Javascript Utilities
+
+There are a number of utilities that comes with this library, even though it is a contracts-only library.
+
+Getting these utilities documented and properly tested is part of the `0.2.0` milestone.
+
+#### Deployer
+
+`Deployer` is in the script folder. It can deploy contracts, and keeps records of the contracts it deploys. It also automatically links contracts with libraries, provided those libraries can be found in the same folder as the contracts (.bin and .abi files).
+ 
+#### ContractService
+
+`ContractService` is a base class for contract services, which is wrappers for web3 contracts. The wrappers does any extra conversion that's needed, for example `bytes32` <-> ASCII, timestamps to Date objects, and such. It can be found in the scripts folder as well.
+
+Contract services also use solidity events to hold transactions until the event is fired. This is the most secure way of dealing with return values from non-constant functions in Ethereum, because the events are specific to not only the contract in question and the event type, but the hash of the transaction as well. This in combination with the contract systems of events and error codes makes it possible to see exactly what the result of a transaction were, and to know when it was processed.
+  
+Sometimes it is smart to do some calls to check the state of a contract before trying a costly transaction. If that is the case, then those functions can be added to the service as well and run before the actual transaction.
+  
+#### Errors
+ 
+`Errors` is in the script folder, and can be used to convert error codes (numbers) to the name that is used in the errors contract in `dao-stl`, e.g. `error(2000) = 'ACCESS_DENIED'`. Good for logging and such.
+
+#### Module specific utilities
+
+If a module has its own specific utilities, then it is found in the script-folder of the module, e.g. `dao-core/scripts`. They can contain contract services for the solidity contracts, deployment scripts, small utilities, and tests.
 
 ## DAO framework
 

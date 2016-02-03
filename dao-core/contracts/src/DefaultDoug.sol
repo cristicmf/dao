@@ -418,10 +418,11 @@ contract DefaultDoug is Doug, Errors {
             return;
         }
 
-        bool sda = DougEnabled(contractAddress).setDougAddress(this);
+        // TODO try-catch later.
+        address sda = DougEnabled(contractAddress).setDougAddress(this);
 
         // If failing the doug-address check - break.
-        if (!sda) {
+        if (sda != address(this)) {
             // Come up with something better here.
             error = PARAMETER_ERROR;
             return;
@@ -468,7 +469,8 @@ contract DefaultDoug is Doug, Errors {
             error = ARRAY_INDEX_OUT_OF_BOUNDS;
             return;
         }
-        return (map._keys[index], map._data[identifier].value, NO_ERROR);
+        var id = map._keys[index];
+        return (id, map._data[id].value, NO_ERROR);
     }
 
     // Check if the caller has doug permissions.

@@ -2,7 +2,7 @@ var fs = require('fs-extra');
 var path = require('path');
 var async = require('async');
 
-var Deployer = require('../../../script/deployment/deployer.js');
+var Deployer = require('../../../script/deployer.js');
 var AddressSetDb = require('./admin_reg_user_registry');
 
 // *****************

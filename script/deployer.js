@@ -7,7 +7,7 @@ var path = require('path');
 
 var DEFAULT_GAS = 3000000;
 
-var DEFAULT_ETH_URL = "http://localhost:8545";
+// var DEFAULT_ETH_URL = "http://localhost:8545";
 
 function Deployer(rootDir, ethURL, gas) {
     this.rootDir = rootDir;
@@ -66,6 +66,41 @@ Deployer.prototype.deploy = function(contract, params, cb){
         cf.new.apply(cf, params);
     });
 
+};
+
+Deployer.prototype.deployOnly = function(contract, params, cb){
+
+    var binPath = path.join(this.rootDir, contract + ".bin");
+    var abiPath = path.join(this.rootDir, contract + ".abi");
+    var c;
+    try {
+        var bytecode = '0x' + fs.readFileSync(binPath).toString();
+        var abi = fs.readJsonSync(abiPath);
+        c = {bytecode: bytecode, abi: abi};
+    } catch (err) {
+        return cb("Contract: '" + contract + "' missing binary (.bin) or abi (.abi) file in root dir.");
+    }
+
+    var that = this;
+        console.log("Deploying: " + contract + 'without linking or registering.');
+
+        var cf = that._web3.eth.contract(c.abi);
+
+        if(!params){
+            params = [];
+        }
+
+        var opts = {data: c.bin, gas: that._gas};
+        params.push(opts);
+        params.push(function (err, ctr) {
+            if(err) {
+                cb(err);
+            } else if(ctr.address){
+                console.log("'" + contract + "' deployed at: " + ctr.address);
+                cb(null, ctr);
+            }
+        });
+        cf.new.apply(cf, params);
 };
 
 Deployer.prototype._linkBytecode = function (bytecode, cb) {

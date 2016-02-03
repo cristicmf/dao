@@ -1,12 +1,12 @@
 {
   "name": "dao-framework",
-  "version": "0.1.0",
-  "description": "dao-core",
+  "version": "0.1.1",
+  "description": "dao-framework",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smartcontractproduction/dao.git"
   },
-  "author": "Andreas Olofsson",
+  "author": "Andreas Olofsson (androlo1980@gmail.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/smartcontractproduction/dao/issues"

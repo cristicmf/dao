@@ -20,7 +20,7 @@ contract Destructible {
             value (uint) - The value of the contract account.
             error (uint16) - An error code.
     */
-    event Destroy(address indexed fundReceiver, uint value, uint16 indexed error);
+    event Destroy(address indexed fundReceiver, uint indexed value, uint16 indexed error);
 
     /*
         Function: destroy
@@ -45,19 +45,19 @@ contract Destructible {
 */
 contract DougEnabled is Destructible {
 
+    // TODO use try-catch in Doug instead, when that is added.
     /*
         Function: setDougAddress
 
-        Set the address of the Doug contract.
+        Set the address of the Doug contract. Will fail if address is already set, or if input address is null.
 
         Params:
             dougAddr (address) - The Doug-address.
 
         Returns:
-            added (bool) - True means the address was added successfully. Doug implementations
-                should normally not register a contract that returns false.
+            doug (address) - An address. 0 means null param, doug != dougAddr means some other doug address is in use.
     */
-    function setDougAddress(address dougAddr) returns (bool result);
+    function setDougAddress(address dougAddr) returns (address doug);
 
     /*
         Function: dougAddress
@@ -421,17 +421,17 @@ contract DefaultDougEnabled is DougEnabled, Errors {
             dougAddr (address) - The Doug-address.
 
         Returns:
-            added (bool) - True means the address was set successfully.
+            doug (address) - An address. 0 means null param, doug != dougAddr means some other doug address is in use.
     */
-    function setDougAddress(address dougAddr) returns (bool result) {
+    function setDougAddress(address dougAddr) returns (address doug) {
         // If dougAddr is zero.
         if (dougAddr == 0)
-            return false;
+            return;
         // If Doug is set, only change it if the caller is the current Doug.
         if(address(_DOUG) != 0x0 && address(_DOUG) != msg.sender)
-            return false;
+            return address(_DOUG);
         _DOUG = Doug(dougAddr);
-        return true;
+        return dougAddr;
     }
 
     /*

@@ -58,7 +58,7 @@ contract MockUserDatabase is UserDatabase {
         return _size;
     }
 
-    function setDougAddress(address dougAddr) returns (bool result) {}
+    function setDougAddress(address dougAddr) returns (address result) {}
 
     function dougAddress() constant returns (address dougAddress) {
         return MOCK_RETURN;

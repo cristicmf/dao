@@ -48,6 +48,18 @@ An iterable map that can be extended by ballot manager contracts.
 
 A public ballot contract that will call a `mint` function on a given contract if the vote succeeds. The `mint` function is part of the `MintedCurrency` interface in `dao-currency`.
 
+#### PublicDurationBallot
+
+A public ballot contract that will call a `setDuration` function on a given contract if the vote succeeds. This method is part of the `PubliCurrency` contract, and is used to set the duration of ballots.
+
+#### PublicQuorumBallot
+
+A public ballot contract that will call the `setQuorum` function on a given contract if the vote succeeds. This method is part of the `PubliCurrency` contract, and is used to set the percentage of eligible voters that must vote for a vote to pass.
+
+#### PublicKeepDurationBallot
+
+A public ballot contract that will call the `setKeepDuration` function on a given contract if the vote succeeds. This method is part of the `PubliCurrency` contract, and is used to set how much time must pass from a vote being concluded to when it can be removed.
+
 #### PublicCurrency
 
-A minted user currency that Uses public voting for minting (through `PublicMintingBallot`).
+A minted user currency that Uses public voting for minting, setting vote durations, quorum, and the time before a ballot may be removed from the history.

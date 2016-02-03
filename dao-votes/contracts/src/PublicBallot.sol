@@ -1,3 +1,5 @@
+import "../../../dao-core/contracts/src/Doug.sol";
+
 /*
     Contract: PublicBallot
 
@@ -8,7 +10,7 @@
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
-contract PublicBallot {
+contract PublicBallot is Destructible {
 
     /*
         Enum: State

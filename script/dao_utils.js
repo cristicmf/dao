@@ -29,18 +29,25 @@ function htoa(hex) {
 }
 
 /**
- * ascii-to-hex. Code is taken from the web3.js utility function 'fromAscii'.
+ * ascii-to-hex. Code is taken from the web3.js utility function 'fromAscii'. Max 32 bytes.
  *
  * @param {string} str - The ASCII string.
+ * @param {number} [maxLength] - The maximum length.
  */
-function atoh(str) {
+function atoh(str, maxLength) {
     var hex = "";
+    var ml;
+    if(!maxLength)
+        ml = 32;
+    else
+        ml = maxLength;
+    if (str.length > ml)
+        str = str.slice(0, ml);
     for(var i = 0; i < str.length; i++) {
         var code = str.charCodeAt(i);
         var n = code.toString(16);
         hex += n.length < 2 ? '0' + n : n;
     }
-
     return "0x" + hex;
 }
 

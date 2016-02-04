@@ -1,8 +1,8 @@
-import "../../../dao-stl/contracts/src/assertions/DaoAsserter.sol";
+import "../../../dao-stl/contracts/src/assertions/DaoTest.sol";
 import "../../../dao-core/contracts/test/MockDatabaseDoug.sol";
 import "../src/DefaultCurrencyDatabase.sol";
 
-contract DefaultCurrencyDatabaseTest is DaoAsserter {
+contract DefaultCurrencyDatabaseTest is DaoTest {
 
     address constant TEST_ADDRESS = 0x12345;
     address constant TEST_ADDRESS_2 = 0x54321;
@@ -18,11 +18,8 @@ contract DefaultCurrencyDatabaseTest is DaoAsserter {
         var cdb = new DefaultCurrencyDatabase();
         cdb.setDougAddress(address(mdd));
 
-        var err = cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT);
-        assertNoError(err, "add returned error");
-
-        var ab = cdb.accountBalance(TEST_ADDRESS);
-        assertUintsEqual(ab, uint(TEST_ADD_AMOUNT), "accountBalance returns the wrong balance.");
+        cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT).assertNoError("add returned error");
+        cdb.accountBalance(TEST_ADDRESS).assertEqual(uint(TEST_ADD_AMOUNT), "accountBalance returns the wrong balance.");
     }
 
     function testAddFailNotActions(){
@@ -30,11 +27,8 @@ contract DefaultCurrencyDatabaseTest is DaoAsserter {
         var cdb = new DefaultCurrencyDatabase();
         cdb.setDougAddress(address(mdd));
 
-        var err = cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT);
-        assertErrorsEqual(err, ACCESS_DENIED, "add returned no 'access denied' error");
-
-        var ab = cdb.accountBalance(TEST_ADDRESS);
-        assertUintZero(ab, "accountBalance is not 0.");
+        cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT).assertErrorsEqual(ACCESS_DENIED, "add returned no 'access denied' error");
+        cdb.accountBalance(TEST_ADDRESS).assertZero("accountBalance is not 0.");
     }
 
     function testAddFailRemoveMoreThenCurrentBalance(){
@@ -42,11 +36,8 @@ contract DefaultCurrencyDatabaseTest is DaoAsserter {
         var cdb = new DefaultCurrencyDatabase();
         cdb.setDougAddress(address(mdd));
 
-        var err = cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT_NEG);
-        assertErrorsEqual(err, TRANSFER_FAILED, "add returned no 'transfer failed' error");
-
-        var ab = cdb.accountBalance(TEST_ADDRESS);
-        assertUintZero(ab, "accountBalance is not 0.");
+        cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT_NEG).assertErrorsEqual(TRANSFER_FAILED, "add returned no 'transfer failed' error");
+        cdb.accountBalance(TEST_ADDRESS).assertZero("accountBalance is not 0.");
     }
 
     function testSendSuccess(){
@@ -54,17 +45,11 @@ contract DefaultCurrencyDatabaseTest is DaoAsserter {
         var cdb = new DefaultCurrencyDatabase();
         cdb.setDougAddress(address(mdd));
 
-        var err = cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT);
-        assertNoError(err, "add returned error");
-
-        err = cdb.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_SEND_AMOUNT);
-        assertNoError(err, "send returned error");
-
-        var ab = cdb.accountBalance(TEST_ADDRESS);
-        assertUintsEqual(ab, uint(TEST_ADD_AMOUNT) - TEST_SEND_AMOUNT, "accountBalance returns the wrong balance for sender.");
-
-        ab = cdb.accountBalance(TEST_ADDRESS_2);
-        assertUintsEqual(ab, uint(TEST_SEND_AMOUNT), "accountBalance returns the wrong balance for receiver.");
+        cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT).assertNoError("add returned error");
+        cdb.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_SEND_AMOUNT).assertNoError("send returned error");
+        cdb.accountBalance(TEST_ADDRESS).assertEqual(uint(TEST_ADD_AMOUNT) - TEST_SEND_AMOUNT,
+            "accountBalance returns the wrong balance for sender.");
+        cdb.accountBalance(TEST_ADDRESS_2).assertEqual(uint(TEST_SEND_AMOUNT), "accountBalance returns the wrong balance for receiver.");
     }
 
     function testSendFailNotActions(){
@@ -72,11 +57,8 @@ contract DefaultCurrencyDatabaseTest is DaoAsserter {
         var cdb = new DefaultCurrencyDatabase();
         cdb.setDougAddress(address(mdd));
 
-        var err = cdb.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_SEND_AMOUNT);
-        assertErrorsEqual(err, ACCESS_DENIED, "send returned no 'access denied' error");
-
-        var ab = cdb.accountBalance(TEST_ADDRESS);
-        assertUintZero(ab, "accountBalance is not 0.");
+        cdb.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_SEND_AMOUNT).assertErrorsEqual(ACCESS_DENIED, "send returned no 'access denied' error");
+        cdb.accountBalance(TEST_ADDRESS).assertZero("accountBalance is not 0.");
     }
 
     function testSendFailNotEnoughFunds(){
@@ -84,11 +66,10 @@ contract DefaultCurrencyDatabaseTest is DaoAsserter {
         var cdb = new DefaultCurrencyDatabase();
         cdb.setDougAddress(address(mdd));
 
-        var err = cdb.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_SEND_AMOUNT);
-        assertErrorsEqual(err, INSUFFICIENT_SENDER_BALANCE, "send returned no 'insufficient sender balance' error");
+        cdb.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_SEND_AMOUNT).assertErrorsEqual(INSUFFICIENT_SENDER_BALANCE,
+            "send returned no 'insufficient sender balance' error");
 
-        var ab = cdb.accountBalance(TEST_ADDRESS_2);
-        assertUintZero(ab, "accountBalance is not 0 for receiver.");
+        cdb.accountBalance(TEST_ADDRESS_2).assertZero("accountBalance is not 0 for receiver.");
     }
 
 

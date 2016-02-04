@@ -1,4 +1,4 @@
-import "../../../dao-stl/contracts/src/assertions/DaoAsserter.sol";
+import "../../../dao-stl/contracts/src/assertions/DaoTest.sol";
 import "../src/AbstractMintedCurrency.sol";
 
 contract AbstractMintedCurrencyImpl is AbstractMintedCurrency {
@@ -14,46 +14,44 @@ contract AbstractMintedCurrencyImpl is AbstractMintedCurrency {
 
 }
 
-contract AbstractMintedCurrencyTest is DaoAsserter {
+contract AbstractMintedCurrencyTest is DaoTest {
 
     address constant TEST_ADDRESS = 0x12345;
     address constant TEST_ADDRESS_2 = 0x54321;
 
     function testSetMinterSuccess() {
         var amci = new AbstractMintedCurrencyImpl(0, this);
-        var err = amci.setMinter(TEST_ADDRESS);
-        assertNoError(err, "setMinter returned error");
-        assertAddressesEqual(amci.minter(), TEST_ADDRESS, "minter returns the wrong address");
+
+        amci.setMinter(TEST_ADDRESS).assertNoError("setMinter returned error");
+        amci.minter().assertEqual(TEST_ADDRESS, "minter returns the wrong address");
     }
 
     function testSetMinterFailMinterNull() {
         var amci = new AbstractMintedCurrencyImpl(0, TEST_ADDRESS);
-        var err = amci.setMinter(0);
-        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "setMinter returned no 'null param' error");
-        assertAddressesEqual(amci.minter(), TEST_ADDRESS, "minter returns the wrong address");
+
+        amci.setMinter(0).assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "setMinter returned no 'null param' error");
+        amci.minter().assertEqual(TEST_ADDRESS, "minter returns the wrong address");
     }
 
     function testSetMinterFailAccessDenied() {
         var amci = new AbstractMintedCurrencyImpl(0, TEST_ADDRESS);
-        var err = amci.setMinter(TEST_ADDRESS_2);
-        assertErrorsEqual(err, ACCESS_DENIED, "setMinter returned no 'access denied' error");
-        assertAddressesEqual(amci.minter(), TEST_ADDRESS, "minter returns the wrong address");
+
+        amci.setMinter(TEST_ADDRESS_2).assertErrorsEqual(ACCESS_DENIED, "setMinter returned no 'access denied' error");
+        amci.minter().assertEqual(TEST_ADDRESS, "minter returns the wrong address");
     }
 
     function testSetCurrencyDatabaseSuccess() {
         var amci = new AbstractMintedCurrencyImpl(0, this);
-        var err = amci.setCurrencyDatabase(TEST_ADDRESS);
-        assertNoError(err, "setCurrencyDatabase returned an error");
-        var cd = amci.currencyDatabase();
-        assertAddressesEqual(cd, TEST_ADDRESS, "currencyDatabase returns the wrong address");
+
+        amci.setCurrencyDatabase(TEST_ADDRESS).assertNoError("setCurrencyDatabase returned an error");
+        amci.currencyDatabase().assertEqual(TEST_ADDRESS, "currencyDatabase returns the wrong address");
     }
 
     function testSetCurrencyDatabaseFailNotMinter() {
         var amci = new AbstractMintedCurrencyImpl(TEST_ADDRESS, TEST_ADDRESS_2);
-        var err = amci.setCurrencyDatabase(this);
-        assertErrorsEqual(err, ACCESS_DENIED, "setCurrencyDatabase did not return 'access denied' error");
-        var cd = amci.currencyDatabase();
-        assertAddressesEqual(cd, TEST_ADDRESS, "currencyDatabase returns the wrong address");
+
+        amci.setCurrencyDatabase(this).assertErrorsEqual(ACCESS_DENIED, "setCurrencyDatabase did not return 'access denied' error");
+        amci.currencyDatabase().assertEqual(TEST_ADDRESS, "currencyDatabase returns the wrong address");
     }
 
 

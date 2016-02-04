@@ -83,8 +83,9 @@ library Assertions {
         Returns:
             result (bool) - The result.
     */
-    function assertEqual(string A, string B) constant returns (bool result) {
+    function assertEqual(string A, string B, string message) constant returns (bool result) {
         result = _stringsEqual(A, B);
+        _report(result, message);
     }
 
     /*
@@ -106,6 +107,7 @@ library Assertions {
         result = !_stringsEqual(A, B);
         _report(result, message);
     }
+
 
     /*
         Function: assertEmpty(string)
@@ -305,46 +307,6 @@ library Assertions {
     }
 
     // ************************************** bool **************************************
-
-    /*
-        Function: assertBoolsEqual
-
-        Assert that two booleans are equal.
-
-        : A == B
-
-        Params:
-            A (bool) - The first boolean.
-            B (bool) - The second boolean.
-            message (string) - A message that is sent if the assertion fails.
-
-        Returns:
-            result (bool) - The result.
-    */
-    function assertBoolsEqual(bool A, bool B, string message) constant returns (bool result) {
-        result = (A == B);
-        _report(result, message);
-    }
-
-    /*
-        Function: assertBoolsNotEqual
-
-        Assert that two booleans are not equal.
-
-        : A != B
-
-        Params:
-            A (bool) - The first boolean.
-            B (bool) - The second boolean.
-            message (string) - A message that is sent if the assertion fails.
-
-        Returns:
-            result (bool) - The result.
-    */
-    function assertBoolsNotEqual(bool A, bool B, string message) constant returns (bool result) {
-        result = (A != B);
-        _report(result, message);
-    }
 
     /*
         Function: assertTrue

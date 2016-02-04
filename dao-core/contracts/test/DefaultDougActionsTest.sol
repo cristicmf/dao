@@ -1,6 +1,6 @@
 import "./DougBase.sol";
 
-contract DefaultDougActionsTest is DaoAsserter {
+contract DefaultDougActionsTest is DaoTest {
 
     address constant TEST_ADDRESS = 0x12345;
 
@@ -11,33 +11,33 @@ contract DefaultDougActionsTest is DaoAsserter {
     function testAddActionsContract() {
         DefaultDoug doug = new DefaultDoug(new MockPermission(true), false, false);
         var mc = new MockContract();
-        var err = doug.addActionsContract(TEST_BYTES32, address(mc));
-        assertNoError(err, "addActionsContract returned error.");
+        var err = doug.addActionsContract(TEST_BYTES32, mc);
+        err.assertNoError("addActionsContract returned error.");
         var cAddr = doug.actionsContractAddress(TEST_BYTES32);
-        assertAddressesEqual(cAddr, address(mc), "actionsContractAddress returned the wrong address.");
+        cAddr.assertEqual(mc, "actionsContractAddress returned the wrong address.");
         var (id, addr, errId) = doug.actionsContractFromIndex(0);
-        assertBytes32Equal(id, TEST_BYTES32, "actionsContractAddress returned the wrong Id.");
-        assertNoError(errId, "actionsContractFromIndex returned error.");
-        assertBytes32Equal(doug.actionsContractId(address(mc)), TEST_BYTES32, "actionsContractId returned the wrong Id.");
-        assertUintsEqual(doug.numActionsContracts(), 1, "size of actions contracts map is not 1");
+        id.assertEqual(TEST_BYTES32, "actionsContractAddress returned the wrong Id.");
+        errId.assertNoError("actionsContractFromIndex returned error.");
+        doug.actionsContractId(mc).assertEqual(TEST_BYTES32, "actionsContractId returned the wrong Id.");
+        doug.numActionsContracts().assertEqual(1, "size of actions contracts map is not 1");
     }
 
     function testAddActionsContractFailNotRoot() {
         DefaultDoug doug = new DefaultDoug(new MockPermission(false), false, false);
         var err = doug.addActionsContract(0, 0);
-        assertErrorsEqual(err, ACCESS_DENIED, "addActionsContract did not return 'access denied' error");
+        err.assertErrorsEqual(ACCESS_DENIED, "addActionsContract did not return 'access denied' error");
     }
 
     function testAddActionsContractFailBadId() {
         DefaultDoug doug = new DefaultDoug(new MockPermission(true), false, false);
         var err = doug.addActionsContract(0, TEST_ADDRESS);
-        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "addActionsContract did not return 'null parameter' error");
+        err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "addActionsContract did not return 'null parameter' error");
     }
 
     function testAddActionsContractFailBadAddress() {
         DefaultDoug doug = new DefaultDoug(new MockPermission(true), false, false);
         var err = doug.addActionsContract(TEST_BYTES32, 0);
-        assertErrorsEqual(err, NULL_PARAM_NOT_ALLOWED, "addActionsContract did not return 'null parameter' error");
+        err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "addActionsContract did not return 'null parameter' error");
     }
 
     // TODO
@@ -46,30 +46,30 @@ contract DefaultDougActionsTest is DaoAsserter {
     function testAddActionsContractOverwriteFail() {
         DefaultDoug doug = new DefaultDoug(new MockPermission(true), false, false);
         var mc = new MockContract();
-        doug.addActionsContract(TEST_BYTES32, address(mc));
+        doug.addActionsContract(TEST_BYTES32, mc);
         var mc2 = new MockContract();
         var err = doug.addActionsContract(TEST_BYTES32, address(mc2));
-        assertErrorsEqual(err, RESOURCE_ALREADY_EXISTS, "addActionsContract did not return 'resource exists' error.");
+        err.assertErrorsEqual(RESOURCE_ALREADY_EXISTS, "addActionsContract did not return 'resource exists' error.");
         var addr = doug.actionsContractAddress(TEST_BYTES32);
-        assertAddressesEqual(addr, address(mc), "Address not correct.");
+        addr.assertEqual(mc, "Address not correct.");
     }
 
     function testAddAndRemoveActionsContract() {
         DefaultDoug doug = new DefaultDoug(new MockPermission(true), false, false);
         var mc = new MockContract();
-        var err = doug.addActionsContract(TEST_BYTES32, address(mc));
-        assertNoError(err, "addActionsContract returned error.");
+        var err = doug.addActionsContract(TEST_BYTES32, mc);
+        err.assertNoError("addActionsContract returned error.");
         err = doug.removeActionsContract(TEST_BYTES32);
-        assertNoError(err, "removeActionsContract returned error.");
+        err.assertNoError("removeActionsContract returned error.");
 
-        assertAddressZero(doug.actionsContractAddress(TEST_BYTES32), "actionsContractAddress returned non-zero address.");
-        assertBytes32Zero(doug.actionsContractId(address(mc)), "actionsContractId returned non-zero Id.");
+        doug.actionsContractAddress(TEST_BYTES32).assertZero("actionsContractAddress returned non-zero address.");
+        doug.actionsContractId(mc).assertZero("actionsContractId returned non-zero Id.");
 
         var (id, addr, errId) = doug.actionsContractFromIndex(0);
-        assertBytes32Zero(id, "actionsContractFromIndex returned non-zero Id.");
-        assertAddressZero(addr, "actionsContractFromIndex returned non-zero address.");
-        assertErrorsEqual(errId, ARRAY_INDEX_OUT_OF_BOUNDS, "actionsContractFromIndex did not return 'array index out-of-bounds' error.");
-        assertUintZero(doug.numActionsContracts(), "size of action contracts map is not zero");
+        id.assertZero("actionsContractFromIndex returned non-zero Id.");
+        addr.assertZero("actionsContractFromIndex returned non-zero address.");
+        errId.assertErrorsEqual(ARRAY_INDEX_OUT_OF_BOUNDS, "actionsContractFromIndex did not return 'array index out-of-bounds' error.");
+        doug.numActionsContracts().assertZero("size of action contracts map is not zero");
     }
 
 }

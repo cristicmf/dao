@@ -1,4 +1,4 @@
-import "../../../dao-stl/contracts/src/assertions/DaoAsserter.sol";
+import "../../../dao-stl/contracts/src/assertions/DaoTest.sol";
 import "../src/Doug.sol";
 import "../src/DefaultDoug.sol";
 import "../src/Permission.sol";

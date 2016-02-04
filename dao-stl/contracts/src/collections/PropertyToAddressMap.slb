@@ -19,7 +19,7 @@ library PropertyToAddressMap {
     /*
         Struct: Element
 
-        Element type for the map.
+        Element type for the self.
 
         Members:
 
@@ -49,15 +49,15 @@ library PropertyToAddressMap {
         Add an entry to the map.
 
         Params:
-            map (Map) - Storage reference to the map.
+            self (Map) - Storage reference to the map.
             key (bytes32) - The key.
             value (address) - The value.
 
         Returns:
             oldValue (address) - The old value, if any.
     */
-    function insert(Map storage map, bytes32 key, address value) returns (address oldValue) {
-        (oldValue,) = insert(map, key, value, true);
+    function insert(Map storage self, bytes32 key, address value) returns (address oldValue) {
+        (oldValue,) = insert(self, key, value, true);
     }
 
     /*
@@ -66,7 +66,7 @@ library PropertyToAddressMap {
         Add an entry to the map.
 
         Params:
-            map (Map) - Storage reference to the map.
+            self (Map) - Storage reference to the map.
             key (bytes32) - The key.
             value (address) - The value.
             overwrite (bool) - Whether or not to overwrite existing values.
@@ -75,14 +75,14 @@ library PropertyToAddressMap {
             oldValue (address) - The old value, if any.
             added (bool) - Whether or not the entry was added.
     */
-    function insert(Map storage map, bytes32 key, address value, bool overwrite) returns (address oldValue, bool added) {
-        var exists = map._data[key].value != 0;
+    function insert(Map storage self, bytes32 key, address value, bool overwrite) returns (address oldValue, bool added) {
+        var exists = self._data[key].value != 0;
 
         if (!exists)
-            map._data[key] = Element(map._keys.push(key) - 1, value);
+            self._data[key] = Element(self._keys.push(key) - 1, value);
         else if (overwrite) {
-            oldValue = map._data[key].value;
-            map._data[key].value = value;
+            oldValue = self._data[key].value;
+            self._data[key].value = value;
             added = true;
         }
     }
@@ -93,29 +93,29 @@ library PropertyToAddressMap {
         Remove an entry from the map.
 
         Params:
-            map (Map) - Storage reference to the map.
+            self (Map) - Storage reference to the map.
             key (bytes32) - The key.
 
         Returns:
             address (value) - The value that was removed, if any.
             removed (bool) - 'true' if the entry was removed, 'false' if not.
     */
-    function remove(Map storage map, bytes32 key) returns (address value, bool removed) {
-        var elem = map._data[key];
+    function remove(Map storage self, bytes32 key) returns (address value, bool removed) {
+        var elem = self._data[key];
         value = elem.value;
         var exists = value != 0;
         if (!exists) return;
 
         var keyIndex = elem._keyIndex;
 
-        delete map._data[key];
-        var len = map._keys.length;
+        delete self._data[key];
+        var len = self._keys.length;
         if (keyIndex != len - 1) {
-            var swap = map._keys[len - 1];
-            map._keys[keyIndex] = swap;
-            map._data[swap]._keyIndex = keyIndex;
+            var swap = self._keys[len - 1];
+            self._keys[keyIndex] = swap;
+            self._data[swap]._keyIndex = keyIndex;
         }
-        map._keys.length--;
+        self._keys.length--;
         removed = true;
     }
 
@@ -125,14 +125,14 @@ library PropertyToAddressMap {
         Get a value by key.
 
         Params:
-            map (Map) - Storage reference to the map.
+            self (Map) - Storage reference to the map.
             key (bytes32) - The key.
 
         Returns:
             address (value) - The value.
     */
-    function get(Map storage map, bytes32 key) constant returns (address value) {
-        return map._data[key].value;
+    function get(Map storage self, bytes32 key) constant returns (address value) {
+        return self._data[key].value;
     }
 
     /*
@@ -141,14 +141,14 @@ library PropertyToAddressMap {
         Check if a key exists.
 
         Params:
-            map (Map) - Storage reference to the map.
+            self (Map) - Storage reference to the map.
             key (bytes32) - The key.
 
         Returns:
             has (bool) - 'true' if the key exists, otherwise 'false'.
     */
-    function hasKey(Map storage map, bytes32 key) constant returns (bool has) {
-        return map._data[key].value != 0;
+    function hasKey(Map storage self, bytes32 key) constant returns (bool has) {
+        return self._data[key].value != 0;
     }
 
     /*
@@ -157,18 +157,18 @@ library PropertyToAddressMap {
         Get a key by its index in the backing array. Used when iterating.
 
         Params:
-            map (Map) - Storage reference to the map.
+            self (Map) - Storage reference to the map.
             index (uint) - The index.
 
         Returns:
             key (bytes32) - The key.
             exists (bool) - Whether or not the key exists. 'false' only if 'index' is illegal.
     */
-    function keyFromIndex(Map storage map, uint index) constant returns (bytes32 key, bool exists) {
-        if (index >= map._keys.length)
+    function keyFromIndex(Map storage self, uint index) constant returns (bytes32 key, bool exists) {
+        if (index >= self._keys.length)
             return;
         else
-            return (map._keys[index], true);
+            return (self._keys[index], true);
     }
 
     /*
@@ -177,7 +177,7 @@ library PropertyToAddressMap {
         Get an entry by its index in the backing array. Used when iterating.
 
         Params:
-            map (Map) - Storage reference to the map.
+            self (Map) - Storage reference to the map.
             index (uint) - The index.
 
         Returns:
@@ -185,12 +185,12 @@ library PropertyToAddressMap {
             value (address) - The value.
             exists (bool) - Whether or not the key exists. 'false' only if 'index' is illegal.
     */
-    function entryFromIndex(Map storage map, uint index) constant returns (bytes32 key, address value, bool exists) {
-        if (index >= map._keys.length)
+    function entryFromIndex(Map storage self, uint index) constant returns (bytes32 key, address value, bool exists) {
+        if (index >= self._keys.length)
             return;
         else {
-            var k = map._keys[index];
-            return (k, map._data[k].value, true);
+            var k = self._keys[index];
+            return (k, self._data[k].value, true);
         }
     }
 
@@ -200,13 +200,13 @@ library PropertyToAddressMap {
         Get the size of the map.
 
         Params:
-            map (Map) - Storage reference to the map.
+            self (Map) - Storage reference to the map.
 
         Returns:
             size (uint) - The size.
     */
-    function size(Map storage map) constant returns (uint size) {
-        return map._keys.length;
+    function size(Map storage self) constant returns (uint size) {
+        return self._keys.length;
     }
 
 }

@@ -97,7 +97,8 @@ contract PublicCurrency is BallotMap, MintedUserCurrency {
             userDatabase (address) - The address to the user database.
     */
     function PublicCurrency(address currencyDatabase, address userDatabase)
-            MintedUserCurrency(currencyDatabase, userDatabase, this) {
+        MintedUserCurrency(currencyDatabase, userDatabase, this)
+    {
         _duration = DEFAULT_DURATION;
         _quorum = DEFAULT_QUORUM;
         _keepDuration = 1 years;

@@ -48,15 +48,15 @@ library AddressSet {
         Add a value to the set.
 
         Params:
-            set (Set) - Storage reference to the set.
+            self (Set) - Storage reference to the set.
             val (address) - The value.
 
         Returns:
             added (bool) - 'true' if the bytes32 was added, 'false' if not.
     */
-    function insert(Set storage set, address val) returns (bool added) {
-        if (!set._data[val]._exists) {
-            set._data[val] = Element(set._values.push(val) - 1, true);
+    function insert(Set storage self, address val) returns (bool added) {
+        if (!self._data[val]._exists) {
+            self._data[val] = Element(self._values.push(val) - 1, true);
             return true;
         }
     }
@@ -67,25 +67,25 @@ library AddressSet {
         Remove a value from the set.
 
         Params:
-            set (Set) - Storage reference to the set.
+            self (Set) - Storage reference to the set.
             val (address) - The value.
 
         Returns:
             removed (bool) - 'true' if the bytes32 was removed, 'false' if not.
     */
-    function remove(Set storage set, address val) returns (bool removed) {
-        var elem = set._data[val];
+    function remove(Set storage self, address val) returns (bool removed) {
+        var elem = self._data[val];
         if (!elem._exists) return false;
 
         var valIndex = elem._valIndex;
-        delete set._data[val];
-        var len = set._values.length;
+        delete self._data[val];
+        var len = self._values.length;
         if (valIndex != len - 1) {
-            var swap = set._values[len - 1];
-            set._values[valIndex] = swap;
-            set._data[swap]._valIndex = valIndex;
+            var swap = self._values[len - 1];
+            self._values[valIndex] = swap;
+            self._data[swap]._valIndex = valIndex;
         }
-        set._values.length--;
+        self._values.length--;
         return true;
     }
 
@@ -95,14 +95,14 @@ library AddressSet {
         Check if a value exists.
 
         Params:
-            set (Set) - Storage reference to the set.
+            self (Set) - Storage reference to the set.
             val (address) - The value.
 
         Returns:
             has (bool) 'true' if the value was found, 'false' otherwise.
     */
-    function hasValue(Set storage set, address val) constant returns (bool has) {
-        return set._data[val]._exists;
+    function hasValue(Set storage self, address val) constant returns (bool has) {
+        return self._data[val]._exists;
     }
 
     /*
@@ -111,18 +111,18 @@ library AddressSet {
         Get a value by its index in the backing array.
 
         Params:
-            set (Set) - Storage reference to the set.
+            self (Set) - Storage reference to the set.
             index (uint) - The index.
 
         Returns:
             value (address) - The value.
             exists (bool) 'true' if the value was found, 'false' otherwise. Workaround for when index is out of bounds.
     */
-    function valueFromIndex(Set storage set, uint index) constant returns (address value, bool exists) {
-        if (index >= set._values.length)
+    function valueFromIndex(Set storage self, uint index) constant returns (address value, bool exists) {
+        if (index >= self._values.length)
             return;
         else
-            return (set._values[index], true);
+            return (self._values[index], true);
     }
 
     /*
@@ -131,13 +131,13 @@ library AddressSet {
         Get the size of the set. The size is the number of elements currently stored in the set.
 
         Params:
-            set (Set) - Storage reference to the set.
+            self (Set) - Storage reference to the set.
 
         Returns:
             size (uint) - The size.
     */
-    function size(Set storage set) constant returns (uint size){
-        return set._values.length;
+    function size(Set storage self) constant returns (uint size){
+        return self._values.length;
     }
 
 }

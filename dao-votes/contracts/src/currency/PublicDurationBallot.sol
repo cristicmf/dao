@@ -34,7 +34,8 @@ contract PublicDurationBallot is AbstractPublicBallot {
         uint8 quorum,
         uint numEligibleVoters,
         uint newDuration
-    ) AbstractPublicBallot(
+    )
+        AbstractPublicBallot(
         id,
         userDatabase,
         creator,

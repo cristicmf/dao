@@ -1,5 +1,5 @@
 import "../../src/collections/PropertySet.slb";
-import "../../src/assertions/Asserter.sol";
+import "../../src/assertions/Test.sol";
 
 contract PropertySetDb {
 
@@ -29,7 +29,7 @@ contract PropertySetDb {
 }
 
 
-contract PropertySetTest is Asserter {
+contract PropertySetTest is Test {
 
     bytes32 constant TEST_PROPERTY = 0x12345;
     bytes32 constant TEST_PROPERTY_2 = 0xABCDEF;
@@ -37,41 +37,44 @@ contract PropertySetTest is Asserter {
 
     function testInsert() {
         var psdb = new PropertySetDb();
-        var added = psdb.addProperty(TEST_PROPERTY);
-        assertTrue(added, "addProperty does not return true");
-        assertTrue(psdb.hasProperty(TEST_PROPERTY), "hasProperty does not return true");
+
+        psdb.addProperty(TEST_PROPERTY).assert("addProperty does not return true");
+        psdb.hasProperty(TEST_PROPERTY).assert("hasProperty does not return true");
+
         var (a, e) = psdb.propertyFromIndex(0);
-        assertTrue(e, "propertyFromIndex exist is false");
-        assertBytes32Equal(a, TEST_PROPERTY, "propertyFromIndex returns the wrong address");
+        e.assert("propertyFromIndex exist is false");
+        a.assertEqual(TEST_PROPERTY, "propertyFromIndex returns the wrong address");
     }
 
     function testRemoveProperty() {
         var psdb = new PropertySetDb();
         psdb.addProperty(TEST_PROPERTY);
-        var removed = psdb.removeProperty(TEST_PROPERTY);
-        assertTrue(removed, "removeProperty does not return true");
-        assertFalse(psdb.hasProperty(TEST_PROPERTY), "hasProperty does not return false");
+
+        psdb.removeProperty(TEST_PROPERTY).assert("removeProperty does not return true");
+        psdb.hasProperty(TEST_PROPERTY).assertFalse("hasProperty does not return false");
+
         var (a, e) = psdb.propertyFromIndex(0);
-        assertFalse(e, "propertyFromIndex exist is true");
-        assertBytes32Zero(a, "propertyFromIndex returns non-zero address");
-        assertUintZero(psdb.numProperties(), "size is not zero");
+        e.assertFalse("propertyFromIndex exist is true");
+        a.assertZero("propertyFromIndex returns non-zero address");
+        psdb.numProperties().assertZero("size is not zero");
     }
 
     function testAddTwoBProperties() {
         var psdb = new PropertySetDb();
         psdb.addProperty(TEST_PROPERTY);
-        var added = psdb.addProperty(TEST_PROPERTY_2);
-        assertTrue(added, "addProperty does not return true for second element");
-        assertTrue(psdb.hasProperty(TEST_PROPERTY), "hasProperty does not return true for first element");
-        assertTrue(psdb.hasProperty(TEST_PROPERTY_2), "hasProperty does not return true for second element");
-        var (a, e) = psdb.propertyFromIndex(0);
-        assertTrue(e, "propertyFromIndex exist is false for first element");
-        assertBytes32Equal(a, TEST_PROPERTY, "propertyFromIndex returns the wrong address for first element");
-        (a, e) = psdb.propertyFromIndex(1);
-        assertTrue(e, "propertyFromIndex exist is false for second element");
-        assertBytes32Equal(a, TEST_PROPERTY_2, "propertyFromIndex returns the wrong address for second element");
 
-        assertUintsEqual(psdb.numProperties(), 2, "size is not 2");
+        psdb.addProperty(TEST_PROPERTY_2).assert("addProperty does not return true for second element");
+        psdb.hasProperty(TEST_PROPERTY).assert("hasProperty does not return true for first element");
+        psdb.hasProperty(TEST_PROPERTY_2).assert("hasProperty does not return true for second element");
+
+        var (a, e) = psdb.propertyFromIndex(0);
+        e.assert("propertyFromIndex exist is false for first element");
+        a.assertEqual(TEST_PROPERTY, "propertyFromIndex returns the wrong address for first element");
+        (a, e) = psdb.propertyFromIndex(1);
+        e.assert("propertyFromIndex exist is false for second element");
+        a.assertEqual(TEST_PROPERTY_2, "propertyFromIndex returns the wrong address for second element");
+
+        psdb.numProperties().assertEqual(2, "size is not 2");
     }
 
     function testAddTwoPropertiesRemoveLast() {
@@ -80,17 +83,17 @@ contract PropertySetTest is Asserter {
         psdb.addProperty(TEST_PROPERTY_2);
         psdb.removeProperty(TEST_PROPERTY_2);
 
-        assertTrue(psdb.hasProperty(TEST_PROPERTY), "hasProperty does not return true for first element");
-        assertFalse(psdb.hasProperty(TEST_PROPERTY_2), "hasProperty does not return false for second element");
+        psdb.hasProperty(TEST_PROPERTY).assert("hasProperty does not return true for first element");
+        psdb.hasProperty(TEST_PROPERTY_2).assertFalse("hasProperty does not return false for second element");
 
         var (a, e) = psdb.propertyFromIndex(0);
-        assertTrue(e, "propertyFromIndex exist is false for first element");
-        assertBytes32Equal(a, TEST_PROPERTY, "propertyFromIndex returns the wrong address for first element");
+        e.assert("propertyFromIndex exist is false for first element");
+        a.assertEqual(TEST_PROPERTY, "propertyFromIndex returns the wrong address for first element");
         (a, e) = psdb.propertyFromIndex(1);
-        assertFalse(e, "propertyFromIndex exist is true for second element");
-        assertBytes32Zero(a, "propertyFromIndex returns the wrong address for second element");
+        e.assertFalse("propertyFromIndex exist is true for second element");
+        a.assertZero("propertyFromIndex returns the wrong address for second element");
 
-        assertUintsEqual(psdb.numProperties(), 1, "size is not 1");
+        psdb.numProperties().assertEqual(1, "size is not 1");
     }
 
     function testAddTwoPropertiesRemoveFirst() {
@@ -99,17 +102,17 @@ contract PropertySetTest is Asserter {
         psdb.addProperty(TEST_PROPERTY_2);
         psdb.removeProperty(TEST_PROPERTY);
 
-        assertFalse(psdb.hasProperty(TEST_PROPERTY), "hasProperty does not return false for first element");
-        assertTrue(psdb.hasProperty(TEST_PROPERTY_2), "hasProperty does not return true for second element");
+        psdb.hasProperty(TEST_PROPERTY).assertFalse("hasProperty does not return false for first element");
+        psdb.hasProperty(TEST_PROPERTY_2).assert("hasProperty does not return true for second element");
 
         var (a, e) = psdb.propertyFromIndex(0);
-        assertTrue(e, "propertyFromIndex exist is false for first element");
-        assertBytes32Equal(a, TEST_PROPERTY_2, "propertyFromIndex returns the wrong address for first element");
+        e.assert("propertyFromIndex exist is false for first element");
+        a.assertEqual(TEST_PROPERTY_2, "propertyFromIndex returns the wrong address for first element");
         (a, e) = psdb.propertyFromIndex(1);
-        assertFalse(e, "propertyFromIndex exist is true for second element");
-        assertBytes32Zero(a, "propertyFromIndex returns the wrong address for second element");
+        e.assertFalse("propertyFromIndex exist is true for second element");
+        a.assertZero("propertyFromIndex returns the wrong address for second element");
 
-        assertUintsEqual(psdb.numProperties(), 1, "size is not 1");
+        psdb.numProperties().assertEqual(1, "size is not 1");
     }
 
     function testAddThreePropertiesRemoveMiddle() {
@@ -119,21 +122,21 @@ contract PropertySetTest is Asserter {
         psdb.addProperty(TEST_PROPERTY_3);
         psdb.removeProperty(TEST_PROPERTY_2);
 
-        assertTrue(psdb.hasProperty(TEST_PROPERTY), "hasProperty does not return true for first element");
-        assertFalse(psdb.hasProperty(TEST_PROPERTY_2), "hasProperty does not return false for second element");
-        assertTrue(psdb.hasProperty(TEST_PROPERTY_3), "hasProperty does not return true for third element");
+        psdb.hasProperty(TEST_PROPERTY).assert("hasProperty does not return true for first element");
+        psdb.hasProperty(TEST_PROPERTY_2).assertFalse("hasProperty does not return false for second element");
+        psdb.hasProperty(TEST_PROPERTY_3).assert("hasProperty does not return true for third element");
 
         var (a, e) = psdb.propertyFromIndex(0);
-        assertTrue(e, "propertyFromIndex exist is false for first element");
-        assertBytes32Equal(a, TEST_PROPERTY, "propertyFromIndex returns the wrong address for first element");
+        e.assert("propertyFromIndex exist is false for first element");
+        a.assertEqual(TEST_PROPERTY, "propertyFromIndex returns the wrong address for first element");
 
         (a, e) = psdb.propertyFromIndex(1);
-        assertTrue(e, "propertyFromIndex exist is false for second element");
-        assertBytes32Equal(a, TEST_PROPERTY_3, "propertyFromIndex returns the wrong address for second element");
+        e.assert("propertyFromIndex exist is false for second element");
+        a.assertEqual(TEST_PROPERTY_3, "propertyFromIndex returns the wrong address for second element");
 
         (a, e) = psdb.propertyFromIndex(2);
-        assertFalse(e, "propertyFromIndex exist is true for third element");
-        assertBytes32Zero(a, "propertyFromIndex returns the wrong address for third element");
+        e.assertFalse("propertyFromIndex exist is true for third element");
+        a.assertZero("propertyFromIndex returns the wrong address for third element");
     }
 
 }

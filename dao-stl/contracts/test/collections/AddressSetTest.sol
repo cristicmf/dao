@@ -1,5 +1,5 @@
 import "../../src/collections/AddressSet.slb";
-import "../../src/assertions/Asserter.sol";
+import "../../src/assertions/Test.sol";
 
 contract AddressSetDb {
 
@@ -34,7 +34,7 @@ contract AddressSetDb {
 }
 
 
-contract AddressSetTest is Asserter {
+contract AddressSetTest is Test {
 
     address constant TEST_ADDRESS = 0x12345;
     address constant TEST_ADDRESS_2 = 0xABCDEF;
@@ -42,41 +42,42 @@ contract AddressSetTest is Asserter {
 
     function testInsert() {
         var asdb = new AddressSetDb();
-        var added = asdb.addAddress(TEST_ADDRESS);
-        assertTrue(added, "addAddress does not return true");
-        assertTrue(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return true");
+        
+        asdb.addAddress(TEST_ADDRESS).assert("addAddress does not return true");
+        asdb.hasAddress(TEST_ADDRESS).assert("hasAddress does not return true");
         var (a, e) = asdb.addressFromIndex(0);
-        assertTrue(e, "addressFromIndex exist is false");
-        assertAddressesEqual(a, TEST_ADDRESS, "addressFromIndex returns the wrong address");
+        e.assert("addressFromIndex exist is false");
+        a.assertEqual(TEST_ADDRESS, "addressFromIndex returns the wrong address");
     }
 
     function testRemoveAddress() {
         var asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
-        var removed = asdb.removeAddress(TEST_ADDRESS);
-        assertTrue(removed, "removeAddress does not return true");
-        assertFalse(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return false");
+
+        asdb.removeAddress(TEST_ADDRESS).assert("removeAddress does not return true");
+        asdb.hasAddress(TEST_ADDRESS).assertFalse("hasAddress does not return false");
         var (a, e) = asdb.addressFromIndex(0);
-        assertFalse(e, "addressFromIndex exist is true");
-        assertAddressZero(a, "addressFromIndex returns non-zero address");
-        assertUintZero(asdb.numAddresses(), "size is not zero");
+        e.assertFalse("addressFromIndex exist is true");
+        a.assertZero("addressFromIndex returns non-zero address");
+        asdb.numAddresses().assertZero("size is not zero");
     }
 
     function testAddTwoAddresses() {
         var asdb = new AddressSetDb();
         asdb.addAddress(TEST_ADDRESS);
-        var added = asdb.addAddress(TEST_ADDRESS_2);
-        assertTrue(added, "addAddress does not return true for second element");
-        assertTrue(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return true for first element");
-        assertTrue(asdb.hasAddress(TEST_ADDRESS_2), "hasAddress does not return true for second element");
-        var (a, e) = asdb.addressFromIndex(0);
-        assertTrue(e, "addressFromIndex exist is false for first element");
-        assertAddressesEqual(a, TEST_ADDRESS, "addressFromIndex returns the wrong address for first element");
-        (a, e) = asdb.addressFromIndex(1);
-        assertTrue(e, "addressFromIndex exist is false for second element");
-        assertAddressesEqual(a, TEST_ADDRESS_2, "addressFromIndex returns the wrong address for second element");
 
-        assertUintsEqual(asdb.numAddresses(), 2, "size is not 2");
+        asdb.addAddress(TEST_ADDRESS_2).assert("addAddress does not return true for second element");
+        asdb.hasAddress(TEST_ADDRESS).assert("hasAddress does not return true for first element");
+        asdb.hasAddress(TEST_ADDRESS_2).assert("hasAddress does not return true for second element");
+
+        var (a, e) = asdb.addressFromIndex(0);
+        e.assert("addressFromIndex exist is false for first element");
+        a.assertEqual(TEST_ADDRESS, "addressFromIndex returns the wrong address for first element");
+        (a, e) = asdb.addressFromIndex(1);
+        e.assert("addressFromIndex exist is false for second element");
+        a.assertEqual(TEST_ADDRESS_2, "addressFromIndex returns the wrong address for second element");
+
+        asdb.numAddresses().assertEqual(2, "size is not 2");
     }
 
     function testAddTwoAddressesRemoveLast() {
@@ -85,17 +86,17 @@ contract AddressSetTest is Asserter {
         asdb.addAddress(TEST_ADDRESS_2);
         asdb.removeAddress(TEST_ADDRESS_2);
 
-        assertTrue(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return true for first element");
-        assertFalse(asdb.hasAddress(TEST_ADDRESS_2), "hasAddress does not return false for second element");
+        asdb.hasAddress(TEST_ADDRESS).assert("hasAddress does not return true for first element");
+        asdb.hasAddress(TEST_ADDRESS_2).assertFalse("hasAddress does not return false for second element");
 
         var (a, e) = asdb.addressFromIndex(0);
-        assertTrue(e, "addressFromIndex exist is false for first element");
-        assertAddressesEqual(a, TEST_ADDRESS, "addressFromIndex returns the wrong address for first element");
+        e.assert("addressFromIndex exist is false for first element");
+        a.assertEqual(TEST_ADDRESS, "addressFromIndex returns the wrong address for first element");
         (a, e) = asdb.addressFromIndex(1);
-        assertFalse(e, "addressFromIndex exist is true for second element");
-        assertAddressZero(a, "addressFromIndex returns the wrong address for second element");
+        e.assertFalse("addressFromIndex exist is true for second element");
+        a.assertZero("addressFromIndex returns the wrong address for second element");
 
-        assertUintsEqual(asdb.numAddresses(), 1, "size is not 1");
+        asdb.numAddresses().assertEqual(1, "size is not 1");
     }
 
     function testAddTwoAddressesRemoveFirst() {
@@ -104,17 +105,17 @@ contract AddressSetTest is Asserter {
         asdb.addAddress(TEST_ADDRESS_2);
         asdb.removeAddress(TEST_ADDRESS);
 
-        assertFalse(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return false for first element");
-        assertTrue(asdb.hasAddress(TEST_ADDRESS_2), "hasAddress does not return true for second element");
+        asdb.hasAddress(TEST_ADDRESS).assertFalse("hasAddress does not return false for first element");
+        asdb.hasAddress(TEST_ADDRESS_2).assert("hasAddress does not return true for second element");
 
         var (a, e) = asdb.addressFromIndex(0);
-        assertTrue(e, "addressFromIndex exist is false for first element");
-        assertAddressesEqual(a, TEST_ADDRESS_2, "addressFromIndex returns the wrong address for first element");
+        e.assert("addressFromIndex exist is false for first element");
+        a.assertEqual(TEST_ADDRESS_2, "addressFromIndex returns the wrong address for first element");
         (a, e) = asdb.addressFromIndex(1);
-        assertFalse(e, "addressFromIndex exist is true for second element");
-        assertAddressZero(a, "addressFromIndex returns the wrong address for second element");
+        e.assertFalse("addressFromIndex exist is true for second element");
+        a.assertZero("addressFromIndex returns the wrong address for second element");
 
-        assertUintsEqual(asdb.numAddresses(), 1, "size is not 1");
+        asdb.numAddresses().assertEqual(1, "size is not 1");
     }
 
     function testAddThreeAddressesRemoveMiddle() {
@@ -124,21 +125,21 @@ contract AddressSetTest is Asserter {
         asdb.addAddress(TEST_ADDRESS_3);
         asdb.removeAddress(TEST_ADDRESS_2);
 
-        assertTrue(asdb.hasAddress(TEST_ADDRESS), "hasAddress does not return true for first element");
-        assertFalse(asdb.hasAddress(TEST_ADDRESS_2), "hasAddress does not return false for second element");
-        assertTrue(asdb.hasAddress(TEST_ADDRESS_3), "hasAddress does not return true for third element");
+        asdb.hasAddress(TEST_ADDRESS).assert("hasAddress does not return true for first element");
+        asdb.hasAddress(TEST_ADDRESS_2).assertFalse("hasAddress does not return false for second element");
+        asdb.hasAddress(TEST_ADDRESS_3).assert("hasAddress does not return true for third element");
 
         var (a, e) = asdb.addressFromIndex(0);
-        assertTrue(e, "addressFromIndex exist is false for first element");
-        assertAddressesEqual(a, TEST_ADDRESS, "addressFromIndex returns the wrong address for first element");
+        e.assert("addressFromIndex exist is false for first element");
+        a.assertEqual(TEST_ADDRESS, "addressFromIndex returns the wrong address for first element");
 
         (a, e) = asdb.addressFromIndex(1);
-        assertTrue(e, "addressFromIndex exist is false for second element");
-        assertAddressesEqual(a, TEST_ADDRESS_3, "addressFromIndex returns the wrong address for second element");
+        e.assert("addressFromIndex exist is false for second element");
+        a.assertEqual(TEST_ADDRESS_3, "addressFromIndex returns the wrong address for second element");
 
         (a, e) = asdb.addressFromIndex(2);
-        assertFalse(e, "addressFromIndex exist is true for third element");
-        assertAddressZero(a, "addressFromIndex returns the wrong address for third element");
+        e.assertFalse("addressFromIndex exist is true for third element");
+        a.assertZero("addressFromIndex returns the wrong address for third element");
     }
 
 }

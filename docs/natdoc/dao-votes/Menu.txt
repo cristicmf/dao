@@ -25,7 +25,7 @@ Footer: Copyright (C) 2015 Andreas Olofsson
 # These are indexes you deleted, so Natural Docs will not add them again
 # unless you remove them from this line.
 
-Don't Index: Interfaces, Functions, General, Events, Contracts, Files, Authors, Constructors, Structs
+Don't Index: Functions, Structs, Authors, Files, Contracts, Interfaces, Constructors, General, Events
 
 
 # --------------------------------------------------------------------------
@@ -60,6 +60,9 @@ Group: Currency  {
    File: PublicMintingBallot.sol  (currency/PublicMintingBallot.sol)
    File: PublicQuorumBallot.sol  (currency/PublicQuorumBallot.sol)
    }  # Group: Currency
+
+File: temp/BallotManager.sol  (temp/BallotManager.sol)
+File: temp/PublicBallotManager.sol  (temp/PublicBallotManager.sol)
 
 Group: Index  {
 

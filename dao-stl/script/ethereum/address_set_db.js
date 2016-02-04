@@ -32,9 +32,8 @@ AddressSetDb.prototype.hasAddress = function (address, cb) {
 AddressSetDb.prototype.addressFromIndex = function (index, cb) {
     this._contract.addressFromIndex(index, function(err, ret) {
         if (err) return cb(err);
-        var addr = ret[0];
-        var exists = ret[1];
-        cb(null, addr, exists);
+        var fmt = afiFormat(ret);
+        cb(null, fmt.address, fmt.exists);
     })
 };
 
@@ -46,7 +45,9 @@ AddressSetDb.prototype.values = function(cb){
 
     var that = this;
 
-    this._contract.numAddresses(function(error, num){
+    var block = this._web3.eth.blockNumber;
+
+    this._contract.numAddresses(block, function(error, num){
         if (error) return cb(error);
         var size = num.toNumber();
         var addresses = [];
@@ -56,11 +57,11 @@ AddressSetDb.prototype.values = function(cb){
                 return i < size;
             },
             function (cb) {
-                that.addressFromIndex(i, function(error, address, exists){
+                that._contract.addressFromIndex(i, block, function(error, ret){
                     if(error) return cb(error);
-                    if(exists) {
-                        addresses.push(address);
-                    }
+                    var fmt = afiFormat(ret);
+                    if(fmt.exists)
+                        addresses.push(fmt.address);
                     i++;
                     cb();
                 });
@@ -73,5 +74,12 @@ AddressSetDb.prototype.values = function(cb){
     });
 
 };
+
+function afiFormat(ret) {
+    var fmt = {};
+    fmt.address = ret[1];
+    fmt.exists = ret[2];
+    return fmt;
+}
 
 module.exports = AddressSetDb;

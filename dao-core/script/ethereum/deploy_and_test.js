@@ -13,13 +13,14 @@ var DefaultPermission = require('./default_permission');
 function deploy() {
 
     var dir = path.join(__dirname, "../../contracts/build/test");
-    var dep = new Deployer(dir, "http://localhost:8545");
+    var dep = new Deployer(dir);
 
     var settable;
 
     var perm;
     var doug;
 
+    // The steps.
     async.series([
         deployPermission,
         deployDoug,

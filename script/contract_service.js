@@ -1,11 +1,37 @@
+/**
+ * @file contract_service.js
+ * @fileOverview Base class for contract services.
+ * @author Andreas Olofsson (androlo1980@gmail.com)
+ * @module contract_service
+ */
+'use strict';
 
+/**
+ * ContractService is a base class for contract services.
+ *
+ * @param {Object} web3 - A web3 object.
+ * @param {Object} contract - A web3 contract instance.
+ * @param {number} gas - The amount of gas that will be used in transactions.
+ *
+ * @constructor
+ */
 function ContractService(web3, contract, gas) {
     this._web3 = web3;
     this._contract = contract;
     this._gas = gas;
 }
 
-// Waits for event to trigger or 2 minutes passes. Returns 'eventData.args'.
+/**
+ * Wait for a transaction to complete. This is implemented by adding events to contracts
+ * that will trigger when execution is done - no matter the outcome. The function also has
+ * a timeout (default length is 2 minutes) in case there is no response.
+ *
+ * this function will pass the event arguments back in the callback.
+ *
+ * @param {string} eventName - The name of the event as it appears in the ABI (no params, just the name).
+ * @param {string} txHash - The transaction hash. This is returned from transactions, and is used to filter events.
+ * @param cb - The error-first callback. Returns the event arguments.
+ */
 ContractService.prototype.waitForArgs = function(eventName, txHash, cb){
     var event;
 
@@ -30,7 +56,17 @@ ContractService.prototype.waitForArgs = function(eventName, txHash, cb){
     } , 120000);
 };
 
-//  Waits for event to trigger or 2 minutes passes. Returns 'eventData.args.error'.
+/**
+ * Wait for a transaction to complete. This is implemented by adding events to contracts
+ * that will trigger when execution is done - no matter the outcome. The function also has
+ * a timeout (default length is 2 minutes) in case there is no response.
+ *
+ * this function will pass the error code from the event arguments back in the callback.
+ *
+ * @param {string} eventName - The name of the event as it appears in the ABI (no params, just the name).
+ * @param {string} txHash - The transaction hash. This is returned from transactions, and is used to filter events.
+ * @param cb - The error-first callback. Returns the event 'error' argument as a javascript number.
+ */
 ContractService.prototype.waitFor = function(eventName, txHash, cb){
     var event;
 
@@ -55,7 +91,21 @@ ContractService.prototype.waitFor = function(eventName, txHash, cb){
     } , 120000);
 };
 
-//  Waits for event to trigger or 2 minutes passes. Returns 'eventData.args.error'.
+/**
+ * Wait for a transaction to complete. This is implemented by adding events to contracts
+ * that will trigger when execution is done - no matter the outcome. The function also has
+ * a timeout (default length is 2 minutes) in case there is no response.
+ *
+ * Unlike the other 'waitFor' functions, this one takes no 'eventName' param. Instead it uses
+ * the 'Destroy' event (which is available in most framework contracts).
+ *
+ * This function will pass the error code from the event arguments back in the callback. If
+ * the error code is 0 it will also call the client to check if the contract was indeed removed
+ * (by doing a 'web3.eth.getCode' call to the client).
+ *
+ * @param {string} txHash - The transaction hash. This is returned from transactions, and is used to filter events.
+ * @param cb - The error-first callback. Returns the event 'error' argument as a javascript number.
+ */
 ContractService.prototype.waitForDestroyed = function(txHash, cb){
     var event;
 

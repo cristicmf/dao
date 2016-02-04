@@ -7,12 +7,12 @@ var AddressSetDb = require('./address_set_db');
 
 // *****************
 
-function deploy(callback) {
+function deploy() {
 
     var TEST_ADDRESS = "0x1234123412341234123412341234123412341234";
 
     var dir = path.join(__dirname, "../../contracts/build/test");
-    var dep = new Deployer(dir, "http://localhost:8545");
+    var dep = new Deployer(dir);
 
     var asdb;
 
@@ -28,6 +28,8 @@ function deploy(callback) {
             if (err) throw err;
             asdb = new AddressSetDb(dep.web3(), contract, dep.gas());
             cb();
+            dep.writeLibraries();
+            dep.writeContracts();
         })
     }
 

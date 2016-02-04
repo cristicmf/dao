@@ -9,7 +9,7 @@ var DefaultDoug = require('./default_doug');
 function deploy(){
 
     var dir = path.join(__dirname, "../../contracts/build/release");
-    var dep = new Deployer(dir ,"http://localhost:8545");
+    var dep = new Deployer(dir);
 
     var perm;
     var doug;
@@ -59,7 +59,7 @@ function deploy(){
     }
 
     function write(cb){
-        fs.writeJsonSync("./doug.json", {doug: doug.address});
+        dep.writeContracts(path.join(__dirname,"contracts.json"));
         cb();
     }
 

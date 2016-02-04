@@ -4,6 +4,14 @@ Standard contracts used throughout the entire framework.
 
 ## Installation and Usage
 
+#### Deployment
+
+The `AddressSetDb` contracts in tests can be deployed onto an Ethereum chain and tested using `dao-stl/script/ethereum/deploy_address_set.js`.
+
+It is possible to deploy Doug and run some calls as well, using `dao-core/script/ethereum/deploy_and_test.js`
+ 
+There will be more options later.
+
 #### Building/rebuilding of contracts
 
 NOTE: Requires `solc`. Will only build tests (nothing else to build).

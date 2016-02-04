@@ -1,3 +1,16 @@
+/**
+ * @file dao_utils.js
+ * @fileOverview Some utility functions.
+ * @author Andreas Olofsson (androlo1980@gmail.com)
+ * @module dao_utils
+ */
+'use strict';
+
+/**
+ * hex-to-ascii. Code is taken from the web3.js utility function 'toAscii'.
+ *
+ * @param {string} hex - The hex string.
+ */
 function htoa(hex) {
 // Find termination
     var str = "";
@@ -15,6 +28,11 @@ function htoa(hex) {
     return str;
 }
 
+/**
+ * ascii-to-hex. Code is taken from the web3.js utility function 'fromAscii'.
+ *
+ * @param {string} str - The ASCII string.
+ */
 function atoh(str) {
     var hex = "";
     for(var i = 0; i < str.length; i++) {
@@ -26,14 +44,29 @@ function atoh(str) {
     return "0x" + hex;
 }
 
+/**
+ * Converts a javascript date object to a unix timestamp.
+ *
+ * @param {Object} date - A javascript date object.
+ */
 function dateToTimestamp(date) {
     return date.getTime() / 1000 | 0;
 }
 
+/**
+ * Converts a unix timestamp to a javascript date object.
+ *
+ * @param {Object} timestamp - A javascript date object.
+ */
 function timestampToDate(timestamp) {
     return new Date(timestamp*1000);
 }
 
+/**
+ * Converts a unix timestamp in BigNumber form to a javascript date object.
+ *
+ * @param {Object} timestamp - A javascript date object.
+ */
 function bnToDate(timestamp) {
     return new Date(timestamp.toNumber()*1000);
 }

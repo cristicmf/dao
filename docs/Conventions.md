@@ -60,6 +60,10 @@ No style in particular. Whatever works. Using WebStorm's JSLint functionality wh
 
 * Contract services returns the data from constant functions in their callback, formatted and with a separate parameter for each, starting with the error. `function(error, userName, userEmail, code)`
 
+* If a contract has an iterable collection, the service should have a function for getting all the elements. Normally it would have the same name as the collection; for example, if a contract has a list of owners, then the function of the service would be `owners`. It should allow for start and end indices, to limit the number of elements received.
+
+* If a contract has a collection getter that involves making more then one call to the contract, it should use the same block-number for every call, meaning it will use the same (immutable) state for all of them.
+
 * Error codes are always returned as a javascript number. The big number conversion must be done in the contract service before returning it.
 
 * Dates/timestamps are always passed in as a javascript Date object, and returned as Date objects as well. They are stored on-chain as unix timestamps in hex form (as usual).

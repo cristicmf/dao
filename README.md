@@ -150,7 +150,7 @@ This is normally because you don't have [solc](https://github.com/ethereum/solid
 
 **I can't test the contracts**
 
-This is normally because the contract build folders has been tampered with, or because sol-unit can't be installed. The reason for sol-unit failure could be missing dependencies. sol-unit uses javascript ethereum, which depends on C libraries, which you may not be able to build. 
+This is normally because the contract build folders has been tampered with, or because sol-unit can't be installed. The reason for sol-unit failure could be missing dependencies. sol-unit uses javascript ethereum which depends on C libraries, which you may not be able to build. 
 
 **I can't build html documentation**
 
@@ -167,7 +167,9 @@ To contact me, send a personal message on linkedin: https://www.linkedin.com/in/
 
 **Me Hiring**
 
-I'm not looking to hire anyone at the moment.
+I'm not hiring as of right now.
+
+I will likely soon be looking for a node.js developer that is familiar with Ethereum and Ethereum-like tech and their javascript APIs/tools. If the position opens I will announce it.
 
 ## Licence
 

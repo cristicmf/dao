@@ -1,4 +1,11 @@
-// Javascript for interpreting error codes. These are the codes used in the Errors.sol contract.
+/**
+ * @file errors.js
+ * @fileOverview Javascript for interpreting error codes. These are the codes used in the Errors.sol contract.
+ * @author Andreas Olofsson (androlo1980@gmail.com)
+ * @module errors
+ */
+'use strict';
+
 var errors = {};
 
 errors[0] = "NO_ERROR";
@@ -31,7 +38,16 @@ errors[8004] = "TRANSFER_NOT_ALLOWED";
 errors[8100] = "INSUFFICIENT_SENDER_BALANCE";
 errors[8101] = "TRANSFERRED_AMOUNT_TOO_HIGH";
 
-// Error names. NO_ERROR is returned as null string.
+/**
+ * Get the error name.
+ *
+ * If the error number is invalid it returns 'UNKNOWN_ERROR'.
+ *
+ * 'NO_ERROR' is returned as null string.
+ *
+ * @param {number} code - The error code.
+ * @returns {string} - The name of the error.
+ */
 function error(code) {
     if(code === 0){
         return "";

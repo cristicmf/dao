@@ -28,8 +28,6 @@ function deploy() {
             if (err) throw err;
             asdb = new AddressSetDb(dep.web3(), contract, dep.gas());
             cb();
-            dep.writeLibraries();
-            dep.writeContracts();
         })
     }
 

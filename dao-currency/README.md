@@ -1,7 +1,5 @@
 # dao-currency
 
-**Under construction**
-
 ## Installation and Usage
 
 #### Building/rebuilding of contracts

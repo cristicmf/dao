@@ -1,7 +1,5 @@
 # dao-users
 
-**Under construction**
-
 ## Installation and Usage
 
 #### Building/rebuilding of contracts

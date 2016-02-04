@@ -1,6 +1,6 @@
 # dao-votes
 
-**Under construction**
+Note: Adding managed struct versions for ballots as well.
 
 ## Installation and Usage
 

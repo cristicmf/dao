@@ -18,10 +18,24 @@ function deploy() {
 
     console.log("Starting to deploy.");
 
-    async.series([deployAddressSetDb, testAddAddresses, testHasAddress, testValues, testRemoveAddress, testValues], function (err) {
+    // These are run in order.
+    var steps = [
+        deployAddressSetDb,
+        testAddAddresses,
+        testHasAddress,
+        testValues,
+        testRemoveAddress,
+        testValues
+    ];
+
+    // Run
+
+    async.series(steps, function (err) {
         if (err) throw err;
-        console.log("All contracts deployed!");
+        console.log("Done!");
     });
+
+    // The functions.
 
     function deployAddressSetDb(cb) {
         dep.deploy("AddressSetDb", [], function (err, contract) {
@@ -34,7 +48,7 @@ function deploy() {
     // Add an address.
     function testAddAddresses(cb) {
         console.log("Inserting: " + TEST_ADDRESS);
-        asdb.addAddress(TEST_ADDRESS, function(error, args){
+        asdb.addAddress(TEST_ADDRESS, function (error, args) {
             if (error) return cb(error);
             if (args.added)
                 console.log("Address was added");
@@ -78,5 +92,5 @@ function deploy() {
     }
 }
 
-deploy(function () {
-});
+// Execute
+deploy();

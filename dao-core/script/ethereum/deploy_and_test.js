@@ -20,8 +20,9 @@ function deploy() {
     var perm;
     var doug;
 
-    // The steps.
-    async.series([
+    // These are run in order.
+
+    var steps = [
         deployPermission,
         deployDoug,
         testRootSet,
@@ -43,10 +44,16 @@ function deploy() {
         destroyPermission,
         checkDougGone,
         checkPermissionGone
-    ], function (err) {
+    ];
+
+    // Run
+
+    async.series(steps, function (err) {
         if (err) throw err;
         console.log("Done!");
     });
+
+    // The functions.
 
     function deployPermission(cb) {
         dep.deploy("DefaultPermission", [dep.address()], function (err, contract) {
@@ -262,4 +269,5 @@ function deploy() {
 
 }
 
+// Execute
 deploy();

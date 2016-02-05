@@ -28,7 +28,7 @@ Gulp: `$ gulp build:core`
 
 Gulp: `$ gulp test:core` 
 
-Command-line tool: `$ solunit -d ./dao-core/contracts/build/test`
+Command-line tool: `$ solunit -d ./dao-core/build/test`
 
 #### Docs
 

@@ -16,7 +16,7 @@ Gulp: `$ gulp build:votes`
 
 Gulp: `$ gulp test:votes` 
 
-Command-line tool: `$ solunit -d ./dao-votes/contracts/build/test`
+Command-line tool: `$ solunit -d ./dao-votes/build/test`
 
 #### Docs
 

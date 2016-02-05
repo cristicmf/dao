@@ -24,7 +24,7 @@ Gulp: `$ gulp build:stl`
 
 Gulp: `$ gulp test:stl`
 
-Command-line tool: `$ solunit -d ./dao-stl/contracts/build/test`
+Command-line tool: `$ solunit -d ./dao-stl/build/test`
 
 #### Docs
 

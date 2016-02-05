@@ -14,7 +14,7 @@ Gulp: `$ gulp build:users`
 
 Gulp: `$ gulp test:users` 
 
-Command-line tool: `$ solunit -d ./dao-users/contracts/build/test`
+Command-line tool: `$ solunit -d ./dao-users/build/test`
 
 #### Docs
 

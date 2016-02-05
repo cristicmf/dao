@@ -14,7 +14,7 @@ Gulp: `$ gulp build:currency`
 
 Gulp: `$ gulp test:currency` 
 
-Command-line tool: `$ solunit -d ./dao-currency/contracts/build/test`
+Command-line tool: `$ solunit -d ./dao-currency/build/test`
 
 #### Docs
 

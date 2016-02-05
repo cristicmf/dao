@@ -22,11 +22,13 @@ NOTE: Ethereum is still experimental, and so is this code. Using this on a chain
 
 ## Getting started
 
-There are [Tutorials](./docs/Tutorials.md).
+A good demo will become available during February.
+
+There are [Tutorials](./docs/Tutorials.md). 
 
 Each module has a README file that explains what it does, which is also useful. They are all referenced in the [Structure](#structure) section of this document.
 
-HTML documentation for the contracts in each module can be found in `docs/contracts/<module name>/index.html`. This goes for the standard library code as well.
+HTML documentation for the contracts in each module can be found in `<module name>/doc/index.html`. This goes for the standard library code as well.
 
 To understand how systems are kept intact, maybe take a look at the document on [Permission Analysis](./docs/Permission_Analysis.md).
 
@@ -57,7 +59,7 @@ NOTE: This requires that the dependencies are in place.
 
 ##### Building
 
-NOTE: Requires `solc` on path. If this fails it will mess up the build folders, so you need to download again, or `git stash`.
+NOTE: You need `solc` on path. If this fails it will mess up the build folders, so you need to download again, or `git stash`.
 
 Gulp: `$ gulp build:all`
 
@@ -66,6 +68,8 @@ Gulp: `$ gulp build:all`
 Gulp: `$ gulp test:all`
 
 ##### Docs
+
+NOTE: You need [NaturalDocs](http://www.naturaldocs.org/) on your path to build html documentation (shell script version, not .bat).
 
 Gulp: `$ gulp htmldoc:all`
 

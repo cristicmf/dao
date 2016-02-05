@@ -3,6 +3,7 @@ var path = require('path');
 var async = require('async');
 var Deployer = require('../../../script/deployer.js');
 var DefaultDoug = require('./default_doug');
+var DefaultPermission = require('./default_permission');
 
 // *************************************************************
 
@@ -35,7 +36,7 @@ function deploy(){
     function deployPermission(cb){
         dep.deploy("DefaultPermission", [dep.address()], function(err, contract){
             if(err) throw err;
-            perm = contract;
+            perm = new DefaultPermission(dep.web3(), contract, dep.gas());
             cb();
         })
     }
@@ -80,3 +81,4 @@ function deploy(){
 
 // Execute
 deploy();
+

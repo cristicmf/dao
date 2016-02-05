@@ -7,7 +7,7 @@ var async = require('async');
 /************************ dao-core ***************************/
 
 var daoCoreTests = ['DefaultPermissionTest', 'DefaultDougTest', 'DefaultDougEnabledTest', 'DefaultDougActionsTest', 'DefaultDougDatabaseTest'];
-var daoCoreTestFolder = path.join(__dirname, 'dao-core', 'contracts', 'build', 'test');
+var daoCoreTestFolder = path.join(__dirname, 'dao-core', 'build', 'test');
 
 gulp.task('build:core', function (cb) {
     process.exec('./build_contracts.sh dao-core', function (error) {
@@ -37,7 +37,7 @@ gulp.task('htmldoc:core', function(cb){
 /************************ dao-currency ***************************/
 
 var daoCurrencyTests = ['DefaultCurrencyDatabaseTest', 'AbstractMintedCurrencyTest', 'DefaultMintedCurrencyTest', 'MintedUserCurrencyTest'];
-var daoCurrencyTestFolder = path.join(__dirname, 'dao-currency', 'contracts', 'build', 'test');
+var daoCurrencyTestFolder = path.join(__dirname, 'dao-currency', 'build', 'test');
 
 gulp.task('build:currency', function (cb) {
     process.exec('./build_contracts.sh dao-currency', function (error) {
@@ -67,7 +67,7 @@ gulp.task('htmldoc:currency', function(cb){
 /************************ dao-stl ***************************/
 
 var daoSTLTests = ['AddressSetTest', 'PropertySetTest', 'PropertyToAddressTest'];
-var daoSTLTestFolder = path.join(__dirname, 'dao-stl', 'contracts', 'build', 'test');
+var daoSTLTestFolder = path.join(__dirname, 'dao-stl', 'build', 'test');
 
 gulp.task('build:stl', function (cb) {
     process.exec('./build_contracts.sh dao-stl', function (error) {
@@ -97,7 +97,7 @@ gulp.task('htmldoc:stl', function(cb){
 /************************ dao-users ***************************/
 
 var daoUsersTests = ['DefaultUserDatabaseTest', 'AbstractUserRegistryTest', 'AdminRegUserRegistryTest', 'SelfRegUserRegistryTest'];
-var daoUsersTestFolder = path.join(__dirname, 'dao-users', 'contracts', 'build', 'test');
+var daoUsersTestFolder = path.join(__dirname, 'dao-users', 'build', 'test');
 
 gulp.task('build:users', function (cb) {
     process.exec('./build_contracts.sh dao-users', function (error) {
@@ -127,7 +127,7 @@ gulp.task('htmldoc:users', function(cb){
 /************************ dao-votes ***************************/
 
 var daoVotesTests = ['BallotMapTest', 'PublicBallotTest', 'PublicMintingBallotTest', 'PublicCurrencyBasicTest', 'PublicCurrencyMintingTest', 'PublicCurrencyDurationTest', 'PublicCurrencyQuorumTest', 'PublicCurrencyKeepDurationTest'];
-var daoVotesTestFolder = path.join(__dirname, 'dao-votes', 'contracts', 'build', 'test');
+var daoVotesTestFolder = path.join(__dirname, 'dao-votes', 'build', 'test');
 
 gulp.task('build:votes', function (cb) {
     process.exec('./build_contracts.sh dao-votes', function (error) {

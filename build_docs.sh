@@ -17,4 +17,4 @@ if  [ ${MODULE} != "dao-core" ] && [ ${MODULE} != "dao-users" ] && [ ${MODULE} !
     exit 2
 fi
 
-NaturalDocs -i ./${MODULE}/contracts/src -p ./docs/natdoc/${MODULE} -s dao -oft -o HTML ./docs/contracts/${MODULE}
+NaturalDocs -i ./${MODULE}/src -p ./docs/natdoc/${MODULE} -s dao -oft -o HTML ./${MODULE}/doc

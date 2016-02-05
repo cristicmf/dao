@@ -35,7 +35,6 @@ var DEFAULT_ETH_URL = "http://localhost:8545";
  * 'contracts[name] = {abi: <object>, bytecode: <string>, contract: <object>}'
  * The 'abi' is a json ABI object, bytecode is a hex-string, and contract is a web3 contract.
  *
- *
  * @param {string} rootDir - The directory where contract .bin and .abi files are stored.
  * @param {Object} [options] - The options.
  *

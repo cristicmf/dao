@@ -25,7 +25,7 @@ Footer: Copyright (C) 2015 Andreas Olofsson
 # These are indexes you deleted, so Natural Docs will not add them again
 # unless you remove them from this line.
 
-Don't Index: Functions, Structs, Authors, Files, Contracts, Interfaces, Constructors, General, Events
+Don't Index: Structs, Constructors, Authors, Interfaces, Contracts, Events, Files, General, Functions
 
 
 # --------------------------------------------------------------------------

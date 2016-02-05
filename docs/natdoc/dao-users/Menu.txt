@@ -25,7 +25,7 @@ Footer: Copyright (C) 2015 Andreas Olofsson
 # These are indexes you deleted, so Natural Docs will not add them again
 # unless you remove them from this line.
 
-Don't Index: Authors, Structs, Events
+Don't Index: Events, Structs, Authors
 
 
 # --------------------------------------------------------------------------

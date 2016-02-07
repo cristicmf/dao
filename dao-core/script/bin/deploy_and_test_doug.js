@@ -3,30 +3,35 @@ var path = require('path');
 var async = require('async');
 var errors = require('../../../script/errors');
 
+var deployDoug = require('../deploy');
+
 var Deployer = require('../../../script/deployer');
 
-var DefaultDoug = require('./default_doug');
-var DefaultPermission = require('./default_permission');
+var dir = path.join(__dirname, "../../build/test");
+var dep = new Deployer(dir);
+
+// Call deploy doug and get the permission and doug services.
+deployDoug(dep, function (error, dep, services) {
+    if (error) throw error;
+    // Run the tests.
+    test(services, function(err){
+        if (err) throw err;
+        console.log("Done.");
+    });
+});
 
 // *************************************************************
 
-function deploy() {
-
-    var dir = path.join(__dirname, "../../contracts/build/test");
-    var dep = new Deployer(dir);
+function test(services, callback) {
 
     var settable;
 
-    var perm;
-    var doug;
+    var perm = services.perm;
+    var doug = services.doug;
 
     // These are run in order.
 
     var steps = [
-        deployPermission,
-        deployDoug,
-        testRootSet,
-        testPermSet,
         deploySettable,
         testAddActionsContract,
         testActionsContractAddress,
@@ -48,57 +53,12 @@ function deploy() {
 
     // Run
 
-    async.series(steps, function (err) {
-        if (err) throw err;
-        console.log("Done!");
-    });
+    async.series(steps, callback);
 
     // The functions.
 
-    function deployPermission(cb) {
-        dep.deploy("DefaultPermission", [dep.address()], function (err, contract) {
-            if (err) throw err;
-            perm = new DefaultPermission(dep.web3(), contract, dep.gas());
-            cb();
-        })
-    }
-
-    function deployDoug(cb) {
-        var permAddr = perm.address();
-        dep.deploy("DefaultDoug", [permAddr, false, false], function (err, contract) {
-            if (err) return cb(err);
-            doug = new DefaultDoug(dep.web3(), contract, dep.gas());
-            cb();
-        })
-    }
-
-    // Basic check.
-    function testRootSet(cb) {
-        perm.root(function (error, addr){
-            if (error) return cb(error);
-            if (addr !== dep.address()) {
-                return cb(new Error("Root address in permission is wrong: " + pRoot));
-            }
-            console.log("Root permission properly set.");
-            cb();
-        });
-    }
-
-    // Basic check.
-    function testPermSet(cb) {
-        doug.permissionAddress(function (error, addr) {
-            if (error) return cb(error);
-            var pAddr = perm.address();
-            if (addr !== pAddr) {
-                return cb(new Error("Permission address in doug is wrong: " + addr));
-            }
-            console.log("Doug permission contract properly set.");
-            cb();
-        });
-    }
-
     function deploySettable(cb) {
-        dep.deploy("DefaultDougSettable", [], function (err, contract) {
+        dep.deploy("settable", "DefaultDougSettable", function (err, contract) {
             if (err) return cb(err);
             settable = contract;
             cb();
@@ -268,6 +228,3 @@ function deploy() {
     }
 
 }
-
-// Execute
-deploy();

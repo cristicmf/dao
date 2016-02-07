@@ -2,17 +2,13 @@ var fs = require('fs-extra');
 var path = require('path');
 var async = require('async');
 
-var Deployer = require('../../../script/deployer.js');
 var AddressSetDb = require('./address_set_db');
 
 // *****************
 
-function deploy() {
+function deploy(dep, callback) {
 
     var TEST_ADDRESS = "0x1234123412341234123412341234123412341234";
-
-    var dir = path.join(__dirname, "../../contracts/build/test");
-    var dep = new Deployer(dir);
 
     var asdb;
 
@@ -31,14 +27,16 @@ function deploy() {
     // Run
 
     async.series(steps, function (err) {
-        if (err) throw err;
-        console.log("Done!");
+        if (err) return callback(err);
+        callback(null, dep, {
+            asdb: asdb
+        })
     });
 
     // The functions.
 
     function deployAddressSetDb(cb) {
-        dep.deploy("AddressSetDb", [], function (err, contract) {
+        dep.deploy("asdb", "AddressSetDb", function (err, contract) {
             if (err) throw err;
             asdb = new AddressSetDb(dep.web3(), contract, dep.gas());
             cb();
@@ -92,5 +90,4 @@ function deploy() {
     }
 }
 
-// Execute
-deploy();
+module.exports = deploy;

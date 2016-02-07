@@ -2,18 +2,18 @@
  * @file default_doug.js
  * @fileOverview Contract service for 'DefaultDoug'.
  * @author Andreas Olofsson (androlo1980@gmail.com)
- * @module default_doug
+ * @module dao_core/default_doug
  */
 "use strict";
 
 var async = require('async');
 var util = require('util');
 
-var ContractService = require('../../../script/contract_service');
-var daoUtils = require('../../../script/dao_utils');
+var ContractService = require('../../script/contract_service');
+var daoUtils = require('../../script/dao_utils');
 
 /**
- * Service for 'DefaultDoug'
+ * Service for 'Doug'
  *
  * @param {Object} web3 - A web3 object.
  * @param {Object} contract - A web3 contract instance.
@@ -22,11 +22,11 @@ var daoUtils = require('../../../script/dao_utils');
  * @constructor
  * @augments module:contract_service:ContractService
  */
-function DefaultDoug(web3, contract, gas) {
+function Doug(web3, contract, gas) {
     ContractService.call(this, web3, contract, gas);
 }
 
-util.inherits(DefaultDoug, ContractService);
+util.inherits(Doug, ContractService);
 
 // *************************** Actions-contracts ***************************
 
@@ -37,7 +37,7 @@ util.inherits(DefaultDoug, ContractService);
  * @param {string} address - The contract address.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultDoug.prototype.addActionsContract = function (identifier, address, cb) {
+Doug.prototype.addActionsContract = function (identifier, address, cb) {
     var that = this;
     var idHex = daoUtils.atoh(identifier);
     this._contract.addActionsContract(idHex, address, {gas: this._gas}, function (error, txHash) {
@@ -52,7 +52,7 @@ DefaultDoug.prototype.addActionsContract = function (identifier, address, cb) {
  * @param {string} identifier - A < 32 byte identifier.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultDoug.prototype.removeActionsContract = function (identifier, cb) {
+Doug.prototype.removeActionsContract = function (identifier, cb) {
     var that = this;
     var idHex = daoUtils.atoh(identifier);
     this._contract.removeActionsContract(idHex, {gas: this._gas}, function (error, txHash) {
@@ -67,7 +67,7 @@ DefaultDoug.prototype.removeActionsContract = function (identifier, cb) {
  * @param {string} identifier - A < 32 byte identifier.
  * @param {Function} cb - error first callback: function(error, address).
  */
-DefaultDoug.prototype.actionsContractAddress = function (identifier, cb) {
+Doug.prototype.actionsContractAddress = function (identifier, cb) {
     var idHex = daoUtils.atoh(identifier);
     this._contract.actionsContractAddress(idHex, cb);
 };
@@ -78,7 +78,7 @@ DefaultDoug.prototype.actionsContractAddress = function (identifier, cb) {
  * @param {string} address - The contract address.
  * @param {Function} cb - error first callback: function(error, id).
  */
-DefaultDoug.prototype.actionsContractId = function (address, cb) {
+Doug.prototype.actionsContractId = function (address, cb) {
     this._contract.actionsContractId(address, function (error, idHex) {
         if (error) return cb(error);
         var id = daoUtils.htoa(idHex);
@@ -92,7 +92,7 @@ DefaultDoug.prototype.actionsContractId = function (address, cb) {
  * @param {number} index - The index.
  * @param {Function} cb - error first callback: function(error, identifier, address, errorCode).
  */
-DefaultDoug.prototype.actionsContractFromIndex = function (index, cb) {
+Doug.prototype.actionsContractFromIndex = function (index, cb) {
     this._contract.actionsContractFromIndex(index, function (error, ret) {
         if (error) return cb(error);
         var fmt = cfiFormat(ret);
@@ -105,7 +105,7 @@ DefaultDoug.prototype.actionsContractFromIndex = function (index, cb) {
  *
  * @param {Function} cb - error first callback: function(error, numContracts).
  */
-DefaultDoug.prototype.numActionsContracts = function (cb) {
+Doug.prototype.numActionsContracts = function (cb) {
     this._contract.numActionsContracts(cb);
 };
 
@@ -115,7 +115,7 @@ DefaultDoug.prototype.numActionsContracts = function (cb) {
  * @param {boolean} destroyRemovedActions - 'true' if contracts should be destroyed.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultDoug.prototype.setDestroyRemovedActions = function (destroyRemovedActions, cb) {
+Doug.prototype.setDestroyRemovedActions = function (destroyRemovedActions, cb) {
     var that = this;
     this._contract.setDestroyRemovedActions(destroyRemovedActions, {gas: this._gas}, function (error, txHash) {
         if (error) return cb(error);
@@ -128,7 +128,7 @@ DefaultDoug.prototype.setDestroyRemovedActions = function (destroyRemovedActions
  *
  * @param {Function} cb - error first callback: function(error, destroyRemovedActions).
  */
-DefaultDoug.prototype.destroyRemovedActions = function (cb) {
+Doug.prototype.destroyRemovedActions = function (cb) {
     this._contract.destroyRemovedActions(cb);
 };
 
@@ -143,7 +143,7 @@ DefaultDoug.prototype.destroyRemovedActions = function (cb) {
  * @param {number} [elements] - The number of elements to fetch.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultDoug.prototype.actionsContracts = function (start, elements, cb) {
+Doug.prototype.actionsContracts = function (start, elements, cb) {
 
     var that = this;
 
@@ -205,7 +205,7 @@ DefaultDoug.prototype.actionsContracts = function (start, elements, cb) {
  * @param {string} address - The contract address.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultDoug.prototype.addDatabaseContract = function (identifier, address, cb) {
+Doug.prototype.addDatabaseContract = function (identifier, address, cb) {
     var that = this;
     var idHex = daoUtils.atoh(identifier);
     this._contract.addDatabaseContract(idHex, address, {gas: this._gas}, function (error, txHash) {
@@ -220,7 +220,7 @@ DefaultDoug.prototype.addDatabaseContract = function (identifier, address, cb) {
  * @param {string} identifier - A < 32 byte identifier.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultDoug.prototype.removeDatabaseContract = function (identifier, cb) {
+Doug.prototype.removeDatabaseContract = function (identifier, cb) {
     var that = this;
     var idHex = daoUtils.atoh(identifier);
     this._contract.removeDatabaseContract(idHex, {gas: this._gas}, function (error, txHash) {
@@ -235,7 +235,7 @@ DefaultDoug.prototype.removeDatabaseContract = function (identifier, cb) {
  * @param {string} identifier - A < 32 byte identifier.
  * @param {Function} cb - error first callback: function(error, address).
  */
-DefaultDoug.prototype.databaseContractAddress = function (identifier, cb) {
+Doug.prototype.databaseContractAddress = function (identifier, cb) {
     var idHex = daoUtils.atoh(identifier);
     this._contract.databaseContractAddress(idHex, cb);
 };
@@ -246,7 +246,7 @@ DefaultDoug.prototype.databaseContractAddress = function (identifier, cb) {
  * @param {string} address - The contract address.
  * @param {Function} cb - error first callback: function(error, id).
  */
-DefaultDoug.prototype.databaseContractId = function (address, cb) {
+Doug.prototype.databaseContractId = function (address, cb) {
     this._contract.databaseContractId(address, function (error, idHex) {
         if (error) return cb(error);
         var id = daoUtils.htoa(idHex);
@@ -260,7 +260,7 @@ DefaultDoug.prototype.databaseContractId = function (address, cb) {
  * @param {number} index - The index.
  * @param {Function} cb - error first callback: function(error, identifier, address, errorCode).
  */
-DefaultDoug.prototype.databaseContractFromIndex = function (index, cb) {
+Doug.prototype.databaseContractFromIndex = function (index, cb) {
     this._contract.databaseContractFromIndex(index, function (error, ret) {
         if (error) return cb(error);
         var fmt = cfiFormat(ret);
@@ -273,7 +273,7 @@ DefaultDoug.prototype.databaseContractFromIndex = function (index, cb) {
  *
  * @param {Function} cb - error first callback: function(error, numContracts).
  */
-DefaultDoug.prototype.numDatabaseContracts = function (cb) {
+Doug.prototype.numDatabaseContracts = function (cb) {
     this._contract.numDatabaseContracts(cb);
 };
 
@@ -283,7 +283,7 @@ DefaultDoug.prototype.numDatabaseContracts = function (cb) {
  * @param {boolean} destroyRemovedDatabases - 'true' if contracts should be destroyed.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultDoug.prototype.setDestroyRemovedDatabases = function (destroyRemovedDatabases, cb) {
+Doug.prototype.setDestroyRemovedDatabases = function (destroyRemovedDatabases, cb) {
     var that = this;
     this._contract.setDestroyRemovedDatabases(destroyRemovedDatabases, {gas: this._gas}, function (error, txHash) {
         if (error) return cb(error);
@@ -296,7 +296,7 @@ DefaultDoug.prototype.setDestroyRemovedDatabases = function (destroyRemovedDatab
  *
  * @param {Function} cb - error first callback: function(error, destroyRemovedDatabases).
  */
-DefaultDoug.prototype.destroyRemovedDatabases = function (cb) {
+Doug.prototype.destroyRemovedDatabases = function (cb) {
     this._contract.destroyRemovedDatabases(cb);
 };
 
@@ -311,7 +311,7 @@ DefaultDoug.prototype.destroyRemovedDatabases = function (cb) {
  * @param {number} [elements] - The number of elements to fetch.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultDoug.prototype.databaseContracts = function (start, elements, cb) {
+Doug.prototype.databaseContracts = function (start, elements, cb) {
 
     var that = this;
 
@@ -372,7 +372,7 @@ DefaultDoug.prototype.databaseContracts = function (start, elements, cb) {
  * @param {string} permissionAddress - The address.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultDoug.prototype.setPermission = function (permissionAddress, cb) {
+Doug.prototype.setPermission = function (permissionAddress, cb) {
     var that = this;
     this._contract.setPermission(permissionAddress, {gas: this._gas}, function (error, txHash) {
         if (error) return cb(error);
@@ -385,7 +385,7 @@ DefaultDoug.prototype.setPermission = function (permissionAddress, cb) {
  *
  * @param {Function} cb - error first callback: function(error, address).
  */
-DefaultDoug.prototype.permissionAddress = function (cb) {
+Doug.prototype.permissionAddress = function (cb) {
     this._contract.permissionAddress(cb);
 };
 
@@ -395,7 +395,7 @@ DefaultDoug.prototype.permissionAddress = function (cb) {
  * @param {address} fundReceiver - The address that will receive the funds from the contract.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultDoug.prototype.destroy = function (fundReceiver, cb) {
+Doug.prototype.destroy = function (fundReceiver, cb) {
     var that = this;
     this._contract.destroy(fundReceiver, {gas: this._gas}, function (error, txHash) {
         if (error) return cb(error);
@@ -407,4 +407,4 @@ function cfiFormat(ret) {
     return {identifier: daoUtils.htoa(ret[0]), address: ret[1], error: ret[2]};
 }
 
-module.exports = DefaultDoug;
+module.exports = Doug;

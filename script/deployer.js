@@ -8,12 +8,8 @@
 
 var async = require('async');
 var fs = require('fs-extra');
-var Web3 = require('web3');
 var path = require('path');
-
-var DEFAULT_GAS = 3000000;
-
-var DEFAULT_ETH_URL = "http://localhost:8545";
+var daoUtils = require('./dao_utils');
 
 /**
  * Deployer is used to deploy contracts onto an ethereum block-chain. It deploys contracts,
@@ -28,14 +24,14 @@ var DEFAULT_ETH_URL = "http://localhost:8545";
  * 'address'    - The address to use as sender when deploying. If not set, it will look for the
  *                'DOUG_ROOT' environment variable, and lastly default to 'web3.eth.coinbase'.
  * 'ethURL'     - The URL to the Ethererum RPC-server. Defaults to 'http://localhost:8545'
- * 'libraries'  - A json file consisting of an array with {name: <string>, address: <address>} entries.
+ * 'libraries'  - A libraries json file.
  *                This is useful if the chain already has libraries on it.
  *
  * Deployed contracts are stored as a mapping:
  * 'contracts[name] = {abi: <object>, bytecode: <string>, contract: <object>}'
  * The 'abi' is a json ABI object, bytecode is a hex-string, and contract is a web3 contract.
  *
- * @param {string} rootDir - The directory where contract .bin and .abi files are stored.
+ * @param {string} [rootDir] - The directory where contract .bin and .abi files are stored.
  * @param {Object} [options] - The options.
  *
  * @constructor
@@ -43,36 +39,32 @@ var DEFAULT_ETH_URL = "http://localhost:8545";
 function Deployer(rootDir, options) {
     this._libs = {};
     this._contracts = {};
-    if(!rootDir ){
-        throw new Error("Missing rootDir param for 'new Deployer'");
+    if (!rootDir) {
+        throw new Error("Missing params for 'new Deployer'");
+    } else if (typeof(rootDir) !== 'string') {
+        options = rootDir;
+    } else {
+        this._rootDir = rootDir;
     }
-    this._rootDir = rootDir;
     var opts = options || {};
-    this._gas = opts.gas || DEFAULT_GAS;
-    var ethURL = opts.ethURL || DEFAULT_ETH_URL;
-
-    var web3 = new Web3();
-    web3.setProvider(new web3.providers.HttpProvider(ethURL));
-    var root = opts.address || process.env.DOUG_ROOT || web3.eth.coinbase;
-    if(!root){
-        throw new Error("Neither DOUG_ROOT environment variable or eth coinbase is valid. Can't sign transactions.");
-    }
-    web3.eth.defaultAccount = root;
-
-    this._address = root;
+    this._gas = opts.gas || daoUtils.defaultGas();
+    var web3 = daoUtils.web3(opts.address, opts.ethURL);
+    this._address = web3.eth.defaultAccount;
 
     this._web3 = web3;
-    if(opts.libraries) {
+    if (opts.libraries) {
 
-        var libraries = fs.readJsonSync(opts.libraries);
+        var lData = fs.readJsonSync(opts.libraries);
 
-        for(var i = 0; i < libraries.length; i++){
-            var libData = libraries[i];
-            var code = web3.eth.getCode(libData.address);
-            if(code === "0x") {
-                throw new Error("Library: '" + libData.name + "' at '" + libData.address + "' had no code in it")
+        for (var lib in lData.libraries) {
+            if (lData.libraries.hasOwnProperty(lib)) {
+                var libAddr = lData.libraries[lib];
+                var code = web3.eth.getCode(libAddr);
+                if (code === "0x") {
+                    throw new Error("Library: '" + lib + "' at '" + libAddr + "' had no code in it");
+                }
+                this._libs[lib] = {address: libAddr, bytecode: code};
             }
-            this._libs[libData.name] = {name: libData.name, address: libData.address, bytecode: code};
         }
     }
 }
@@ -81,51 +73,55 @@ function Deployer(rootDir, options) {
  * Deploy a conract. Will register the contract in the deployed contracts registry,
  * and automatically link with libraries if needed.
  *
- * @param {string} contract - The name of the contract as it appears in the .sol file.
+ * @param {string} name - The name of the contract instance (user defined).
+ * @param {string} type - The name of the contract type as it appears in the .sol file.
  * @param {Array} [params] - An array of the constructor params in order.
  * @param {Function} cb - Error-first callback: 'function(error, contract)', where contract is a web3 contract.
  */
-Deployer.prototype.deploy = function(contract, params, cb){
+Deployer.prototype.deploy = function (name, type, params, cb) {
     var callback;
-    if(typeof(params) === 'function'){
+    if (typeof(params) === 'function') {
         callback = params;
         params = [];
     } else {
         callback = cb;
     }
-    var binPath = path.join(this._rootDir, contract + ".bin");
-    var abiPath = path.join(this._rootDir, contract + ".abi");
+    var binPath = path.join(this._rootDir, type + ".bin");
+    var abiPath = path.join(this._rootDir, type + ".abi");
 
     try {
         var bytecode = '0x' + fs.readFileSync(binPath).toString();
         var abi = fs.readJsonSync(abiPath);
-        this._contracts[contract] = {bytecode: bytecode, abi: abi};
+        if (this._contracts[name]) {
+            return callback(new Error('Duplicate name: ' + name));
+        }
+        this._contracts[name] = {type: type, bytecode: bytecode, abi: abi};
     } catch (err) {
-        return callback("Contract: '" + contract + "' missing binary (.bin) or abi (.abi) file in root dir.");
+        return callback(new Error("Contract: '" + type + "' missing binary (.bin) or abi (.abi) file in root dir."));
     }
 
     var that = this;
-    // Deploy and link libraries before pushing onto
-    this._linkBytecode(bytecode, function(err, newBytecode){
-        if(err) return callback(err);
-        var cObj = that._contracts[contract];
+    // Deploy and link libraries before adding to contracts list.
+    this._linkBytecode(bytecode, function (err, newBytecode) {
+        if (err) return callback(err);
+        var cObj = that._contracts[name];
         cObj.bytecode = newBytecode;
-        console.log("Deploying: " + contract);
+        console.log("Deploying: " + name);
 
         var cf = that._web3.eth.contract(cObj.abi);
 
-        if(!params){
+        if (!params) {
             params = [];
         }
 
         var opts = {data: newBytecode, gas: that._gas};
         params.push(opts);
         params.push(function (err, ctr) {
-            if(err) {
+            if (err) {
                 callback(err);
-            } else if(ctr.address){
+            } else if (ctr.address) {
                 cObj.contract = ctr;
-                console.log("'" + contract + "' deployed at: " + ctr.address);
+                console.log("Contract '" + name + "' {" + type + "} deployed at: " + ctr.address);
                 callback(null, ctr);
             }
         });
@@ -138,21 +134,21 @@ Deployer.prototype.deploy = function(contract, params, cb){
  * Deploy a contract. Will not register the contract in the deployed contracts registry, nor do
  * any linking. Useful when deploying simple test contracts.
  *
- * @param {string} contract - The name of the contract as it appears in the source code.
+ * @param {string} type - The name of the contract as it appears in the source code.
  * @param {Array} [params] - An array of the constructor params in order.
  * @param {Function} cb - Error-first callback: 'function(error, contract)', where contract is a web3 contract.
  */
-Deployer.prototype.deployOnly = function(contract, params, cb){
+Deployer.prototype.deployOnly = function (type, params, cb) {
     var callback;
-    if(typeof(params) === 'function'){
+    if (typeof(params) === 'function') {
         callback = params;
         params = [];
     } else {
         callback = cb;
     }
 
-    var binPath = path.join(this._rootDir, contract + ".bin");
-    var abiPath = path.join(this._rootDir, contract + ".abi");
+    var binPath = path.join(this._rootDir, type + ".bin");
+    var abiPath = path.join(this._rootDir, type + ".abi");
     var c;
 
     try {
@@ -160,29 +156,29 @@ Deployer.prototype.deployOnly = function(contract, params, cb){
         var abi = fs.readJsonSync(abiPath);
         c = {bytecode: bytecode, abi: abi};
     } catch (err) {
-        return callback("Contract: '" + contract + "' missing binary (.bin) or abi (.abi) file in root dir.");
+        return callback("Contract: '" + type + "' missing binary (.bin) or abi (.abi) file in root dir.");
     }
 
     var that = this;
-        console.log("Deploying: " + contract + 'without linking or registering.');
+    console.log("Deploying: " + type + 'without linking or registering.');
 
-        var cf = that._web3.eth.contract(c.abi);
+    var cf = that._web3.eth.contract(c.abi);
 
-        if(!params){
-            params = [];
+    if (!params) {
+        params = [];
+    }
+
+    var opts = {data: c.bin, gas: that._gas};
+    params.push(opts);
+    params.push(function (err, ctr) {
+        if (err) {
+            callback(err);
+        } else if (ctr.address) {
+            console.log("'" + type + "' deployed at: " + ctr.address);
+            callback(null, ctr);
         }
-
-        var opts = {data: c.bin, gas: that._gas};
-        params.push(opts);
-        params.push(function (err, ctr) {
-            if(err) {
-                callback(err);
-            } else if(ctr.address){
-                console.log("'" + contract + "' deployed at: " + ctr.address);
-                callback(null, ctr);
-            }
-        });
-        cf.new.apply(cf, params);
+    });
+    cf.new.apply(cf, params);
 };
 
 /**
@@ -274,12 +270,12 @@ Deployer.prototype._deployLibrary = function (name, cb) {
         var opts = {data: lib.bytecode, gas: this._gas};
 
         cf.new(opts, function (err, contract) {
-            if(err) {
+            if (err) {
                 cb(err);
-            } else if(contract.address){
+            } else if (contract.address) {
                 lib.address = contract.address;
                 lib.contract = contract;
-                console.log("Library '" +name + "' deployed at: " + contract.address);
+                console.log("Library '" + name + "' deployed at: " + contract.address);
                 cb(null, contract.address);
             }
         });
@@ -287,11 +283,20 @@ Deployer.prototype._deployLibrary = function (name, cb) {
 };
 
 /**
+ * Set the root-directory to use when deploying.
+ *
+ * @param {string} rootDir - The root directory.
+ */
+Deployer.prototype.setRootDir = function (rootDir) {
+    this._rootDir = rootDir;
+};
+
+/**
  * Set the address to use when deploying.
  *
  * @param {string} address - The address as a hex-string.
  */
-Deployer.prototype.setAddress = function(address) {
+Deployer.prototype.setAddress = function (address) {
     this._address = address;
 };
 
@@ -300,52 +305,95 @@ Deployer.prototype.setAddress = function(address) {
  *
  * @param {number|string|Object} gas - The gas as a number, string, or BigNumber.
  */
-Deployer.prototype.setGas = function(gas) {
+Deployer.prototype.setGas = function (gas) {
     this._gas = gas;
 };
 
 /**
- * Write contract data (name, address) into a json file.
+ * Write contract data into a json file.
  *
- * @param {string} [fileName] - The filename. Defaults to 'rootDir/contracts.json'.
- * @returns {string} The filename that was used.
+ * @param {string} fileName         - The filename. Defaults to 'rootDir/contracts.json'.
+ * @param {Object} modifyContracts  - Don't overwrite the old contracts file, only modify it.
+ * @param {boolean} libraries       - If libraries was deployed as well, set this to 'true' and it will write the
+ *                                    deployment file for those as well, and link to the contracts through a timestamp.
+ * @param {boolean} libraryFileName - The libraries filename. Defaults to 'rootDir/libraries.json'.
+ * @param {Object} modifyLibraries  - Don't overwrite the old libraries file, only modify it.
+ *
+ * @returns {Object} The contracts object.
  */
-Deployer.prototype.writeContracts = function(fileName) {
+Deployer.prototype.writeContracts = function (fileName, modifyContracts, libraries, libraryFileName, modifyLibraries) {
+
     var fn = fileName || path.join(this._rootDir, "contracts.json");
-    var contracts = {};
-    for(var c in this._contracts) {
-        if(this._contracts.hasOwnProperty(c)){
-            contracts[c] = this._contracts[c].contract.address;
+    var cData;
+    if (modifyContracts) {
+        cData = fs.readJsonSync(fn);
+    } else {
+        cData = {contracts: {}};
+    }
+    var libs = libraries;
+    var lfn = libraryFileName || path.join(this._rootDir, "libraries.json");
+    var lData;
+    if (modifyLibraries) {
+        lData = fs.readJsonSync(lfn);
+    } else {
+        lData = {libraries: {}};
+    }
+
+    for (var c in this._contracts) {
+        if (this._contracts.hasOwnProperty(c)) {
+            var cc = this._contracts[c];
+            cData.contracts[c] = {type: cc.type, address: cc.contract.address};
         }
     }
-    fs.writeJsonSync(fn, contracts);
-    return fn;
+
+    cData.id = new Date().getTime();
+
+    if (libs) {
+        for (var lib in this._libs) {
+            if (this._libs.hasOwnProperty(lib)) {
+                lData.libraries[lib] = this._libs[lib].address;
+            }
+        }
+        lData.id = cData.id;
+        fs.writeJsonSync(lfn, lData);
+    }
+
+    fs.writeJsonSync(fn, cData);
+    return cData;
 };
 
 /**
  * Write library data (name, address) into a json file.
  *
- * @param {string} [fileName] - The filename. Defaults to 'rootDir/libraries.json'.
- * @returns {string} The filename that was used.
+ * @param {boolean} fileName        - The libraries filename. Defaults to 'rootDir/libraries.json'.
+ * @param {Object} modifyLibraries  - Don't overwrite the old libraries file, only modify it.
+ *
+ * @returns {Object} The libraries object.
  */
-Deployer.prototype.writeLibraries = function(fileName) {
-    var fn = fileName || path.join(this._rootDir, "libraries.json");
-    var libraries = [];
-    for(var lib in this._libs) {
-        if(this._libs.hasOwnProperty(lib)){
-            libraries.push({name: lib, address: this._libs[lib].address});
+Deployer.prototype.writeLibraries = function (fileName, modifyLibraries) {
+    var lfn = fileName || path.join(this._rootDir, "libraries.json");
+    var lData;
+    if (modifyLibraries) {
+        lData = fs.readJsonSync(lfn);
+    } else {
+        lData = {libraries: {}};
+    }
+    for (var lib in this._libs) {
+        if (this._libs.hasOwnProperty(lib)) {
+            lData.libraries[lib] = this._libs[lib].address;
         }
     }
-    fs.writeJsonSync(fn, libraries);
+    lData.id = new Date().getTime();
+    fs.writeJsonSync(lfn, lData);
     return fn;
 };
 
 /**
  * Get the address used when deploying.
  *
- * @returns {*|string} The address as a hex-string.
+ * @returns {string} The address as a hex-string.
  */
-Deployer.prototype.address = function() {
+Deployer.prototype.address = function () {
     return this._address;
 };
 
@@ -354,7 +402,7 @@ Deployer.prototype.address = function() {
  *
  * @returns {Object}
  */
-Deployer.prototype.web3 = function() {
+Deployer.prototype.web3 = function () {
     return this._web3;
 };
 
@@ -363,7 +411,7 @@ Deployer.prototype.web3 = function() {
  *
  * @returns {Object}
  */
-Deployer.prototype.contracts = function() {
+Deployer.prototype.contracts = function () {
     return this._contracts;
 };
 
@@ -372,7 +420,7 @@ Deployer.prototype.contracts = function() {
  *
  * @returns {number|number|string|Object}
  */
-Deployer.prototype.gas = function() {
+Deployer.prototype.gas = function () {
     return this._gas;
 };
 
@@ -381,7 +429,7 @@ Deployer.prototype.gas = function() {
  *
  * @returns {Object}
  */
-Deployer.prototype.libraries = function() {
+Deployer.prototype.libraries = function () {
     return this._libs;
 };
 

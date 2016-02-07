@@ -9,7 +9,7 @@
 var async = require('async');
 var util = require('util');
 
-var ContractService = require('../../../script/contract_service');
+var ContractService = require('../../script/contract_service');
 
 /**
  * Service for 'AddressSetDb'

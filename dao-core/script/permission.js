@@ -2,18 +2,18 @@
  * @file default_permission.js
  * @fileOverview Contract service for 'DefaultPermission'.
  * @author Andreas Olofsson (androlo1980@gmail.com)
- * @module default_permission
+ * @module dao_core/default_permission
  */
 "use strict";
 
 var async = require('async');
 var util = require('util');
 
-var ContractService = require('../../../script/contract_service');
-var daoUtils = require('../../../script/dao_utils');
+var ContractService = require('../../script/contract_service');
+var daoUtils = require('../../script/dao_utils');
 
 /**
- * Service for 'DefaultPermission'
+ * Service for 'Permission'
  *
  * @param {Object} web3 - A web3 object.
  * @param {Object} contract - A web3 contract instance.
@@ -22,11 +22,11 @@ var daoUtils = require('../../../script/dao_utils');
  * @constructor
  * @augments module:contract_service:ContractService
  */
-function DefaultPermission(web3, contract, gas) {
+function Permission(web3, contract, gas) {
     ContractService.call(this, web3, contract, gas);
 }
 
-util.inherits(DefaultPermission, ContractService);
+util.inherits(Permission, ContractService);
 
 /**
  * Set the root address.
@@ -34,7 +34,7 @@ util.inherits(DefaultPermission, ContractService);
  * @param {string} newRoot - The new root address.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultPermission.prototype.setRoot = function (newRoot, cb) {
+Permission.prototype.setRoot = function (newRoot, cb) {
     var that = this;
     this._contract.setPermission(newRoot, {gas: this._gas}, function(error, txHash){
         if(error) return cb(error);
@@ -47,7 +47,7 @@ DefaultPermission.prototype.setRoot = function (newRoot, cb) {
  *
  * @param {Function} cb - error first callback: function(error, rootAddress).
  */
-DefaultPermission.prototype.root = function (cb) {
+Permission.prototype.root = function (cb) {
     this._contract.root(cb);
 };
 
@@ -56,7 +56,7 @@ DefaultPermission.prototype.root = function (cb) {
  *
  * @param {Function} cb - error first callback: function(error, address, timestamp).
  */
-DefaultPermission.prototype.rootData = function (cb) {
+Permission.prototype.rootData = function (cb) {
     this._contract.rootData(function(error, ret){
         if (error) return cb(error);
         var addr = ret[0];
@@ -71,7 +71,7 @@ DefaultPermission.prototype.rootData = function (cb) {
  * @param {string} address - The owner address.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultPermission.prototype.addOwner = function (address, cb) {
+Permission.prototype.addOwner = function (address, cb) {
     var that = this;
     this._contract.addOwner(address, {gas: this._gas}, function(error, txHash){
         if(error) return cb(error);
@@ -85,7 +85,7 @@ DefaultPermission.prototype.addOwner = function (address, cb) {
  * @param {string} address - The owner address.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultPermission.prototype.removeOwner = function (address, cb) {
+Permission.prototype.removeOwner = function (address, cb) {
     var that = this;
     this._contract.removeOwner(address, {gas: this._gas}, function(error, txHash){
         if(error) return cb(error);
@@ -98,7 +98,7 @@ DefaultPermission.prototype.removeOwner = function (address, cb) {
  *
  * @param {Function} cb - error first callback: function(error, timestamp, errorCode).
  */
-DefaultPermission.prototype.ownerTimestamp = function (cb) {
+Permission.prototype.ownerTimestamp = function (cb) {
     this._contract.ownerTimestamp(function(error, ret){
         if (error) return cb(error);
         var time = daoUtils.bnToDate(ret[0]);
@@ -113,7 +113,7 @@ DefaultPermission.prototype.ownerTimestamp = function (cb) {
  * @param {number} index - The index.
  * @param {Function} cb - error first callback: function(error, address, timestamp, errorCode).
  */
-DefaultPermission.prototype.ownerFromIndex = function (index, cb) {
+Permission.prototype.ownerFromIndex = function (index, cb) {
     this._contract.ownerFromIndex(index, function(error, ret){
         if (error) return cb(error);
         var fmt = ofiFormat(ret);
@@ -126,7 +126,7 @@ DefaultPermission.prototype.ownerFromIndex = function (index, cb) {
  *
  * @param {Function} cb - error first callback: function(error, numOwners).
  */
-DefaultPermission.prototype.numOwners = function (cb) {
+Permission.prototype.numOwners = function (cb) {
     this._contract.numOwners(cb);
 };
 
@@ -136,7 +136,7 @@ DefaultPermission.prototype.numOwners = function (cb) {
  * @param {string} address - The address.
  * @param {Function} cb - error first callback: function(error, hasPermission).
  */
-DefaultPermission.prototype.hasPermission = function (address, cb) {
+Permission.prototype.hasPermission = function (address, cb) {
     this._contract.hasPermission(address, cb);
 };
 
@@ -152,7 +152,7 @@ DefaultPermission.prototype.hasPermission = function (address, cb) {
  * @param {number} [elements] - The number of elements to fetch.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultPermission.prototype.owners = function (start, elements, cb) {
+Permission.prototype.owners = function (start, elements, cb) {
 
     var that = this;
 
@@ -211,7 +211,7 @@ DefaultPermission.prototype.owners = function (start, elements, cb) {
  * @param {address} fundReceiver - The address that will receive the funds from the contract.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-DefaultPermission.prototype.destroy = function (fundReceiver, cb) {
+Permission.prototype.destroy = function (fundReceiver, cb) {
     var that = this;
     this._contract.destroy(fundReceiver, {gas: this._gas}, function(error, txHash){
         if(error) return cb(error);
@@ -223,4 +223,4 @@ function ofiFormat(ret) {
     return {address: ret[0], timestamp: daoUtils.bnToDate(ret[1]), error: ret[2].toNumber()};
 }
 
-module.exports = DefaultPermission;
+module.exports = Permission;

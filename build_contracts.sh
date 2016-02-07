@@ -21,8 +21,8 @@ BUILD_RELEASE_DIR=${BUILD_DIR}/release
 BUILD_TEST_DIR=${BUILD_DIR}/test
 
 # Contracts for each module
-declare -a DaoCoreContracts=('DefaultDoug.sol' 'DefaultPermission.sol' 'Database.sol')
-declare -a DaoCoreTest=('DefaultPermissionTest.sol' 'DefaultDougActionsTest.sol' 'DefaultDougDatabaseTest.sol' 'DefaultDougTest.sol' 'DefaultDougEnabledTest.sol')
+declare -a DaoCoreContracts=('DefaultDoug.sol' 'DefaultPermission.sol')
+declare -a DaoCoreTest=('DefaultPermissionTest.sol' 'DefaultDougActionsTest.sol' 'DefaultDougDatabaseTest.sol' 'DefaultDougTest.sol' 'DefaultDougEnabledTest.sol' 'SimpleTest.sol')
 
 declare -a DaoCurrencyContracts=('DefaultCurrencyDatabase.sol' 'DefaultMintedCurrency.sol' 'MintedUserCurrency.sol')
 declare -a DaoCurrencyTest=('DefaultCurrencyDatabaseTest.sol' 'AbstractMintedCurrencyTest.sol' 'DefaultMintedCurrencyTest.sol' 'MintedUserCurrencyTest.sol')
@@ -46,7 +46,7 @@ DAOVER=$(grep -Po '(?<="version": ")[^"]*' package.json)
 # Write an output file in each directory.
 function log() {
     SV=$(solc --version)
-    printf "{\n\t\"created\": \"$(date +%Y-%m-%d:%H:%M:%S)\",\n\t\"dao\": \"${DAOVER}\",\n\t\"solc\": \"${SV##*: }\",\n\t\"options\": \"$2\"\n}" > $1/build_data.txt
+    printf "{\n\t\"timestamp\": $(date +%s),\n\t\"dao\": \"${DAOVER}\",\n\t\"solc\": \"${SV##*: }\",\n\t\"options\": \"$2\"\n}" > $1/build_data.txt
 }
 
 # Includes
@@ -56,7 +56,7 @@ DAO_STL_INC="dao-stl=./dao-stl"
 DAO_USERS_INC="dao-users=./dao-users"
 DAO_VOTES_INC="dao-voters=./dao-votes"
 
-INCLUDES="/= ${DAO_CORE_INC} ${DAO_CURRENCY_INC} ${DAO_STL_INC} ${DAO_USERS_INC} ${DAO_VOTES_INC}"
+INCLUDES=".= ${DAO_CORE_INC} ${DAO_CURRENCY_INC} ${DAO_STL_INC} ${DAO_USERS_INC} ${DAO_VOTES_INC}"
 
 # Prepare directories
 rm -rf ${BUILD_DIR}

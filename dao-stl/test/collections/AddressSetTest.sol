@@ -48,6 +48,7 @@ contract AddressSetTest is Test {
         var (a, e) = asdb.addressFromIndex(0);
         e.assert("addressFromIndex exist is false");
         a.assertEqual(TEST_ADDRESS, "addressFromIndex returns the wrong address");
+        asdb.numAddresses().assertEqual(1, "size is wrong");
     }
 
     function testRemoveAddress() {
@@ -77,7 +78,7 @@ contract AddressSetTest is Test {
         e.assert("addressFromIndex exist is false for second element");
         a.assertEqual(TEST_ADDRESS_2, "addressFromIndex returns the wrong address for second element");
 
-        asdb.numAddresses().assertEqual(2, "size is not 2");
+        asdb.numAddresses().assertEqual(2, "size is wrong");
     }
 
     function testAddTwoAddressesRemoveLast() {

@@ -85,7 +85,7 @@ library Assertions {
     */
     function assertEqual(string A, string B, string message) constant returns (bool result) {
         result = _stringsEqual(A, B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -105,9 +105,8 @@ library Assertions {
     */
     function assertNotEqual(string A, string B, string message) constant returns (bool result) {
         result = !_stringsEqual(A, B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
-
 
     /*
         Function: assertEmpty(string)
@@ -125,7 +124,7 @@ library Assertions {
     */
     function assertEmpty(string str, string message) constant returns (bool result) {
         result = _stringsEqual(str, STRING_NULL);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(str, "Tested"), message));
     }
 
     /*
@@ -382,7 +381,7 @@ library Assertions {
     */
     function assertEqual(bool A, bool B, string message) constant returns (bool result) {
         result = (A == B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -402,7 +401,7 @@ library Assertions {
     */
     function assertNotEqual(bool A, bool B, string message) constant returns (bool result) {
         result = (A != B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     // ************************************** uint **************************************
@@ -424,7 +423,7 @@ library Assertions {
     */
     function assertEqual(uint A, uint B, string message) constant returns (bool result) {
         result = (A == B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -444,7 +443,7 @@ library Assertions {
     */
     function assertNotEqual(uint A, uint B, string message) constant returns (bool result) {
         result = (A != B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -464,7 +463,7 @@ library Assertions {
     */
     function assertGT(uint A, uint B, string message) constant returns (bool result) {
         result = (A > B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -484,7 +483,7 @@ library Assertions {
     */
     function assertGTOE(uint A, uint B, string message) constant returns (bool result) {
         result = (A >= B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -504,7 +503,7 @@ library Assertions {
     */
     function assertLT(uint A, uint B, string message) constant returns (bool result) {
         result = (A < B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -524,7 +523,7 @@ library Assertions {
     */
     function assertLTOE(uint A, uint B, string message) constant returns (bool result) {
         result = (A <= B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -543,7 +542,7 @@ library Assertions {
     */
     function assertZero(uint number, string message) constant returns (bool result) {
         result = (number == 0);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(number, "Tested"), message));
     }
 
     /*
@@ -562,7 +561,7 @@ library Assertions {
     */
     function assertNotZero(uint number, string message) constant returns (bool result) {
         result = (number != 0);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(number, "Tested"), message));
     }
 
     // ************************************** int **************************************
@@ -584,7 +583,7 @@ library Assertions {
     */
     function assertEqual(int A, int B, string message) constant returns (bool result) {
         result = (A == B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -604,7 +603,7 @@ library Assertions {
     */
     function assertNotEqual(int A, int B, string message) constant returns (bool result) {
         result = (A != B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -624,7 +623,7 @@ library Assertions {
     */
     function assertGT(int A, int B, string message) constant returns (bool result) {
         result = (A > B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -644,7 +643,7 @@ library Assertions {
     */
     function assertGTOE(int A, int B, string message) constant returns (bool result) {
         result = (A >= B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -664,7 +663,7 @@ library Assertions {
     */
     function assertLT(int A, int B, string message) constant returns (bool result) {
         result = (A < B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -684,7 +683,7 @@ library Assertions {
     */
     function assertLTOE(int A, int B, string message) constant returns (bool result) {
         result = (A <= B);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(A, "Tested"), _tag(B, "Against"), message));
     }
 
     /*
@@ -703,7 +702,7 @@ library Assertions {
     */
     function assertZero(int number, string message) constant returns (bool result) {
         result = (number == 0);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(number, "Tested"), message));
     }
 
     /*
@@ -722,7 +721,7 @@ library Assertions {
     */
     function assertNotZero(int number, string message) constant returns (bool result) {
         result = (number != 0);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(number, "Tested"), message));
     }
 
     /******************************** errors ********************************/
@@ -744,7 +743,7 @@ library Assertions {
     */
     function assertErrorsEqual(uint16 errorCode1, uint16 errorCode2, string message) constant returns (bool result) {
         result = (errorCode1 == errorCode2);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(uint(errorCode1), "Tested"), _tag(uint(errorCode2), "Against"), message));
     }
 
     /*
@@ -764,7 +763,7 @@ library Assertions {
     */
     function assertErrorsNotEqual(uint16 errorCode1, uint16 errorCode2, string message) constant returns (bool result) {
         result = (errorCode1 != errorCode2);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(uint(errorCode1), "Tested"), _tag(uint(errorCode2), "Against"), message));
     }
 
     /*
@@ -783,7 +782,7 @@ library Assertions {
     */
     function assertError(uint16 errorCode, string message) constant returns (bool result) {
         result = (errorCode != 0);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(uint(errorCode), "Tested"), message));
     }
 
     /*
@@ -802,7 +801,7 @@ library Assertions {
     */
     function assertNoError(uint16 errorCode, string message) constant returns (bool result) {
         result = (errorCode == 0);
-        _report(result, message);
+        _report(result, _appendTagged(_tag(uint(errorCode), "Tested"), message));
     }
 
     /******************************** internal ********************************/
@@ -882,6 +881,195 @@ library Assertions {
                 return false;
         }
         return true;
+    }
+
+    uint8 constant ZERO = uint8(byte('0'));
+    uint8 constant A = uint8(byte('a'));
+
+    byte constant MINUS = byte('-');
+    byte constant SPACE = byte(' ');
+
+    // since slicing isn't possible (yet)
+    function _itob(int n, uint8 radix) internal constant returns (bytes, uint) {
+        bytes memory bts = new bytes(257);
+        uint i;
+        if (n < 0) {
+            bts[i++] = MINUS;
+            n = -n;
+        }
+        while (n > 0) {
+            bts[i++] = _utoa(uint8(n % radix)); // Turn it to ascii.
+            n /= radix;
+        }
+        return (bts, i);
+    }
+
+    // Convert an int to a string. Radix a number between 2 and 16.
+    function _itoa(int n, uint8 radix) internal constant returns (string) {
+        if (n == 0 || radix < 2 || radix > 16)
+            return '0';
+        var (bts, sz) = _itob(n, radix);
+        bytes memory b = new bytes(sz);
+        for (uint i = 0; i < sz; i++)
+            b[i] = bts[i];
+        return string(b);
+    }
+
+    // since slicing isn't possible (yet)
+    function _utob(uint n, uint8 radix) internal constant returns (bytes, uint) {
+        bytes memory bts = new bytes(257);
+        uint i;
+        while (n > 0) {
+            bts[i++] = _utoa(uint8(n % radix)); // Turn it to ascii.
+            n /= radix;
+        }
+        return (bts, i);
+    }
+
+    // Convert an uint to a string. Radix a number between 2 and 16.
+    function _utoa(uint n, uint8 radix) internal constant returns (string) {
+        if (n == 0 || radix < 2 || radix > 16)
+            return '0';
+        var (bts, sz) = _utob(n, radix);
+        bytes memory b = new bytes(sz);
+        for (uint i = 0; i < sz; i++)
+            b[i] = bts[i];
+        return string(b);
+    }
+
+    function _utoa(uint8 u) internal constant returns (byte) {
+        if (u < 10)
+            return byte(u + ZERO);
+        else if (u < 16)
+            return byte(u - 10 + A);
+        else
+            return 0;
+    }
+
+    // Convert a bool to a string.
+    function _otoa(bool val) internal constant returns (string) {
+        bytes memory b;
+        if (val) {
+            b = new bytes(4);
+            b[0] = 't';
+            b[1] = 'r';
+            b[2] = 'u';
+            b[3] = 'e';
+            return string(b);
+        }
+        else {
+            b = new bytes(5);
+            b[0] = 'f';
+            b[1] = 'a';
+            b[2] = 'l';
+            b[3] = 's';
+            b[4] = 'e';
+            return string(b);
+        }
+    }
+
+    /*
+    function htoa(address addr) constant returns (string) {
+        bytes memory bts = new bytes(40);
+        bytes20 addrBts = bytes20(addr);
+        for (uint i = 0; i < 20; i++) {
+            bts[2*i] = addrBts[i] % 16;
+            bts[2*i + 1] = (addrBts[i] / 16) % 16;
+        }
+        return string(bts);
+    }
+    */
+
+    function _tag(string value, string tag) internal returns (string) {
+
+        bytes memory valueB = bytes(value);
+        bytes memory tagB = bytes(tag);
+
+        uint vl = valueB.length;
+        uint tl = tagB.length;
+
+        bytes memory newB = new bytes(vl + tl + 2);
+
+        uint i;
+        uint j;
+
+        for (i = 0; i < tl; i++)
+            newB[j++] = tagB[i];
+        newB[j++] = ':';
+        newB[j++] = ' ';
+        for (i = 0; i < vl; i++)
+            newB[j++] = valueB[i];
+
+        return string(newB);
+    }
+
+    function _tag(int n, string tag) internal returns (string) {
+        var nstr = _itoa(n, 10);
+        return _tag(nstr, tag);
+    }
+
+    function _tag(uint n, string tag) internal returns (string) {
+        var nstr = _utoa(n, 10);
+        return _tag(nstr, tag);
+    }
+
+    function _tag(bool b, string tag) internal returns (string) {
+        var nstr = _otoa(b);
+        return _tag(nstr, tag);
+    }
+
+    function _appendTagged(string tagged, string str) internal returns (string) {
+
+        bytes memory taggedB = bytes(tagged);
+        bytes memory strB = bytes(str);
+
+        uint sl = strB.length;
+        uint tl = taggedB.length;
+
+        bytes memory newB = new bytes(sl + tl + 3);
+
+        uint i;
+        uint j;
+
+        for (i = 0; i < sl; i++)
+            newB[j++] = strB[i];
+        newB[j++] = ' ';
+        newB[j++] = '(';
+        for (i = 0; i < tl; i++)
+            newB[j++] = taggedB[i];
+        newB[j++] = ')';
+
+        return string(newB);
+    }
+
+    function _appendTagged(string tagged0, string tagged1, string str) internal returns (string) {
+
+        bytes memory tagged0B = bytes(tagged0);
+        bytes memory tagged1B = bytes(tagged1);
+        bytes memory strB = bytes(str);
+
+        uint sl = strB.length;
+        uint t0l = tagged0B.length;
+        uint t1l = tagged1B.length;
+
+        bytes memory newB = new bytes(sl + t0l + t1l + 5);
+
+        uint i;
+        uint j;
+
+        for (i = 0; i < sl; i++)
+            newB[j++] = strB[i];
+        newB[j++] = ' ';
+        newB[j++] = '(';
+        for (i = 0; i < t0l; i++)
+            newB[j++] = tagged0B[i];
+        newB[j++] = ',';
+        newB[j++] = ' ';
+        for (i = 0; i < t1l; i++)
+            newB[j++] = tagged1B[i];
+        newB[j++] = ')';
+
+        return string(newB);
     }
 
 }

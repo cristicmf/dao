@@ -44,6 +44,7 @@ contract PropertySetTest is Test {
         var (a, e) = psdb.propertyFromIndex(0);
         e.assert("propertyFromIndex exist is false");
         a.assertEqual(TEST_PROPERTY, "propertyFromIndex returns the wrong address");
+        psdb.numProperties().assertEqual(1, "size is wrong");
     }
 
     function testRemoveProperty() {

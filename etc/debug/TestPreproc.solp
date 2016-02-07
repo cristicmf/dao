@@ -1,0 +1,21 @@
+contract TestPreproc {
+
+#ifdef DEBUG
+    event DebugSender(address indexed sender);
+#endif
+
+    address _owner;
+
+    function TestPreproc() {
+        _owner = msg.sender;
+    }
+
+    function setOwner(address newOwner){
+        if(msg.sender == _owner)
+            _owner = newOwner;
+#ifdef DEBUG
+        DebugSender(msg.sender);
+#endif
+    }
+
+}

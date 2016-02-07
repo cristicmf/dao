@@ -161,41 +161,56 @@ gulp.task('build:all', ['build:core', 'build:currency', 'build:stl', 'build:user
 gulp.task('test:all', function (cb) {
     var total = 0;
     var successful = 0;
+    var units = 0;
+    var skipped = 0;
 
     async.series([
             function (cb) {
                 solUnit.runTests(daoCoreTests, daoCoreTestFolder, true, function (stats) {
                     total += stats.total;
                     successful += stats.successful;
+                    units += stats.numTestUnits;
+                    skipped += stats.numSkippedUnits;
                     cb();
                 });
             }, function (cb) {
                 solUnit.runTests(daoCurrencyTests, daoCurrencyTestFolder, true, function (stats) {
                     total += stats.total;
                     successful += stats.successful;
+                    units += stats.numTestUnits;
+                    skipped += stats.numSkippedUnits;
                     cb();
                 });
             }, function (cb) {
                 solUnit.runTests(daoSTLTests, daoSTLTestFolder, true, function (stats) {
                     total += stats.total;
                     successful += stats.successful;
+                    units += stats.numTestUnits;
+                    skipped += stats.numSkippedUnits;
                     cb();
                 });
             }, function (cb) {
                 solUnit.runTests(daoUsersTests, daoUsersTestFolder, true, function (stats) {
                     total += stats.total;
                     successful += stats.successful;
+                    units += stats.numTestUnits;
+                    skipped += stats.numSkippedUnits;
                     cb();
                 });
             }, function (cb) {
                 solUnit.runTests(daoVotesTests, daoVotesTestFolder, true, function (stats) {
                     total += stats.total;
                     successful += stats.successful;
+                    units += stats.numTestUnits;
+                    skipped += stats.numSkippedUnits;
                     cb();
                 });
             }], function () {
             console.log("");
             console.log("****************************************");
+            console.log("Total units: " + units);
+            console.log("Skipped: " + skipped);
+            console.log("");
             console.log("Total tests: " + total);
             console.log("Successful: " + successful);
             console.log("Failed: " + (total - successful).toString());

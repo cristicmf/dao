@@ -9,7 +9,7 @@
 
 ## Basic Tutorial
 
-This tutorial shows how to use the dao framework. We're going to start from a simple contract; namely the subcurrency example from the [Solidity webpage](http://solidity.readthedocs.org/en/latest/introduction-to-smart-contracts.html#subcurrency-example). This is how it looks at the time of writing:
+This tutorial shows how to use the dao framework by making a simple coin. We're going to start from the sub-currency example on the [Solidity webpage](http://solidity.readthedocs.org/en/latest/introduction-to-smart-contracts.html#subcurrency-example). This is how the currency contract looks at the time of writing:
 
 ```
 contract Coin {
@@ -44,23 +44,27 @@ contract Coin {
 }
 ```
 
-This contract has all the basic functionality needed for a subcurrency contract, but it is not fit for the dao framework. We need to separate it into a database and an actions contract.
+This contract has all the basic functionality needed for a sub-currency contract, but it must be modified to fit into the framework.
 
 ### Step 1
 
-The first step is to create a database and an actions contract. We will leave the database empty for now, and put everything into the actions contract. 
+The first change is to separate it into a database and an actions contract. We will leave the database empty for now, and put everything into the actions contract. 
 
 We will make a few modifications first.
 
 - The event is not needed for this example, so it will be removed. 
 
-- Sticking to the coding conventions we will remove the public modifier from `minter` and write the accessor function ourselves so that we can document it and name the return value. We will also put a `_` in front of the variable name since it's not public. This helps us avoid name collisions with functions, and signals to other ÐApp Ðevs that they should never modify the value directly.
+- We will remove the public modifier from `minter` and write the accessor function ourselves so that we can document it and name the return value. We will also put a `_` in front of the variable name since it's not public.
 
 - We will do the same thing as above with the `balances` field.
 
-- We will add return values to all functions, so that callers knows what's going on. These are standard errors so the errors in dao-core's `Errors.sol` will do. NOTE: Ethereum itself does not support return values from transactions yet, but others (like Tendermint) do, and it's planned for Ethereum as well.
+- We will return standard error-codes from non-constant functions. 
 
 - We will make the minter address a constructor argument instead of automatically assigning `msg.sender`.
+
+- We will integrate the contracts with the framework.
+
+NOTE: Ethereum itself does not support return values in transactions yet, but it is a planned feature, and is always useful in contract-to-contract calls.
 
 ```
 contract CoinDb is DefaultDatabase {
@@ -69,7 +73,7 @@ contract CoinDb is DefaultDatabase {
 ```
 
 ```
-contract CoinActions is DefaultDougEnabled, Errors {
+contract CoinActions is DefaultDougEnabled {
     
     address _minter;
     mapping (address => uint) _balances;
@@ -102,9 +106,11 @@ contract CoinActions is DefaultDougEnabled, Errors {
 }
 ```
 
+`DefaultDougEnabled` makes it possible to add the contract to `Doug`, and `Errors` gives access to a set of standard error-codes.
+
 ### Step 2
 
-The next step is to separate logic from data storage. User permission checks in the DAO framework are always done in actions contracts.
+The next step is to separate logic from data-storage.
 
 ```
 
@@ -131,13 +137,15 @@ contract CoinDb is DefaultDatabase {
         return _balances[addr];
     }
     
-    function destroy(address fundReceiver){}
-    
 }
 ```
 
 ```
-contract CoinActions is DefaultDougEnabled, Errors {
+contract CoinActions is DefaultDougEnabled {
+    
+    event Mint(address indexed receiver, uint indexed amount, uint16 indexed error);
+    
+    event Send(address indexed receiver, uint indexed amount, uint16 indexed error);
     
     address _minter;
     
@@ -150,32 +158,31 @@ contract CoinActions is DefaultDougEnabled, Errors {
         
     function mint(address receiver, uint amount) returns (uint16 error) {
         if (msg.sender != _minter)
-            return ACCESS_DENIED;
-        return _cdb.add(receiver, amount);
+            error = ACCESS_DENIED;
+        else 
+            error = _cdb.add(receiver, amount);
+        Mint(receiver, amount, error);
     }
     
     function send(address receiver, uint amount) returns (uint16 error) {
-        return _cdb.send(msg.sender, receiver, amount);
+        error = _cdb.send(msg.sender, receiver, amount);
+        Send(receiver, amount, error);
     }
     
     function minter() constant returns (address minter) {
         return _minter;
     }
     
-    function destroy(address fundReceiver) {}
-    
 }
 ```
 
-We have now lifted the `minter` mechanics out of the database contract and put it in the actions contract instead. Minting is restricted to a single account for now, but if we wanted to add minting privileges to more then one account we can now do that by replacing the action contract; the coin balances of all users would still remain in the database, un-changed.
+We have now lifted the `minter` mechanics out of the database contract and put it in the actions contract. Minting is restricted to a single account for now.
 
-The database contract only has a simple mapping in it, but in a real system we would probably want a more advanced collection, so there would be a lot more code in there (or it would delegate some of that functionality to a library contract).
-
-Note that the actions contract takes the coin database contract address as a constructor argument. We will look at a number of different ways of doing this in another tutorial.
+The database contract has a simple mapping in it, but in a real system we would probably want a more advanced collection. It extends `DefaultDatabase`, which makes it `DougEnabled` and gives it the `_checkCaller`-function, which calls `Doug` to check if the calling contract is an actions-contract.
 
 ### Step 3
 
-We now have to deploy the system and test it. We will do that through the browser compiler, to make it as simple as possible. Note that the test contract is now the minter and the sender - not us.
+We now have to deploy the system and test it. We will do that through the browser compiler. Note that the test contract is now the minter and the sender - not us.
 
 ```
 contract UserProxy {
@@ -188,6 +195,7 @@ contract UserProxy {
         error = CoinActions(coinActions).send(receiver,amount);
     }
 }
+
 
 contract CoinTest {
     
@@ -234,9 +242,9 @@ contract CoinTest {
 }
 ```
 
-What we did here was to set the system up so that we call it from a solidity contract. This is just to make testing simpler. In the regular dao framework modules the tests are done using the sol-unit library, and interaction would be done through RPC calls to the blockchain client - usually through javascript libraries like web3.js.
+You may run this yourself in the online compiler by clicking this [link](https://chriseth.github.io/browser-solidity/?gist=https://gist.github.com/androlo/2ac5e8bb13967952d24d). After the page has loaded, find `CoinTest` in the menu to the right, click `create`, and then play around with the methods. 
 
-You may run this yourself in the online compiler by clicking this [link]( https://chriseth.github.io/browser-solidity/?gist=https://gist.github.com/anonymous/e1d8a9d0aeb39a0a969f). After the page has loaded, find `CoinTest` in the menu to the right, click `create`, and then play around with the methods. 
+In the regular dao framework modules the tests are done using the sol-unit library, and interaction would be done through RPC calls to the blockchain client - usually through javascript libraries like web3.js. This is just contract code so it will work in any DApp framework.
 
 NOTE: The entire dao-core is added to the gist because github imports does not work yet. When it does, it will only contain the contracts from the tutorial and import the rest from the dao github repo. Also it will take a while to load the page and compile the code.
 

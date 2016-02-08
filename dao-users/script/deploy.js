@@ -3,7 +3,7 @@ var path = require('path');
 var async = require('async');
 
 var Deployer = require('../../../script/deployer.js');
-var AddressSetDb = require('./admin_reg_user_registry');
+var AddressSetDb = require('./user_database');
 
 // *****************
 

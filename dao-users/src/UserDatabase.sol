@@ -44,6 +44,7 @@ contract UserDatabase is Database {
 
         Params:
             addr (address) - The user address.
+
         Returns:
             error (uint16) An error code.
     */
@@ -158,5 +159,28 @@ contract UserDatabase is Database {
             size (uint) - The size of the collection of users.
     */
     function size() constant returns (uint size);
+
+    /*
+        Function: setMaxSize
+
+        Set the maximum number of users allowed.
+
+        Params:
+            maxSize (uint) - The user address.
+
+        Returns:
+            error (uint16) An error code.
+    */
+    function setMaxSize(uint maxSize) returns (uint16 error);
+
+    /*
+        Function: maxSize
+
+        Get the total number of users allowed.
+
+        Returns:
+            size (uint) - The maximum size.
+    */
+    function maxSize() constant returns (uint maxSize);
 
 }

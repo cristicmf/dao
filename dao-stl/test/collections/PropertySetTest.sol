@@ -1,5 +1,5 @@
-import "../../src/collections/PropertySet.slb";
-import "../../src/assertions/Test.sol";
+import "dao-stl/src/collections/PropertySet.slb";
+import "dao-stl/src/assertions/Test.sol";
 
 contract PropertySetDb {
 

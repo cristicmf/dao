@@ -21,6 +21,8 @@ contract AbstractUserRegistryTest is DaoTest {
 
     bytes32 constant TEST_HASH = 0x11;
 
+    uint constant TEST_MAX_USERS = 1;
+
     function testCreate() {
         var auri = new AbstractUserRegistryImpl(TEST_ADDRESS, this);
         auri.admin().assertEqual(this, "The admin address is wrong.");
@@ -59,14 +61,14 @@ contract AbstractUserRegistryTest is DaoTest {
         var mud = new MockUserDatabase(0, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.removeUser(TEST_ADDRESS);
-        err.assertErrorsEqual(MOCK_RETURN, "removeUser returned an error");
+        err.assertErrorsEqual(MOCK_RETURN, "removeUser returned the wrong error");
     }
 
     function testRemoveUserSuccessIsUser() {
         var mud = new MockUserDatabase(0, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.removeUser(this);
-        err.assertErrorsEqual(MOCK_RETURN, "removeUser returned an error");
+        err.assertErrorsEqual(MOCK_RETURN, "removeUser returned the wrong error");
     }
 
     function testRemoveUserFailNotAdminOrUser() {
@@ -87,21 +89,21 @@ contract AbstractUserRegistryTest is DaoTest {
         var mud = new MockUserDatabase(0, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.removeSelf();
-        err.assertErrorsEqual(MOCK_RETURN, "removeSelf returned an error");
+        err.assertErrorsEqual(MOCK_RETURN, "removeSelf returned the wrong error");
     }
 
     function testUpdateDataHashSuccessIsAdmin() {
         var mud = new MockUserDatabase(0, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.updateDataHash(TEST_ADDRESS, TEST_HASH);
-        err.assertErrorsEqual(MOCK_RETURN, "updateDataHash returned an error");
+        err.assertErrorsEqual(MOCK_RETURN, "updateDataHash returned the wrong error");
     }
 
     function testUpdateDataHashSuccessIsUser() {
         var mud = new MockUserDatabase(0, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.updateDataHash(this, TEST_HASH);
-        err.assertErrorsEqual(MOCK_RETURN, "updateDataHash returned an error");
+        err.assertErrorsEqual(MOCK_RETURN, "updateDataHash returned the wrong error");
     }
 
     function testUpdateDataHashFailNotAdminOrUser() {
@@ -122,7 +124,20 @@ contract AbstractUserRegistryTest is DaoTest {
         var mud = new MockUserDatabase(0, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.updateMyDataHash(TEST_HASH);
-        err.assertErrorsEqual(MOCK_RETURN, "removeSelf returned an error");
+        err.assertErrorsEqual(MOCK_RETURN, "updateMyDataHash returned the wrong error");
+    }
+
+    function testSetMaxUsersSuccess() {
+        var mud = new MockUserDatabase(0, true, 0);
+        var auri = new AbstractUserRegistryImpl(mud, this);
+        var err = auri.setMaxUsers(TEST_MAX_USERS);
+        err.assertErrorsEqual(MOCK_RETURN, "setMaxUsers returned the wrong error");
+    }
+
+    function testSetMaxUsersFailNotAdmin() {
+        var auri = new AbstractUserRegistryImpl(0, TEST_ADDRESS);
+        var err = auri.setMaxUsers(TEST_MAX_USERS);
+        err.assertErrorsEqual(ACCESS_DENIED, "setMaxUsers returned the wrong error");
     }
 
     function testSetAdminSuccess() {
@@ -132,7 +147,7 @@ contract AbstractUserRegistryTest is DaoTest {
         auri.admin().assertEqual(TEST_ADDRESS, "admin returns the wrong address");
     }
 
-    function testSetAdminFailAccessDenied() {
+    function testSetAdminFailNotAdmin() {
         var auri = new AbstractUserRegistryImpl(0, TEST_ADDRESS);
         var err = auri.setAdmin(TEST_ADDRESS_2);
         err.assertErrorsEqual(ACCESS_DENIED, "setAdmin returned no 'access denied' error");

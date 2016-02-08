@@ -59,6 +59,15 @@ contract UserRegistry is DougEnabled {
     event SetAdmin(address indexed dbAddr, uint16 indexed error);
 
     /*
+        Event: SetMaxUsers
+
+        Params:
+            maxUsers (uint) - The address.
+            error (uint16) - An error code.
+    */
+    event SetMaxUsers(uint indexed maxUsers, uint16 indexed error);
+
+    /*
         Function: registerUser
 
         Register a new user.
@@ -136,6 +145,19 @@ contract UserRegistry is DougEnabled {
             error (uint16) - An error code.
     */
     function updateMyDataHash(bytes32 dataHash) returns (uint16 error);
+
+    /*
+        Function: setMaxUsers
+
+        Set the maximum number of users that are allowed in the group.
+
+        Params:
+            maxUsers (uint) - The maximum number of users.
+
+        Returns:
+            error (uint16) - An error code.
+    */
+    function setMaxUsers(uint maxUsers) returns (uint16 error);
 
     /*
         Function: setUserDatabase

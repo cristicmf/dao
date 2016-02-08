@@ -68,4 +68,10 @@ contract MockUserDatabase is UserDatabase {
 
     function _checkCaller() constant internal returns (bool) {}
 
+    function setMaxSize(uint maxSize) returns (uint16 error) {
+        return MOCK_RETURN;
+    }
+
+    function maxSize() constant returns (uint maxSize) {}
+
 }

@@ -1,5 +1,5 @@
-import "../../src/collections/PropertyToAddressMap.slb";
-import "../../src/assertions/Test.sol";
+import "dao-stl/src/collections/PropertyToAddressMap.slb";
+import "dao-stl/src/assertions/Test.sol";
 
 contract PropertyToAddressDb {
 

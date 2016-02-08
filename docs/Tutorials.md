@@ -345,7 +345,7 @@ function send(address receiver, uint amount) returns (uint16 error) {
 This is fast and simple, but there is a problem. What if we want to replace the database? In that case we will have to add a method to the actions contract that allow us to change the database address, and remember to do that when we add a new database.
 
 The setter will have to use permissions as well. One way of doing it would be to allow anyone with the Doug permission to do it.
- 
+
 ```
 function setCoinDatabase(address newCoinDb) returns (uint16 error) {
     var perm = Permission(_DOUG.permissionAddress());

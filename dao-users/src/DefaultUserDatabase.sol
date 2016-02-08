@@ -5,10 +5,15 @@ import "dao-stl/src/errors/Errors.sol";
     Contract: DefaultUserDatabase
 
     DefaultUserDatabase is an iterable map with (address, UserData) entries. Order of insertion is not preserved.
+
     O(1) insert, find, and remove.
+
     Stores an array index (uint) for each entry, in addition to the key and value.
     This is for easy lookup, and for making iteration possible.
+
     Order of insertion is not preserved.
+
+    A max-size of 0 means no upper limit. This is the default value.
 
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
@@ -34,6 +39,8 @@ contract DefaultUserDatabase is DefaultDatabase {
         bytes32 dataHash;
     }
 
+    uint _maxSize;
+
     mapping(bytes32 => address) _nToA;
     mapping(address => Element) _data;
     address[] _keys;
@@ -48,6 +55,7 @@ contract DefaultUserDatabase is DefaultDatabase {
             value_nickname (bytes32) - The users nickname.
             value_timestamp (uint) - A unix timestamp.
             value_dataHash (bytes32) - Hash of the file containing (optional) user data.
+
         Returns:
             error (uint16) An error code.
     */
@@ -57,6 +65,8 @@ contract DefaultUserDatabase is DefaultDatabase {
         var exists = _data[addr].nickname != 0 || _nToA[value_nickname] != 0;
         if (exists)
             return RESOURCE_ALREADY_EXISTS;
+        if (_maxSize != 0 && _keys.length == _maxSize)
+            return ARRAY_INDEX_OUT_OF_BOUNDS;
         else
             _data[addr] = Element(_keys.push(addr) - 1, value_nickname, value_timestamp, value_dataHash);
     }
@@ -69,6 +79,7 @@ contract DefaultUserDatabase is DefaultDatabase {
         Params:
             addr (address) - The address.
             dataHash (bytes32) - Hash of the file containing (optional) user data.
+
         Returns:
             error (uint16) An error code.
     */
@@ -90,6 +101,7 @@ contract DefaultUserDatabase is DefaultDatabase {
 
         Params:
             addr (address) - The user address.
+
         Returns:
             error (uint16) An error code.
     */
@@ -244,6 +256,37 @@ contract DefaultUserDatabase is DefaultDatabase {
     */
     function size() constant returns (uint size) {
         return _keys.length;
+    }
+
+    /*
+        Function: setMaxSize
+
+        Set the maximum number of users allowed.
+
+        Params:
+            maxSize (uint) - The user address.
+
+        Returns:
+            error (uint16) An error code.
+    */
+    function setMaxSize(uint maxSize) returns (uint16 error) {
+        if (!_checkCaller())
+            return ACCESS_DENIED;
+        if (maxSize != 0 && _keys.length > maxSize)
+            return INTEGER_OUT_OF_BOUNDS;
+        _maxSize = maxSize;
+    }
+
+    /*
+        Function: maxSize
+
+        Get the maximum number of users allowed.
+
+        Returns:
+            size (uint) - The maximum size.
+    */
+    function maxSize() constant returns (uint maxSize) {
+        return _maxSize;
     }
 
 }

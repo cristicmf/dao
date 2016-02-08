@@ -1,5 +1,5 @@
-import "../../src/collections/AddressSet.slb";
-import "../../src/assertions/Test.sol";
+import "dao-stl/src/collections/AddressSet.slb";
+import "dao-stl/src/assertions/Test.sol";
 
 contract AddressSetDb {
 

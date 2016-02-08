@@ -52,7 +52,6 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled {
             error = NULL_PARAM_NOT_ALLOWED;
         else
             error = _userDatabase.registerUser(addr, nickname, block.timestamp, dataHash);
-
         RegisterUser(addr, nickname, dataHash, error);
     }
 
@@ -128,6 +127,25 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled {
     function updateMyDataHash(bytes32 dataHash) returns (uint16 error) {
         error = _userDatabase.updateDataHash(msg.sender, dataHash);
         UpdateDataHash(msg.sender, dataHash, error);
+    }
+
+    /*
+        Function: setMaxUsers
+
+        Set the maximum number of users that are allowed in the group.
+
+        Params:
+            maxUsers (uint) - The maximum number of users.
+
+        Returns:
+            error (uint16) - An error code.
+    */
+    function setMaxUsers(uint maxUsers) returns (uint16 error) {
+        if (msg.sender != _admin)
+            error = ACCESS_DENIED;
+        else
+            error = _userDatabase.setMaxSize(maxUsers);
+        SetMaxUsers(maxUsers, error);
     }
 
     /*

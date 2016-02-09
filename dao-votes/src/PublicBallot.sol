@@ -1,3 +1,7 @@
+/*
+    File: PublicBallot.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-core/src/Doug.sol";
 
 /*
@@ -7,8 +11,6 @@ import "dao-core/src/Doug.sol";
     that requires its own contract. It allows for any number of voters.
     Simpler voting contracts done by a handful of voters can be done wih a
     struct + library combination instead.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract PublicBallot is Destructible {
 

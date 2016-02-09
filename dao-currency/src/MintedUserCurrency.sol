@@ -1,3 +1,7 @@
+/*
+    File: MintedUserCurrency.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-stl/src/errors/Errors.sol";
 import "dao-core/src/Doug.sol";
 import "dao-users/src/UserDatabase.sol";
@@ -8,8 +12,6 @@ import "./CurrencyDatabase.sol";
     Contract: MintedUserCurrency
 
     Minted currency that can only be held by users. User checks are done using a 'UserDatabase' contract.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract MintedUserCurrency is AbstractMintedCurrency {
 

@@ -1,3 +1,7 @@
+/*
+    File: DefaultCurrencyDatabase.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "./CurrencyDatabase.sol";
 import "dao-core/src/Database.sol";
 
@@ -6,8 +10,6 @@ import "dao-core/src/Database.sol";
 
     Default implementation of CurrencyDatabase. To save sapce, the balance mapping is not iterable.
     Applications are expected to already have an iterable collection of users (such as 'DefaultUserDatabase') which can be used instead.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract DefaultCurrencyDatabase is CurrencyDatabase, DefaultDatabase {
 

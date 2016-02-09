@@ -1,12 +1,5 @@
 import "../../../../dao-core/contracts/src/Doug.sol";
 
-/*
-    Contract: BallotManager
-
-    This is an interface for contracts that handles a single type of ballot.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
-*/
 contract BallotManager is DougEnabled {
 
     /*

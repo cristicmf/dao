@@ -1,11 +1,13 @@
+/*
+    File: Test.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "./Assertions.sol";
 
 /*
     Contract: Test
 
     Contract that binds all valid types to the <Assertions> methods.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract Test {
     using Assertions for bool;

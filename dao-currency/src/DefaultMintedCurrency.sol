@@ -1,3 +1,7 @@
+/*
+    File: DefaultMintedCurrency.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "./AbstractMintedCurrency.sol";
 import "./CurrencyDatabase.sol";
 
@@ -5,8 +9,6 @@ import "./CurrencyDatabase.sol";
     Contract: DefaultMintedCurrency
 
     Default implementation of 'MintedCurrency'.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract DefaultMintedCurrency is AbstractMintedCurrency {
 

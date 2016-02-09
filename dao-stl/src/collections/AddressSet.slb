@@ -1,4 +1,9 @@
 /*
+    File: AddressSet.slb
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
+
+/*
     Library: AddressSet
 
     AddressSet is a set backed by an iterable map with (address, bool) entries.
@@ -9,8 +14,6 @@
     This is for easy lookup, and for making iteration possible.
 
     Order of insertion is not preserved.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 library AddressSet {
 

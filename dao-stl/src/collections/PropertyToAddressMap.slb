@@ -1,4 +1,9 @@
 /*
+    File: PropertyToAddressMap.slb
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
+
+/*
     Library: PropertyToAddressMap
 
     PropertyToAddressMap is an iterable map with (bytes32, address) entries.

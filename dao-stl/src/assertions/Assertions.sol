@@ -1,4 +1,9 @@
 /*
+    File: Assertions.slb
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
+
+/*
     Library: Assertions
 
     Assertions for unit testing contracts. Tests are run with the
@@ -38,8 +43,6 @@
         }
     }
     (end)
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 library Assertions {
 

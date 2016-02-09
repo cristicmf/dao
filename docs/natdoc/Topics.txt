@@ -86,6 +86,7 @@ Topic Type: Contract
    Plural: Contracts
    Scope: Start
    Class Hierarchy: Yes
+   Can Group With: Classes
 
    Keywords:
       contract, contracts
@@ -96,19 +97,10 @@ Topic Type: Library
    Plural: Libraries
    Scope: Start
    Class Hierarchy: Yes
+   Can Group With: Classes
 
    Keywords:
       library, libraries
-
-
-Alter Topic Type: Interface
-
-   Plural: Interfaces
-   Scope: Start
-   Class Hierarchy: Yes
-
-   Add Keywords:
-      interface, interfaces
 
 
 Topic Type: Author
@@ -170,16 +162,7 @@ Alter Topic Type: Variable
       uint, uints
       byte, bytes
       real, reals
-      array, arrays
-      hash, hashes
       bool, bools
-      boolean, booleans
-      pointer, pointers
-      ptr, ptrs
-      reference, references
-      ref, refs
-      object, objects
-      obj, objs
       string, strings
       str, strs
       address, addresses

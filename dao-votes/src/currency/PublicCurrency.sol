@@ -1,3 +1,7 @@
+/*
+    File: PublicCurrency.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-stl/src/errors/Errors.sol";
 import "dao-core/src/Doug.sol";
 import "dao-users/src/UserDatabase.sol";
@@ -16,7 +20,6 @@ import "dao-votes/src/PublicBallot.sol";
     is not in a separate contract, since ballots are short-lived, and there really shouldn't
     be any changes to the actual ballot control logic while ballots are taking place.
 
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract PublicCurrency is BallotMap, MintedUserCurrency {
 
@@ -52,7 +55,7 @@ contract PublicCurrency is BallotMap, MintedUserCurrency {
     /*
         Event: CreateQuorumBallot
 
-        Params:.
+        Params:
             quorum (uint8) - The quorum.
             error (uint16) - An error code.
     */
@@ -70,7 +73,7 @@ contract PublicCurrency is BallotMap, MintedUserCurrency {
 /*
         Event: RemoveBallot
 
-        Params:.
+        Params:
             ballotAddress (address) - The address of the ballot.
             error (uint16) - An error code.
     */

@@ -1,3 +1,7 @@
+/*
+    File: DefaultPermission.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-stl/src/errors/Errors.sol";
 import "./Permission.sol";
 import "./Doug.sol";
@@ -12,8 +16,6 @@ import "./Doug.sol";
     Root and owners all pass the 'isPermission' check.
 
     All addresses must be valid. If root is not valid, root can not be changed so the entire system breaks down.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract DefaultPermission is Destructible, Permission, Errors {
 

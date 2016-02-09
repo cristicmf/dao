@@ -1,11 +1,13 @@
+/*
+    File: Database.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "./Doug.sol";
 
 /*
     Contract: Database
 
     Interface for databases.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract Database is DougEnabled {
 
@@ -26,7 +28,6 @@ contract Database is DougEnabled {
 
     Base contract for databases. Provides an internal method for checking if caller is an actions contract.
 
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract DefaultDatabase is Database, DefaultDougEnabled {
 

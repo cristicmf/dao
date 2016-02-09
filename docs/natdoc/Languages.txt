@@ -121,8 +121,8 @@ Language: Solidity
    Enum Values: Under parent
    Function Prototype Enders: ; {
    Variable Prototype Enders: ; =
-   Event Prototype Enders: ; {
-   Contract Prototype Ender: {
    Struct Prototype Ender: {
    Constructor Prototype Ender: {
+   Event Prototype Enders: ; {
    Library Prototype Ender: {
+   Contract Prototype Ender: {

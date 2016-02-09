@@ -920,6 +920,11 @@ a.IFile {
 }
 /* keywords */
 
+.prettyprint {
+    padding: 2px;
+    padding-top: 3px;
+}
+
 .prettyprint.PDefaultValue .kwd,
 .prettyprint.PDefaultValuePrefix .kwd,
 .prettyprint.PTypePrefix .kwd {

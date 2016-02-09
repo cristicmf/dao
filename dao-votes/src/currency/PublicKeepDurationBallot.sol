@@ -1,3 +1,7 @@
+/*
+    File: PublicKeepDurationBallot.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-votes/src/AbstractPublicBallot.sol";
 import "./PublicCurrency.sol";
 
@@ -5,8 +9,6 @@ import "./PublicCurrency.sol";
     Contract: PublicKeepDurationBallot
 
     Public ballot that sets vote durations upon successful votes.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract PublicKeepDurationBallot is AbstractPublicBallot {
 

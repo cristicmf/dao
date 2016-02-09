@@ -1,3 +1,7 @@
+/*
+    File: AdminRegUserRegistry.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "./AbstractUserRegistry.sol";
 
 /*
@@ -5,8 +9,6 @@ import "./AbstractUserRegistry.sol";
 
     User registry contract. Depends on a 'UserDatabase' contract.
     All users must be registered by an administrator.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract AdminRegUserRegistry is AbstractUserRegistry {
 

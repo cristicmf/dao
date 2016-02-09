@@ -1,11 +1,13 @@
+/*
+    File: MintedCurrency.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-core/src/Doug.sol";
 
 /*
     Contract: MintedCurrency
 
     MintedCurrency is an interface for currency actions-contracts that has a minter.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract MintedCurrency is DougEnabled {
 

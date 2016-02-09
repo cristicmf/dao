@@ -1,3 +1,7 @@
+/*
+    File: PublicMintingBallot.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-votes/src/AbstractPublicBallot.sol";
 import "./PublicCurrency.sol";
 
@@ -5,8 +9,6 @@ import "./PublicCurrency.sol";
     Contract: PublicMintingBallot
 
     Public ballot that mints coins upon successful votes.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract PublicMintingBallot is AbstractPublicBallot {
 

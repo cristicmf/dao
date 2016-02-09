@@ -1,3 +1,7 @@
+/*
+    File: AbstractMintedCurrency.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-core/src/Doug.sol";
 import "./MintedCurrency.sol";
 import "./CurrencyDatabase.sol";
@@ -6,8 +10,6 @@ import "./CurrencyDatabase.sol";
     Contract: AbstractMintedCurrency
 
     Implements 'setMinter', 'minter' and 'destroy' from <MintedCurrency>.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled {
 

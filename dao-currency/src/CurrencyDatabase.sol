@@ -1,11 +1,13 @@
+/*
+    File: CurrencyDatabase.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-core/src/Database.sol";
 
 /*
     Contract: CurrencyDatabase
 
     CurrencyDatabase is an interface for contracts that keeps track of currency balance.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract CurrencyDatabase is Database {
 

@@ -1,3 +1,7 @@
+/*
+    File: Doug.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "./Permission.sol";
 import "dao-stl/src/errors/Errors.sol";
 
@@ -7,8 +11,6 @@ import "dao-stl/src/errors/Errors.sol";
     Interface for destructible (deletable) contracts.
     Should be implemented by contracts that are used as doug actions or database contracts,
     so that the contract can be automatically destroyed when it is removed from Doug.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract Destructible {
 
@@ -40,8 +42,6 @@ contract Destructible {
 
     This interface must be implemented by contracts that are used as doug
     actions or database contracts.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract DougEnabled is Destructible {
 
@@ -76,8 +76,6 @@ contract DougEnabled is Destructible {
     Contract: ActionsContractRegistry
 
     The ActionsContractRegistry is an interface for contracts that has an iterable registry of actions contracts.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract ActionsContractRegistry {
 
@@ -217,8 +215,6 @@ contract ActionsContractRegistry {
     Contract: DatabaseContractRegistry
 
     The DatabaseContractRegistry is an interface for contracts that has an iterable registry of database contracts.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract DatabaseContractRegistry {
 
@@ -359,8 +355,6 @@ contract DatabaseContractRegistry {
 
     Doug is an interface for the top level contract in a DApp. It has registries for contracts
     and a permissions manager. Contract IDs are 32 byte strings (bytes32).
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract Doug is ActionsContractRegistry, DatabaseContractRegistry, Destructible {
 
@@ -405,8 +399,6 @@ contract Doug is ActionsContractRegistry, DatabaseContractRegistry, Destructible
     Contract: DefaultDougEnabled
 
     Default implementation of 'DougEnabled'.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract DefaultDougEnabled is DougEnabled, Errors {
 

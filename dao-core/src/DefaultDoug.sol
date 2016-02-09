@@ -1,3 +1,7 @@
+/*
+    File: DefaultDoug.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-stl/src/errors/Errors.sol";
 import "./Doug.sol";
 import "./Permission.sol";
@@ -15,8 +19,6 @@ import "./Permission.sol";
     Contracts can only be given one id, and each id is unique.
 
     Most collections work is done internally rather then through a library.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract DefaultDoug is Doug, Errors {
 

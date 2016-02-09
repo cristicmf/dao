@@ -1,3 +1,7 @@
+/*
+    File: DefaultUserDatabase.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-core/src/Database.sol";
 import "dao-stl/src/errors/Errors.sol";
 
@@ -14,8 +18,6 @@ import "dao-stl/src/errors/Errors.sol";
     Order of insertion is not preserved.
 
     A max-size of 0 means no upper limit. This is the default value.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract DefaultUserDatabase is DefaultDatabase {
 

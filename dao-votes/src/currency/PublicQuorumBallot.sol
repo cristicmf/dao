@@ -1,3 +1,7 @@
+/*
+    File: PublicQuorumBallot.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-votes/src/AbstractPublicBallot.sol";
 import "./PublicCurrency.sol";
 
@@ -5,8 +9,6 @@ import "./PublicCurrency.sol";
     Contract: PublicQuorumBallot
 
     Public ballot that sets the quorum upon successful votes.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract PublicQuorumBallot is AbstractPublicBallot {
 

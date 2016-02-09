@@ -1,3 +1,7 @@
+/*
+    File: SelfRegUserRegistry.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "./AbstractUserRegistry.sol";
 
 /*
@@ -5,8 +9,6 @@ import "./AbstractUserRegistry.sol";
 
     User registry contract. Depends on a 'UserDatabase' contract.
     Users can register themselves.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract SelfRegUserRegistry is AbstractUserRegistry {
 

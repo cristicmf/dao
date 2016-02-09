@@ -1,3 +1,7 @@
+/*
+    File: UserDatabase.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-core/src/Database.sol";
 
 /*
@@ -5,7 +9,6 @@ import "dao-core/src/Database.sol";
 
     UserDatabase is an interface for contracts that keeps an iterable record of users.
 
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract UserDatabase is Database {
 

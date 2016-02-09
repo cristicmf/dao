@@ -1,3 +1,7 @@
+/*
+    File: AbstractPublicBallot.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "./PublicBallot.sol";
 import "dao-users/src/UserDatabase.sol";
 import "dao-stl/src/errors/Errors.sol";
@@ -10,10 +14,9 @@ import "dao-stl/src/errors/Errors.sol";
     The vote must be concluded manually by calling 'finalize' after the time has expired,
     unless every eligible voter votes (in which case the last vote will automatically
     conclude it).
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract AbstractPublicBallot is PublicBallot,  Errors {
+
 
     /*
         Struct: Element
@@ -30,9 +33,9 @@ contract AbstractPublicBallot is PublicBallot,  Errors {
     }
 
     /*
-        Struct: Element
+        Struct: Map
 
-        Element type for the voter map.
+        Map of voters.
 
         Members:
             _data - A mapping of 'address' to 'Element's.
@@ -43,6 +46,7 @@ contract AbstractPublicBallot is PublicBallot,  Errors {
         mapping(address => Element) _data;
         address[] _keys;
     }
+
 
     UserDatabase _userDatabase;
 

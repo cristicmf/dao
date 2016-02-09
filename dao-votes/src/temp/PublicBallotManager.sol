@@ -1,12 +1,5 @@
 import "./BallotManager.sol";
 
-/*
-    Contract: PublicBallotManager
-
-    This is an interface for contracts that handles a single type of public ballot.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
-*/
 contract PublicBallotManager is BallotManager {
 
     /*

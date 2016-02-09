@@ -1,11 +1,13 @@
+/*
+    File: UserRegistry.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-core/src/Doug.sol";
 
 /*
     Contract: UserRegistry
 
     An interface for contracts that works with a user database to register and manage users.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract UserRegistry is DougEnabled {
 

@@ -1,3 +1,7 @@
+/*
+    File: AbstractUserRegistry.sol
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+*/
 import "dao-core/src/Doug.sol";
 import "./UserRegistry.sol";
 import "./UserDatabase.sol";
@@ -12,8 +16,6 @@ import "./UserDatabase.sol";
     Uses a single admin account.
 
     The admin can remove users and edit their data.
-
-    Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled {
 

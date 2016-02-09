@@ -44,7 +44,7 @@ Command-line [Gulp](http://gulpjs.com/) is optional, but has tasks for building 
 
 You need [solc](https://github.com/ethereum/solidity) on your path to compile locally (latest dev).
 
-You need [NaturalDocs](http://www.naturaldocs.org/) on your path to build html documentation (shell script version, not .bat).
+You need [NaturalDocs](http://www.naturaldocs.org/) and [jsdoc](http://usejsdoc.org/) on your path to build html documentation.
 
 **Formal proofs**
 
@@ -160,7 +160,7 @@ This is normally because the contract build folders has been tampered with, or b
 
 **I can't build html documentation**
 
-This could be because you don't have [NaturalDocs](http://www.naturaldocs.org/) on your path.
+This could be because you don't have [NaturalDocs](http://www.naturaldocs.org/) or `jsdoc` on your path.
 
 
 ## Business

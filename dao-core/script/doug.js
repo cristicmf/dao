@@ -188,7 +188,7 @@ Doug.prototype.actionsContracts = function (start, elements, cb) {
                 });
             },
             function (err) {
-                cb(err, contracts);
+                cb(err, {startIndex: s, endIndex: e, totalSize: size, blockNumber: block, contracts: contracts});
             }
         );
 
@@ -356,7 +356,7 @@ Doug.prototype.databaseContracts = function (start, elements, cb) {
                 });
             },
             function (err) {
-                cb(err, contracts);
+                cb(err, {startIndex: s, endIndex: e, totalSize: size, blockNumber: block, contracts: contracts});
             }
         );
 
@@ -389,22 +389,8 @@ Doug.prototype.permissionAddress = function (cb) {
     this._contract.permissionAddress(cb);
 };
 
-/**
- * Destroy the doug contract.
- *
- * @param {address} fundReceiver - The address that will receive the funds from the contract.
- * @param {Function} cb - error first callback: function(error, errorCode).
- */
-Doug.prototype.destroy = function (fundReceiver, cb) {
-    var that = this;
-    this._contract.destroy(fundReceiver, {gas: this._gas}, function (error, txHash) {
-        if (error) return cb(error);
-        that.waitForDestroyed(txHash, cb);
-    });
-};
-
 function cfiFormat(ret) {
-    return {identifier: daoUtils.htoa(ret[0]), address: ret[1], error: ret[2]};
+    return {identifier: daoUtils.htoa(ret[0]), address: ret[1], error: ret[2].toNumber()};
 }
 
 module.exports = Doug;

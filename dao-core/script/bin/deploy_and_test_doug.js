@@ -67,7 +67,7 @@ function test(services, callback) {
 
     function testAddActionsContract(cb) {
         console.log("Adding actions contract: " + settable.address);
-        doug.addActionsContract("test", settable.address, function (error, code) {
+        doug.addActionsContract("settable", settable.address, function (error, code) {
             if (error) return cb(error);
             if (code !== 0) {
                 return cb(new Error("Add returned error: " + errors.error(code)));
@@ -79,7 +79,7 @@ function test(services, callback) {
 
     function testActionsContractAddress(cb) {
         console.log("Getting address from id");
-        doug.actionsContractAddress("test", function (error, address) {
+        doug.actionsContractAddress("settable", function (error, address) {
             if (error) return cb(error);
             if (address != settable.address) {
                 return cb(new Error("Wrong address: " + address));
@@ -93,7 +93,7 @@ function test(services, callback) {
         console.log("Getting id from address");
         doug.actionsContractId(settable.address, function (error, id) {
             if (error) return cb(error);
-            if (id !== "test") {
+            if (id !== "settable") {
                 return cb(new Error("Wrong id: " + id));
             }
             console.log("Contract id: " + id);
@@ -112,8 +112,8 @@ function test(services, callback) {
     }
 
     function testRemoveActionsContract(cb) {
-        console.log("Removing actions contract: test");
-        doug.removeActionsContract("test", function (error, code) {
+        console.log("Removing actions contract: settable");
+        doug.removeActionsContract("settable", function (error, code) {
             if (error) return cb(error);
             if (code !== 0) {
                 return cb(new Error("Remove returned error: " + errors.error(code)));
@@ -125,7 +125,7 @@ function test(services, callback) {
 
     function testAddDatabaseContract(cb) {
         console.log("Adding database contract: " + settable.address);
-        doug.addDatabaseContract("test", settable.address, function (error, code) {
+        doug.addDatabaseContract("settable", settable.address, function (error, code) {
             if (error) return cb(error);
             if (code !== 0) {
                 return cb(new Error("Add returned error: " + errors.error(code)));
@@ -137,7 +137,7 @@ function test(services, callback) {
 
     function testDatabaseContractAddress(cb) {
         console.log("Getting address from id.");
-        doug.databaseContractAddress("test", function (error, address) {
+        doug.databaseContractAddress("settable", function (error, address) {
             if (error) return cb(error);
             if (address != settable.address) {
                 return cb(new Error("Wrong address: " + address));
@@ -151,7 +151,7 @@ function test(services, callback) {
         console.log("Getting id from address");
         doug.databaseContractId(settable.address, function (error, id) {
             if (error) return cb(error);
-            if (id !== "test") {
+            if (id !== "settable") {
                 return cb(new Error("Wrong id: " + id));
             }
             console.log("Contract id: " + id);
@@ -170,8 +170,8 @@ function test(services, callback) {
     }
 
     function testRemoveDatabaseContract(cb) {
-        console.log("Removing database contract: test");
-        doug.removeDatabaseContract("test", function (error, code) {
+        console.log("Removing database contract: settable");
+        doug.removeDatabaseContract("settable", function (error, code) {
             if (error) return cb(error);
             if (code !== 0) {
                 return cb(new Error("Remove returned error: " + errors.error(code)));

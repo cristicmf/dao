@@ -151,6 +151,23 @@ contract UserDatabase is Database {
     function userAddressFromIndex(uint index) constant returns (address addr, uint16 error);
 
     /*
+        Function: userFromIndex
+
+        Get user data from their index in the backing array.
+
+        Params:
+            index (uint) - The index.
+
+        Returns:
+            addr (address) - The user address.
+            nickname (bytes32) - The nickname.
+            timestamp (uint) - The timestamp from when the user was added.
+            dataHash (bytes32) - The data-hash.
+            error (uint16) - An error code.
+    */
+    function userFromIndex(uint index) constant returns (address addr, bytes32 nickname, uint timestamp, bytes32 dataHash, uint16 error);
+
+    /*
         Function: size
 
         Get the total number of users.

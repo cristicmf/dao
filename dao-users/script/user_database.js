@@ -1,8 +1,8 @@
 /**
- * @file default_permission.js
+ * @file user_database.js
  * @fileOverview Contract service for 'UserDatabase'.
  * @author Andreas Olofsson (androlo1980@gmail.com)
- * @module dao_core/default_permission
+ * @module dao_users/user_database
  */
 "use strict";
 
@@ -29,120 +29,108 @@ function UserDatabase(web3, contract, gas) {
 util.inherits(UserDatabase, ContractService);
 
 /**
- * Set the root address.
+ * Get user data from the user address.
  *
- * @param {string} newRoot - The new root address.
- * @param {Function} cb - error first callback: function(error, errorCode).
+ * @param {string} addr - The address.
+ * @param {Function} cb - error first callback: function(error, nickname, time, dataHash).
  */
-UserDatabase.prototype.setRoot = function (newRoot, cb) {
-    var that = this;
-    this._contract.setPermission(newRoot, {gas: this._gas}, function(error, txHash){
-        if(error) return cb(error);
-        that.waitFor('SetRoot', txHash, cb);
+UserDatabase.prototype.userFromAddress = function (addr, cb) {
+    this._contract.user['address'](addr, function(err, ret){
+        if(err) return cb(err);
+        var nickname = daoUtils.htoa(ret[0]);
+        var time = daoUtils.bnToDate(ret[1]);
+        var dataHash = ret[2];
+        cb(null, nickname, time, dataHash)
     });
 };
 
 /**
- * Get the root address.
+ * Get user data from the user (nick) name.
  *
+ * @param {string} name - The name.
+ * @param {Function} cb - error first callback: function(error, nickname, time, dataHash).
+ */
+UserDatabase.prototype.userFromName = function (name, cb) {
+    var nameHex = daoUtils.atoh(name);
+    this._contract.user['bytes32'](nameHex, function(err, ret){
+        if(err) return cb(err);
+        var nickname = daoUtils.htoa(ret[0]);
+        var time = daoUtils.bnToDate(ret[1]);
+        var dataHash = ret[2];
+        cb(null, nickname, time, dataHash)
+    });
+};
+
+/**
+ * Check if an address belongs to a registered user.
+ *
+ * @param {string} addr - The address.
  * @param {Function} cb - error first callback: function(error, rootAddress).
  */
-UserDatabase.prototype.root = function (cb) {
-    this._contract.root(cb);
+UserDatabase.prototype.hasUserFromAddress = function (addr, cb) {
+    this._contract.user['address'](addr, cb);
 };
 
 /**
- * Get the root data, which includes the address and timestamp when he was added.
+ * Check if a name belongs to a registered user.
  *
- * @param {Function} cb - error first callback: function(error, address, timestamp).
+ * @param {string} name - The name.
+ * @param {Function} cb - error first callback: function(error, rootAddress).
  */
-UserDatabase.prototype.rootData = function (cb) {
-    this._contract.rootData(function(error, ret){
-        if (error) return cb(error);
-        var addr = ret[0];
-        var time = daoUtils.bnToDate(ret[1]);
-        cb(null, addr, time);
-    });
+UserDatabase.prototype.hasUserFromName = function (name, cb) {
+    var nameHex = daoUtils.atoh(name);
+    this._contract.user['bytes32'](nameHex, cb);
 };
 
 /**
- * Add a new owner. Owners satisifies 'hasPermission', but can not add or remove other owners.
- *
- * @param {string} address - The owner address.
- * @param {Function} cb - error first callback: function(error, errorCode).
- */
-UserDatabase.prototype.addOwner = function (address, cb) {
-    var that = this;
-    this._contract.addOwner(address, {gas: this._gas}, function(error, txHash){
-        if(error) return cb(error);
-        that.waitFor('AddOwner', txHash, cb);
-    });
-};
-
-/**
- * Remove an owner.
- *
- * @param {string} address - The owner address.
- * @param {Function} cb - error first callback: function(error, errorCode).
- */
-UserDatabase.prototype.removeOwner = function (address, cb) {
-    var that = this;
-    this._contract.removeOwner(address, {gas: this._gas}, function(error, txHash){
-        if(error) return cb(error);
-        that.waitFor('RemoveOwner', txHash, cb);
-    });
-};
-
-/**
- * Get the timestamp when an owner was added. Also serves as an existence check.
- *
- * @param {Function} cb - error first callback: function(error, timestamp, errorCode).
- */
-UserDatabase.prototype.ownerTimestamp = function (cb) {
-    this._contract.ownerTimestamp(function(error, ret){
-        if (error) return cb(error);
-        var time = daoUtils.bnToDate(ret[0]);
-        var code = ret[1].toNumber();
-        cb(null, time, code);
-    });
-};
-
-/**
- * Get an owner's data based on his position in the backing array.
+ * Get a user address from their index in the backing array.
  *
  * @param {number} index - The index.
- * @param {Function} cb - error first callback: function(error, address, timestamp, errorCode).
+ * @param {Function} cb - error first callback: function(error, address, errorCode).
  */
-UserDatabase.prototype.ownerFromIndex = function (index, cb) {
-    this._contract.ownerFromIndex(index, function(error, ret){
-        if (error) return cb(error);
-        var fmt = ofiFormat(ret);
-        cb(null, fmt.address, fmt.timestamp, fmt.error);
+UserDatabase.prototype.userAddressFromIndex = function (index, cb) {
+    this._contract.userAddressFromIndex(index, function(err, ret){
+        if(err) return cb(err);
+        var addr = ret[0];
+        var code = ret[1].toNumber();
+        cb(null, addr, code);
     });
 };
 
 /**
- * Get the total number of owners.
+ * Get user data from their index in the backing array.
  *
- * @param {Function} cb - error first callback: function(error, numOwners).
+ * @param {number} index - The index.
+ * @param {Function} cb - error first callback: function(error, address, nickname, timestamp, dataHash, errorCode).
  */
-UserDatabase.prototype.numOwners = function (cb) {
-    this._contract.numOwners(cb);
+UserDatabase.prototype.userFromIndex = function (index, cb) {
+    this._contract.userFromIndex(index, function(err, ret){
+        if(err) return cb(err);
+        var fmt = ufiFormat(ret);
+        cb(null, fmt.address, fmt.nickname, fmt.timestamp, fmt.dataHash, fmt.errorCode);
+    });
 };
 
 /**
- * Check if an address has this permission, meaning they're either root or an owner.
+ * Get the current size of the user database (the number of registered users).
  *
- * @param {string} address - The address.
- * @param {Function} cb - error first callback: function(error, hasPermission).
+ * @param {Function} cb - error first callback: function(error, size).
  */
-UserDatabase.prototype.hasPermission = function (address, cb) {
-    this._contract.hasPermission(address, cb);
+UserDatabase.prototype.size = function (cb) {
+    this._contract.size(cb);
 };
 
+/**
+ * Get the maximum size of the user database.
+ *
+ * @param {Function} cb - error first callback: function(error, maxSize).
+ */
+UserDatabase.prototype.maxSize = function (cb) {
+    this._contract.maxSize(cb);
+};
 
 /**
- * Get owners.
+ * Get users.
  *
  * If neither 'start' nor 'elements' are provided, the entire collection will be fetched.
  *
@@ -152,13 +140,13 @@ UserDatabase.prototype.hasPermission = function (address, cb) {
  * @param {number} [elements] - The number of elements to fetch.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserDatabase.prototype.owners = function (start, elements, cb) {
+UserDatabase.prototype.users = function (start, elements, cb) {
 
     var that = this;
 
     var block = this._web3.eth.blockNumber;
 
-    this._contract.numOwners(block, function (error, num) {
+    this._contract.size(block, function (error, num) {
         if (error) return cb(error);
         var size = num.toNumber();
 
@@ -178,26 +166,32 @@ UserDatabase.prototype.owners = function (start, elements, cb) {
             e = start + elements > size ? size : start + elements;
         }
 
-        var owners = [];
+        var users = [];
         var i = s;
         async.whilst(
             function () {
                 return i < e;
             },
             function (cb) {
-                that._contract.ownerFromIndex(i, block, function (error, ret) {
+                that._contract.userFromIndex(i, block, function (error, ret) {
                     if (error) return cb(error);
-                    var fmt = ofiFormat(ret);
+                    var fmt = ufiFormat(ret);
 
                     if (fmt.error === 0) {
-                        owners.push({address: fmt.address, timestamp: fmt.timestamp});
+                        users.push({
+                            address: fmt.address,
+                            nickname: fmt.nickname,
+                            timestamp: fmt.timestamp,
+                            dataHash: fmt.dataHash,
+                            errorCode: fmt.errorCode
+                        });
                     }
                     i++;
                     cb();
                 });
             },
             function (err) {
-                cb(err, owners);
+                cb(err, {startIndex: s, endIndex: e, totalSize: size, blockNumber: block, users: users});
             }
         );
 
@@ -205,22 +199,14 @@ UserDatabase.prototype.owners = function (start, elements, cb) {
 
 };
 
-/**
- * Destroy the permission contract.
- *
- * @param {address} fundReceiver - The address that will receive the funds from the contract.
- * @param {Function} cb - error first callback: function(error, errorCode).
- */
-UserDatabase.prototype.destroy = function (fundReceiver, cb) {
-    var that = this;
-    this._contract.destroy(fundReceiver, {gas: this._gas}, function(error, txHash){
-        if(error) return cb(error);
-        that.waitForDestroyed(txHash, cb);
-    });
-};
-
-function ofiFormat(ret) {
-    return {address: ret[0], timestamp: daoUtils.bnToDate(ret[1]), error: ret[2].toNumber()};
+function ufiFormat(ret) {
+    return {
+        address: ret[0],
+        nickname: daoUtils.htoa(ret[1]),
+        timestamp: daoUtils.bnToDate(ret[2]),
+        dataHash: ret[3],
+        errorCode: ret[2].toNumber()
+    };
 }
 
 module.exports = UserDatabase;

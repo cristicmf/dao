@@ -5,8 +5,6 @@
     <solUnit at https://github.com/smartcontractproduction/sol-unit>
     unit-testing framework.
 
-    Test contracts can do assertions via this library rather then extending <DaoAsserter>.
-
     (start code)
     contract ModAdder {
 
@@ -54,6 +52,12 @@ library Assertions {
     // Constant: STRING_NULL
     // The null string: ""
     string constant STRING_NULL = "";
+
+    uint8 constant ZERO = uint8(byte('0'));
+    uint8 constant A = uint8(byte('a'));
+
+    byte constant MINUS = byte('-');
+    byte constant SPACE = byte(' ');
 
     /*
         Event: TestEvent
@@ -1424,13 +1428,18 @@ library Assertions {
         return bytes(str).length == 0;
     }
 
-    uint8 constant ZERO = uint8(byte('0'));
-    uint8 constant A = uint8(byte('a'));
+    /*
+        Function: _itoa
 
-    byte constant MINUS = byte('-');
-    byte constant SPACE = byte(' ');
+        Convert a signed integer to a string. Negative numbers gets a '-' in front, e.g. "-54".
 
-    // since slicing isn't possible (yet)
+        Params:
+            n (int) - The integer.
+            radix (uint8) - A number between 2 and 16 (inclusive). Characters used are 0-9,a-f
+
+        Returns:
+            result (string) - The resulting string.
+    */
     function _itoa(int n, uint8 radix) internal constant returns (string) {
         if (n == 0 || radix < 2 || radix > 16)
             return '0';
@@ -1463,7 +1472,18 @@ library Assertions {
         return string(rev);
     }
 
-    // since slicing isn't possible (yet)
+    /*
+        Function: _utoa(uint)
+
+        Convert an  unsigned integer to a string.
+
+        Params:
+            n (uint) - The unsigned integer.
+            radix (uint8) - A number between 2 and 16 (inclusive). Characters used are 0-9,a-f
+
+        Returns:
+            result (string) - The resulting string.
+    */
     function _utoa(uint n, uint8 radix) internal constant returns (string) {
         if (n == 0 || radix < 2 || radix > 16)
             return '0';
@@ -1480,6 +1500,18 @@ library Assertions {
         return string(rev);
     }
 
+    /*
+        Function: _utoa(uint8)
+
+        Convert an unsigned 8-bit integer to its ASCII byte representation. Numbers 0-9 are converted to '0'-'9',
+        numbers 10-16 to 'a'-'f'. Numbers larger then 16 return the null byte.
+
+        Params:
+            u (uint8) - The unsigned 8-bit integer.
+
+        Returns:
+            result (string) - The ASCII byte.
+    */
     function _utoa(uint8 u) internal constant returns (byte) {
         if (u < 10)
             return byte(u + ZERO);
@@ -1489,8 +1521,18 @@ library Assertions {
             return 0;
     }
 
-    // Convert a bool to a string.
-    function _otoa(bool val) internal constant returns (string) {
+    /*
+        Function: _ltoa
+
+        Convert an boolean to a string.
+
+        Params:
+            val (bool) - The boolean.
+
+        Returns:
+            result (string) - "true" if true, "false" if false.
+    */
+    function _ltoa(bool val) internal constant returns (string) {
         bytes memory b;
         if (val) {
             b = new bytes(4);
@@ -1523,6 +1565,18 @@ library Assertions {
     }
     */
 
+    /*
+        Function: _tag(string)
+
+        Add a tag to a string. The 'value' and 'tag' strings are returned on the form "tag: value".
+
+        Params:
+            value (string) - The value.
+            tag (string) - The tag.
+
+        Returns:
+            result (string) - "tag: value"
+    */
     function _tag(string value, string tag) internal returns (string) {
 
         bytes memory valueB = bytes(value);
@@ -1546,21 +1600,69 @@ library Assertions {
         return string(newB);
     }
 
-    function _tag(int n, string tag) internal returns (string) {
-        var nstr = _itoa(n, 10);
+    /*
+        Function: _tag(int)
+
+        Add a tag to an int.
+
+        Params:
+            value (int) - The value.
+            tag (string) - The tag.
+
+        Returns:
+            result (string) - "tag: _itoa(value)"
+    */
+    function _tag(int value, string tag) internal returns (string) {
+        var nstr = _itoa(value, 10);
         return _tag(nstr, tag);
     }
 
-    function _tag(uint n, string tag) internal returns (string) {
-        var nstr = _utoa(n, 10);
+    /*
+        Function: _tag(uint)
+
+        Add a tag to an uint.
+
+        Params:
+            value (uint) - The value.
+            tag (string) - The tag.
+
+        Returns:
+            result (string) - "tag: _utoa(value)"
+    */
+    function _tag(uint value, string tag) internal returns (string) {
+        var nstr = _utoa(value, 10);
         return _tag(nstr, tag);
     }
 
-    function _tag(bool b, string tag) internal returns (string) {
-        var nstr = _otoa(b);
+    /*
+        Function: _tag(bool)
+
+        Add a tag to a boolean.
+
+        Params:
+            value (bool) - The value.
+            tag (string) - The tag.
+
+        Returns:
+            result (string) - "tag: _ltoa(value)"
+    */
+    function _tag(bool value, string tag) internal returns (string) {
+        var nstr = _ltoa(value);
         return _tag(nstr, tag);
     }
 
+    /*
+        Function: _appendTagged(string)
+
+        Append a tagged value to a string.
+
+        Params:
+            tagged (string) - The tagged value.
+            str (string) - The string.
+
+        Returns:
+            result (string) - "str (tagged)"
+    */
     function _appendTagged(string tagged, string str) internal returns (string) {
 
         bytes memory taggedB = bytes(tagged);
@@ -1585,6 +1687,19 @@ library Assertions {
         return string(newB);
     }
 
+    /*
+        Function: _appendTagged(string, string)
+
+        Append two tagged values to a string.
+
+        Params:
+            tagged0 (string) - The first tagged value.
+            tagged1 (string) - The second tagged value.
+            str (string) - The string.
+
+        Returns:
+            result (string) - "str (tagged0, tagged1)"
+    */
     function _appendTagged(string tagged0, string tagged1, string str) internal returns (string) {
 
         bytes memory tagged0B = bytes(tagged0);

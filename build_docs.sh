@@ -5,16 +5,11 @@ if [[ -z $(command -v solc) ]]; then
     exit 1
 fi
 
-if [[ -z $1 ]]; then
-    echo "No argument provided"
-    exit 1
-fi
+OUTPUT_DIR=$1
 
-MODULE=$1
-
-if  [ ${MODULE} != "dao-core" ] && [ ${MODULE} != "dao-users" ] && [ ${MODULE} != "dao-currency" ] && [ ${MODULE} != "dao-votes" ] && [ ${MODULE} != "dao-stl" ]; then
-    echo "Param not recognized: ${MODULE}"
+if  [ -z $1 ]; then
+    echo "No output directory"
     exit 2
 fi
 
-NaturalDocs -i ./${MODULE}/src -p ./docs/natdoc/${MODULE} -s dao -oft -o HTML ./${MODULE}/doc
+NaturalDocs -i ./dao-core/src -i ./dao-currency/src -i ./dao-stl/src -i ./dao-users/src -i ./dao-votes/src -p ./docs/natdoc -s dao -oft -o HTML $1

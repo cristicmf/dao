@@ -197,26 +197,12 @@ Permission.prototype.owners = function (start, elements, cb) {
                 });
             },
             function (err) {
-                cb(err, owners);
+                cb(err, {startIndex: s, endIndex: e, totalSize: size, blockNumber: block, owners: owners});
             }
         );
 
     });
 
-};
-
-/**
- * Destroy the permission contract.
- *
- * @param {address} fundReceiver - The address that will receive the funds from the contract.
- * @param {Function} cb - error first callback: function(error, errorCode).
- */
-Permission.prototype.destroy = function (fundReceiver, cb) {
-    var that = this;
-    this._contract.destroy(fundReceiver, {gas: this._gas}, function(error, txHash){
-        if(error) return cb(error);
-        that.waitForDestroyed(txHash, cb);
-    });
 };
 
 function ofiFormat(ret) {

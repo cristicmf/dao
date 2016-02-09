@@ -22,6 +22,20 @@ function ContractService(web3, contract, gas) {
 }
 
 /**
+ * Destroy the contract.
+ *
+ * @param {address} fundReceiver - The address that will receive the funds from the contract.
+ * @param {Function} cb - error first callback: function(error, errorCode).
+ */
+ContractService.prototype.destroy = function (fundReceiver, cb) {
+    var that = this;
+    this._contract.destroy(fundReceiver, {gas: this._gas}, function(error, txHash){
+        if(error) return cb(error);
+        that.waitForDestroyed(txHash, cb);
+    });
+};
+
+/**
  * Wait for a transaction to complete. This is implemented by adding events to contracts
  * that will trigger when execution is done - no matter the outcome. The function also has
  * a timeout (default length is 2 minutes) in case there is no response.

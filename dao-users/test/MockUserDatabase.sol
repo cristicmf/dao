@@ -54,6 +54,9 @@ contract MockUserDatabase is UserDatabase {
 
     function userAddressFromIndex(uint index) constant returns (address addr, uint16 error) {}
 
+    function userFromIndex(uint index) constant returns (address addr, bytes32 nickname, uint timestamp, bytes32 dataHash, uint16 error) {}
+
+
     function size() constant returns (uint size) {
         return _size;
     }

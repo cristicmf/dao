@@ -1,0 +1,143 @@
+Format: 1.52
+
+
+Title: DAO framework
+SubTitle: Smart-contracts for the DAO framework
+
+Footer: Copyright (C) 2015 Andreas Olofsson
+
+# You can add a timestamp to your documentation like one of these:
+# Timestamp: Generated on month day, year
+# Timestamp: Updated mm/dd/yyyy
+# Timestamp: Last updated mon day
+#
+#   m     - One or two digit month.  January is "1"
+#   mm    - Always two digit month.  January is "01"
+#   mon   - Short month word.  January is "Jan"
+#   month - Long month word.  January is "January"
+#   d     - One or two digit day.  1 is "1"
+#   dd    - Always two digit day.  1 is "01"
+#   day   - Day with letter extension.  1 is "1st"
+#   yy    - Two digit year.  2006 is "06"
+#   yyyy  - Four digit year.  2006 is "2006"
+#   year  - Four digit year.  2006 is "2006"
+
+# These are indexes you deleted, so Natural Docs will not add them again
+# unless you remove them from this line.
+
+Don't Index: Authors
+
+
+# --------------------------------------------------------------------------
+# 
+# Cut and paste the lines below to change the order in which your files
+# appear on the menu.  Don't worry about adding or removing files, Natural
+# Docs will take care of that.
+# 
+# You can further organize the menu by grouping the entries.  Add a
+# "Group: [name] {" line to start a group, and add a "}" to end it.
+# 
+# You can add text and web links to the menu by adding "Text: [text]" and
+# "Link: [name] ([URL])" lines, respectively.
+# 
+# The formatting and comments are auto-generated, so don't worry about
+# neatness when editing the file.  Natural Docs will clean it up the next
+# time it is run.  When working with groups, just deal with the braces and
+# forget about the indentation and comments.
+# 
+# You can use this file on other computers even if they use different
+# directories.  As long as the command line points to the same source files,
+# Natural Docs will be able to correct the locations automatically.
+# 
+# --------------------------------------------------------------------------
+
+
+Group: Dao-core  {
+
+   File: Database.sol  (/home/andreas/WebstormProjects/dao/dao-core/src/Database.sol)
+   File: DefaultDoug.sol  (/home/andreas/WebstormProjects/dao/dao-core/src/DefaultDoug.sol)
+   File: DefaultPermission.sol  (/home/andreas/WebstormProjects/dao/dao-core/src/DefaultPermission.sol)
+   File: Doug.sol  (/home/andreas/WebstormProjects/dao/dao-core/src/Doug.sol)
+   File: Permission.sol  (/home/andreas/WebstormProjects/dao/dao-core/src/Permission.sol)
+   }  # Group: Dao-core
+
+Group: Dao-currency  {
+
+   File: AbstractMintedCurrency.sol  (/home/andreas/WebstormProjects/dao/dao-currency/src/AbstractMintedCurrency.sol)
+   File: CurrencyDatabase.sol  (/home/andreas/WebstormProjects/dao/dao-currency/src/CurrencyDatabase.sol)
+   File: DefaultCurrencyDatabase.sol  (/home/andreas/WebstormProjects/dao/dao-currency/src/DefaultCurrencyDatabase.sol)
+   File: DefaultMintedCurrency.sol  (/home/andreas/WebstormProjects/dao/dao-currency/src/DefaultMintedCurrency.sol)
+   File: MintedCurrency.sol  (/home/andreas/WebstormProjects/dao/dao-currency/src/MintedCurrency.sol)
+   File: MintedUserCurrency.sol  (/home/andreas/WebstormProjects/dao/dao-currency/src/MintedUserCurrency.sol)
+   }  # Group: Dao-currency
+
+Group: Dao-stl  {
+
+   Group: Assertions  {
+
+      File: Assertions.sol  (/home/andreas/WebstormProjects/dao/dao-stl/src/assertions/Assertions.sol)
+      File: DaoTest.sol  (/home/andreas/WebstormProjects/dao/dao-stl/src/assertions/DaoTest.sol)
+      File: Test.sol  (/home/andreas/WebstormProjects/dao/dao-stl/src/assertions/Test.sol)
+      }  # Group: Assertions
+
+   Group: Collections  {
+
+      File: AddressSet.slb  (/home/andreas/WebstormProjects/dao/dao-stl/src/collections/AddressSet.slb)
+      File: PropertySet.slb  (/home/andreas/WebstormProjects/dao/dao-stl/src/collections/PropertySet.slb)
+      File: PropertyToAddressMap.slb  (/home/andreas/WebstormProjects/dao/dao-stl/src/collections/PropertyToAddressMap.slb)
+      }  # Group: Collections
+
+   File: Errors.sol  (/home/andreas/WebstormProjects/dao/dao-stl/src/errors/Errors.sol)
+   }  # Group: Dao-stl
+
+Group: Dao-users  {
+
+   File: AbstractUserRegistry.sol  (/home/andreas/WebstormProjects/dao/dao-users/src/AbstractUserRegistry.sol)
+   File: AdminRegUserRegistry.sol  (/home/andreas/WebstormProjects/dao/dao-users/src/AdminRegUserRegistry.sol)
+   File: DefaultUserDatabase.sol  (/home/andreas/WebstormProjects/dao/dao-users/src/DefaultUserDatabase.sol)
+   File: SelfRegUserRegistry.sol  (/home/andreas/WebstormProjects/dao/dao-users/src/SelfRegUserRegistry.sol)
+   File: UserDatabase.sol  (/home/andreas/WebstormProjects/dao/dao-users/src/UserDatabase.sol)
+   File: UserRegistry.sol  (/home/andreas/WebstormProjects/dao/dao-users/src/UserRegistry.sol)
+   }  # Group: Dao-users
+
+Group: Dao-votes  {
+
+   File: AbstractPublicBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/AbstractPublicBallot.sol)
+   File: BallotMap.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/BallotMap.sol)
+
+   Group: Currency  {
+
+      File: PublicCurrency.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/currency/PublicCurrency.sol)
+      File: PublicDurationBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/currency/PublicDurationBallot.sol)
+      File: PublicKeepDurationBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/currency/PublicKeepDurationBallot.sol)
+      File: PublicMintingBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/currency/PublicMintingBallot.sol)
+      File: PublicQuorumBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/currency/PublicQuorumBallot.sol)
+      }  # Group: Currency
+
+   File: PublicBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/PublicBallot.sol)
+   File: temp/BallotManager.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/temp/BallotManager.sol)
+   File: temp/PublicBallotManager.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/temp/PublicBallotManager.sol)
+   }  # Group: Dao-votes
+
+Group: Index  {
+
+   Index: Everything
+   Contract Index: Contracts
+   Function Index: Functions
+   Event Index: Events
+   Constructor Index: Constructors
+   Struct Index: Structs
+   File Index: Files
+   Constant Index: Constants
+   Library Index: Libraries
+   Type Index: Types
+   }  # Group: Index
+
+
+
+##### Do not change or remove these lines. #####
+Data: 1(D3333RuEG3p\fHGp63_GY6tuHEgHulG9t63fpu3fpuz9uHG36H9)
+Data: 1(h3333RuEG3p\fHGp63_GY6tuHEgHulG9t63fpu3fpuz9NHHG\9Q36H9)
+Data: 1(T3333RuEG3p\fHGp63_GY6tuHEgHulG9t63fpu3fpuz6to36H9)
+Data: 1(-3333RuEG3p\fHGp63_GY6tuHEgHulG9t63fpu3fpuzN6GH636H9)
+Data: 1(n3333RuEG3p\fHGp63_GY6tuHEgHulG9t63fpu3fpuz/utG636H9)

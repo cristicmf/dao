@@ -63,10 +63,17 @@ contract DefaultUserDatabaseTest is DaoTest {
         udb.hasUser(TEST_ADDRESS).assert("hasUser returned false");
 
         var (a, e) = udb.userAddressFromIndex(0);
-        e.assertNoError("userFromIndex returned an error");
-        a.assertEqual(TEST_ADDRESS, "userFromIndex address is wrong");
+        e.assertNoError("userAddressFromIndex returned an error");
+        a.assertEqual(TEST_ADDRESS, "userAddressFromIndex address is wrong");
+        
+        var (ad, nn, ts, dh, er) = udb.userFromIndex(0);
+        ad.assertEqual(TEST_ADDRESS, "userAddressFromIndex address is wrong");
+        nn.assertEqual(TEST_NICKNAME, "userAddressFromIndex returning the wrong nickname");
+        ts.assertEqual(TEST_TIMESTAMP, "userAddressFromIndex returning the wrong timestamp");
+        dh.assertEqual(TEST_HASH, "userAddressFromIndex returning the wrong data-hash");
+        er.assertNoError("userAddressFromIndex returned an error");
 
-        var (nn, ts, dh) = udb.user(TEST_ADDRESS);
+        (nn, ts, dh) = udb.user(TEST_ADDRESS);
         nn.assertEqual(TEST_NICKNAME, "user returning the wrong nickname");
         ts.assertEqual(TEST_TIMESTAMP, "user returning the wrong timestamp");
         dh.assertEqual(TEST_HASH, "user returning the wrong data-hash");
@@ -107,8 +114,8 @@ contract DefaultUserDatabaseTest is DaoTest {
         udb.removeUser(TEST_ADDRESS);
         udb.hasUser(TEST_ADDRESS).assertFalse("hasUser returned true");
         var (a, e) = udb.userAddressFromIndex(0);
-        e.assertErrorsEqual(ARRAY_INDEX_OUT_OF_BOUNDS, "userFromIndex returned no 'array index out-of-bounds' error");
-        a.assertZero("userFromIndex address is not null");
+        e.assertErrorsEqual(ARRAY_INDEX_OUT_OF_BOUNDS, "userAddressFromIndex returned no 'array index out-of-bounds' error");
+        a.assertZero("userAddressFromIndex address is not null");
         var (nn, ts, dh) = udb.user(TEST_ADDRESS);
         nn.assertZero("user returning the wrong nickname");
         ts.assertZero("user returning the wrong timestamp");
@@ -165,12 +172,12 @@ contract DefaultUserDatabaseTest is DaoTest {
         udb.hasUser(TEST_ADDRESS_2).assert("hasUser returned false for second user");
 
         var (a, e) = udb.userAddressFromIndex(0);
-        e.assertNoError("userFromIndex returned an error for first user");
-        a.assertEqual(TEST_ADDRESS, "userFromIndex address is wrong for first user");
+        e.assertNoError("userAddressFromIndex returned an error for first user");
+        a.assertEqual(TEST_ADDRESS, "userAddressFromIndex address is wrong for first user");
 
         (a, e) = udb.userAddressFromIndex(1);
-        e.assertNoError("userFromIndex returned an error for second user");
-        a.assertEqual(TEST_ADDRESS_2, "userFromIndex address is wrong for second user");
+        e.assertNoError("userAddressFromIndex returned an error for second user");
+        a.assertEqual(TEST_ADDRESS_2, "userAddressFromIndex address is wrong for second user");
 
         var (nn, ts, dh) = udb.user(TEST_ADDRESS);
         nn.assertEqual(TEST_NICKNAME, "first user returning the wrong nickname");
@@ -198,12 +205,12 @@ contract DefaultUserDatabaseTest is DaoTest {
         udb.hasUser(TEST_ADDRESS_2).assertFalse("hasUser returned true for second user");
 
         var (a, e) = udb.userAddressFromIndex(0);
-        e.assertNoError("userFromIndex returned an error for first user");
-        a.assertEqual(TEST_ADDRESS, "userFromIndex address is wrong for first user");
+        e.assertNoError("userAddressFromIndex returned an error for first user");
+        a.assertEqual(TEST_ADDRESS, "userAddressFromIndex address is wrong for first user");
 
         (a, e) = udb.userAddressFromIndex(1);
-        e.assertErrorsEqual(ARRAY_INDEX_OUT_OF_BOUNDS, "userFromIndex did not return an 'array index out-of-bounds' for second user");
-        a.assertZero("userFromIndex address is not zero for second user");
+        e.assertErrorsEqual(ARRAY_INDEX_OUT_OF_BOUNDS, "userAddressFromIndex did not return an 'array index out-of-bounds' for second user");
+        a.assertZero("userAddressFromIndex address is not zero for second user");
 
         var (nn, ts, dh) = udb.user(TEST_ADDRESS);
         nn.assertEqual(TEST_NICKNAME, "first user returning the wrong nickname");
@@ -231,12 +238,12 @@ contract DefaultUserDatabaseTest is DaoTest {
         udb.hasUser(TEST_ADDRESS_2).assert("hasUser returned false for second user");
 
         var (a, e) = udb.userAddressFromIndex(0);
-        e.assertNoError("userFromIndex returned an error for first user");
-        a.assertEqual(TEST_ADDRESS_2, "userFromIndex address is wrong for first user");
+        e.assertNoError("userAddressFromIndex returned an error for first user");
+        a.assertEqual(TEST_ADDRESS_2, "userAddressFromIndex address is wrong for first user");
 
         (a, e) = udb.userAddressFromIndex(1);
-        e.assertErrorsEqual(ARRAY_INDEX_OUT_OF_BOUNDS, "userFromIndex did not return an 'array index out-of-bounds' for second user");
-        a.assertZero("userFromIndex address is not zero for second user");
+        e.assertErrorsEqual(ARRAY_INDEX_OUT_OF_BOUNDS, "userAddressFromIndex did not return an 'array index out-of-bounds' for second user");
+        a.assertZero("userAddressFromIndex address is not zero for second user");
 
         var (nn, ts, dh) = udb.user(TEST_ADDRESS);
         nn.assertZero("first user returning the wrong nickname");
@@ -265,7 +272,7 @@ contract DefaultUserDatabaseTest is DaoTest {
         udb.hasUser(TEST_ADDRESS_2).assertFalse("hasUser returned true for second user");
 
         var (a, e) = udb.userAddressFromIndex(0);
-        e.assertErrorsEqual(ARRAY_INDEX_OUT_OF_BOUNDS, "userFromIndex did not return an 'array index out-of-bounds' for second user");
+        e.assertErrorsEqual(ARRAY_INDEX_OUT_OF_BOUNDS, "userAddressFromIndex did not return an 'array index out-of-bounds' for second user");
 
         var (nn, ts, dh) = udb.user(TEST_ADDRESS);
         nn.assertZero("first user returning the wrong nickname");

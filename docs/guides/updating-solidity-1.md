@@ -168,8 +168,3 @@ Proper delegation is an important part of smart-contract systems. It is also som
 Another thing to keep in mind is that modularity comes with a cost, because it requires more code, storage variables and calls. On the public chain, where the gas limitations are quite severe (for obvious reasons), even a small modular system could be hard to deploy and run. Generally, when it comes to scalability vs. efficiency I tend to go with scalability. The large, expensive contracts in an excessively modular system can after all be improved and replaced, but if the contracts are locked down that may not be an option.
 
 In my opinion, it is very important to at least acknowledge that the code is going to need updates, and at some point there must be a good policy for how it can be done. The alternative is to not have a plan and fail. And then maybe fail again, and again, until eventually it becomes clear.
-
-### Next tutorial
-
-The next tutorial will be about how to manage updates. This tutorial explained how contracts can be designed to allow updates, but the process of updating a contract has many steps, starting with the compilation and then testing, uploading calling the function(s) that updates the target contract (`setValidator` in this case), and making sure that all relevant pre- and post-conditions were met.
-

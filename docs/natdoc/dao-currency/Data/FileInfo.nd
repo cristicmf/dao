@@ -1,8 +1,8 @@
 1.52
 Solidity
+/home/andreas/WebstormProjects/dao/dao-currency/src/DefaultMintedCurrency.sol	1454379224	1	/home/andreas/WebstormProjects/dao/dao-currency/src/DefaultMintedCurrency.sol
 /home/andreas/WebstormProjects/dao/dao-currency/src/MintedCurrency.sol	1454650513	1	/home/andreas/WebstormProjects/dao/dao-currency/src/MintedCurrency.sol
 /home/andreas/WebstormProjects/dao/dao-currency/src/AbstractMintedCurrency.sol	1454650513	1	/home/andreas/WebstormProjects/dao/dao-currency/src/AbstractMintedCurrency.sol
-/home/andreas/WebstormProjects/dao/dao-currency/src/DefaultMintedCurrency.sol	1454379224	1	/home/andreas/WebstormProjects/dao/dao-currency/src/DefaultMintedCurrency.sol
 /home/andreas/WebstormProjects/dao/dao-currency/src/DefaultCurrencyDatabase.sol	1454650513	1	/home/andreas/WebstormProjects/dao/dao-currency/src/DefaultCurrencyDatabase.sol
-/home/andreas/WebstormProjects/dao/dao-currency/src/MintedUserCurrency.sol	1454650513	1	/home/andreas/WebstormProjects/dao/dao-currency/src/MintedUserCurrency.sol
 /home/andreas/WebstormProjects/dao/dao-currency/src/CurrencyDatabase.sol	1454650513	1	/home/andreas/WebstormProjects/dao/dao-currency/src/CurrencyDatabase.sol
+/home/andreas/WebstormProjects/dao/dao-currency/src/MintedUserCurrency.sol	1454650513	1	/home/andreas/WebstormProjects/dao/dao-currency/src/MintedUserCurrency.sol

@@ -1,6 +1,6 @@
 /**
  * @file default_permission.js
- * @fileOverview Contract service for 'DefaultPermission'.
+ * @fileOverview Contract service for 'UserDatabase'.
  * @author Andreas Olofsson (androlo1980@gmail.com)
  * @module dao_core/default_permission
  */

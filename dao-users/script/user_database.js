@@ -65,7 +65,7 @@ UserDatabase.prototype.userFromName = function (name, cb) {
  * Check if an address belongs to a registered user.
  *
  * @param {string} addr - The address.
- * @param {Function} cb - error first callback: function(error, rootAddress).
+ * @param {Function} cb - error first callback: function(error, result).
  */
 UserDatabase.prototype.hasUserFromAddress = function (addr, cb) {
     this._contract.user['address'](addr, cb);
@@ -75,7 +75,7 @@ UserDatabase.prototype.hasUserFromAddress = function (addr, cb) {
  * Check if a name belongs to a registered user.
  *
  * @param {string} name - The name.
- * @param {Function} cb - error first callback: function(error, rootAddress).
+ * @param {Function} cb - error first callback: function(error, result).
  */
 UserDatabase.prototype.hasUserFromName = function (name, cb) {
     var nameHex = daoUtils.atoh(name);

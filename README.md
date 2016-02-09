@@ -112,9 +112,9 @@ Sometimes it is smart to do some calls to check the state of a contract before t
  
 `Errors` is in the script folder, and can be used to convert error codes (numbers) to the name that is used in the errors contract in `dao-stl`, e.g. `error(2000) = 'ACCESS_DENIED'`. Good for logging and such.
 
-#### Module specific utilities
+#### Module-specific javascript
 
-If a module has its own specific utilities, then it is found in the script-folder of the module, e.g. `dao-core/scripts`. They can contain contract services for the solidity contracts, deployment scripts, small utilities, and tests.
+Module-specific javascript is found in the script folder of the module, e.g. `dao-core/scripts`. They can contain contract services, deployment scripts, utilities, and tests.
 
 ## DAO framework
 

@@ -20,7 +20,7 @@ var Web3 = require('web3');
  * @param {string|*} address - An address to use as sender. Defaults to coinbase address if set to null.
  * @param {string} [ethURL="http://localhost:8545"] - url to Ethereum RPC-server.
  *
- *  @alias module:dao_utils
+ * @alias module:dao_utils.web3
  */
 function web3(address, ethURL) {
     var web3 = new Web3();
@@ -43,6 +43,8 @@ function web3(address, ethURL) {
  * @param {string} contractFile - The contract json file.
  * @param {string} contractsFolder - The folder where .abi files can be found.
  * @returns {Object} - The loaded contracts.
+ *
+ * @alias module:dao_utils.loadContracts
  */
 function loadContracts(web3, contractFile, contractsFolder) {
 
@@ -64,6 +66,8 @@ function loadContracts(web3, contractFile, contractsFolder) {
  * Get the default gas value: 3'000'000.
  *
  * @returns {number}
+ *
+ * @alias module:dao_utils.defaultGas
  */
 function defaultGas() {
     return DEFAULT_GAS;
@@ -73,6 +77,8 @@ function defaultGas() {
  * hex-to-ascii. Code is taken from the web3.js utility function 'toAscii'.
  *
  * @param {string} hex - The hex string.
+ *
+ * @alias module:dao_utils.htoa
  */
 function htoa(hex) {
 // Find termination
@@ -96,6 +102,8 @@ function htoa(hex) {
  *
  * @param {string} str - The ASCII string.
  * @param {number} [maxLength] - The maximum length.
+ *
+ * @alias module:dao_utils.atoh
  */
 function atoh(str, maxLength) {
     var hex = "";
@@ -118,6 +126,8 @@ function atoh(str, maxLength) {
  * Converts a javascript date object to a unix timestamp.
  *
  * @param {Object} date - A javascript date object.
+ *
+ * @alias module:dao_utils.dateToTimestamp
  */
 function dateToTimestamp(date) {
     return date.getTime() / 1000 | 0;
@@ -127,6 +137,8 @@ function dateToTimestamp(date) {
  * Converts a unix timestamp to a javascript date object.
  *
  * @param {Object} timestamp - A javascript date object.
+ *
+ * @alias module:dao_utils.timestampToDate
  */
 function timestampToDate(timestamp) {
     return new Date(timestamp * 1000);
@@ -136,6 +148,8 @@ function timestampToDate(timestamp) {
  * Converts a unix timestamp in BigNumber form to a javascript date object.
  *
  * @param {Object} timestamp - A javascript date object.
+ *
+ * @alias module:dao_utils.bnToDate
  */
 function bnToDate(timestamp) {
     return new Date(timestamp.toNumber() * 1000);

@@ -142,7 +142,7 @@ AddressSetDb.prototype.values = function(start, elements, cb){
                 });
             },
             function (err) {
-                cb(err, addresses);
+                cb(err, {startIndex: s, endIndex: e, totalSize: size, blockNumber: block, addresses: addresses});
             }
         );
 

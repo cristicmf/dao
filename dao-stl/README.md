@@ -6,11 +6,7 @@ Standard contracts used throughout the entire framework.
 
 #### Deployment
 
-The `AddressSetDb` contracts in tests can be deployed onto an Ethereum chain and tested using `dao-stl/script/ethereum/deploy.js`.
-
-It is possible to deploy Doug and run some calls as well, using `dao-core/script/ethereum/deploy_and_test_doug.js`
- 
-There will be more options later.
+The `AddressSetDb` contracts in tests can be deployed onto an Ethereum chain and tested using `dao-stl/script/bin/deploy_address_set.js`.
 
 #### Building/rebuilding of contracts
 
@@ -26,11 +22,9 @@ Gulp: `$ gulp test:stl`
 
 Command-line tool: `$ solunit -d ./dao-stl/build/test`
 
-#### Docs
+### Usage
 
-Shell script: `$ ./build_docs.sh dao-stl`
-
-Gulp: `$ gulp htmldoc:stl`
+[User manual](https://github.com/smartcontractproduction/dao/blob/master/docs/Manual.md)
 
 ## Packages
 

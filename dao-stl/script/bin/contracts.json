@@ -1,0 +1,9 @@
+{
+  "contracts": {
+    "asdb": {
+      "type": "AddressSetDb",
+      "address": "0x0c1bdc2e92a336ac6f3636bd3ebcae5da0c62902"
+    }
+  },
+  "id": 1455043720125
+}

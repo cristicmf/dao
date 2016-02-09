@@ -47,6 +47,8 @@ errors[8101] = "TRANSFERRED_AMOUNT_TOO_HIGH";
  *
  * @param {number} code - The error code.
  * @returns {string} - The name of the error.
+ *
+ *  @alias module:errors.error
  */
 function error(code) {
     if(code === 0){

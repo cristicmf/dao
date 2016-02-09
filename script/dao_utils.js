@@ -19,6 +19,8 @@ var Web3 = require('web3');
  *
  * @param {string|*} address - An address to use as sender. Defaults to coinbase address if set to null.
  * @param {string} [ethURL="http://localhost:8545"] - url to Ethereum RPC-server.
+ *
+ *  @alias module:dao_utils
  */
 function web3(address, ethURL) {
     var web3 = new Web3();

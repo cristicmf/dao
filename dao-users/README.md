@@ -16,12 +16,6 @@ Gulp: `$ gulp test:users`
 
 Command-line tool: `$ solunit -d ./dao-users/build/test`
 
-#### Docs
-
-Shell script: `$ ./build_docs.sh dao-users`
-
-Gulp: `$ gulp htmldoc:users`
-
 #### Usage
 
 [User manual](https://github.com/smartcontractproduction/dao/blob/master/docs/Manual.md)

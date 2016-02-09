@@ -2,7 +2,7 @@
  * @file default_doug.js
  * @fileOverview Contract service for 'DefaultDoug'.
  * @author Andreas Olofsson (androlo1980@gmail.com)
- * @module dao_core/default_doug
+ * @module dao_core/doug
  */
 "use strict";
 

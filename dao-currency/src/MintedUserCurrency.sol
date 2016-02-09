@@ -5,7 +5,7 @@ import "./AbstractMintedCurrency.sol";
 import "./CurrencyDatabase.sol";
 
 /*
-    Contract: DefaultMintedCurrency
+    Contract: MintedUserCurrency
 
     Minted currency that can only be held by users. User checks are done using a 'UserDatabase' contract.
 

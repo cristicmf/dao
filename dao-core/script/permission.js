@@ -2,7 +2,7 @@
  * @file default_permission.js
  * @fileOverview Contract service for 'DefaultPermission'.
  * @author Andreas Olofsson (androlo1980@gmail.com)
- * @module dao_core/default_permission
+ * @module dao_core/permission
  */
 "use strict";
 

@@ -28,7 +28,9 @@ There are [Tutorials](./docs/Tutorials.md).
 
 Each module has a README file that explains what it does, which is also useful. They are all referenced in the [Structure](#structure) section of this document.
 
-HTML documentation for the contracts in each module can be found in `<module name>/doc/index.html`. This goes for the standard library code as well.
+HTML documentation for all the contracts can be found at http://smartcontractproduction.github.io/dao-contracts.
+
+HTML documenttion for the javascript can be found at http://smartcontractproduction.github.io/dao-javascript
 
 To understand how systems are kept intact, maybe take a look at the document on [Permission Analysis](./docs/Permission_Analysis.md).
 

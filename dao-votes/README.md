@@ -1,7 +1,5 @@
 # dao-votes
 
-Note: Adding managed struct versions for ballots as well.
-
 ## Installation and Usage
 
 #### Building/rebuilding of contracts
@@ -17,12 +15,6 @@ Gulp: `$ gulp build:votes`
 Gulp: `$ gulp test:votes` 
 
 Command-line tool: `$ solunit -d ./dao-votes/build/test`
-
-#### Docs
-
-Shell script: `$ ./build_docs.sh dao-votes`
-
-Gulp: `$ gulp htmldoc:votes`
 
 #### Usage
 

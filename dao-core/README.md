@@ -1,12 +1,10 @@
 # dao-core
 
-dao-core is the centerpiece of the DAO framework.
+Dao-core is the centerpiece of the DAO framework.
 
 ## Installation and Usage
 
 [User manual](https://github.com/smartcontractproduction/dao/blob/master/docs/Manual.md)
-
-node.js is needed to run the helper scripts.
 
 #### Deployment
 
@@ -29,12 +27,6 @@ Gulp: `$ gulp build:core`
 Gulp: `$ gulp test:core` 
 
 Command-line tool: `$ solunit -d ./dao-core/build/test`
-
-#### Docs
-
-Shell script: `$ ./build_docs.sh dao-core`
-
-Gulp: `$ gulp htmldoc:core`
 
 ### Contracts
 

@@ -26,14 +26,6 @@ gulp.task('test:core', function (cb) {
     });
 });
 
-gulp.task('htmldoc:core', function(cb){
-    process.exec('./build_docs.sh dao-core', function (error) {
-        if (error)
-            throw new Error(error);
-        cb(error);
-    });
-});
-
 /************************ dao-currency ***************************/
 
 var daoCurrencyTests = ['DefaultCurrencyDatabaseTest', 'AbstractMintedCurrencyTest', 'DefaultMintedCurrencyTest', 'MintedUserCurrencyTest'];
@@ -53,14 +45,6 @@ gulp.task('test:currency', function (cb) {
         if (failed !== 0)
             throw new Error("Tests failed: " + failed);
         cb();
-    });
-});
-
-gulp.task('htmldoc:currency', function(cb){
-    process.exec('./build_docs.sh dao-currency', function (error) {
-        if (error)
-            throw new Error(error);
-        cb(error);
     });
 });
 
@@ -86,14 +70,6 @@ gulp.task('test:stl', function (cb) {
     });
 });
 
-gulp.task('htmldoc:stl', function(cb){
-    process.exec('./build_docs.sh dao-stl', function (error) {
-        if (error)
-            throw new Error(error);
-        cb(error);
-    });
-});
-
 /************************ dao-users ***************************/
 
 var daoUsersTests = ['DefaultUserDatabaseTest', 'AbstractUserRegistryTest', 'AdminRegUserRegistryTest', 'SelfRegUserRegistryTest'];
@@ -116,14 +92,6 @@ gulp.task('test:users', function (cb) {
     });
 });
 
-gulp.task('htmldoc:users', function(cb){
-    process.exec('./build_docs.sh dao-users', function (error) {
-        if (error)
-            throw new Error(error);
-        cb(error);
-    });
-});
-
 /************************ dao-votes ***************************/
 
 var daoVotesTests = ['BallotMapTest', 'PublicBallotTest', 'PublicMintingBallotTest', 'PublicCurrencyBasicTest', 'PublicCurrencyMintingTest', 'PublicCurrencyDurationTest', 'PublicCurrencyQuorumTest', 'PublicCurrencyKeepDurationTest'];
@@ -143,14 +111,6 @@ gulp.task('test:votes', function (cb) {
         if (failed !== 0)
             throw new Error("Tests failed: " + failed);
         cb();
-    });
-});
-
-gulp.task('htmldoc:votes', function(cb){
-    process.exec('./build_docs.sh dao-votes', function (error) {
-        if (error)
-            throw new Error(error);
-        cb(error);
     });
 });
 
@@ -221,5 +181,3 @@ gulp.task('test:all', function (cb) {
     );
 
 });
-
-gulp.task('htmldoc:all', ['htmldoc:core', 'htmldoc:currency', 'htmldoc:stl', 'htmldoc:users', 'htmldoc:votes']);

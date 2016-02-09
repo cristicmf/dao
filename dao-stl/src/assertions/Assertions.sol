@@ -799,7 +799,7 @@ library Assertions {
     /*
         Function: assertEqual(uint[])
 
-        Assert that two 'uint[]' are equal. This means:
+        Assert that two 'uint[ ]' are equal.
 
         : arrA.length == arrB.length
 
@@ -831,7 +831,7 @@ library Assertions {
     /*
         Function: assertNotEqual(uint[])
 
-        Assert that two 'uint[]' are not equal. This means:
+        Assert that two 'uint[]' are not equal.
 
         : arrA.length != arrB.length
 
@@ -911,7 +911,7 @@ library Assertions {
     /*
         Function: assertEqual(int[])
 
-        Assert that two 'int[]' are equal. This means:
+        Assert that two 'int[]' are equal.
 
         : arrA.length == arrB.length
 
@@ -943,7 +943,7 @@ library Assertions {
     /*
         Function: assertNotEqual(int[])
 
-        Assert that two 'int[]' are not equal. This means:
+        Assert that two 'int[]' are not equal.
 
         : arrA.length != arrB.length
 
@@ -1023,7 +1023,7 @@ library Assertions {
     /*
         Function: assertEqual(address[])
 
-        Assert that two 'address[]' are equal. This means:
+        Assert that two 'address[]' are equal.
 
         : arrA.length == arrB.length
 
@@ -1055,7 +1055,7 @@ library Assertions {
     /*
         Function: assertNotEqual(address[])
 
-        Assert that two 'address[]' are not equal. This means:
+        Assert that two 'address[]' are not equal.
 
         : arrA.length != arrB.length
 
@@ -1135,7 +1135,7 @@ library Assertions {
     /*
         Function: assertEqual(bytes32[])
 
-        Assert that two 'bytes32[]' are equal. This means:
+        Assert that two 'bytes32[]' are equal.
 
         : arrA.length == arrB.length
 
@@ -1167,7 +1167,7 @@ library Assertions {
     /*
         Function: assertNotEqual(bytes32[])
 
-        Assert that two 'bytes32[]' are not equal. This means:
+        Assert that two 'bytes32[]' are not equal.
 
         : arrA.length != arrB.length
 

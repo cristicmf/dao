@@ -16,13 +16,7 @@ Gulp: `$ gulp test:currency`
 
 Command-line tool: `$ solunit -d ./dao-currency/build/test`
 
-#### Docs
-
-Shell script: `$ ./build_docs.sh dao-currency`
-
-Gulp: `$ gulp htmldoc:currency`
-
-#### Usage
+### Usage
 
 [User manual](https://github.com/smartcontractproduction/dao/blob/master/docs/Manual.md)
 

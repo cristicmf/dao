@@ -156,7 +156,7 @@ UserRegistry.prototype.setUserDatabase = function (databaseAddress, cb) {
  *
  * @param {Function} cb - error first callback: function(error, address).
  */
-UserDatabase.prototype.userDatabase = function (cb) {
+UserRegistry.prototype.userDatabase = function (cb) {
     this._contract.userDatabase(cb);
 };
 
@@ -180,6 +180,6 @@ UserRegistry.prototype.setAdmin = function (adminAddress, cb) {
  *
  * @param {Function} cb - error first callback: function(error, address).
  */
-UserDatabase.prototype.admin = function (cb) {
+UserRegistry.prototype.admin = function (cb) {
     this._contract.admin(cb);
 };

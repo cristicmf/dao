@@ -10,6 +10,7 @@ var Deployer = require('./script/deployer');
 var ContractService = require('./script/contract_service');
 
 var daoCore = require('./dao-core/script/dao_core');
+var daoCurrency = require('./dao-currency/script/dao_currency');
 var daoUsers = require('./dao-users/script/dao_users');
 
 /**
@@ -44,6 +45,13 @@ exports.ContractService = ContractService;
  * @type {module:dao_core}
  */
 exports.core = daoCore;
+
+/**
+ * Dao-currency.
+ *
+ * @type {module:dao_currency}
+ */
+exports.users = daoCurrency;
 
 /**
  * Dao-users.

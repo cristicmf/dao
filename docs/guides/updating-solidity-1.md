@@ -1,25 +1,36 @@
 # Updating Solidity 1 - Contract basics
 
-This is a new tutorial series about how to create modular systems of smart-contracts, and how to continuously update the code in a reliable way. Most contracts in a DApp will become obsolete at some point, and will require an update. Same as in other applications. It could be because new features must be added, a bug is found, or because a better, more optimized version has been made. Updating could of course cause problems so it must be done with care. Some of the things one must ensure is that:
+This is a new tutorial series about how to create modular systems of smart-contracts, and how to replace contracts in a reliable way. This, along with some other life-cycle management, is mostly what this DAO framework does.
+ 
+Readers should have a basic understanding of how Ethereum and Solidity works.
 
-- updating is possible.
+### Updating contracts
+
+Most contracts in a DApp will become obsolete at some point, and will require an update. Same as in other applications. It could be because new features must be added, a bug is found, or because a better, more optimized version has been made. Updating could of course cause problems so it must be done with care. Some of the things one must ensure is that:
+
 - the new contract works as intended.
 - all the calls made during the replacement procedure was executed successfully.
 - replacing the contract has no side-effects in other parts of the system.
 
-The first point may seem obvious but it usually requires a lot of work, because updating is not possible by default; the reason is because of how accounts, code and storage works.
+The first thing that must be checked, though, is that updating is even possible at all. This is not always the case, because of how Ethereum accounts works.
 
 ### Accounts, Code and Storage
 
-A very important property of Etheruem contracts is that when a contract has been uploaded to the chain, the code can never be changed. Contracts are stored in special account objects, and these object has references to the contract (byte) code, and a database, and some other things. The database is a key-value store, also known as 'storage', and is where data such as the values of contract fields is stored.
+A very important property of Etheruem contracts is that when a contract has been uploaded to the chain, the code can never be changed. Contracts are stored in special account objects that hold references to the contract (byte) code, and a database, and some other things. The database is a key-value store, also known as 'storage', and is where data such as the values of contract fields is stored.
+
+![ExtVsContractAccount](../images/ext_vs_contract_account.png)
 
 When contracts are created, a new account is first made, then the code is loaded into a VM which runs the constructor part, initializes fields etc., and then adds the runtime portion (or body) of the contract to the account. After that is done, there is no way to change the code, and there is no way to update the database except through that code.
 
 But what if you want to change the code? What if a bug is discovered?
 
-The way you solve that is by connecting several contracts. Contract `C` could call contract `D` as part of its functionality, and the address to `D` could be settable in `C`, meaning it would be possible to change what `D` is. This is best explained through a series of simple examples.
+There is actually a way to replace code at runtime, and that is by connecting several contract calls into one single call-chain. Contract `C` could call contract `D` as part of its functionality, and the address to `D` could be settable in `C`, meaning it would be possible to change what `D` is. An example of this could be a bank contract that calls a different contract with the user credentials (usually just the account address) to authenticate.
 
-### A simple storage contract
+![BankAuthSequence](../images/bank_auth_sequence.png)
+
+### Writing modular contracts
+
+Writing modular contracts is not that complicated. We will start from the beginning, and make something very simple:
 
 ```
 contract Data {
@@ -34,9 +45,9 @@ contract Data {
 }
 ```
 
-This simple contract allows a user to add and read an unsigned integer. The only account that is allowed to add data is the account with address `0x692a...`. This address is a hex literal, so is added to the bytecode when the contract is compiled.
+This contract allows a user to add and read an unsigned integer. The only account that is allowed to add data is the account with address `0x692a...`. This address is a hex literal, so is added to the bytecode when the contract is compiled.
 
-A potential problem is that we might want to replace this address later, or even the entire validation procedurer, but we can't because of how code and storage works. A simple way of making the contract more flexible is to store the current owner address in storage instead, and make it possible to change.
+A potential problem is that we might want to replace this address later, or even the entire validation procedure, but we can't because of how code and storage works. A simple way of making the contract more flexible is to store the current owner address in storage instead, and make it possible to change.
 
 ```
 contract DataOwnerSettable {
@@ -167,4 +178,9 @@ Proper delegation is an important part of smart-contract systems. It is also som
 
 Another thing to keep in mind is that modularity comes with a cost, because it requires more code, storage variables and calls. On the public chain, where the gas limitations are quite severe (for obvious reasons), even a small modular system could be hard to deploy and run. Generally, when it comes to scalability vs. efficiency I tend to go with scalability. The large, expensive contracts in an excessively modular system can after all be improved and replaced, but if the contracts are locked down that may not be an option.
 
-In my opinion, it is very important to at least acknowledge that the code is going to need updates, and at some point there must be a good policy for how it can be done. The alternative is to not have a plan and fail. And then maybe fail again, and again, until eventually it becomes clear.
+In my opinion, it is very important to at least acknowledge that the code is going to need updates, and to device a good policy for how it can be done; the alternative is to not have a plan and fail, and then fail again, and again, until eventually this becomes clear.
+
+
+Happy smart-contracting! 
+
+// A

@@ -75,7 +75,7 @@ Group: Dao-stl  {
 
    Group: Assertions  {
 
-      File: Assertions.sol  (/home/andreas/WebstormProjects/dao/dao-stl/src/assertions/Assertions.sol)
+      File: Assertions.slb  (/home/andreas/WebstormProjects/dao/dao-stl/src/assertions/Assertions.sol)
       File: DaoTest.sol  (/home/andreas/WebstormProjects/dao/dao-stl/src/assertions/DaoTest.sol)
       File: Test.sol  (/home/andreas/WebstormProjects/dao/dao-stl/src/assertions/Test.sol)
       }  # Group: Assertions

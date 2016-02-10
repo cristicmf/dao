@@ -24,7 +24,7 @@ When contracts are created, a new account is first made, then the code is loaded
 
 ### Writing modular contracts
 
-Writing modular contracts is not that complicated. We will start from the beginning, and make something very simple:
+Writing modular contracts is not that complicated. We will start from a very simple non-modular contract:
 
 ```
 contract Data {

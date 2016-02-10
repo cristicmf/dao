@@ -22,12 +22,6 @@ A very important property of Etheruem contracts is that when a contract has been
 
 When contracts are created, a new account is first made, then the code is loaded into a VM which runs the constructor part, initializes fields etc., and then adds the runtime portion (or body) of the contract to the account. After that is done, there is no way to change the code, and there is no way to update the database except through that code.
 
-But what if you want to change the code? What if a bug is discovered?
-
-There is actually a way to replace code at runtime, and that is by connecting several contract calls into one single call-chain. Contract `C` could call contract `D` as part of its functionality, and the address to `D` could be settable in `C`, meaning it would be possible to change what `D` is. An example of this could be a bank contract that calls a different contract with the user credentials (usually just the account address) to authenticate.
-
-![BankAuthSequence](../images/bank-auth-sequence.png)
-
 ### Writing modular contracts
 
 Writing modular contracts is not that complicated. We will start from the beginning, and make something very simple:
@@ -73,7 +67,15 @@ This contract has an `owner` field (mapped to storage). It is initialized with t
 
 ### Delegation
 
-What if a settable owner is not enough, though? What if we want to be able to update not only the owner address, but the entire validation process? That is possible. We will do it in two steps. First we move the account validation code into a different contract.
+What if a settable owner is not enough, though? What if we want to be able to update not only the owner address, but the entire validation process?
+
+There is actually a way to replace code, and that is by connecting several contract calls ro form one single call-chain. A contract `C` could call another contract `C` as part of its functionality, meaning a transaction to `C` will execute code not just in `C` but in `D` as well. Moreover, we could also make the address to `D` settable, meaning it would be possible to change the instance of `D` that `C` is pointing to. An example of this could be a bank contract that calls a different contract to authenticate.
+
+![BankAuthSequence](../images/bank-auth-sequence.png)
+
+In this case, every time `deposit` is called on `Bank`, it makes a call to `Authenticator`, using the caller address as argument, and checks the return value to decide whether or not to break. `Authenticator` is just another contract, and it is possible to change the address to the `Authenticator` meaning the calls would be directed to another contract. 
+
+We're now going to update the data contract to work in this way, starting by moving the account validation into a different contract.
 
 ```
 contract AccountValidator {
@@ -116,7 +118,7 @@ contract DataExternalValidation {
 
 To use this, we first create an `AccountValidator` contract; it has the `owner` field now, and that field is automatically initialized with an account address. Then we create a `DataExternalValidation`-contract and inject the address of the validator through the contract constructor. When someone tries to write to `data`, it will call the `validate` function of the current validator contract to do the check rather then storing (or hard coding) the `owner` address and doing the equality check internally. Everything that has to do with access control is now delegated to the validator contract. 
 
-This is very nice, because it is now possible to replace the contract that does the actual check. Not only does it decouple this from the data, but since the `AccountValidator` is its own contract, we could potentially use that contract in other contracts as well and thus give `owner` control over more contracts then just one.
+This is very nice, because it is now possible to replace the contract that does the actual check. Also, since the `AccountValidator` is its own contract we could potentially use that contract in other contracts as well, and thus use it to control more contracts then just one.
 
 One thing remains though. We still can't replace the code! All we have done is move the validation code out of the contract. The code of the `AccountValidator` contract can't be changed anymore then that of the data contract. Fortunately, Solidity provides a very simple and powerful workaround - abstract functions. 
 
@@ -172,13 +174,21 @@ contract MultiAccountValidator is AccountValidator {
 }
 ```
 
+Finally, it is worth noticing that you can actually pass in a contract that is not an `AccountValidator`. There is no type check when you convert an address to a contract type, so it would only show up when the contract is actually called; and in fact, if the contract has the required method it will work, even though it does not actually actually extend `AccountValidator`, but even though it works it is of course not recommended to use contracts in that way. 
+
 ### Summary
 
-Proper delegation is an important part of smart-contract systems. It is also something one has to consider from the very start, because the rules for how a set of contracts can be updated is generally contained in the contracts themselves. Also, the more contracts that are in the system the harder they become to manage, and a strategy that makes a small system work may not be suitable for a medium-sized or large one.
+Proper delegation is an important part of smart-contract systems, because it means contracts can be replaced. There are some things to keep in mind, though:  
 
-Another thing to keep in mind is that modularity comes with a cost, because it requires more code, storage variables and calls. On the public chain, where the gas limitations are quite severe (for obvious reasons), even a small modular system could be hard to deploy and run. Generally, when it comes to scalability vs. efficiency I tend to go with scalability. The large, expensive contracts in an excessively modular system can after all be improved and replaced, but if the contracts are locked down that may not be an option.
+- Delegation requires type-unsafe conversion, which means one must be careful when setting/changing a contract reference.
 
-In my opinion, it is very important to at least acknowledge that the code is going to need updates, and to device a good policy for how it can be done; the alternative is to not have a plan and fail, and then fail again, and again, until eventually this becomes clear.
+- The more contracts that are in the system the harder they become to manage, and a strategy that makes a small system work may not be suitable for a medium-sized or large one.
+
+- Modularity comes with a cost, because it requires more code, storage variables and calls. On the public chain, where the gas limitations are quite severe (for obvious reasons), even a small modular system could be hard to deploy and run. Generally, when it comes to scalability vs. efficiency I tend to go with scalability. The large, expensive contracts in an excessively modular system can after all be improved and replaced, but if the contracts are locked down that may not be an option.
+
+### Next tutorial
+
+The next tutorial will be about how the external components can be set up so as to make the updating process safe. This will include contract code compilation, testing, and how to get contracts onto the chain using web3.js - the official Ethereum javascript API.
 
 
 Happy smart-contracting! 

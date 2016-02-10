@@ -18,7 +18,7 @@ The first thing that must be checked, though, is that updating is even possible 
 
 A very important property of Etheruem contracts is that when a contract has been uploaded to the chain, the code can never be changed. Contracts are stored in special account objects that hold references to the contract (byte) code, and a database, and some other things. The database is a key-value store, also known as 'storage', and is where data such as the values of contract fields is stored.
 
-![ExtVsContractAccount](../images/ext_vs_contract_account.png)
+![ExtVsContractAccount](../images/ext-vs-contract-account.png)
 
 When contracts are created, a new account is first made, then the code is loaded into a VM which runs the constructor part, initializes fields etc., and then adds the runtime portion (or body) of the contract to the account. After that is done, there is no way to change the code, and there is no way to update the database except through that code.
 
@@ -26,7 +26,7 @@ But what if you want to change the code? What if a bug is discovered?
 
 There is actually a way to replace code at runtime, and that is by connecting several contract calls into one single call-chain. Contract `C` could call contract `D` as part of its functionality, and the address to `D` could be settable in `C`, meaning it would be possible to change what `D` is. An example of this could be a bank contract that calls a different contract with the user credentials (usually just the account address) to authenticate.
 
-![BankAuthSequence](../images/bank_auth_sequence.png)
+![BankAuthSequence](../images/bank-auth-sequence.png)
 
 ### Writing modular contracts
 

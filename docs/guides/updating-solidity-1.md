@@ -73,7 +73,7 @@ There is actually a way to replace code, and that is by connecting several contr
 
 ![BankAuthSequence](../images/bank-auth-sequence.png)
 
-In this case, every time `deposit` is called on `Bank`, it makes a call to `Authenticator`, using the caller address as argument, and checks the return value to decide whether or not to break. `Authenticator` is just another contract, and it is possible to change the address to the `Authenticator` meaning the calls would be directed to another contract. 
+In this case, every time `deposit` is called on `Bank`, it makes a call to `Authenticator`, using the caller address as argument, and checks the return value to decide whether or not to finalize the deposit. `Authenticator` is just another contract, and it is possible to change the address to the `Authenticator` meaning the calls would be directed to another contract. 
 
 We're now going to update the data contract to work in this way, starting by moving the account validation into a different contract.
 
@@ -118,9 +118,9 @@ contract DataExternalValidation {
 
 To use this contract on the chain we would first create an `AccountValidator` contract, then create a `DataExternalValidation`-contract and inject the address of the validator through the contract constructor. When someone tries to write to `data` it will call `validate` on the current validator contract to do the owner check. 
 
-This is very nice, because it is now possible to replace the contract where the owner check is. Also, since the `AccountValidator` is its own contract we could potentially use that instance to do authentication for other contracts as well.
+This is very nice, because it is now possible to replace the contract where the owner check is. Also, since the `AccountValidator` is its own contract we could potentially use that instance to do authentication for more contracts then just one.
 
-One thing remains though. We still can't replace the code! All we have done is move the validation code out of the contract. The code of the `AccountValidator` contract can't be changed anymore then that of the data contract. Fortunately, Solidity provides a very simple and powerful workaround - abstract functions. 
+One thing remains though. We still can't replace the code! All we have done is move the validation code out of the contract. The code of the `AccountValidator` contract can't be changed anymore then that of the data contract. Fortunately, Solidity provides a very simple and powerful solution - abstract functions. 
 
 ### Abstract functions
 
@@ -148,7 +148,7 @@ contract SingleAccountValidator is AccountValidator {
 }
 ```
 
-With these contracts, the data contract no longer works with a concrete validator contract but an abstract (interface) representation instead, meaning we can choose which implementation we want to provide. This works in pretty much the same way as it does in languages like Java and C++. Let's say we want to allow more owner accounts then just one. We could then provide this contract:
+With these contracts, the data contract no longer works with a concrete validator contract but an abstract (interface) representation instead, meaning we can choose which implementation we want to provide. This works in pretty much the same way as it does in languages like Java and C++. Let's say we want to allow more owner accounts then just one. We could then provide it with this contract:
 
 ```
 contract MultiAccountValidator is AccountValidator {
@@ -170,7 +170,9 @@ contract MultiAccountValidator is AccountValidator {
 }
 ```
 
-Finally, it is worth noticing that you can actually pass in a contract that is not an `AccountValidator`. There is no type check when you convert an address to a contract type, so it would only show up when the contract is actually called; and in fact, if the contract has the required method it will work, even though it does not actually actually extend `AccountValidator`, but even though it works it is of course not recommended to use contracts in that way. 
+Finally, it is worth noticing that you can actually pass in a contract that is not an `AccountValidator`. There is no type check when you convert an address to a contract type, so it would only show up when the contract is actually called; and in fact, so long as the contract has the required method the call will work - even if it does not actually actually extend `AccountValidator`. 
+
+It is of course not recommended to use contracts in that way. 
 
 ### Summary
 

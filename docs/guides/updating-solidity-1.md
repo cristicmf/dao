@@ -4,7 +4,7 @@ This is a new tutorial series about how to create modular systems of smart-contr
  
 Readers should have a basic understanding of how Ethereum and Solidity works.
 
-### Updating contracts
+### Introduction
 
 Most contracts in a DApp will become obsolete at some point, and will require an update. Same as in other applications. It could be because new features must be added, a bug is found, or because a better, more optimized version has been made. Updating could of course cause problems so it must be done with care. Some of the things one must ensure is that:
 
@@ -22,9 +22,7 @@ A very important property of Etheruem contracts is that when a contract has been
 
 When contracts are created, a new account is first made, then the code is loaded into a VM which runs the constructor part, initializes fields etc., and then adds the runtime portion (or body) of the contract to the account. After that is done, there is no way to change the code, and there is no way to update the database except through that code.
 
-### Writing modular contracts
-
-Writing modular contracts is not that complicated. We will start from a very simple non-modular contract:
+Let us look at a very simple example contract:
 
 ```
 contract Data {
@@ -41,7 +39,9 @@ contract Data {
 
 This contract allows a user to add and read an unsigned integer. The only account that is allowed to add data is the account with address `0x692a...`. This address is a hex literal, so is added to the bytecode when the contract is compiled.
 
-A potential problem is that we might want to replace this address later, or even the entire validation procedure, but we can't because of how code and storage works. A simple way of making the contract more flexible is to store the current owner address in storage instead, and make it possible to change.
+But what if we do want to replace this address later?
+
+The fact is it isn't possible. If we want that functionality we need to prepare the contract in advance. A simple way of making it more flexible would be to put the current owner address in a storage variable instead, and make it possible to change.
 
 ```
 contract DataOwnerSettable {
@@ -63,13 +63,13 @@ contract DataOwnerSettable {
 }
 ```
 
-This contract has an `owner` field (mapped to storage). It is initialized with the address of the account that creates the contract, and can later be changed by the current owner by calling `setOwner`. The guard inside `addData` is still the same; the only thing that changed is that the owner address is no longer hard-coded.
+This contract has an `owner` field (mapped to storage). It is initialized with the address of the account that creates the contract, and can later be changed by the current owner by calling `setOwner`. The guard inside `addData` is still the same; the only thing that changed is that the owner address is not hard-coded.
 
 ### Delegation
 
 What if a settable owner is not enough, though? What if we want to be able to update not only the owner address, but the entire validation process?
 
-There is actually a way to replace code, and that is by connecting several contract calls ro form one single call-chain. A contract `C` could call another contract `C` as part of its functionality, meaning a transaction to `C` will execute code not just in `C` but in `D` as well. Moreover, we could also make the address to `D` settable, meaning it would be possible to change the instance of `D` that `C` is pointing to. An example of this could be a bank contract that calls a different contract to authenticate.
+There is actually a way to replace code, and that is by connecting several contract calls to form one single call-chain. A contract `C` could call another contract `D` as part of its functionality, meaning a transaction to `C` will execute code not just in `C` but in `D` as well. Moreover, we could also make the address to `D` settable, meaning it would be possible to change the instance of `D` that `C` is pointing to. An example of this could be a bank contract that calls a different contract to authenticate.
 
 ![BankAuthSequence](../images/bank-auth-sequence.png)
 
@@ -116,9 +116,9 @@ contract DataExternalValidation {
 }
 ```
 
-To use this, we first create an `AccountValidator` contract; it has the `owner` field now, and that field is automatically initialized with an account address. Then we create a `DataExternalValidation`-contract and inject the address of the validator through the contract constructor. When someone tries to write to `data`, it will call the `validate` function of the current validator contract to do the check rather then storing (or hard coding) the `owner` address and doing the equality check internally. Everything that has to do with access control is now delegated to the validator contract. 
+To use this contract on the chain we would first create an `AccountValidator` contract, then create a `DataExternalValidation`-contract and inject the address of the validator through the contract constructor. When someone tries to write to `data` it will call `validate` on the current validator contract to do the owner check. 
 
-This is very nice, because it is now possible to replace the contract that does the actual check. Also, since the `AccountValidator` is its own contract we could potentially use that contract in other contracts as well, and thus use it to control more contracts then just one.
+This is very nice, because it is now possible to replace the contract where the owner check is. Also, since the `AccountValidator` is its own contract we could potentially use that instance to do authentication for other contracts as well.
 
 One thing remains though. We still can't replace the code! All we have done is move the validation code out of the contract. The code of the `AccountValidator` contract can't be changed anymore then that of the data contract. Fortunately, Solidity provides a very simple and powerful workaround - abstract functions. 
 
@@ -148,11 +148,7 @@ contract SingleAccountValidator is AccountValidator {
 }
 ```
 
-With these contracts, the data contract no longer works with a concrete validator contract, but an abstract (interface) representation. This makes sense, because it does not really needs to know what the `validate` function actually does, it only needs to know the signature.
-
-Interfaces works the same way as it does in most other object-oriented languages, just declare functions without a body and they become abstract. 
-
-We still can't change the code stored in a contract account, but we can change the code that is executed when a function is called, by delegating some functionality to other contract which are allowed to be replaced; all we need to do is change the validator contract to a different contract. For example, if we want to allow more owners then one we could use an instance of this contract:
+With these contracts, the data contract no longer works with a concrete validator contract but an abstract (interface) representation instead, meaning we can choose which implementation we want to provide. This works in pretty much the same way as it does in languages like Java and C++. Let's say we want to allow more owner accounts then just one. We could then provide this contract:
 
 ```
 contract MultiAccountValidator is AccountValidator {

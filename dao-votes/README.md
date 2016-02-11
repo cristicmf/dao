@@ -30,7 +30,11 @@ Ballots are the basic voting contracts used in this system. It comes with an int
 
 #### PublicBallot
 
-A yes/no/abstain ballot
+A ballot where eligible voters are taken from a `UserDatabase`, and has some additional features like a quorum.
+
+#### YesNoAbstainVote
+
+A vote where the options are yes, no or abstain.
 
 #### BallotMap
 

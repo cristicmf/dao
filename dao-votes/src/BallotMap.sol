@@ -1,8 +1,8 @@
 /*
     File: BallotMap.sol
+
     Author: Andreas Olofsson (androlo1980@gmail.com)
-*/
-/*
+
     Contract: BallotMap
 
     A basic map for ballot-contracts (address -> bytes32). Should be extended.

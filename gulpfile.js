@@ -94,7 +94,7 @@ gulp.task('test:users', function (cb) {
 
 /************************ dao-votes ***************************/
 
-var daoVotesTests = ['BallotMapTest', 'PublicBallotTest', 'PublicMintingBallotTest', 'PublicCurrencyBasicTest', 'PublicCurrencyMintingTest', 'PublicCurrencyDurationTest', 'PublicCurrencyQuorumTest', 'PublicCurrencyKeepDurationTest'];
+var daoVotesTests = ['BallotMapTest', 'AbstractBallotTest', 'AbstractPublicYNABallotTest'];
 var daoVotesTestFolder = path.join(__dirname, 'dao-votes', 'build', 'test');
 
 gulp.task('build:votes', function (cb) {
@@ -114,9 +114,29 @@ gulp.task('test:votes', function (cb) {
     });
 });
 
+var examplesTests = ['PublicMintingBallotTest', 'PublicDurationBallotTest', 'PublicQuorumBallotTest', 'PublicKeepDurationBallotTest', 'PublicCurrencyBasicTest', 'PublicCurrencyMintingTest', 'PublicCurrencyDurationTest', 'PublicCurrencyQuorumTest', 'PublicCurrencyKeepDurationTest'];
+var examplesTestFolder = path.join(__dirname, 'examples', 'contracts', 'public_currency', 'build', 'test');
+
+gulp.task('build:examples', function (cb) {
+    process.exec('./build_example_contracts.sh', function (error) {
+        if (error)
+            throw new Error(error);
+        cb(error);
+    });
+});
+
+gulp.task('test:examples', function (cb) {
+    solUnit.runTests(examplesTests, examplesTestFolder, true, function (stats) {
+        var failed = stats.total - stats.successful;
+        if (failed !== 0)
+            throw new Error("Tests failed: " + failed);
+        cb();
+    });
+});
+
 /************************ all ***************************/
 
-gulp.task('build:all', ['build:core', 'build:currency', 'build:stl', 'build:users', 'build:votes']);
+gulp.task('build:all', ['build:core', 'build:currency', 'build:stl', 'build:users', 'build:votes', 'build:examples']);
 
 gulp.task('test:all', function (cb) {
     var total = 0;
@@ -159,6 +179,14 @@ gulp.task('test:all', function (cb) {
                 });
             }, function (cb) {
                 solUnit.runTests(daoVotesTests, daoVotesTestFolder, true, function (stats) {
+                    total += stats.total;
+                    successful += stats.successful;
+                    units += stats.numTestUnits;
+                    skipped += stats.numSkippedUnits;
+                    cb();
+                });
+            }, function (cb) {
+                solUnit.runTests(examplesTests, examplesTestFolder, true, function (stats) {
                     total += stats.total;
                     successful += stats.successful;
                     units += stats.numTestUnits;

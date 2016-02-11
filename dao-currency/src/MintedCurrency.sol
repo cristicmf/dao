@@ -1,5 +1,6 @@
 /*
     File: MintedCurrency.sol
+
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 import "dao-core/src/Doug.sol";

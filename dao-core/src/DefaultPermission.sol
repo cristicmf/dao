@@ -1,8 +1,10 @@
 /*
     File: DefaultPermission.sol
+
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 import "dao-stl/src/errors/Errors.sol";
+import "dao-stl/src/contracts/Destructible.sol";
 import "./Permission.sol";
 import "./Doug.sol";
 

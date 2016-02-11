@@ -1,5 +1,6 @@
 /*
     File: DefaultMintedCurrency.sol
+
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 import "./AbstractMintedCurrency.sol";

@@ -32,8 +32,8 @@ declare -a DaoSTLTest=('collections/AddressSetTest.sol' 'collections/PropertySet
 declare -a DaoUsersContracts=('DefaultUserDatabase.sol' 'AdminRegUserRegistry.sol' 'SelfRegUserRegistry.sol')
 declare -a DaoUsersTest=('DefaultUserDatabaseTest.sol' 'AbstractUserRegistryTest.sol' 'AdminRegUserRegistryTest.sol' 'SelfRegUserRegistryTest.sol')
 
-declare -a DaoVotesContracts=('currency/PublicCurrency.sol' 'currency/PublicDurationBallot.sol' 'currency/PublicKeepDurationBallot.sol' 'currency/PublicMintingBallot.sol' 'currency/PublicQuorumBallot.sol')
-declare -a DaoVotesTest=('BallotMapTest.sol' 'PublicBallotTest.sol' 'PublicMintingBallotTest.sol' 'PublicCurrencyBasicTest.sol' 'PublicCurrencyMintingTest.sol' 'PublicCurrencyDurationTest.sol' 'PublicCurrencyQuorumTest.sol' 'PublicCurrencyKeepDurationTest.sol')
+declare -a DaoVotesContracts=()
+declare -a DaoVotesTest=('BallotMapTest.sol' 'AbstractBallotTest.sol' 'AbstractPublicYNABallotTest.sol')
 
 if [ ${MODULE} != "dao-core" ] && [ ${MODULE} != "dao-users" ] && [ ${MODULE} != "dao-currency" ] && [ ${MODULE} != "dao-votes" ] && [ ${MODULE} != "dao-stl" ]; then
     echo "Param not recognized: ${MODULE}"

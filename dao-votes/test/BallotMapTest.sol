@@ -13,7 +13,6 @@ contract BallotMapImpl is BallotMap {
     }
 }
 
-
 contract BallotMapTest is DaoTest {
 
     address constant TEST_KEY   = 0x12345;

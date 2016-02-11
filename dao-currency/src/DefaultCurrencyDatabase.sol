@@ -1,5 +1,6 @@
 /*
     File: DefaultCurrencyDatabase.sol
+
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 import "./CurrencyDatabase.sol";

@@ -1,9 +1,8 @@
 /*
     File: Permission.sol
-    Author: Andreas Olofsson (androlo1980@gmail.com)
-*/
 
-/*
+    Author: Andreas Olofsson (androlo1980@gmail.com)
+
     Contract: Permission
 
     Interface for permission contracts with a root user and a number of permission owners.

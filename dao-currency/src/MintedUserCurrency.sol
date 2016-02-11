@@ -1,5 +1,6 @@
 /*
     File: MintedUserCurrency.sol
+
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 import "dao-stl/src/errors/Errors.sol";

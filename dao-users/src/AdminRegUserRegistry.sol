@@ -1,5 +1,6 @@
 /*
     File: AdminRegUserRegistry.sol
+
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 import "./AbstractUserRegistry.sol";

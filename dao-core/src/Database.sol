@@ -1,5 +1,6 @@
 /*
     File: Database.sol
+
     Author: Andreas Olofsson (androlo1980@gmail.com)
 */
 import "./Doug.sol";

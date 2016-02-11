@@ -26,7 +26,9 @@ A good demo will become available during February.
 
 There are [Tutorials](./docs/Tutorials.md). 
 
-Each module has a README file that explains what it does, which is also useful. They are all referenced in the [Structure](#structure) section of this document.
+There are examples in the [examples folder](./examples/README.md).
+
+Each module has a README file that explains what it does. They are all referenced in the [Structure](#structure) section of this document.
 
 HTML documentation for all the contracts can be found at http://smartcontractproduction.github.io/dao-contracts.
 

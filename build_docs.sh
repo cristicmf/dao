@@ -8,7 +8,7 @@ if [[ -z $(command -v solc) ]]; then
 fi
 
 if [[ -z $(jsdoc -v solc) ]]; then
-    echo "Cannot find NaturalDocs executable on path (http://www.naturaldocs.org/). Exiting."
+    echo "Cannot find jsdoc executable on path. Exiting."
     exit 1
 fi
 

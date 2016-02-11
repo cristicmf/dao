@@ -1,6 +1,6 @@
 {
-	"timestamp": 1455202447,
-	"dao": "0.1.6",
+	"timestamp": 1455218838,
+	"dao": "0.1.7",
 	"solc": "0.2.1-fad2d4df/RelWithDebInfo-Linux/g++/int linked to libethereum-1.1.0-34716679/.-Linux/g++/int",
 	"options": "--bin --abi"
 }

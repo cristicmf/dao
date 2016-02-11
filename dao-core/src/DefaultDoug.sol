@@ -423,7 +423,7 @@ contract DefaultDoug is Doug, Errors {
 
         Returns:
             oldAddress (address) - The address of the replaced contract, if any.
-            error (uint16) error - An error code.
+            error (uint16) - An error code.
     */
     function _addContract(NAMap storage map, bytes32 identifier, address contractAddress) internal returns (address oldAddress, uint16 error) {
 
@@ -474,7 +474,7 @@ contract DefaultDoug is Doug, Errors {
 
         Returns:
             addr (address) - The address of the removed contract.
-            error (uint16) error - An error code.
+            error (uint16) - An error code.
     */
     function _removeContract(NAMap storage map, bytes32 identifier) internal returns (address addr, uint16 error) {
         if (!_hasDougPermission()) {
@@ -516,7 +516,7 @@ contract DefaultDoug is Doug, Errors {
         Returns:
             identifier (bytes32) - The contract id.
             contractAddress (address) - The contract address.
-            error (uint16) error - An error code.
+            error (uint16) - An error code.
     */
     function _contractFromIndex(NAMap storage map, uint index) internal constant returns (bytes32 identifier, address contractAddress, uint16 error) {
         if (index >= map._keys.length) {
@@ -527,8 +527,15 @@ contract DefaultDoug is Doug, Errors {
         return (id, map._data[id].value, NO_ERROR);
     }
 
-    // Check if the caller has doug permissions.
-    function _hasDougPermission() constant internal returns (bool isRoot) {
+     /*
+        Function: _hasDougPermission
+
+        Check if the caller has the doug permission.
+
+        Returns:
+            hasDougPermission (bool) - 'true' if the caller has the doug permission.
+    */
+    function _hasDougPermission() constant internal returns (bool hasDougPermission) {
         return address(_permission) != 0 && _permission.hasPermission(msg.sender);
     }
 

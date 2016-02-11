@@ -73,7 +73,7 @@ Gulp: `$ gulp test:all`
 
 ##### Docs
 
-NOTE: You need [NaturalDocs](http://www.naturaldocs.org/) on your path to build html documentation (shell script version, not .bat).
+NOTE: You need [NaturalDocs](http://www.naturaldocs.org/) and `jsdoc` on your path to build html documentation.
 
 Gulp: `$ gulp htmldoc:all`
 

@@ -102,22 +102,18 @@ Group: Dao-users  {
 
 Group: Dao-votes  {
 
-   File: AbstractPublicBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/AbstractPublicBallot.sol)
+   File: AbstractPublicBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/AbstractBallot.sol)
+   File: AbstractPublicYNABallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/AbstractPublicYNABallot.sol)
+   File: Ballot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/Ballot.sol)
    File: BallotMap.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/BallotMap.sol)
-
-   Group: Currency  {
-
-      File: PublicCurrency.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/currency/PublicCurrency.sol)
-      File: PublicDurationBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/currency/PublicDurationBallot.sol)
-      File: PublicKeepDurationBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/currency/PublicKeepDurationBallot.sol)
-      File: PublicMintingBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/currency/PublicMintingBallot.sol)
-      File: PublicQuorumBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/currency/PublicQuorumBallot.sol)
-      }  # Group: Currency
-
    File: PublicBallot.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/PublicBallot.sol)
    File: temp/BallotManager.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/temp/BallotManager.sol)
    File: temp/PublicBallotManager.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/temp/PublicBallotManager.sol)
+   File: YesNoAbstainVote.sol  (/home/andreas/WebstormProjects/dao/dao-votes/src/YesNoAbstainVote.sol)
    }  # Group: Dao-votes
+
+File: Destructible.sol  (/home/andreas/WebstormProjects/dao/dao-stl/src/contracts/Destructible.sol)
+File: Executor.sol  (/home/andreas/WebstormProjects/dao/dao-stl/src/contracts/Executor.sol)
 
 Group: Index  {
 

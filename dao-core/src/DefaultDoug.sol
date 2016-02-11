@@ -91,8 +91,14 @@ contract DefaultDoug is Doug, Errors {
             error (uint16) - An error code.
     */
     function addActionsContract(bytes32 identifier, address contractAddress) external returns (uint16 error) {
-        error = _addContract(_aMap, identifier, contractAddress);
+        address oldAddress;
+        (oldAddress, error) = _addContract(_aMap, identifier, contractAddress);
+        if (oldAddress != ADDRESS_NULL && _destroyRemovedActions) {
+            Destructible(contractAddress).destroy(_permission.root());
+            RemoveActionsContract(identifier, oldAddress, NO_ERROR);
+        }
         AddActionsContract(identifier, contractAddress, error);
+
     }
 
     /*
@@ -225,7 +231,12 @@ contract DefaultDoug is Doug, Errors {
             error (uint16) - An error code.
     */
     function addDatabaseContract(bytes32 identifier, address contractAddress) external returns (uint16 error) {
-        error = _addContract(_dMap, identifier, contractAddress);
+        address oldAddress;
+        (oldAddress, error) = _addContract(_dMap, identifier, contractAddress);
+        if (oldAddress != ADDRESS_NULL && _destroyRemovedDatabases) {
+            Destructible(contractAddress).destroy(_permission.root());
+            RemoveDatabaseContract(identifier, oldAddress, NO_ERROR);
+        }
         AddDatabaseContract(identifier, contractAddress, error);
     }
 
@@ -400,8 +411,21 @@ contract DefaultDoug is Doug, Errors {
 
     // *********************************** Internal ************************************
 
-    // Add a contract to the given map.
-    function _addContract(NAMap storage map, bytes32 identifier, address contractAddress) internal returns (uint16 error) {
+     /*
+        Function: _addContract
+
+        Add a contract.
+
+        Params:
+            map (<NaMap>) - The map (either actions or databases).
+            identifier (bytes32) - The contract id.
+            contractAddress (address) - The contract address.
+
+        Returns:
+            oldAddress (address) - The address of the replaced contract, if any.
+            error (uint16) error - An error code.
+    */
+    function _addContract(NAMap storage map, bytes32 identifier, address contractAddress) internal returns (address oldAddress, uint16 error) {
 
         if (!_hasDougPermission()) {
             error = ACCESS_DENIED;
@@ -410,14 +434,6 @@ contract DefaultDoug is Doug, Errors {
         // Neither the ID nor the address can be null.
         if (identifier == BYTES32_NULL || contractAddress == ADDRESS_NULL) {
             error = NULL_PARAM_NOT_ALLOWED;
-            return;
-        }
-
-        var oldAddress = map._data[identifier].value;
-        var exists = oldAddress != ADDRESS_NULL;
-
-        if (exists) {
-            error = RESOURCE_ALREADY_EXISTS;
             return;
         }
 
@@ -431,13 +447,35 @@ contract DefaultDoug is Doug, Errors {
             return;
         }
 
-        // Register address under the given ID.
-        map._data[identifier] = NAElement(map._keys.push(identifier) - 1, contractAddress);
+        oldAddress = map._data[identifier].value;
+
+        var exists = oldAddress != ADDRESS_NULL;
+
+        if (exists) {
+            map._data[identifier].value = contractAddress;
+            delete map._aToN[oldAddress];
+        }
+        else {
+            // Register address under the given ID.
+            map._data[identifier] = NAElement(map._keys.push(identifier) - 1, contractAddress);
+        }
         // Register ID under the given address.
         map._aToN[contractAddress] = identifier;
     }
 
-    // Remove a contract from the given map.
+     /*
+        Function: _removeContract
+
+        Remove a contract.
+
+        Params:
+            map (<NaMap>) - The map (either actions or databases).
+            identifier (bytes32) - The contract id.
+
+        Returns:
+            addr (address) - The address of the removed contract.
+            error (uint16) error - An error code.
+    */
     function _removeContract(NAMap storage map, bytes32 identifier) internal returns (address addr, uint16 error) {
         if (!_hasDougPermission()) {
             error = ACCESS_DENIED;
@@ -466,7 +504,20 @@ contract DefaultDoug is Doug, Errors {
         map._keys.length--;
     }
 
-    // Get a contract by index, from the given map.
+     /*
+        Function: _contractFromIndex
+
+        Get a contract from its index in the backing array of the provided map.
+
+        Params:
+            map (<NaMap>) - The map (either actions or databases).
+            index (uint) - The index.
+
+        Returns:
+            identifier (bytes32) - The contract id.
+            contractAddress (address) - The contract address.
+            error (uint16) error - An error code.
+    */
     function _contractFromIndex(NAMap storage map, uint index) internal constant returns (bytes32 identifier, address contractAddress, uint16 error) {
         if (index >= map._keys.length) {
             error = ARRAY_INDEX_OUT_OF_BOUNDS;

@@ -48,10 +48,9 @@ contract DefaultDougDatabaseTest is DaoTest {
         var mc = new MockContract();
         doug.addDatabaseContract(TEST_BYTES32, mc);
         var mc2 = new MockContract();
-        var err = doug.addDatabaseContract(TEST_BYTES32, address(mc2));
-        err.assertErrorsEqual(RESOURCE_ALREADY_EXISTS, "addDatabaseContract did not return 'resource exists' error.");
-        var addr = doug.databaseContractAddress(TEST_BYTES32);
-        addr.assertEqual(mc, "Address not correct.");
+        var err = doug.addDatabaseContract(TEST_BYTES32, mc2);
+        doug.databaseContractAddress(TEST_BYTES32).assertEqual(mc2, "Address not correct.");
+        doug.databaseContractId(mc).assertZero("databaseContractId for first contract not zero");
     }
 
     function testAddAndRemoveDatabaseContract() {

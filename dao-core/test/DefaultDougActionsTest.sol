@@ -43,15 +43,15 @@ contract DefaultDougActionsTest is DaoTest {
     // TODO
     // function testAddDatabaseContractFailContractNotDougEnabled() {}
 
-    function testAddActionsContractOverwriteFail() {
+    function testAddActionsContractOverwriteSuccess() {
         DefaultDoug doug = new DefaultDoug(new MockPermission(true), false, false);
         var mc = new MockContract();
         doug.addActionsContract(TEST_BYTES32, mc);
         var mc2 = new MockContract();
-        var err = doug.addActionsContract(TEST_BYTES32, address(mc2));
-        err.assertErrorsEqual(RESOURCE_ALREADY_EXISTS, "addActionsContract did not return 'resource exists' error.");
-        var addr = doug.actionsContractAddress(TEST_BYTES32);
-        addr.assertEqual(mc, "Address not correct.");
+        var err = doug.addActionsContract(TEST_BYTES32, mc2);
+        err.assertNoError("addActionsContract returned error.");
+        doug.actionsContractAddress(TEST_BYTES32).assertEqual(mc2, "Address not correct.");
+        doug.actionsContractId(mc).assertZero("actionsContractId for first contract not zero");
     }
 
     function testAddAndRemoveActionsContract() {

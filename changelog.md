@@ -1,5 +1,9 @@
 # changelog
 
+#### 0.1.7
+
+- Small tweak to DefaultDoug to make contracts overwritable.
+
 #### 0.1.6
 
 - Added the changelog.

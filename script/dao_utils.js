@@ -136,23 +136,34 @@ function dateToTimestamp(date) {
 /**
  * Converts a unix timestamp to a javascript date object.
  *
- * @param {Object} timestamp - A javascript date object.
+ * Returns 'null' if the timestamp is 0.
+ *
+ * @param {number} timestamp - A javascript date object.
  *
  * @alias module:dao_utils.timestampToDate
  */
 function timestampToDate(timestamp) {
+    if(timestamp === 0) {
+        return null;
+    }
     return new Date(timestamp * 1000);
 }
 
 /**
  * Converts a unix timestamp in BigNumber form to a javascript date object.
  *
+ * Returns 'null' if the timestamp is 0.
+ *
  * @param {Object} timestamp - A javascript date object.
  *
  * @alias module:dao_utils.bnToDate
  */
 function bnToDate(timestamp) {
-    return new Date(timestamp.toNumber() * 1000);
+    var tsNum = timestamp.toNumber();
+    if (tsNum === 0) {
+        return null;
+    }
+    return new Date(tsNum * 1000);
 }
 
 module.exports = {

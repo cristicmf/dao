@@ -18,14 +18,15 @@ contract Ballot is Executor, Destructible {
 
         The state of the voting contract.
 
-
         Null - Null state.
 
         Open - The ballot is open.
 
         Closed - The ballot is closed.
+
+        Error - Something happened that put the ballot in an error state.
     */
-    enum State {Null, Open, Closed}
+    enum State {Null, Open, Closed, Error}
 
     /*
         Function: ballotType

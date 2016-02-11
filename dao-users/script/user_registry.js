@@ -183,3 +183,5 @@ UserRegistry.prototype.setAdmin = function (adminAddress, cb) {
 UserRegistry.prototype.admin = function (cb) {
     this._contract.admin(cb);
 };
+
+module.exports = UserRegistry;

@@ -12,6 +12,7 @@ var ContractService = require('./script/contract_service');
 var daoCore = require('./dao-core/script/dao_core');
 var daoCurrency = require('./dao-currency/script/dao_currency');
 var daoUsers = require('./dao-users/script/dao_users');
+var daoVotes = require('./dao-votes/script/dao_votes');
 
 /**
  * Errors.
@@ -59,3 +60,10 @@ exports.users = daoCurrency;
  * @type {module:dao_users}
  */
 exports.users = daoUsers;
+
+/**
+ * Dao-votes.
+ *
+ * @type {module:dao_votes}
+ */
+exports.votes = daoVotes;

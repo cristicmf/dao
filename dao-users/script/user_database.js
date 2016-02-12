@@ -32,15 +32,13 @@ util.inherits(UserDatabase, ContractService);
  * Get user data from the user address.
  *
  * @param {string} addr - The address.
- * @param {Function} cb - error first callback: function(error, nickname, time, dataHash).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 UserDatabase.prototype.userFromAddress = function (addr, cb) {
     this._contract.user['address'](addr, function(err, ret){
         if(err) return cb(err);
-        var nickname = daoUtils.htoa(ret[0]);
-        var time = daoUtils.bnToDate(ret[1]);
-        var dataHash = ret[2];
-        cb(null, nickname, time, dataHash)
+        var data = {nickname: daoUtils.htoa(ret[0]), timestamp: daoUtils.bnToDate(ret[1]), dataHash: ret[2]};
+        cb(null, data);
     });
 };
 
@@ -48,16 +46,13 @@ UserDatabase.prototype.userFromAddress = function (addr, cb) {
  * Get user data from the user (nick) name.
  *
  * @param {string} name - The name.
- * @param {Function} cb - error first callback: function(error, nickname, time, dataHash).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 UserDatabase.prototype.userFromName = function (name, cb) {
     var nameHex = daoUtils.atoh(name);
     this._contract.user['bytes32'](nameHex, function(err, ret){
-        if(err) return cb(err);
-        var nickname = daoUtils.htoa(ret[0]);
-        var time = daoUtils.bnToDate(ret[1]);
-        var dataHash = ret[2];
-        cb(null, nickname, time, dataHash)
+        var data = {nickname: daoUtils.htoa(ret[0]), timestamp: daoUtils.bnToDate(ret[1]), dataHash: ret[2]};
+        cb(null, data);
     });
 };
 
@@ -86,14 +81,12 @@ UserDatabase.prototype.hasUserFromName = function (name, cb) {
  * Get a user address from their index in the backing array.
  *
  * @param {number} index - The index.
- * @param {Function} cb - error first callback: function(error, address, errorCode).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 UserDatabase.prototype.userAddressFromIndex = function (index, cb) {
     this._contract.userAddressFromIndex(index, function(err, ret){
         if(err) return cb(err);
-        var addr = ret[0];
-        var code = ret[1].toNumber();
-        cb(null, addr, code);
+        cb(null, {address: ret[0], errorCode: ret[1].toNumber});
     });
 };
 
@@ -101,13 +94,13 @@ UserDatabase.prototype.userAddressFromIndex = function (index, cb) {
  * Get user data from their index in the backing array.
  *
  * @param {number} index - The index.
- * @param {Function} cb - error first callback: function(error, address, nickname, timestamp, dataHash, errorCode).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 UserDatabase.prototype.userFromIndex = function (index, cb) {
     this._contract.userFromIndex(index, function(err, ret){
         if(err) return cb(err);
         var fmt = ufiFormat(ret);
-        cb(null, fmt.address, fmt.nickname, fmt.timestamp, fmt.dataHash, fmt.errorCode);
+        cb(null, fmt);
     });
 };
 
@@ -138,7 +131,7 @@ UserDatabase.prototype.maxSize = function (cb) {
  *
  * @param {number} [start=0] - The starting index.
  * @param {number} [elements] - The number of elements to fetch.
- * @param {Function} cb - error first callback: function(error, errorCode).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 UserDatabase.prototype.users = function (start, elements, cb) {
 

@@ -33,14 +33,15 @@ util.inherits(Doug, ContractService);
 /**
  * Add an actions-contract to the registry.
  *
- * @param {string} identifier - A < 32 byte identifier.
- * @param {string} address - The contract address.
+ * @param {Object} data - {id: <string>, address: <string>}
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Doug.prototype.addActionsContract = function (identifier, address, cb) {
+Doug.prototype.addActionsContract = function (data, cb) {
     var that = this;
-    var idHex = daoUtils.atoh(identifier);
-    this._contract.addActionsContract(idHex, address, {gas: this._gas}, function (error, txHash) {
+    var id = data.id;
+    var addr = data.address;
+    var idHex = daoUtils.atoh(id);
+    this._contract.addActionsContract(idHex, addr, {gas: this._gas}, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('AddActionsContract', txHash, cb);
     });
@@ -90,13 +91,13 @@ Doug.prototype.actionsContractId = function (address, cb) {
  * Get an actions-contracts data by its index in the backing array.
  *
  * @param {number} index - The index.
- * @param {Function} cb - error first callback: function(error, identifier, address, errorCode).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 Doug.prototype.actionsContractFromIndex = function (index, cb) {
     this._contract.actionsContractFromIndex(index, function (error, ret) {
         if (error) return cb(error);
         var fmt = cfiFormat(ret);
-        cb(null, fmt.identifier, fmt.address, fmt.error);
+        cb(null, fmt);
     });
 };
 
@@ -141,7 +142,7 @@ Doug.prototype.destroyRemovedActions = function (cb) {
  *
  * @param {number} [start=0] - The starting index.
  * @param {number} [elements] - The number of elements to fetch.
- * @param {Function} cb - error first callback: function(error, errorCode).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 Doug.prototype.actionsContracts = function (start, elements, cb) {
 
@@ -201,14 +202,15 @@ Doug.prototype.actionsContracts = function (start, elements, cb) {
 /**
  * Add a database-contract to the registry.
  *
- * @param {string} identifier - A < 32 byte identifier.
- * @param {string} address - The contract address.
+ * @param {Object} data - {id: <string>, address: <string>}
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Doug.prototype.addDatabaseContract = function (identifier, address, cb) {
+Doug.prototype.addDatabaseContract = function (data, cb) {
     var that = this;
-    var idHex = daoUtils.atoh(identifier);
-    this._contract.addDatabaseContract(idHex, address, {gas: this._gas}, function (error, txHash) {
+    var id = data.id;
+    var addr = data.address;
+    var idHex = daoUtils.atoh(id);
+    this._contract.addDatabaseContract(idHex, addr, {gas: this._gas}, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('AddDatabaseContract', txHash, cb);
     });
@@ -258,13 +260,12 @@ Doug.prototype.databaseContractId = function (address, cb) {
  * Get a database-contracts data by its index in the backing array.
  *
  * @param {number} index - The index.
- * @param {Function} cb - error first callback: function(error, identifier, address, errorCode).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 Doug.prototype.databaseContractFromIndex = function (index, cb) {
     this._contract.databaseContractFromIndex(index, function (error, ret) {
         if (error) return cb(error);
-        var fmt = cfiFormat(ret);
-        cb(null, fmt.identifier, fmt.address, fmt.error);
+        cb(null, cfiFormat(ret));
     });
 };
 
@@ -309,7 +310,7 @@ Doug.prototype.destroyRemovedDatabases = function (cb) {
  *
  * @param {number} [start=0] - The starting index.
  * @param {number} [elements] - The number of elements to fetch.
- * @param {Function} cb - error first callback: function(error, errorCode).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 Doug.prototype.databaseContracts = function (start, elements, cb) {
 
@@ -348,7 +349,7 @@ Doug.prototype.databaseContracts = function (start, elements, cb) {
                     if (error) return cb(error);
                     var fmt = cfiFormat(ret);
 
-                    if (fmt.error === 0) {
+                    if (fmt.errorCode === 0) {
                         contracts.push({identifier: fmt.identifier, address: fmt.address});
                     }
                     i++;

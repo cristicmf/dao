@@ -7,7 +7,7 @@ var Simple = require('./simple');
 
 var loadDoug = require('./load');
 
-var dir = path.join(__dirname, "../../build/test");
+var dir = path.join(__dirname, "../../../dao-core/build/test");
 var cFile = path.join(__dirname, "contracts.json");
 
 var dep = new Deployer(dir);
@@ -40,7 +40,6 @@ function deploySimple(services, callback) {
     // These are run in order.
     var steps = [
         deploySimpleTwo,
-        removeSimpleOneFromDoug,
         addSimpleTwoToDoug,
         testSimpleTwoAdded
     ];
@@ -64,19 +63,8 @@ function deploySimple(services, callback) {
         })
     }
 
-    function removeSimpleOneFromDoug(cb) {
-        doug.removeActionsContract("simple", function (error, code) {
-            if (error) return cb(error);
-            if (code !== 0) {
-                return cb(new Error("removeActionsContract returned error: " + errors.error(code)));
-            }
-            console.log("simpleOne removed from doug.");
-            cb();
-        });
-    }
-
     function addSimpleTwoToDoug(cb) {
-        doug.addActionsContract("simple", st.address(), function (error, code) {
+        doug.addActionsContract({id: "simple", address: st.address()}, function (error, code) {
             if (error) return cb(error);
             if (code !== 0) {
                 return cb(new Error("addActionsContract returned error: " + errors.error(code)));
@@ -92,7 +80,7 @@ function deploySimple(services, callback) {
             if (addr !== st.address()) {
                 return cb(new Error("simple cannot be found in Doug. Address: " + addr));
             }
-            console.log("simple properly added.");
+            console.log("simpleTwo properly added.");
             cb();
         });
     }

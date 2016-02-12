@@ -6,9 +6,9 @@ var Deployer = require('../../../script/deployer');
 var SimpleDb = require('./simple_db');
 var Simple = require('./simple');
 
-var deployDoug = require('../deploy');
+var deployDoug = require('../../../dao-core/script/dao_core').deploy;
 
-var dir = path.join(__dirname, "../../build/test");
+var dir = path.join(__dirname, "../../../dao-core/build/test");
 var dep = new Deployer(dir);
 
 // Start by unit-testing all contracts we're about to deploy. If the tests fail, throw.
@@ -81,7 +81,7 @@ function deploySimple(dougServices, callback) {
     }
 
     function addSimpleDbToDoug(cb) {
-        doug.addDatabaseContract("simpleDb", sdb.address(), function (error, code) {
+        doug.addDatabaseContract({id: "simpleDb", address: sdb.address()}, function (error, code) {
             if (error) return cb(error);
             if (code !== 0) {
                 return cb(new Error("addDatabaseContract returned error: " + errors.error(code)));
@@ -111,7 +111,7 @@ function deploySimple(dougServices, callback) {
     }
 
     function addSimpleOneToDoug(cb) {
-        doug.addActionsContract("simple", so.address(), function (error, code) {
+        doug.addActionsContract({id: "simple", address: so.address()}, function (error, code) {
             if (error) return cb(error);
             if (code !== 0) {
                 return cb(new Error("addActionsContract returned error: " + errors.error(code)));

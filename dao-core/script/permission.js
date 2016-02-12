@@ -54,14 +54,14 @@ Permission.prototype.root = function (cb) {
 /**
  * Get the root data, which includes the address and timestamp when he was added.
  *
- * @param {Function} cb - error first callback: function(error, address, timestamp).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 Permission.prototype.rootData = function (cb) {
     this._contract.rootData(function(error, ret){
         if (error) return cb(error);
         var addr = ret[0];
         var time = daoUtils.bnToDate(ret[1]);
-        cb(null, addr, time);
+        cb(null, {address: addr, timestamp: time});
     });
 };
 
@@ -96,14 +96,14 @@ Permission.prototype.removeOwner = function (address, cb) {
 /**
  * Get the timestamp when an owner was added. Also serves as an existence check.
  *
- * @param {Function} cb - error first callback: function(error, timestamp, errorCode).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 Permission.prototype.ownerTimestamp = function (cb) {
     this._contract.ownerTimestamp(function(error, ret){
         if (error) return cb(error);
         var time = daoUtils.bnToDate(ret[0]);
         var code = ret[1].toNumber();
-        cb(null, time, code);
+        cb(null, {timestamp: time, errorCode: code});
     });
 };
 
@@ -111,13 +111,12 @@ Permission.prototype.ownerTimestamp = function (cb) {
  * Get an owner's data based on his position in the backing array.
  *
  * @param {number} index - The index.
- * @param {Function} cb - error first callback: function(error, address, timestamp, errorCode).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 Permission.prototype.ownerFromIndex = function (index, cb) {
     this._contract.ownerFromIndex(index, function(error, ret){
         if (error) return cb(error);
-        var fmt = ofiFormat(ret);
-        cb(null, fmt.address, fmt.timestamp, fmt.error);
+        cb(null, ofiFormat(ret));
     });
 };
 
@@ -150,7 +149,7 @@ Permission.prototype.hasPermission = function (address, cb) {
  *
  * @param {number} [start=0] - The starting index.
  * @param {number} [elements] - The number of elements to fetch.
- * @param {Function} cb - error first callback: function(error, errorCode).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 Permission.prototype.owners = function (start, elements, cb) {
 
@@ -189,7 +188,7 @@ Permission.prototype.owners = function (start, elements, cb) {
                     if (error) return cb(error);
                     var fmt = ofiFormat(ret);
 
-                    if (fmt.error === 0) {
+                    if (fmt.errorCode === 0) {
                         owners.push({address: fmt.address, timestamp: fmt.timestamp});
                     }
                     i++;
@@ -206,7 +205,7 @@ Permission.prototype.owners = function (start, elements, cb) {
 };
 
 function ofiFormat(ret) {
-    return {address: ret[0], timestamp: daoUtils.bnToDate(ret[1]), error: ret[2].toNumber()};
+    return {address: ret[0], timestamp: daoUtils.bnToDate(ret[1]), errorCode: ret[2].toNumber()};
 }
 
 module.exports = Permission;

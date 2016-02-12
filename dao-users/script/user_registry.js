@@ -30,13 +30,14 @@ util.inherits(UserRegistry, ContractService);
 /**
  * Register a user.
  *
- * @param {string} addr - The user address.
- * @param {string} nickname - The nickname.
- * @param {string} dataHash - The hash of the file containing user data.
+ * @param {Object} data - {address: <string>, nickname: <string>, dataHash: <string>}
  *
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.registerUser = function (addr, nickname, dataHash, cb) {
+UserRegistry.prototype.registerUser = function (data, cb) {
+    var addr = data.address;
+    var nickname = data.nickname;
+    var dataHash = data.dataHash;
     var that = this;
     var nickHex = daoUtils.atoh(nickname);
     this._contract.registerUser(addr, nickHex, dataHash, {gas: this._gas}, function(error, txHash){
@@ -48,12 +49,13 @@ UserRegistry.prototype.registerUser = function (addr, nickname, dataHash, cb) {
 /**
  * Register the caller as a user.
  *
- * @param {string} nickname - The nickname.
- * @param {string} dataHash - The hash of the file containing user data.
+ * @param {Object} data - {nickname: <string>, dataHash: <string>}
  *
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.registerSelf = function (nickname, dataHash, cb) {
+UserRegistry.prototype.registerSelf = function (data, cb) {
+    var nickname = data.nickname;
+    var dataHash = data.dataHash;
     var that = this;
     var nickHex = daoUtils.atoh(nickname);
     this._contract.registerSelf(nickHex, dataHash, {gas: this._gas}, function(error, txHash){
@@ -93,12 +95,13 @@ UserRegistry.prototype.removeSelf = function (cb) {
 /**
  * Update a user's data-hash.
  *
- * @param {string} addr - The user address.
- * @param {string} dataHash - The hash of the file containing user data.
+ * @param {Object} data - {address: <string>, dataHash: <string>}
  *
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.updateDataHash = function (addr, dataHash, cb) {
+UserRegistry.prototype.updateDataHash = function (data, cb) {
+    var addr = data.address;
+    var dataHash = data.dataHash;
     var that = this;
     this._contract.updateDataHash(addr, dataHash, {gas: this._gas}, function(error, txHash){
         if(error) return cb(error);

@@ -3,7 +3,7 @@ var dir = path.join(__dirname, "../../build/release");
 
 var Deployer = require('../../../script/deployer.js');
 
-var deployDoug = require('../deploy');
+var deployDoug = require('../dao_core').deploy;
 
 var dep = new Deployer(dir);
 

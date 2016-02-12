@@ -29,29 +29,14 @@ util.inherits(MintedCurrency, ContractService);
 /**
  * Mint coins and add to an account.
  *
- * @param {string} receiver - The receiver account.
- * @param {number} amount - The amount.
+ * @param {Object} data - {receiver: <string>, amount: <string>}
  *
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-MintedCurrency.prototype.registerUser = function (receiver, amount, cb) {
+MintedCurrency.prototype.mint = function (data, cb) {
     var that = this;
-    this._contract.registerUser(receiver, amount, {gas: this._gas}, function(error, txHash){
-        if(error) return cb(error);
-        that.waitFor('Mint', txHash, cb);
-    });
-};
-
-/**
- * Mint coins and add to an account.
- *
- * @param {string} receiver - The receiver account.
- * @param {number} amount - The amount.
- *
- * @param {Function} cb - error first callback: function(error, errorCode).
- */
-MintedCurrency.prototype.mint = function (receiver, amount, cb) {
-    var that = this;
+    var receiver = data.receiver;
+    var amount = data.amount;
     this._contract.mint(receiver, amount, {gas: this._gas}, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('Mint', txHash, cb);
@@ -61,13 +46,14 @@ MintedCurrency.prototype.mint = function (receiver, amount, cb) {
 /**
  * Send coins to a receiver account. Uses caller address as sender.
  *
- * @param {string} receiver - The receiver account.
- * @param {number} amount - The amount.
+ * @param {Object} data - {receiver: <string>, amount: <string>}
  *
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-MintedCurrency.prototype.sendSelf = function (receiver, amount, cb) {
+MintedCurrency.prototype.sendSelf = function (data, cb) {
     var that = this;
+    var receiver = data.receiver;
+    var amount = data.amount;
     this._contract.send['address,uint'](receiver, amount, {gas: this._gas}, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('Send', txHash, cb);
@@ -77,14 +63,15 @@ MintedCurrency.prototype.sendSelf = function (receiver, amount, cb) {
 /**
  * Send coins from the sender account to a receiver account.
  *
- * @param {string} sender - The sender account.
- * @param {string} receiver - The receiver account.
- * @param {number} amount - The amount.
+ * @param {Object} data - {sender: <string>, receiver: <string>, amount: <string>}
  *
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-MintedCurrency.prototype.send = function (sender, receiver, amount, cb) {
+MintedCurrency.prototype.send = function (data, cb) {
     var that = this;
+    var sender = data.sender;
+    var receiver = data.receiver;
+    var amount = data.amount;
     this._contract.send['address,address,uint'](sender, receiver, amount, {gas: this._gas}, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('Send', txHash, cb);

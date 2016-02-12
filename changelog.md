@@ -1,5 +1,11 @@
 # changelog
 
+#### 0.1.8
+
+- Changed output and (some) input in javascript contract services to use objects rather then multiple params. Better for web apis.
+
+- Patched simple_update example so that it now require modules from the correct folders. This was broken after moving from `dao-core` to `examples`.
+
 #### 0.1.7
 
 - Small tweak to DefaultDoug to make contracts overwritable.

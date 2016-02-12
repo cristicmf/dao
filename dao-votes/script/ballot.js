@@ -73,7 +73,7 @@ Ballot.prototype.opened = function (cb) {
 /**
  * Get the time when the ballot was concluded.
  *
- * @param {Function} cb - error first callback: function(error, ballotId).
+ * @param {Function} cb - error first callback: function(error, concluded).
  */
 Ballot.prototype.concluded = function (cb) {
     this._contract.concluded(function(err, ret){
@@ -85,7 +85,7 @@ Ballot.prototype.concluded = function (cb) {
 /**
  * Get the duration of the ballot (in seconds).
  *
- * @param {Function} cb - error first callback: function(error, ballotId).
+ * @param {Function} cb - error first callback: function(error, durationInSeconds).
  */
 Ballot.prototype.durationInSeconds = function (cb) {
     this._contract.durationInSeconds(function(err, ret){
@@ -97,7 +97,7 @@ Ballot.prototype.durationInSeconds = function (cb) {
 /**
  * Get the state.
  *
- * @param {Function} cb - error first callback: function(error, ballotId).
+ * @param {Function} cb - error first callback: function(error, state).
  */
 Ballot.prototype.state = function (cb) {
     this._contract.state(function(err, ret){

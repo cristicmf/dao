@@ -3,7 +3,7 @@ var path = require('path');
 var async = require('async');
 var errors = require('../../../script/errors');
 
-var deployDoug = require('../deploy');
+var deployDoug = require('../dao_core').deploy;
 
 var Deployer = require('../../../script/deployer');
 
@@ -67,7 +67,7 @@ function test(services, callback) {
 
     function testAddActionsContract(cb) {
         console.log("Adding actions contract: " + settable.address);
-        doug.addActionsContract("settable", settable.address, function (error, code) {
+        doug.addActionsContract({id: "settable", address: settable.address}, function (error, code) {
             if (error) return cb(error);
             if (code !== 0) {
                 return cb(new Error("Add returned error: " + errors.error(code)));
@@ -125,7 +125,7 @@ function test(services, callback) {
 
     function testAddDatabaseContract(cb) {
         console.log("Adding database contract: " + settable.address);
-        doug.addDatabaseContract("settable", settable.address, function (error, code) {
+        doug.addDatabaseContract({id: "settable", address: settable.address}, function (error, code) {
             if (error) return cb(error);
             if (code !== 0) {
                 return cb(new Error("Add returned error: " + errors.error(code)));

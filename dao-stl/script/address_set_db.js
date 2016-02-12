@@ -69,13 +69,13 @@ AddressSetDb.prototype.hasAddress = function (address, cb) {
  * Get an address by its index in the backing array.
  *
  * @param {number} index - The index.
- * @param {Function} cb - error first callback: function(error, address, exists).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 AddressSetDb.prototype.addressFromIndex = function (index, cb) {
     this._contract.addressFromIndex(index, function(err, ret) {
         if (err) return cb(err);
         var fmt = afiFormat(ret);
-        cb(null, fmt.address, fmt.exists);
+        cb(null, fmt);
     })
 };
 
@@ -97,7 +97,7 @@ AddressSetDb.prototype.numAddresses = function (cb) {
  *
  * @param {number} [start=0] - The starting index.
  * @param {number} [elements] - The number of elements to fetch.
- * @param {Function} cb - error first callback: function(error, errorCode).
+ * @param {Function} cb - error first callback: function(error, data).
  */
 AddressSetDb.prototype.values = function(start, elements, cb){
 

@@ -1,5 +1,9 @@
 # changelog
 
+#### 0.1.10
+
+- Fixed wrong method name in permission service.
+
 #### 0.1.9
 
 - Added better error-reporting.

@@ -36,8 +36,8 @@ util.inherits(Permission, ContractService);
  */
 Permission.prototype.setRoot = function (newRoot, cb) {
     var that = this;
-    this._contract.setPermission(newRoot, {gas: this._gas}, function(error, txHash){
-        if(error) return cb(error);
+    this._contract.setRoot(newRoot, {gas: this._gas}, function (error, txHash) {
+        if (error) return cb(error);
         that.waitFor('SetRoot', txHash, cb);
     });
 };
@@ -57,7 +57,7 @@ Permission.prototype.root = function (cb) {
  * @param {Function} cb - error first callback: function(error, data).
  */
 Permission.prototype.rootData = function (cb) {
-    this._contract.rootData(function(error, ret){
+    this._contract.rootData(function (error, ret) {
         if (error) return cb(error);
         var addr = ret[0];
         var time = daoUtils.bnToDate(ret[1]);
@@ -73,8 +73,8 @@ Permission.prototype.rootData = function (cb) {
  */
 Permission.prototype.addOwner = function (address, cb) {
     var that = this;
-    this._contract.addOwner(address, {gas: this._gas}, function(error, txHash){
-        if(error) return cb(error);
+    this._contract.addOwner(address, {gas: this._gas}, function (error, txHash) {
+        if (error) return cb(error);
         that.waitFor('AddOwner', txHash, cb);
     });
 };
@@ -87,8 +87,8 @@ Permission.prototype.addOwner = function (address, cb) {
  */
 Permission.prototype.removeOwner = function (address, cb) {
     var that = this;
-    this._contract.removeOwner(address, {gas: this._gas}, function(error, txHash){
-        if(error) return cb(error);
+    this._contract.removeOwner(address, {gas: this._gas}, function (error, txHash) {
+        if (error) return cb(error);
         that.waitFor('RemoveOwner', txHash, cb);
     });
 };
@@ -99,7 +99,7 @@ Permission.prototype.removeOwner = function (address, cb) {
  * @param {Function} cb - error first callback: function(error, data).
  */
 Permission.prototype.ownerTimestamp = function (cb) {
-    this._contract.ownerTimestamp(function(error, ret){
+    this._contract.ownerTimestamp(function (error, ret) {
         if (error) return cb(error);
         var time = daoUtils.bnToDate(ret[0]);
         var code = ret[1].toNumber();
@@ -114,7 +114,7 @@ Permission.prototype.ownerTimestamp = function (cb) {
  * @param {Function} cb - error first callback: function(error, data).
  */
 Permission.prototype.ownerFromIndex = function (index, cb) {
-    this._contract.ownerFromIndex(index, function(error, ret){
+    this._contract.ownerFromIndex(index, function (error, ret) {
         if (error) return cb(error);
         cb(null, ofiFormat(ret));
     });

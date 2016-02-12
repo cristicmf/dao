@@ -212,7 +212,8 @@ contract DefaultPermission is Destructible, Permission, Errors {
             error = ARRAY_INDEX_OUT_OF_BOUNDS;
             return;
         }
-        return (_owners._keys[index], _owners._data[owner].timestamp, NO_ERROR);
+        var addr = _owners._keys[index];
+        return (addr, _owners._data[addr].timestamp, NO_ERROR);
     }
 
     /*

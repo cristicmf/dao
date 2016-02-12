@@ -1,5 +1,9 @@
 # changelog
 
+#### 0.1.11
+
+- Minor updates to permissions contract and service.
+
 #### 0.1.10
 
 - Fixed wrong method name in permission service.

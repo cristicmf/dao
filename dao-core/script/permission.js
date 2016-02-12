@@ -96,10 +96,11 @@ Permission.prototype.removeOwner = function (address, cb) {
 /**
  * Get the timestamp when an owner was added. Also serves as an existence check.
  *
+ * @param {string} address - The owner address.
  * @param {Function} cb - error first callback: function(error, data).
  */
-Permission.prototype.ownerTimestamp = function (cb) {
-    this._contract.ownerTimestamp(function (error, ret) {
+Permission.prototype.ownerTimestamp = function (address, cb) {
+    this._contract.ownerTimestamp(address, function (error, ret) {
         if (error) return cb(error);
         var time = daoUtils.bnToDate(ret[0]);
         var code = ret[1].toNumber();

@@ -1,5 +1,9 @@
 # changelog
 
+#### 0.1.9
+
+- Added better error-reporting.
+
 #### 0.1.8
 
 - Changed output and (some) input in javascript contract services to use objects rather then multiple params. Better for web apis.

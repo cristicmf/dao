@@ -91,7 +91,7 @@ Doug.prototype.actionsContractId = function (address, cb) {
  * Get an actions-contracts data by its index in the backing array.
  *
  * @param {number} index - The index.
- * @param {Function} cb - error first callback: function(error, data).
+ * @param {Function} cb - error first callback: function(error, {identifier: <string>, address: <string>, error: <number>}).
  */
 Doug.prototype.actionsContractFromIndex = function (index, cb) {
     this._contract.actionsContractFromIndex(index, function (error, ret) {
@@ -142,7 +142,7 @@ Doug.prototype.destroyRemovedActions = function (cb) {
  *
  * @param {number} [start=0] - The starting index.
  * @param {number} [elements] - The number of elements to fetch.
- * @param {Function} cb - error first callback: function(error, data).
+ * @param {Function} cb - error first callback: function(error, {startIndex: number, endIndex: number, totalSize: number, blockNumber: block, contracts: contracts}).
  */
 Doug.prototype.actionsContracts = function (start, elements, cb) {
 
@@ -260,7 +260,7 @@ Doug.prototype.databaseContractId = function (address, cb) {
  * Get a database-contracts data by its index in the backing array.
  *
  * @param {number} index - The index.
- * @param {Function} cb - error first callback: function(error, data).
+ * @param {Function} cb - error first callback: function(error, identifier, address, errorCode).
  */
 Doug.prototype.databaseContractFromIndex = function (index, cb) {
     this._contract.databaseContractFromIndex(index, function (error, ret) {
@@ -310,7 +310,7 @@ Doug.prototype.destroyRemovedDatabases = function (cb) {
  *
  * @param {number} [start=0] - The starting index.
  * @param {number} [elements] - The number of elements to fetch.
- * @param {Function} cb - error first callback: function(error, data).
+ * @param {Function} cb - error first callback: function(error, errorCode).
  */
 Doug.prototype.databaseContracts = function (start, elements, cb) {
 

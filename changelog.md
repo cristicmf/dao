@@ -1,12 +1,16 @@
 # changelog
 
+#### 0.1.13
+
+- Changed contract build-scripts to js-only. Shell scripts are gone.
+
 #### 0.1.12
 
 - Added txData object to all service methods.
 
 - Added javascript deployment and loading methods to dao-users.
  
-- Added 'constant' to a method in minted currency, and one in user registry. Re-compiled. 
+- Added 'constant' to a method in minted currency, and one in user registry. Re-compiled.
 
 #### 0.1.11
 

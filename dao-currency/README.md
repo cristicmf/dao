@@ -10,12 +10,6 @@ Shell script: `$ ./build_contracts.sh dao-currency`
 
 Gulp: `$ gulp build:currency`
 
-#### Testing
-
-Gulp: `$ gulp test:currency` 
-
-Command-line tool: `$ solunit -d ./dao-currency/build/test`
-
 ### Usage
 
 [User manual](https://github.com/smartcontractproduction/dao/blob/master/docs/Manual.md)

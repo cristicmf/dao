@@ -16,6 +16,7 @@ function deploy(dep, callback) {
 
     // These are run in order.
     var steps = [
+        deployAddressSet,
         deployAddressSetDb,
         testAddAddresses,
         testHasAddress,
@@ -34,6 +35,13 @@ function deploy(dep, callback) {
     });
 
     // The functions.
+
+    function deployAddressSet(cb) {
+        dep.deployLibrary("AddressSet", function (err) {
+            if (err) throw err;
+            cb();
+        })
+    }
 
     function deployAddressSetDb(cb) {
         dep.deploy("asdb", "AddressSetDb", function (err, contract) {

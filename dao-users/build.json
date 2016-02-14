@@ -1,0 +1,10 @@
+{
+  "contracts": ["DefaultUserDatabase", "AdminRegUserRegistry", "SelfRegUserRegistry"],
+  "testContracts": ["DefaultUserDatabaseTest", "AbstractUserRegistryTest", "AdminRegUserRegistryTest", "SelfRegUserRegistryTest"],
+  "options": {
+    "bin": true,
+    "abi": true,
+    "includeRoot": true,
+    "daoIncludes": true
+  }
+}

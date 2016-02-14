@@ -1,0 +1,10 @@
+{
+  "contracts": ["DefaultDoug", "DefaultPermission"],
+  "testContracts": ["DefaultPermissionTest", "DefaultDougActionsTest", "DefaultDougDatabaseTest", "DefaultDougTest", "DefaultDougEnabledTest", "DefaultSimpleDbTest", "SimpleOneTest", "SimpleTwoTest"],
+  "options": {
+    "bin": true,
+    "abi": true,
+    "includeRoot": true,
+    "daoIncludes": true
+  }
+}

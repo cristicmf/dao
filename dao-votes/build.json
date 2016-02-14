@@ -1,0 +1,9 @@
+{
+  "testContracts": ["BallotMapTest", "AbstractBallotTest", "AbstractPublicYNABallotTest"],
+  "options": {
+    "bin": true,
+    "abi": true,
+    "includeRoot": true,
+    "daoIncludes": true
+  }
+}

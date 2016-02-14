@@ -16,12 +16,6 @@ Shell script: `$ ./build_contracts.sh dao-stl`
 
 Gulp: `$ gulp build:stl`
 
-#### Testing
-
-Gulp: `$ gulp test:stl`
-
-Command-line tool: `$ solunit -d ./dao-stl/build/test`
-
 ### Usage
 
 [User manual](https://github.com/smartcontractproduction/dao/blob/master/docs/Manual.md)

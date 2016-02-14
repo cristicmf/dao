@@ -10,12 +10,6 @@ Shell script: `$ ./build_contracts.sh dao-votes`
 
 Gulp: `$ gulp build:votes`
 
-#### Testing
-
-Gulp: `$ gulp test:votes` 
-
-Command-line tool: `$ solunit -d ./dao-votes/build/test`
-
 #### Usage
 
 [User manual](https://github.com/smartcontractproduction/dao/blob/master/docs/Manual.md)

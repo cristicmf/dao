@@ -41,20 +41,20 @@ function web3(address, ethURL) {
  *
  * @param {Object} web3 - The web3 instance to use when creating contracts.
  * @param {string} contractFile - The contract json file.
- * @param {string} contractsFolder - The folder where .abi files can be found.
  * @returns {Object} - The loaded contracts.
  *
  * @alias module:dao_utils.loadContracts
  */
-function loadContracts(web3, contractFile, contractsFolder) {
+function loadContracts(web3, contractFile) {
 
     var contracts = fs.readJsonSync(contractFile);
     var loaded = {};
     for (var c in contracts.contracts) {
         if (contracts.contracts.hasOwnProperty(c)) {
             var cData = contracts.contracts[c];
-            var abiFile = path.join(contractsFolder, cData.type + ".abi");
-            var abi = fs.readJsonSync(abiFile);
+            var code = web3.eth.getCode(cData.address);
+            if(code !== cData.bytecode)
+                throw new Error("On-chain bytecode does not match that in the contracts.json file for: " + cData.name + " (" + cData.type + ").");
             loaded[c] = {type: cData.type, contract: web3.eth.contract(abi).at(cData.address)};
         }
     }

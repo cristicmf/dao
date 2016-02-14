@@ -1,1 +1,0 @@
-[{"constant":false,"inputs":[],"name":"testAddSuccess","outputs":[],"type":"function"},{"constant":false,"inputs":[],"name":"testAddFailNotOwner","outputs":[],"type":"function"},{"constant":false,"inputs":[],"name":"testAddFailNotActions","outputs":[],"type":"function"}]

@@ -22,12 +22,6 @@ Shell script: `$ ./build_contracts.sh dao-core`
 
 Gulp: `$ gulp build:core`
 
-#### Testing
-
-Gulp: `$ gulp test:core` 
-
-Command-line tool: `$ solunit -d ./dao-core/build/test`
-
 ### Contracts
 
 ![DaoCoreContracts](../docs/images/dao-core-contracts.png)

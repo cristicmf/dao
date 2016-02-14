@@ -1,24 +1,15 @@
 var gulp = require('gulp');
 var path = require('path');
 var process = require('child_process');
-var solUnit = require('sol-unit');
+
+var builder = require('./script/builder');
 var async = require('async');
 
 /************************ dao-core ***************************/
 
-var daoCoreTests = ['DefaultPermissionTest', 'DefaultDougTest', 'DefaultDougEnabledTest', 'DefaultDougActionsTest', 'DefaultDougDatabaseTest'];
-var daoCoreTestFolder = path.join(__dirname, 'dao-core', 'build', 'test');
-
 gulp.task('build:core', function (cb) {
-    process.exec('./build_contracts.sh dao-core', function (error) {
-        if (error)
-            throw new Error(error);
-        cb();
-    });
-});
-
-gulp.task('test:core', function (cb) {
-    solUnit.runTests(daoCoreTests, daoCoreTestFolder, true, function (stats) {
+    builder.build('dao-core', {test: true}, function (error, stats) {
+        if (error) return cb(error);
         var failed = stats.total - stats.successful;
         if (failed !== 0)
             throw new Error("Tests failed: " + failed);
@@ -28,19 +19,9 @@ gulp.task('test:core', function (cb) {
 
 /************************ dao-currency ***************************/
 
-var daoCurrencyTests = ['DefaultCurrencyDatabaseTest', 'AbstractMintedCurrencyTest', 'DefaultMintedCurrencyTest', 'MintedUserCurrencyTest'];
-var daoCurrencyTestFolder = path.join(__dirname, 'dao-currency', 'build', 'test');
-
 gulp.task('build:currency', function (cb) {
-    process.exec('./build_contracts.sh dao-currency', function (error) {
-        if (error)
-            throw new Error(error);
-        cb(error);
-    });
-});
-
-gulp.task('test:currency', function (cb) {
-    solUnit.runTests(daoCurrencyTests, daoCurrencyTestFolder, true, function (stats) {
+    builder.build('dao-currency', {test: true}, function (error, stats) {
+        if (error) return cb(error);
         var failed = stats.total - stats.successful;
         if (failed !== 0)
             throw new Error("Tests failed: " + failed);
@@ -50,19 +31,9 @@ gulp.task('test:currency', function (cb) {
 
 /************************ dao-stl ***************************/
 
-var daoSTLTests = ['AddressSetTest', 'PropertySetTest', 'PropertyToAddressTest'];
-var daoSTLTestFolder = path.join(__dirname, 'dao-stl', 'build', 'test');
-
 gulp.task('build:stl', function (cb) {
-    process.exec('./build_contracts.sh dao-stl', function (error) {
-        if (error)
-            throw new Error(error);
-        cb(error);
-    });
-});
-
-gulp.task('test:stl', function (cb) {
-    solUnit.runTests(daoSTLTests, daoSTLTestFolder, true, function (stats) {
+    builder.build('dao-stl', {test: true}, function (error, stats) {
+        if (error) return cb(error);
         var failed = stats.total - stats.successful;
         if (failed !== 0)
             throw new Error("Tests failed: " + failed);
@@ -72,19 +43,9 @@ gulp.task('test:stl', function (cb) {
 
 /************************ dao-users ***************************/
 
-var daoUsersTests = ['DefaultUserDatabaseTest', 'AbstractUserRegistryTest', 'AdminRegUserRegistryTest', 'SelfRegUserRegistryTest'];
-var daoUsersTestFolder = path.join(__dirname, 'dao-users', 'build', 'test');
-
 gulp.task('build:users', function (cb) {
-    process.exec('./build_contracts.sh dao-users', function (error) {
-        if (error)
-            throw new Error(error);
-        cb(error);
-    });
-});
-
-gulp.task('test:users', function (cb) {
-    solUnit.runTests(daoUsersTests, daoUsersTestFolder, true, function (stats) {
+    builder.build('dao-users', {test: true}, function (error, stats) {
+        if (error) return cb(error);
         var failed = stats.total - stats.successful;
         if (failed !== 0)
             throw new Error("Tests failed: " + failed);
@@ -94,19 +55,9 @@ gulp.task('test:users', function (cb) {
 
 /************************ dao-votes ***************************/
 
-var daoVotesTests = ['BallotMapTest', 'AbstractBallotTest', 'AbstractPublicYNABallotTest'];
-var daoVotesTestFolder = path.join(__dirname, 'dao-votes', 'build', 'test');
-
 gulp.task('build:votes', function (cb) {
-    process.exec('./build_contracts.sh dao-votes', function (error) {
-        if (error)
-            throw new Error(error);
-        cb(error);
-    });
-});
-
-gulp.task('test:votes', function (cb) {
-    solUnit.runTests(daoVotesTests, daoVotesTestFolder, true, function (stats) {
+    builder.build('dao-votes', {test: true}, function (error, stats) {
+        if (error) return cb(error);
         var failed = stats.total - stats.successful;
         if (failed !== 0)
             throw new Error("Tests failed: " + failed);
@@ -114,19 +65,11 @@ gulp.task('test:votes', function (cb) {
     });
 });
 
-var examplesTests = ['PublicMintingBallotTest', 'PublicDurationBallotTest', 'PublicQuorumBallotTest', 'PublicKeepDurationBallotTest', 'PublicCurrencyBasicTest', 'PublicCurrencyMintingTest', 'PublicCurrencyDurationTest', 'PublicCurrencyQuorumTest', 'PublicCurrencyKeepDurationTest'];
-var examplesTestFolder = path.join(__dirname, 'examples', 'contracts', 'public_currency', 'build', 'test');
+/************************ public currency example ***************************/
 
 gulp.task('build:examples', function (cb) {
-    process.exec('./build_example_contracts.sh', function (error) {
-        if (error)
-            throw new Error(error);
-        cb(error);
-    });
-});
-
-gulp.task('test:examples', function (cb) {
-    solUnit.runTests(examplesTests, examplesTestFolder, true, function (stats) {
+    builder.build('examples/contracts/public_currency', {test: true}, function (error, stats) {
+        if (error) return cb(error);
         var failed = stats.total - stats.successful;
         if (failed !== 0)
             throw new Error("Tests failed: " + failed);
@@ -136,9 +79,7 @@ gulp.task('test:examples', function (cb) {
 
 /************************ all ***************************/
 
-gulp.task('build:all', ['build:core', 'build:currency', 'build:stl', 'build:users', 'build:votes', 'build:examples']);
-
-gulp.task('test:all', function (cb) {
+gulp.task('build:all', function (cb) {
     var total = 0;
     var successful = 0;
     var units = 0;
@@ -146,7 +87,8 @@ gulp.task('test:all', function (cb) {
 
     async.series([
             function (cb) {
-                solUnit.runTests(daoCoreTests, daoCoreTestFolder, true, function (stats) {
+                builder.build('dao-core', {test: true}, function (error, stats) {
+                    if (error) return cb(error);
                     total += stats.total;
                     successful += stats.successful;
                     units += stats.numTestUnits;
@@ -154,7 +96,8 @@ gulp.task('test:all', function (cb) {
                     cb();
                 });
             }, function (cb) {
-                solUnit.runTests(daoCurrencyTests, daoCurrencyTestFolder, true, function (stats) {
+                builder.build('dao-currency', {test: true}, function (error, stats) {
+                    if (error) return cb(error);
                     total += stats.total;
                     successful += stats.successful;
                     units += stats.numTestUnits;
@@ -162,7 +105,8 @@ gulp.task('test:all', function (cb) {
                     cb();
                 });
             }, function (cb) {
-                solUnit.runTests(daoSTLTests, daoSTLTestFolder, true, function (stats) {
+                builder.build('dao-stl', {test: true}, function (error, stats) {
+                    if (error) return cb(error);
                     total += stats.total;
                     successful += stats.successful;
                     units += stats.numTestUnits;
@@ -170,7 +114,8 @@ gulp.task('test:all', function (cb) {
                     cb();
                 });
             }, function (cb) {
-                solUnit.runTests(daoUsersTests, daoUsersTestFolder, true, function (stats) {
+                builder.build('dao-users', {test: true}, function (error, stats) {
+                    if (error) return cb(error);
                     total += stats.total;
                     successful += stats.successful;
                     units += stats.numTestUnits;
@@ -178,7 +123,8 @@ gulp.task('test:all', function (cb) {
                     cb();
                 });
             }, function (cb) {
-                solUnit.runTests(daoVotesTests, daoVotesTestFolder, true, function (stats) {
+                builder.build('dao-votes', {test: true}, function (error, stats) {
+                    if (error) return cb(error);
                     total += stats.total;
                     successful += stats.successful;
                     units += stats.numTestUnits;
@@ -186,7 +132,8 @@ gulp.task('test:all', function (cb) {
                     cb();
                 });
             }, function (cb) {
-                solUnit.runTests(examplesTests, examplesTestFolder, true, function (stats) {
+                builder.build('examples/contracts/public_currency', {test: true}, function (error, stats) {
+                    if (error) return cb(error);
                     total += stats.total;
                     successful += stats.successful;
                     units += stats.numTestUnits;

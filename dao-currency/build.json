@@ -1,0 +1,10 @@
+{
+  "contracts": ["DefaultCurrencyDatabase", "DefaultMintedCurrency", "MintedUserCurrency"],
+  "testContracts": ["DefaultCurrencyDatabaseTest", "AbstractMintedCurrencyTest", "DefaultMintedCurrencyTest", "MintedUserCurrencyTest"],
+  "options": {
+    "bin": true,
+    "abi": true,
+    "includeRoot": true,
+    "daoIncludes": true
+  }
+}

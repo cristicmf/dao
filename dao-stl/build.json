@@ -1,0 +1,9 @@
+{
+  "testContracts": ["collections/AddressSetTest", "collections/PropertySetTest", "collections/PropertyToAddressTest"],
+  "options": {
+    "bin": true,
+    "abi": true,
+    "includeRoot": true,
+    "daoIncludes": true
+  }
+}

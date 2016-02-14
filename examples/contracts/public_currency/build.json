@@ -1,0 +1,13 @@
+{
+  "contracts": ["PublicCurrency", "PublicDurationBallot", "PublicKeepDurationBallot", "PublicMintingBallot", "PublicQuorumBallot"],
+  "testContracts": ["PublicMintingBallotTest", "PublicDurationBallotTest", "PublicQuorumBallotTest", "PublicKeepDurationBallotTest", "PublicCurrencyBasicTest", "PublicCurrencyMintingTest", "PublicCurrencyDurationTest", "PublicCurrencyQuorumTest", "PublicCurrencyKeepDurationTest"],
+  "options": {
+    "bin": true,
+    "abi": true,
+    "includeRoot": true,
+    "daoIncludes": true
+  },
+  "includes": {
+    "public-currency": "."
+  }
+}

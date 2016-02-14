@@ -44,7 +44,7 @@ The tools are only tested on 64 bit Ubuntu 14.04+
 
 Command-line [Gulp](http://gulpjs.com/) is optional, but has tasks for building and deploying.
 
-You need [solc](https://github.com/ethereum/solidity) on your path to compile locally (latest dev).
+You need [solc](https://github.com/ethereum/solidity) on your path to build contracts (latest dev).
 
 You need [NaturalDocs](http://www.naturaldocs.org/) and [jsdoc](http://usejsdoc.org/) on your path to build html documentation.
 
@@ -67,16 +67,6 @@ NOTE: You need `solc` on path. If this fails it will mess up the build folders, 
 
 Gulp: `$ gulp build:all`
 
-##### Testing
-
-Gulp: `$ gulp test:all`
-
-##### Docs
-
-NOTE: You need [NaturalDocs](http://www.naturaldocs.org/) and `jsdoc` on your path to build html documentation.
-
-Gulp: `$ gulp htmldoc:all`
-
 ## Structure
 
 These are the different parts of the framework.
@@ -94,29 +84,7 @@ These are the different parts of the framework.
 
 ## Javascript Utilities
 
-There are a number of utilities that comes with this library, even though it is a contracts-only library.
-
-Getting these utilities documented and properly tested is part of the `0.2.0` milestone.
-
-#### Deployer
-
-`Deployer` is in the script folder. It can deploy contracts, and keeps records of the contracts it deploys. It also automatically links contracts with libraries, provided those libraries can be found in the same folder as the contracts (.bin and .abi files).
- 
-#### ContractService
-
-`ContractService` is a base class for contract services, which is wrappers for web3 contracts. The wrappers does any extra conversion that's needed, for example `bytes32` <-> ASCII, timestamps to Date objects, and such. It can be found in the scripts folder as well.
-
-Contract services also use solidity events to hold transactions until the event is fired. This is the most secure way of dealing with return values from non-constant functions in Ethereum, because the events are specific to not only the contract in question and the event type, but the hash of the transaction as well. This in combination with the contract systems of events and error codes makes it possible to see exactly what the result of a transaction were, and to know when it was processed.
-  
-Sometimes it is smart to do some calls to check the state of a contract before trying a costly transaction. If that is the case, then those functions can be added to the service as well and run before the actual transaction.
-  
-#### Errors
- 
-`Errors` is in the script folder, and can be used to convert error codes (numbers) to the name that is used in the errors contract in `dao-stl`, e.g. `error(2000) = 'ACCESS_DENIED'`. Good for logging and such.
-
-#### Module-specific javascript
-
-Module-specific javascript is found in the script folder of the module, e.g. `dao-core/scripts`. They can contain contract services, deployment scripts, utilities, and tests.
+There are a number of utilities that comes with this library, even though it is a contracts-only library. These will be documented and tested later, probably at `0.3.0`
 
 ## DAO framework
 
@@ -154,22 +122,17 @@ Maybe it's good for someone, maybe not.
 
 **I can't build the contracts**
 
-This is normally because you don't have [solc](https://github.com/ethereum/solidity) installed and on your path. `solc` is a C++ library but they are thinking about building a command-line version in javascript, that extends the Emscripten compiled version, which will make it easier to install and use.
+This is normally because you don't have [solc](https://github.com/ethereum/solidity) installed and on your path. This library only works with a local C++ version, because building everything with the bytecode optimizer on can take very long (several minutes).
 
 **I can't test the contracts**
 
-This is normally because the contract build folders has been tampered with, or because sol-unit can't be installed. The reason for sol-unit failure could be missing dependencies. sol-unit uses javascript ethereum which depends on C libraries, which you may not be able to build. 
-
-**I can't build html documentation**
-
-This could be because you don't have [NaturalDocs](http://www.naturaldocs.org/) or `jsdoc` on your path.
-
+This is normally because the contract build folders has been tampered with, or because sol-unit can't be installed. The reason for sol-unit failure could be missing dependencies. sol-unit uses javascript ethereum which depends on C/C++ libraries, which you may not be able to build. Among other things it requires make, g++ and gmp (`libgmp3-dev`).
 
 ## Business
 
 **Hiring Me**
 
-I work with Ethereum contracts and various different block-chain clients, and is available for projects.
+I work with Ethereum contracts and various different block-chain clients, and is sometimes available for projects.
 
 To contact me, send a personal message on linkedin: https://www.linkedin.com/in/andreas-olofsson-69465ba4
 
@@ -177,7 +140,7 @@ To contact me, send a personal message on linkedin: https://www.linkedin.com/in/
 
 I'm not hiring as of right now.
 
-I will likely soon be looking for a node.js developer that is familiar with Ethereum and Ethereum-like tech and their javascript APIs/tools. If the position opens I will announce it.
+I will likely soon be looking for a part time web-applications developer.
 
 ## Licence
 

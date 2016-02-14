@@ -69,10 +69,7 @@ function deploy(dep, administered, callback) {
 
     function deployReg(cb) {
         var type = administered ? "AdminRegUserRegistry" : "SelfRegUserRegistry";
-        console.log(type);
-        console.log(userDb.address());
         var dbAddr = userDb.address();
-        console.log(dep.address());
         dep.deploy("userReg", type, [dbAddr, dep.address()], function (err, contract) {
             if (err) throw err;
             userReg = new UserRegistry(dep.web3(), contract, dep.gas());

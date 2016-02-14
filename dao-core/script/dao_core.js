@@ -117,10 +117,9 @@ function deploy(dep, callback) {
  */
 function load(rootAddress, contractsFile) {
     var web3 = daoUtils.web3(rootAddress);
-    var contractsFolder = path.join(__dirname, "../build/release");
     if (!contractsFile)
         contractsFile = path.join(__dirname, "bin", "contracts.json");
-    var contracts = daoUtils.loadContracts(web3, contractsFile, contractsFolder);
+    var contracts = daoUtils.loadContracts(web3, contractsFile);
     var services = {};
     var gas = daoUtils.defaultGas();
     services.perm = new Permission(web3, contracts.perm.contract, gas);

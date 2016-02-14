@@ -118,6 +118,7 @@ Deployer.prototype.deploy = function (name, type, params, cb) {
                 callback(err);
             } else if (ctr.address) {
                 cObj.contract = ctr;
+                cObj.bytecode = that._web3.eth.getCode(ctr.address);
                 console.log("Contract '" + name + "' {" + type + "} deployed at: " + ctr.address);
                 callback(null, ctr);
             }

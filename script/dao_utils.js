@@ -55,7 +55,7 @@ function loadContracts(web3, contractFile) {
             var code = web3.eth.getCode(cData.address);
             if(code !== cData.bytecode)
                 throw new Error("On-chain bytecode does not match that in the contracts.json file for: " + cData.name + " (" + cData.type + ").");
-            loaded[c] = {type: cData.type, contract: web3.eth.contract(abi).at(cData.address)};
+            loaded[c] = {type: cData.type, contract: web3.eth.contract(cData.abi).at(cData.address)};
         }
     }
     return loaded;

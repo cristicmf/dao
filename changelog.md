@@ -1,5 +1,9 @@
 # changelog
 
+#### 0.1.15
+
+- Minor fixes to deployer, builder, and contract loading functions.
+
 #### 0.1.14
 
 - Added 'builder' and 'solc.compile' to index.js

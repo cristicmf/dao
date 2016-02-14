@@ -14,9 +14,9 @@ function load(rootAddress, contractsFile) {
     var services = {};
     var gas = daoUtils.defaultGas();
 
-    services.doug = new Doug(web3, contracts.doug, gas);
-    services.simpleDb = new SimpleDb(web3, contracts.simpleDb, gas);
-    services.simple = new Simple(web3, contracts.simple, gas);
+    services.doug = new Doug(web3, contracts.doug.contract, gas);
+    services.simpleDb = new SimpleDb(web3, contracts.simpleDb.contract, gas);
+    services.simple = new Simple(web3, contracts.simple.contract, gas);
 
     return services;
 }

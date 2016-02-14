@@ -123,11 +123,10 @@ function load(rootAddress, contractsFile) {
     var contracts = daoUtils.loadContracts(web3, contractsFile, contractsFolder);
     var services = {};
     var gas = daoUtils.defaultGas();
-    services.perm = new Permission(web3, contracts.perm, gas);
-    services.doug = new Doug(web3, contracts.doug, gas);
+    services.perm = new Permission(web3, contracts.perm.contract, gas);
+    services.doug = new Doug(web3, contracts.doug.contract, gas);
     return services;
 }
-
 
 exports.deploy = deploy;
 exports.load = load;

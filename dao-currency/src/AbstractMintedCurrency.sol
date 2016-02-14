@@ -90,7 +90,7 @@ contract AbstractMintedCurrency is MintedCurrency, DefaultDougEnabled {
         Returns:
             dbAddr (address) - The address.
     */
-    function currencyDatabase() returns (address dbAddr) {
+    function currencyDatabase() constant returns (address dbAddr) {
         return _currencyDatabase;
     }
 

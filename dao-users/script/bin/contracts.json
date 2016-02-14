@@ -1,0 +1,13 @@
+{
+  "contracts": {
+    "userDb": {
+      "type": "DefaultUserDatabase",
+      "address": "0x16f4926b5f89adb31e7a374ee0bc636c4679a9bf"
+    },
+    "userReg": {
+      "type": "AdminRegUserRegistry",
+      "address": "0x8038029b84cc27a105b8abb00356242079db59ae"
+    }
+  },
+  "id": 1455458172339
+}

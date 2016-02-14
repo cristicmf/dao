@@ -1,0 +1,21 @@
+{
+  "contracts": {
+    "perm": {
+      "type": "DefaultPermission",
+      "address": "0x756c5f19454c75f1434377f22a08f2d6c6027e80"
+    },
+    "doug": {
+      "type": "DefaultDoug",
+      "address": "0xc1a4b0b7d25177bc9257de445f6d28d52db3cad6"
+    },
+    "simpleDb": {
+      "type": "DefaultSimpleDb",
+      "address": "0xfd0f2c5a4c569d60bae572ce8dc388a42d21ef6c"
+    },
+    "simple": {
+      "type": "SimpleTwo",
+      "address": "0x21558f8946ed1718bfb11d01e9338b3e488dec9a"
+    }
+  },
+  "id": 1455452671298
+}

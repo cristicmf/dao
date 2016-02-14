@@ -31,16 +31,22 @@ util.inherits(UserRegistry, ContractService);
  * Register a user.
  *
  * @param {Object} data - {address: <string>, nickname: <string>, dataHash: <string>}
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.registerUser = function (data, cb) {
+UserRegistry.prototype.registerUser = function (data, txData, cb) {
     var addr = data.address;
     var nickname = data.nickname;
     var dataHash = data.dataHash;
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
     var that = this;
     var nickHex = daoUtils.atoh(nickname);
-    this._contract.registerUser(addr, nickHex, dataHash, {gas: this._gas}, function(error, txHash){
+    this._contract.registerUser(addr, nickHex, dataHash, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('RegisterUser', txHash, cb);
     });
@@ -50,15 +56,21 @@ UserRegistry.prototype.registerUser = function (data, cb) {
  * Register the caller as a user.
  *
  * @param {Object} data - {nickname: <string>, dataHash: <string>}
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.registerSelf = function (data, cb) {
+UserRegistry.prototype.registerSelf = function (data, txData, cb) {
     var nickname = data.nickname;
     var dataHash = data.dataHash;
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
     var that = this;
     var nickHex = daoUtils.atoh(nickname);
-    this._contract.registerSelf(nickHex, dataHash, {gas: this._gas}, function(error, txHash){
+    this._contract.registerSelf(nickHex, dataHash, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('RegisterUser', txHash, cb);
     });
@@ -68,12 +80,18 @@ UserRegistry.prototype.registerSelf = function (data, cb) {
  * Remove a user.
  *
  * @param {string} addr - The user address.
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.removeUser = function (addr, cb) {
+UserRegistry.prototype.removeUser = function (addr, txData, cb) {
     var that = this;
-    this._contract.removeUser(addr, {gas: this._gas}, function(error, txHash){
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.removeUser(addr, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('RemoveUser', txHash, cb);
     });
@@ -81,12 +99,18 @@ UserRegistry.prototype.removeUser = function (addr, cb) {
 
 /**
  * Remove the caller as a user.
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.removeSelf = function (cb) {
+UserRegistry.prototype.removeSelf = function (txData, cb) {
     var that = this;
-    this._contract.removeSelf({gas: this._gas}, function(error, txHash){
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.removeSelf(txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('RemoveUser', txHash, cb);
     });
@@ -96,14 +120,20 @@ UserRegistry.prototype.removeSelf = function (cb) {
  * Update a user's data-hash.
  *
  * @param {Object} data - {address: <string>, dataHash: <string>}
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.updateDataHash = function (data, cb) {
+UserRegistry.prototype.updateDataHash = function (data, txData, cb) {
     var addr = data.address;
     var dataHash = data.dataHash;
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
     var that = this;
-    this._contract.updateDataHash(addr, dataHash, {gas: this._gas}, function(error, txHash){
+    this._contract.updateDataHash(addr, dataHash, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('UpdateDataHash', txHash, cb);
     });
@@ -113,12 +143,18 @@ UserRegistry.prototype.updateDataHash = function (data, cb) {
  * Update the caller's data-hash.
  *
  * @param {string} dataHash - The hash of the file containing user data.
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.updateMyDataHash = function (dataHash, cb) {
+UserRegistry.prototype.updateMyDataHash = function (dataHash, txData, cb) {
     var that = this;
-    this._contract.updateMyDataHash(dataHash, {gas: this._gas}, function(error, txHash){
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.updateMyDataHash(dataHash, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('UpdateDataHash', txHash, cb);
     });
@@ -128,12 +164,18 @@ UserRegistry.prototype.updateMyDataHash = function (dataHash, cb) {
  * Set the maximum number of users allowed.
  *
  * @param {number} maxUsers - The maximum number.
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.setMaxUsers = function (maxUsers, cb) {
+UserRegistry.prototype.setMaxUsers = function (maxUsers, txData, cb) {
     var that = this;
-    this._contract.setMaxUsers(maxUsers, {gas: this._gas}, function(error, txHash){
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.setMaxUsers(maxUsers, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('SetMaxUsers', txHash, cb);
     });
@@ -143,12 +185,18 @@ UserRegistry.prototype.setMaxUsers = function (maxUsers, cb) {
  * Set the address of the user database contract.
  *
  * @param {string} databaseAddress - The database address.
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.setUserDatabase = function (databaseAddress, cb) {
+UserRegistry.prototype.setUserDatabase = function (databaseAddress, txData, cb) {
     var that = this;
-    this._contract.setUserdatabase(databaseAddress, {gas: this._gas}, function(error, txHash){
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.setUserdatabase(databaseAddress, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('SetUserDatabase', txHash, cb);
     });
@@ -157,22 +205,35 @@ UserRegistry.prototype.setUserDatabase = function (databaseAddress, cb) {
 /**
  * Get the address of the user database contract.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, address).
  */
-UserRegistry.prototype.userDatabase = function (cb) {
-    this._contract.userDatabase(cb);
+UserRegistry.prototype.userDatabase = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.userDatabase(txData, cb);
 };
 
 /**
  * Set the admin address.
  *
  * @param {string} adminAddress - The admin address.
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-UserRegistry.prototype.setAdmin = function (adminAddress, cb) {
+UserRegistry.prototype.setAdmin = function (adminAddress, txData, cb) {
     var that = this;
-    this._contract.setAdmin(adminAddress, {gas: this._gas}, function(error, txHash){
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.setAdmin(adminAddress, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('SetAdmin', txHash, cb);
     });
@@ -181,10 +242,17 @@ UserRegistry.prototype.setAdmin = function (adminAddress, cb) {
 /**
  * Get the address of the current administrator.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, address).
  */
-UserRegistry.prototype.admin = function (cb) {
-    this._contract.admin(cb);
+UserRegistry.prototype.admin = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.admin(txData, cb);
 };
 
 module.exports = UserRegistry;

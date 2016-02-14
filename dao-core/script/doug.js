@@ -34,14 +34,21 @@ util.inherits(Doug, ContractService);
  * Add an actions-contract to the registry.
  *
  * @param {Object} data - {id: <string>, address: <string>}
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Doug.prototype.addActionsContract = function (data, cb) {
+Doug.prototype.addActionsContract = function (data, txData, cb) {
     var that = this;
     var id = data.id;
     var addr = data.address;
     var idHex = daoUtils.atoh(id);
-    this._contract.addActionsContract(idHex, addr, {gas: this._gas}, function (error, txHash) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.addActionsContract(idHex, addr, txData, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('AddActionsContract', txHash, cb);
     });
@@ -51,12 +58,19 @@ Doug.prototype.addActionsContract = function (data, cb) {
  * Remove an actions-contract from the registry.
  *
  * @param {string} identifier - A < 32 byte identifier.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Doug.prototype.removeActionsContract = function (identifier, cb) {
+Doug.prototype.removeActionsContract = function (identifier, txData, cb) {
     var that = this;
     var idHex = daoUtils.atoh(identifier);
-    this._contract.removeActionsContract(idHex, {gas: this._gas}, function (error, txHash) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.removeActionsContract(idHex, txData, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('RemoveActionsContract', txHash, cb);
     });
@@ -66,21 +80,35 @@ Doug.prototype.removeActionsContract = function (identifier, cb) {
  * Get an actions-contracts address by its id.
  *
  * @param {string} identifier - A < 32 byte identifier.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, address).
  */
-Doug.prototype.actionsContractAddress = function (identifier, cb) {
+Doug.prototype.actionsContractAddress = function (identifier, txData, cb) {
     var idHex = daoUtils.atoh(identifier);
-    this._contract.actionsContractAddress(idHex, cb);
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.actionsContractAddress(idHex, txData, cb);
 };
 
 /**
  * Get an actions-contracts id by its address.
  *
  * @param {string} address - The contract address.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, id).
  */
-Doug.prototype.actionsContractId = function (address, cb) {
-    this._contract.actionsContractId(address, function (error, idHex) {
+Doug.prototype.actionsContractId = function (address, txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.actionsContractId(address, txData, function (error, idHex) {
         if (error) return cb(error);
         var id = daoUtils.htoa(idHex);
         cb(null, id);
@@ -91,10 +119,17 @@ Doug.prototype.actionsContractId = function (address, cb) {
  * Get an actions-contracts data by its index in the backing array.
  *
  * @param {number} index - The index.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, {identifier: <string>, address: <string>, error: <number>}).
  */
-Doug.prototype.actionsContractFromIndex = function (index, cb) {
-    this._contract.actionsContractFromIndex(index, function (error, ret) {
+Doug.prototype.actionsContractFromIndex = function (index, txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.actionsContractFromIndex(index, txData, function (error, ret) {
         if (error) return cb(error);
         var fmt = cfiFormat(ret);
         cb(null, fmt);
@@ -104,21 +139,35 @@ Doug.prototype.actionsContractFromIndex = function (index, cb) {
 /**
  * Get the number of registered actions-contracts.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, numContracts).
  */
-Doug.prototype.numActionsContracts = function (cb) {
-    this._contract.numActionsContracts(cb);
+Doug.prototype.numActionsContracts = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.numActionsContracts(txData, cb);
 };
 
 /**
  * Set whether or not to call destroy on actions-contracts when they are removed from doug.
  *
  * @param {boolean} destroyRemovedActions - 'true' if contracts should be destroyed.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Doug.prototype.setDestroyRemovedActions = function (destroyRemovedActions, cb) {
+Doug.prototype.setDestroyRemovedActions = function (destroyRemovedActions, txData, cb) {
     var that = this;
-    this._contract.setDestroyRemovedActions(destroyRemovedActions, {gas: this._gas}, function (error, txHash) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.setDestroyRemovedActions(destroyRemovedActions, txData, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('SetDestroyRemovedActions', txHash, cb);
     });
@@ -127,48 +176,53 @@ Doug.prototype.setDestroyRemovedActions = function (destroyRemovedActions, cb) {
 /**
  * Get whether or not to call destroy on actions-contracts when they are removed from doug.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, destroyRemovedActions).
  */
-Doug.prototype.destroyRemovedActions = function (cb) {
-    this._contract.destroyRemovedActions(cb);
+Doug.prototype.destroyRemovedActions = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.destroyRemovedActions(txData, cb);
 };
 
 /**
  * Get actions-contracts.
  *
- * If neither 'start' nor 'elements' are provided, the entire collection will be fetched.
+ * If neither 'startIndex' nor 'elements' are provided, the entire collection will be fetched.
  *
- * If only one number is found before the callback, it will be used as starting index.
- *
- * @param {number} [start=0] - The starting index.
- * @param {number} [elements] - The number of elements to fetch.
+ * @param {Object} queryData - {startIndex: <number>, elements: <number>}
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, {startIndex: number, endIndex: number, totalSize: number, blockNumber: block, contracts: contracts}).
  */
-Doug.prototype.actionsContracts = function (start, elements, cb) {
+Doug.prototype.actionsContracts = function (queryData, txData, cb) {
 
     var that = this;
 
     var block = this._web3.eth.blockNumber;
 
-    this._contract.numActionsContracts(block, function (error, num) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+
+    this._contract.numActionsContracts(txData, block, function (error, num) {
         if (error) return cb(error);
         var size = num.toNumber();
 
-        var s, e;
-        if (typeof(start) === "function") {
-            s = 0;
+        var s = 0, e = 0;
+
+        if (queryData && queryData.startIndex)
+            s = queryData.startIndex;
+        if (queryData && queryData.elements)
+            e = start + queryData.elements > size ? size : start + queryData.elements;
+        else
             e = size;
-            cb = start;
-        }
-        else if (typeof(elements) === "function") {
-            s = start;
-            e = size - start;
-            cb = elements;
-        }
-        else {
-            s = start;
-            e = start + elements > size ? size : start + elements;
-        }
 
         var contracts = [];
         var i = s;
@@ -177,7 +231,7 @@ Doug.prototype.actionsContracts = function (start, elements, cb) {
                 return i < e;
             },
             function (cb) {
-                that._contract.actionsContractFromIndex(i, block, function (error, ret) {
+                that._contract.actionsContractFromIndex(i, txData, block, function (error, ret) {
                     if (error) return cb(error);
                     var fmt = cfiFormat(ret);
 
@@ -203,14 +257,21 @@ Doug.prototype.actionsContracts = function (start, elements, cb) {
  * Add a database-contract to the registry.
  *
  * @param {Object} data - {id: <string>, address: <string>}
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Doug.prototype.addDatabaseContract = function (data, cb) {
+Doug.prototype.addDatabaseContract = function (data, txData, cb) {
     var that = this;
     var id = data.id;
     var addr = data.address;
     var idHex = daoUtils.atoh(id);
-    this._contract.addDatabaseContract(idHex, addr, {gas: this._gas}, function (error, txHash) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.addDatabaseContract(idHex, addr, txData, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('AddDatabaseContract', txHash, cb);
     });
@@ -220,12 +281,19 @@ Doug.prototype.addDatabaseContract = function (data, cb) {
  * Remove a database-contract from the registry.
  *
  * @param {string} identifier - A < 32 byte identifier.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Doug.prototype.removeDatabaseContract = function (identifier, cb) {
+Doug.prototype.removeDatabaseContract = function (identifier, txData, cb) {
     var that = this;
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
     var idHex = daoUtils.atoh(identifier);
-    this._contract.removeDatabaseContract(idHex, {gas: this._gas}, function (error, txHash) {
+    this._contract.removeDatabaseContract(idHex, txData, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('RemoveDatabaseContract', txHash, cb);
     });
@@ -235,21 +303,35 @@ Doug.prototype.removeDatabaseContract = function (identifier, cb) {
  * Get a database-contracts address by its id.
  *
  * @param {string} identifier - A < 32 byte identifier.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, address).
  */
-Doug.prototype.databaseContractAddress = function (identifier, cb) {
+Doug.prototype.databaseContractAddress = function (identifier, txData, cb) {
     var idHex = daoUtils.atoh(identifier);
-    this._contract.databaseContractAddress(idHex, cb);
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.databaseContractAddress(idHex, txData, cb);
 };
 
 /**
  * Get a database-contracts id by its address.
  *
  * @param {string} address - The contract address.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, id).
  */
-Doug.prototype.databaseContractId = function (address, cb) {
-    this._contract.databaseContractId(address, function (error, idHex) {
+Doug.prototype.databaseContractId = function (address, txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.databaseContractId(address, txData, function (error, idHex) {
         if (error) return cb(error);
         var id = daoUtils.htoa(idHex);
         cb(null, id);
@@ -260,10 +342,17 @@ Doug.prototype.databaseContractId = function (address, cb) {
  * Get a database-contracts data by its index in the backing array.
  *
  * @param {number} index - The index.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, identifier, address, errorCode).
  */
-Doug.prototype.databaseContractFromIndex = function (index, cb) {
-    this._contract.databaseContractFromIndex(index, function (error, ret) {
+Doug.prototype.databaseContractFromIndex = function (index, txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.databaseContractFromIndex(index, txData, function (error, ret) {
         if (error) return cb(error);
         cb(null, cfiFormat(ret));
     });
@@ -272,21 +361,35 @@ Doug.prototype.databaseContractFromIndex = function (index, cb) {
 /**
  * Get the number of registered database-contracts.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, numContracts).
  */
-Doug.prototype.numDatabaseContracts = function (cb) {
-    this._contract.numDatabaseContracts(cb);
+Doug.prototype.numDatabaseContracts = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.numDatabaseContracts(txData, cb);
 };
 
 /**
  * Set whether or not to call destroy on database-contracts when they are removed from doug.
  *
  * @param {boolean} destroyRemovedDatabases - 'true' if contracts should be destroyed.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Doug.prototype.setDestroyRemovedDatabases = function (destroyRemovedDatabases, cb) {
+Doug.prototype.setDestroyRemovedDatabases = function (destroyRemovedDatabases, txData, cb) {
     var that = this;
-    this._contract.setDestroyRemovedDatabases(destroyRemovedDatabases, {gas: this._gas}, function (error, txHash) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.setDestroyRemovedDatabases(destroyRemovedDatabases, txData, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('SetDestroyRemovedDatabases', txHash, cb);
     });
@@ -295,48 +398,53 @@ Doug.prototype.setDestroyRemovedDatabases = function (destroyRemovedDatabases, c
 /**
  * Get whether or not to call destroy on database-contracts when they are removed from doug.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, destroyRemovedDatabases).
  */
-Doug.prototype.destroyRemovedDatabases = function (cb) {
-    this._contract.destroyRemovedDatabases(cb);
+Doug.prototype.destroyRemovedDatabases = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.destroyRemovedDatabases(txData, cb);
 };
 
 /**
  * Get database-contracts.
  *
- * If neither 'start' nor 'elements' are provided, the entire collection will be fetched.
+ * If neither 'startIndex' nor 'elements' are provided, the entire collection will be fetched.
  *
- * If only one number is found before the callback, it will be used as starting index.
- *
- * @param {number} [start=0] - The starting index.
- * @param {number} [elements] - The number of elements to fetch.
+ * @param {Object} queryData - {startIndex: <number>, elements: <number>}
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Doug.prototype.databaseContracts = function (start, elements, cb) {
+Doug.prototype.databaseContracts = function (queryData, txData, cb) {
 
     var that = this;
 
     var block = this._web3.eth.blockNumber;
 
-    this._contract.numDatabaseContracts(block, function (error, num) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+
+    this._contract.numDatabaseContracts(txData, block, function (error, num) {
         if (error) return cb(error);
         var size = num.toNumber();
 
-        var s, e;
-        if (typeof(start) === "function") {
-            s = 0;
+        var s = 0, e = 0;
+
+        if (queryData && queryData.startIndex)
+            s = queryData.startIndex;
+        if (queryData && queryData.elements)
+            e = start + queryData.elements > size ? size : start + queryData.elements;
+        else
             e = size;
-            cb = start;
-        }
-        else if (typeof(elements) === "function") {
-            s = start;
-            e = size - start;
-            cb = elements;
-        }
-        else {
-            s = start;
-            e = start + elements > size ? size : start + elements;
-        }
 
         var contracts = [];
         var i = s;
@@ -345,7 +453,7 @@ Doug.prototype.databaseContracts = function (start, elements, cb) {
                 return i < e;
             },
             function (cb) {
-                that._contract.databaseContractFromIndex(i, block, function (error, ret) {
+                that._contract.databaseContractFromIndex(i, txData, block, function (error, ret) {
                     if (error) return cb(error);
                     var fmt = cfiFormat(ret);
 
@@ -371,11 +479,18 @@ Doug.prototype.databaseContracts = function (start, elements, cb) {
  * Set the new permission-contract address.
  *
  * @param {string} permissionAddress - The address.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Doug.prototype.setPermission = function (permissionAddress, cb) {
+Doug.prototype.setPermission = function (permissionAddress, txData, cb) {
     var that = this;
-    this._contract.setPermission(permissionAddress, {gas: this._gas}, function (error, txHash) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.setPermission(permissionAddress, txData, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('SetPermission', txHash, cb);
     });
@@ -384,10 +499,17 @@ Doug.prototype.setPermission = function (permissionAddress, cb) {
 /**
  * Get the address of the permission-contract.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, address).
  */
-Doug.prototype.permissionAddress = function (cb) {
-    this._contract.permissionAddress(cb);
+Doug.prototype.permissionAddress = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.permissionAddress(txData, cb);
 };
 
 function cfiFormat(ret) {

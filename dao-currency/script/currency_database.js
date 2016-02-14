@@ -31,10 +31,19 @@ util.inherits(CurrencyDatabase, ContractService);
  * Get the balance of an account.
  *
  * @param {string} addr - The user address.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, balance).
  */
-CurrencyDatabase.prototype.accountBalance = function (addr, cb) {
-    this._contract.accountBalance(addr, cb);
+CurrencyDatabase.prototype.accountBalance = function (addr, txData, cb) {
+
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+
+    this._contract.accountBalance(addr, txData, cb);
 };
 
 module.exports = CurrencyDatabase;

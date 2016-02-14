@@ -183,7 +183,7 @@ contract UserRegistry is DougEnabled {
         Returns:
             dbAddr (address) - The database address.
     */
-    function userDatabase() returns (address dbAddr);
+    function userDatabase() constant returns (address dbAddr);
 
     /*
         Function: setAdmin
@@ -206,6 +206,6 @@ contract UserRegistry is DougEnabled {
         Returns:
             addr (address) - The admin address.
     */
-    function admin() returns (address addr);
+    function admin() constant returns (address addr);
 
 }

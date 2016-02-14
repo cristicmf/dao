@@ -1,5 +1,13 @@
 # changelog
 
+#### 0.1.12
+
+- Added txData object to all service methods.
+
+- Added javascript deployment and loading methods to dao-users.
+ 
+- Added 'constant' to a method in minted currency, and one in user registry. Re-compiled. 
+
 #### 0.1.11
 
 - Minor updates to permissions contract and service.

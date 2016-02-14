@@ -9,7 +9,6 @@
 var util = require('util');
 
 var Ballot = require('./ballot');
-var daoUtils = require('../../script/dao_utils');
 
 /**
  * Service for 'PublicBallot'
@@ -27,14 +26,20 @@ function PublicBallot(web3, contract, gas) {
 
 util.inherits(PublicBallot, Ballot);
 
-
 /**
  * Get the ballot type.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, finalize).
  */
-PublicBallot.prototype.finalize = function (cb) {
-    this._contract.finalize(function(err, ret){
+PublicBallot.prototype.finalize = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.finalize(txData, function(err, ret){
         if (err) return cb(err);
         var passed = ret[0];
         var error = ret[1].toNumber();
@@ -46,19 +51,33 @@ PublicBallot.prototype.finalize = function (cb) {
 /**
  * Get the address to the user database.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, userDatabase).
  */
-PublicBallot.prototype.userDatabase = function (cb) {
-    this._contract.userDatabase(cb);
+PublicBallot.prototype.userDatabase = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.userDatabase(txData, cb);
 };
 
 /**
  * Get the quorum size.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, quorum).
  */
-PublicBallot.prototype.quorum = function (cb) {
-    this._contract.quorum(function(err, ret){
+PublicBallot.prototype.quorum = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.quorum(txData, function(err, ret){
         if (err) return cb(err);
         cb(null, ret.toNumber());
     });

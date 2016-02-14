@@ -32,11 +32,18 @@ util.inherits(Permission, ContractService);
  * Set the root address.
  *
  * @param {string} newRoot - The new root address.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Permission.prototype.setRoot = function (newRoot, cb) {
+Permission.prototype.setRoot = function (newRoot, txData, cb) {
     var that = this;
-    this._contract.setRoot(newRoot, {gas: this._gas}, function (error, txHash) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.setRoot(newRoot, txData, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('SetRoot', txHash, cb);
     });
@@ -45,19 +52,33 @@ Permission.prototype.setRoot = function (newRoot, cb) {
 /**
  * Get the root address.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, rootAddress).
  */
-Permission.prototype.root = function (cb) {
-    this._contract.root(cb);
+Permission.prototype.root = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.root(txData, cb);
 };
 
 /**
  * Get the root data, which includes the address and timestamp when he was added.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, data).
  */
-Permission.prototype.rootData = function (cb) {
-    this._contract.rootData(function (error, ret) {
+Permission.prototype.rootData = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.rootData(txData, function (error, ret) {
         if (error) return cb(error);
         var addr = ret[0];
         var time = daoUtils.bnToDate(ret[1]);
@@ -69,11 +90,18 @@ Permission.prototype.rootData = function (cb) {
  * Add a new owner. Owners satisifies 'hasPermission', but can not add or remove other owners.
  *
  * @param {string} address - The owner address.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Permission.prototype.addOwner = function (address, cb) {
+Permission.prototype.addOwner = function (address, txData, cb) {
     var that = this;
-    this._contract.addOwner(address, {gas: this._gas}, function (error, txHash) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.addOwner(address, txData, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('AddOwner', txHash, cb);
     });
@@ -83,11 +111,18 @@ Permission.prototype.addOwner = function (address, cb) {
  * Remove an owner.
  *
  * @param {string} address - The owner address.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-Permission.prototype.removeOwner = function (address, cb) {
+Permission.prototype.removeOwner = function (address, txData, cb) {
     var that = this;
-    this._contract.removeOwner(address, {gas: this._gas}, function (error, txHash) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.removeOwner(address, txData, function (error, txHash) {
         if (error) return cb(error);
         that.waitFor('RemoveOwner', txHash, cb);
     });
@@ -97,10 +132,17 @@ Permission.prototype.removeOwner = function (address, cb) {
  * Get the timestamp when an owner was added. Also serves as an existence check.
  *
  * @param {string} address - The owner address.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, data).
  */
-Permission.prototype.ownerTimestamp = function (address, cb) {
-    this._contract.ownerTimestamp(address, function (error, ret) {
+Permission.prototype.ownerTimestamp = function (address, txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.ownerTimestamp(address, txData, function (error, ret) {
         if (error) return cb(error);
         var time = daoUtils.bnToDate(ret[0]);
         var code = ret[1].toNumber();
@@ -112,10 +154,17 @@ Permission.prototype.ownerTimestamp = function (address, cb) {
  * Get an owner's data based on his position in the backing array.
  *
  * @param {number} index - The index.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, data).
  */
-Permission.prototype.ownerFromIndex = function (index, cb) {
-    this._contract.ownerFromIndex(index, function (error, ret) {
+Permission.prototype.ownerFromIndex = function (index, txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.ownerFromIndex(index, txData, function (error, ret) {
         if (error) return cb(error);
         cb(null, ofiFormat(ret));
     });
@@ -124,59 +173,71 @@ Permission.prototype.ownerFromIndex = function (index, cb) {
 /**
  * Get the total number of owners.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, numOwners).
  */
-Permission.prototype.numOwners = function (cb) {
-    this._contract.numOwners(cb);
+Permission.prototype.numOwners = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.numOwners(txData, cb);
 };
 
 /**
  * Check if an address has this permission, meaning they're either root or an owner.
  *
  * @param {string} address - The address.
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, hasPermission).
  */
-Permission.prototype.hasPermission = function (address, cb) {
-    this._contract.hasPermission(address, cb);
+Permission.prototype.hasPermission = function (address, txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.hasPermission(address, txData, cb);
 };
 
 
 /**
  * Get owners.
  *
- * If neither 'start' nor 'elements' are provided, the entire collection will be fetched.
+ * If neither 'startIndex' nor 'elements' are provided, the entire collection will be fetched.
  *
- * If only one number is found before the callback, it will be used as starting index.
- *
- * @param {number} [start=0] - The starting index.
- * @param {number} [elements] - The number of elements to fetch.
+ * @param {Object} queryData - {startIndex: <number>, elements: <number>}
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, data).
  */
-Permission.prototype.owners = function (start, elements, cb) {
+Permission.prototype.owners = function (queryData, txData, cb) {
 
     var that = this;
 
     var block = this._web3.eth.blockNumber;
 
-    this._contract.numOwners(block, function (error, num) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+
+    this._contract.numOwners(txData, block, function (error, num) {
         if (error) return cb(error);
         var size = num.toNumber();
 
-        var s, e;
-        if (typeof(start) === "function") {
-            s = 0;
+        var s = 0, e = 0;
+
+        if (queryData && queryData.startIndex)
+            s = queryData.startIndex;
+        if (queryData && queryData.elements)
+            e = start + queryData.elements > size ? size : start + queryData.elements;
+        else
             e = size;
-            cb = start;
-        }
-        else if (typeof(elements) === "function") {
-            s = start;
-            e = size - start;
-            cb = elements;
-        }
-        else {
-            s = start;
-            e = start + elements > size ? size : start + elements;
-        }
 
         var owners = [];
         var i = s;
@@ -185,7 +246,7 @@ Permission.prototype.owners = function (start, elements, cb) {
                 return i < e;
             },
             function (cb) {
-                that._contract.ownerFromIndex(i, block, function (error, ret) {
+                that._contract.ownerFromIndex(i, txData, block, function (error, ret) {
                     if (error) return cb(error);
                     var fmt = ofiFormat(ret);
 

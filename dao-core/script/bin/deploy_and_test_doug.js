@@ -67,7 +67,7 @@ function test(services, callback) {
 
     function testAddActionsContract(cb) {
         console.log("Adding actions contract: " + settable.address);
-        doug.addActionsContract({id: "settable", address: settable.address}, function (error, code) {
+        doug.addActionsContract({id: "settable", address: settable.address}, {}, function (error, code) {
             if (error) return cb(error);
             if (code !== 0) {
                 return cb(new Error("Add returned error: " + errors.error(code)));
@@ -103,7 +103,7 @@ function test(services, callback) {
 
     function testActionsContracts(cb) {
         console.log("Getting list of actions-contracts.");
-        doug.actionsContracts(function (error, list) {
+        doug.actionsContracts(null, function (error, list) {
             if (error) return cb(error);
             console.log("Contracts:");
             console.log(list);
@@ -161,7 +161,7 @@ function test(services, callback) {
 
     function testDatabaseContracts(cb) {
         console.log("Getting list of database-contracts.");
-        doug.databaseContracts(function (error, list) {
+        doug.databaseContracts(null, function (error, list) {
             if (error) return cb(error);
             console.log("Contracts:");
             console.log(list);

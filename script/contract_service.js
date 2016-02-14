@@ -166,4 +166,14 @@ ContractService.prototype.web3 = function() {
     return this._web3;
 };
 
+ContractService.prototype._txData = function(txData) {
+    if(!txData) {
+        txData = {gas: this._gas};
+    }
+    else if (!txData.gas) {
+        txData.gas = this._gas;
+    }
+    return txData;
+};
+
 module.exports = ContractService;

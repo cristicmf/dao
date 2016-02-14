@@ -30,14 +30,20 @@ util.inherits(MintedCurrency, ContractService);
  * Mint coins and add to an account.
  *
  * @param {Object} data - {receiver: <string>, amount: <string>}
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-MintedCurrency.prototype.mint = function (data, cb) {
+MintedCurrency.prototype.mint = function (data, txData, cb) {
     var that = this;
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
     var receiver = data.receiver;
     var amount = data.amount;
-    this._contract.mint(receiver, amount, {gas: this._gas}, function(error, txHash){
+    this._contract.mint(receiver, amount, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('Mint', txHash, cb);
     });
@@ -47,14 +53,20 @@ MintedCurrency.prototype.mint = function (data, cb) {
  * Send coins to a receiver account. Uses caller address as sender.
  *
  * @param {Object} data - {receiver: <string>, amount: <string>}
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-MintedCurrency.prototype.sendSelf = function (data, cb) {
+MintedCurrency.prototype.sendSelf = function (data, txData, cb) {
     var that = this;
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
     var receiver = data.receiver;
     var amount = data.amount;
-    this._contract.send['address,uint'](receiver, amount, {gas: this._gas}, function(error, txHash){
+    this._contract.send['address,uint'](receiver, amount, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('Send', txHash, cb);
     });
@@ -64,15 +76,21 @@ MintedCurrency.prototype.sendSelf = function (data, cb) {
  * Send coins from the sender account to a receiver account.
  *
  * @param {Object} data - {sender: <string>, receiver: <string>, amount: <string>}
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-MintedCurrency.prototype.send = function (data, cb) {
+MintedCurrency.prototype.send = function (data, txData,  cb) {
     var that = this;
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
     var sender = data.sender;
     var receiver = data.receiver;
     var amount = data.amount;
-    this._contract.send['address,address,uint'](sender, receiver, amount, {gas: this._gas}, function(error, txHash){
+    this._contract.send['address,address,uint'](sender, receiver, amount, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('Send', txHash, cb);
     });
@@ -82,12 +100,18 @@ MintedCurrency.prototype.send = function (data, cb) {
  * Set the address of the user currency contract.
  *
  * @param {string} currencyAddress - The currency database address.
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-MintedCurrency.prototype.setCurrencyDatabase = function (currencyAddress, cb) {
+MintedCurrency.prototype.setCurrencyDatabase = function (currencyAddress, txData, cb) {
     var that = this;
-    this._contract.setCurrencyDatabase(currencyAddress, {gas: this._gas}, function(error, txHash){
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.setCurrencyDatabase(currencyAddress, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('SetCurrencyDatabase', txHash, cb);
     });
@@ -96,22 +120,35 @@ MintedCurrency.prototype.setCurrencyDatabase = function (currencyAddress, cb) {
 /**
  * Get the address of the currency database contract.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, address).
  */
-MintedCurrency.prototype.currencyDatabase = function (cb) {
-    this._contract.currencyDatabase(cb);
+MintedCurrency.prototype.currencyDatabase = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.currencyDatabase(txData, cb);
 };
 
 /**
  * Set the minter address.
  *
  * @param {string} minterAddress - The admin address.
- *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, errorCode).
  */
-MintedCurrency.prototype.setMinter = function (minterAddress, cb) {
+MintedCurrency.prototype.setMinter = function (minterAddress, txData, cb) {
     var that = this;
-    this._contract.setMinter(minterAddress, {gas: this._gas}, function(error, txHash){
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.setMinter(minterAddress, txData, function(error, txHash){
         if(error) return cb(error);
         that.waitFor('SetMinter', txHash, cb);
     });
@@ -120,8 +157,15 @@ MintedCurrency.prototype.setMinter = function (minterAddress, cb) {
 /**
  * Get the address of the current minter.
  *
+ * @param {Object} [txData] - tx data.
  * @param {Function} cb - error first callback: function(error, address).
  */
-MintedCurrency.prototype.minter = function (cb) {
-    this._contract.minter(cb);
+MintedCurrency.prototype.minter = function (txData, cb) {
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.minter(txData, cb);
 };

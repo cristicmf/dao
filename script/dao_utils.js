@@ -55,7 +55,7 @@ function loadContracts(web3, contractFile, contractsFolder) {
             var cData = contracts.contracts[c];
             var abiFile = path.join(contractsFolder, cData.type + ".abi");
             var abi = fs.readJsonSync(abiFile);
-            loaded[c] = web3.eth.contract(abi).at(cData.address);
+            loaded[c] = {type: cData.type, contract: web3.eth.contract(abi).at(cData.address)};
         }
     }
     return loaded;

@@ -179,7 +179,7 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled {
         Returns:
             dbAddr (address) - The database address.
     */
-    function userDatabase() returns (address dbAddr) {
+    function userDatabase() constant returns (address dbAddr) {
         return _userDatabase;
     }
 
@@ -212,7 +212,7 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled {
         Returns:
             addr (address) - The admin address.
     */
-    function admin() returns (address addr) {
+    function admin() constant returns (address addr) {
         return _admin;
     }
 

@@ -7,6 +7,8 @@
 var errors = require('./script/errors');
 var daoUtils = require('./script/dao_utils');
 var Deployer = require('./script/deployer');
+var builder = require('./script/builder');
+var compile = require('./script/solc');
 var ContractService = require('./script/contract_service');
 
 var daoCore = require('./dao-core/script/dao_core');
@@ -27,6 +29,20 @@ exports.errors = errors;
  * @type {module:dao_utils}
  */
 exports.utils = daoUtils;
+
+/**
+ * Builder.
+ *
+ * @type {module:builder}
+ */
+exports.builder = builder;
+
+/**
+ * Javascript binding for 'solc'.
+ *
+ * @type {module:solc}
+ */
+exports.compile = compile;
 
 /**
  *

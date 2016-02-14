@@ -1,7 +1,26 @@
+/**
+ * @file solc.js
+ * @fileOverview Calls command-line solc.
+ * @author Andreas Olofsson (androlo1980@gmail.com)
+ * @module solc
+ */
+'use strict';
 var process = require('child_process');
 
-
-function compile(command, files, callback) {
+/**
+ * Calls command-line solc. The command has three parts.
+ *
+ * 1. 'solc', which is added automatically.
+ * 2. 'options', which includes all the options, e.g. ".= --bin -o ./build"
+ * 3. 'files', which is the input files.
+ *
+ * @param {string} commandOptions - The options as a string. Do not include 'solc' or any input files.
+ * @param {string[]} files - All input files as an array of strings.
+ * @param {Function} callback - Error first callback. 'function(error, compilerVersionString)'
+ *
+ * @alias module:solc.compile
+ */
+function compile(commandOptions, files, callback) {
     if (!files)
         return callback(new Error("No file-names provided."));
     var versionStr;
@@ -21,7 +40,7 @@ function compile(command, files, callback) {
             filesStr += files[i] + " ";
         }
 
-        process.exec('solc ' + command + filesStr, function (error, stdout, stderr) {
+        process.exec('solc ' + commandOptions + filesStr, function (error, stdout, stderr) {
             if (error)
                 return callback(error);
             if (stderr)

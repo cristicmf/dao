@@ -1,8 +1,20 @@
 # changelog
 
+#### 0.1.14
+
+- Added 'builder' and 'solc.compile' to index.js
+
 #### 0.1.13
 
 - Changed contract build-scripts to js-only. Shell scripts are gone.
+
+- Added new deployment output. The output `contracts.json` now includes the compiler version, and the bytecode and ABIs used at the time of deployment.
+
+- When contracts are loaded from a `contracts.json`, the bytecode of the contract at the given address is now compared to the code in the file.
+
+- 'contract.json' files can be amended by providing it as input to new deployments.
+ 
+- It is now possible to `deployLibrary` directly with `Deployer`. It automatically links with dependencies, just like with contracts, but is added to the deployers libraries list rather then the list of contracts. It used to only be possible to deploy contracts, and auto-link libraries.
 
 #### 0.1.12
 

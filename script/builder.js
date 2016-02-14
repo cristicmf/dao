@@ -1,3 +1,10 @@
+/**
+ * @file builder.js
+ * @fileOverview Builds smart-contract modules.
+ * @author Andreas Olofsson (androlo1980@gmail.com)
+ * @module builder
+ */
+'use strict';
 var path = require('path');
 var fs = require('fs-extra');
 var async = require('async');
@@ -16,6 +23,16 @@ var DAO_DEFAULT_INCLUDES = " dao-core=" + DAO_CORE +
     " dao-users=" + DAO_USERS +
     " dao-votes=" + DAO_VOTES + " ";
 
+/**
+ * Build a module. Modules needs a json file that specifies which contracts that should be built, and other things.
+ * See 'dao-framework/dao-core/build.json' as an example.
+ *
+ * @param {string} rootDir - The root directory of the module.
+ * @param {Object} options - Compiler options. Overrides those of the build-file.
+ * @param {Function} callback - Error first callback. If unit--tests are run, the second param is the test stats.
+ *
+ * @alias module:builder.build
+ */
 function build(rootDir, options, callback) {
 
     if (typeof(options) === 'function') {

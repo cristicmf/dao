@@ -100,14 +100,18 @@ function deploy(dep, administered, callback) {
  *     userReg: userRegistryService
  * }
  *
- * @param {string} rootAddress - The address used when making calls to the chain.
+ * @param {Object|string} rootAddressOrWeb3 - The address used when making calls to the chain. Can also be a web3 object.
  * @param {string} contractsFile - The path to the 'contracts.json' file.
  * @returns {{}} Mapping between contract names and services.
  *
  * @alias module:dao_users.load
  */
-function load(rootAddress, contractsFile) {
-    var web3 = daoUtils.web3(rootAddress);
+function load(rootAddressOrWeb3, contractsFile) {
+    var web3;
+    if (typeof(rootAddressOrWeb3) === 'string')
+        web3 = daoUtils.web3(rootAddressOrWeb3);
+    else
+        web3 = rootAddressOrWeb3;
     if (!contractsFile)
         contractsFile = path.join(__dirname, "bin", "contracts.json");
     var contracts = daoUtils.loadContracts(web3, contractsFile);

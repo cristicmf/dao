@@ -39,23 +39,27 @@ function web3(address, ethURL) {
  * contracts file and adds them to an object, using the contract names as keys, and the web3 contracts as
  * values.
  *
- * @param {Object} web3 - The web3 instance to use when creating contracts.
+ * @param {Object|string} rootAddressOrWeb3 - The web3 instance to use when creating contracts.
  * @param {string} contractFile - The contract json file.
  * @returns {Object} - The loaded contracts.
  *
  * @alias module:dao_utils.loadContracts
  */
-function loadContracts(web3, contractFile) {
-
+function loadContracts(rootAddressOrWeb3, contractFile) {
+    var web3In;
+    if (typeof(rootAddressOrWeb3) === 'string')
+        web3In = web3(rootAddressOrWeb3);
+    else
+        web3In = rootAddressOrWeb3;
     var contracts = fs.readJsonSync(contractFile);
     var loaded = {};
     for (var c in contracts.contracts) {
         if (contracts.contracts.hasOwnProperty(c)) {
             var cData = contracts.contracts[c];
-            var code = web3.eth.getCode(cData.address);
+            var code = web3In.eth.getCode(cData.address);
             if(code !== cData.bytecode)
                 throw new Error("On-chain bytecode does not match that in the contracts.json file for: " + cData.name + " (" + cData.type + ").");
-            loaded[c] = {type: cData.type, contract: web3.eth.contract(cData.abi).at(cData.address)};
+            loaded[c] = {type: cData.type, contract: web3In.eth.contract(cData.abi).at(cData.address)};
         }
     }
     return loaded;

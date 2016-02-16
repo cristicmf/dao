@@ -1,5 +1,9 @@
 # changelog
 
+#### 0.1.16
+
+- Updated loading to allow both a web3 instance and a default address as input.
+
 #### 0.1.15
 
 - Minor fixes to deployer, builder, and contract loading functions.

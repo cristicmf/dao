@@ -1,1 +1,0 @@
-[{"constant":false,"inputs":[{"name":"fundReceiver","type":"address"}],"name":"destroy","outputs":[],"type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"fundReceiver","type":"address"},{"indexed":true,"name":"value","type":"uint256"},{"indexed":true,"name":"error","type":"uint16"}],"name":"Destroy","type":"event"}]

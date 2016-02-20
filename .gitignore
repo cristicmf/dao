@@ -8,3 +8,4 @@ dao-currency/build
 dao-stl/build
 dao-users/build
 dao-votes/build
+examples/contracts/public_currency/build

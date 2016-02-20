@@ -24,7 +24,9 @@ The point of this is to give an example of how the contracts can actually be man
 
 1. Start an ethereum node.
 
-2. Run `deploy-one`, to deploy doug, permissions contract, simple database contract, and the first of the simple actions contracts.
+2. `cd` into project root and build the example contracts: `gulp build:examples`. Note this will fail if solc is not on path.
+
+2. `cd` into `examples/script/simple/update` Run `deploy-one`, to deploy doug, permissions contract, simple database contract, and the first of the simple actions contracts.
 
 3. Run `simple-test` to try writing a value to the database via the actions contract. It should succeed.
 

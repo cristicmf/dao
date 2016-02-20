@@ -17,6 +17,15 @@ contract DefaultCurrencyDatabase is CurrencyDatabase, DefaultDatabase {
     mapping (address => uint) _balances;
 
     /*
+        Constructor: DefaultCurrencyDatabase
+
+        Params:
+            actionsName (bytes32) - The name of the actions contract with write privileges..
+    */
+    function DefaultCurrencyDatabase(bytes32 actionsName) DefaultDatabase(actionsName) {}
+
+
+    /*
         Function: add
 
         Add currency to an account.

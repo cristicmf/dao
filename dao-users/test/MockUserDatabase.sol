@@ -77,4 +77,8 @@ contract MockUserDatabase is UserDatabase {
 
     function maxSize() constant returns (uint maxSize) {}
 
+    function actionsName() constant returns (bytes32 actionsName) {}
+
+    function setActionsName(bytes32 actionsName) returns (uint16 error) {}
+
 }

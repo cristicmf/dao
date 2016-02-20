@@ -73,7 +73,7 @@ function deploySimple(dougServices, callback) {
     // The functions.
 
     function deploySimpleDb(cb) {
-        dep.deploy("simpleDb", "DefaultSimpleDb", [], function (err, contract) {
+        dep.deploy("simpleDb", "DefaultSimpleDb", ["simple"], function (err, contract) {
             if (err) throw err;
             sdb = new SimpleDb(dep.web3(), contract, dep.gas());
             cb();

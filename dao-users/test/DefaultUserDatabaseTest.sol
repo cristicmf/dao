@@ -21,24 +21,26 @@ contract DefaultUserDatabaseTest is DaoTest {
     
     uint constant TEST_MAX_SIZE = 1;
 
+    bytes32 constant ACTION_NAME = "user_actions";
+
     function testSetMaxSizeSuccess() {
-        var mdd = new MockDatabaseDoug(true);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
         udb.setMaxSize(TEST_MAX_SIZE).assertNoError("setMaxSize returned an error");
         udb.maxSize().assertEqual(TEST_MAX_SIZE, "maxSize returns the wrong value");
     }
 
     function testSetMaxSizeFailNotActions() {
-        var mdd = new MockDatabaseDoug(false);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug("");
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
         udb.setMaxSize(TEST_MAX_SIZE).assertErrorsEqual(ACCESS_DENIED, "setMaxSize returned the wrong error");
     }
 
     function testSetMaxSizeFailTooManyUsers() {
-        var mdd = new MockDatabaseDoug(true);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
         udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
         udb.registerUser(TEST_ADDRESS_2, TEST_NICKNAME_2, TEST_TIMESTAMP_2, TEST_HASH_2);
@@ -46,8 +48,8 @@ contract DefaultUserDatabaseTest is DaoTest {
     }
 
     function testSetMaxSizeToZeroSuccessDespiteUsers() {
-        var mdd = new MockDatabaseDoug(true);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
         udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
         udb.registerUser(TEST_ADDRESS_2, TEST_NICKNAME_2, TEST_TIMESTAMP_2, TEST_HASH_2);
@@ -55,8 +57,8 @@ contract DefaultUserDatabaseTest is DaoTest {
     }
 
     function testRegister() {
-        var mdd = new MockDatabaseDoug(true);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
         
         udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
@@ -82,8 +84,8 @@ contract DefaultUserDatabaseTest is DaoTest {
 
 
     function testRegisterFailNotActions() {
-        var mdd = new MockDatabaseDoug(false);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug("");
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
 
         var err = udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, 0);
@@ -92,8 +94,9 @@ contract DefaultUserDatabaseTest is DaoTest {
     }
 
     function testOverwriteFail() {
-        var udb = new DefaultUserDatabase();
-        udb.setDougAddress(address(this));
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
+        udb.setDougAddress(mdd);
 
         udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
         var aErr = udb.registerUser(TEST_ADDRESS, TEST_NICKNAME_2, TEST_TIMESTAMP_2, TEST_HASH_2);
@@ -106,8 +109,8 @@ contract DefaultUserDatabaseTest is DaoTest {
     }
 
     function testRemove() {
-        var mdd = new MockDatabaseDoug(true);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
 
         udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
@@ -124,8 +127,8 @@ contract DefaultUserDatabaseTest is DaoTest {
     }
 
     function testRemoveFailNotActions() {
-        var mdd = new MockDatabaseDoug(false);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug("");
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
 
         var err = udb.removeUser(TEST_ADDRESS);
@@ -133,8 +136,8 @@ contract DefaultUserDatabaseTest is DaoTest {
     }
 
     function testUpdateDataHash() {
-        var mdd = new MockDatabaseDoug(true);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
 
         udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
@@ -147,8 +150,8 @@ contract DefaultUserDatabaseTest is DaoTest {
     }
 
     function testUpdateDataHashFailNotActions() {
-        var mdd = new MockDatabaseDoug(false);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug("");
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
 
         udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
@@ -159,8 +162,8 @@ contract DefaultUserDatabaseTest is DaoTest {
 
     function testRegisterTwo() {
 
-        var mdd = new MockDatabaseDoug(true);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
 
         var aErr = udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
@@ -193,8 +196,8 @@ contract DefaultUserDatabaseTest is DaoTest {
     }
 
     function testRegisterTwoRemoveLast() {
-        var mdd = new MockDatabaseDoug(true);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
 
         udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
@@ -226,8 +229,8 @@ contract DefaultUserDatabaseTest is DaoTest {
     }
 
     function testRegisterTwoRemoveFirst() {
-        var mdd = new MockDatabaseDoug(true);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
 
         udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
@@ -259,8 +262,8 @@ contract DefaultUserDatabaseTest is DaoTest {
     }
 
     function testRegisterTwoRemoveBoth() {
-        var mdd = new MockDatabaseDoug(true);
-        var udb = new DefaultUserDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
         udb.setDougAddress(mdd);
 
         udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);

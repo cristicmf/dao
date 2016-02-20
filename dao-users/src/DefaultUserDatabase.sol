@@ -48,6 +48,16 @@ contract DefaultUserDatabase is DefaultDatabase {
     mapping(address => Element) _data;
     address[] _keys;
 
+
+    /*
+        Constructor: DefaultUserDatabase
+
+        Params:
+            actionsName (bytes32) - The name of the actions contract with write privileges..
+    */
+    function DefaultUserDatabase(bytes32 actionsName) DefaultDatabase(actionsName) {}
+
+
     /*
         Function: registerUser
 

@@ -1,7 +1,6 @@
 # Tutorials
 
 - [Basic Tutorial](#basic-tutorial)
-- [Advanced Tutorial](#advanced-tutorial) (under construction)
 
 ##### Case studies
 
@@ -118,6 +117,8 @@ contract CoinDb is DefaultDatabase {
     
     mapping (address => uint) _balances;
 
+    function CoinDb(bytes32 actionName) DefaultDatabase(actionName) {}
+
     function add(address receiver, uint amount) returns (uint16 error) {
         if(!_checkCaller())
             return ACCESS_DENIED;
@@ -204,7 +205,7 @@ contract CoinTest {
     
     function CoinTest() {
         _doug = new DefaultDoug(new DefaultPermission(address(this)), false, false);
-        var cdb = new CoinDb();
+        var cdb = new CoinDb("minted_coin");
         _doug.addDatabaseContract("minted_coin", cdb);
         var ca = new CoinActions(cdb, this);
         _doug.addActionsContract("minted_coin", ca);
@@ -247,81 +248,6 @@ You may run this yourself in the online compiler by clicking this [link](https:/
 In the regular dao framework modules the tests are done using the sol-unit library, and interaction would be done through RPC calls to the blockchain client - usually through javascript libraries like web3.js. This is just contract code so it will work in any DApp framework.
 
 NOTE: The entire dao-core is added to the gist because github imports does not work yet. When it does, it will only contain the contracts from the tutorial and import the rest from the dao github repo. Also it will take a while to load the page and compile the code.
-
-## Advanced Tutorial
-
-This tutorial builds on the basic tutorial, where we created and deployed a sub-currency using the DAO framework. We are now going to add a user management system that will work together with the currency. Users will no longer be able to just get and transfer money around, but will have to be identified first. 
-
-### Step 1
-
-Rather then creating the user module itself we will instead use `dao-users`, which already has basic user management functionality.
-
-We will also re-use the code from the basic tutorial, but modify it. The coin actions contract will now check if the caller is a registered user before letting them send or receive coins. Good thing the coin actions contract is separate from the database, or we would have had to replace the entire system; now we only have to fix the actions contract and re-deploy.
-
-contract CoinActions is DefaultDougEnabled, Errors {
-    
-    address _minter;
-    
-    CoinDb _cdb;
-    UserDatabase _udb;
-    
-    function CoinActions(address coinDb, address userDb, address minter) {
-        _cdb = CoinDb(coinDb);
-        _udb = UserDatabase(userDb);
-        _minter = minter;
-    }
-        
-    function mint(address receiver, uint amount) returns (uint16 error) {
-        if (msg.sender != _minter)
-            return ACCESS_DENIED;
-        if (receiver != _minter && _udb.hasUser(receiver))
-            return RESOURCE_NOT_FOUND;
-        return _cdb.add(receiver, amount);
-    }
-    
-    function send(address receiver, uint amount) returns (uint16 error) {
-        var (sE, rE) = _udb.usersExist(msg.sender, receiver);
-        if (!(sE && rE))
-            return RESOURCE_NOT_FOUND;
-        return _cdb.send(msg.sender, receiver, amount);
-    }
-    
-    function minter() constant returns (address minter) {
-        return _minter;
-    }
-    
-}
-
-Note that the minter does not have to be a user, so the user check in the mint method needs to take that into account (hence the first condition).
-
-It would now be possible to deploy this just as any other contracts.
-
-### Step 3 (optional)
-
-Before we go on to test this, we will consider the performance impact of this setup. Let's start by analyzing the call-chain when someone invokes 'send'. It would look like this.
-
-1. User calls coin actions.
-2. Coin actions calls user database (to do user existence check).
-3. Coin actions calls coin database (to alter the balances).
-4. Coin database calls DOUG (to check if caller is an actions contract).
-
-This means every time a user wants to transfer coins, three contract-to-contract calls will be made. That in itself is not bad, because a call costs only 40 gas as of now (2016-01-11), but it also involves packing and sending data back and forth so will probably add at least several hundred gas to the total.
-
-What we could do is to merge steps 2 and 3 by combining the user and coin databases into one, but that is not completely without risk. 
-
-If all we do is combine the two databases so one could check if a user is registered and what their coin balance is at the same time, then that wouldn't be so bad. That's just an accessor function, and if at some point we want to decouple the two components we can still do that - just stop doing that function in actions contracts. 
-
-If want to automatically check user status **when writing**, i.e. as part of the send function in the database contract, then we're stuck with it until we choose to replace the entire database because that would be the only way to change it back.
-
-This is a good example of why the separation is important. Not having it could lead to hard problems. Maybe in some systems it's worth saving a few hundred gas by lumping everything together, but generally that is not the case. At least not in my experience. A send here involves a transaction plus the altering of two storage slots, and only that costs at least 31000 (21k for tx and 5k per storage slot manipulation), but possible upwards of 61k. 
-
-A better solution could be to allow bulk operations (through arrays), like checking X users, and doing X sends at once. Expanding memory is cheap, and would make sends cost less on average.
-
-### Step 4
-
-Time to deploy. 
-
-TODO
 
 ## Database Providers
 

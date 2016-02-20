@@ -1,6 +1,5 @@
 var gulp = require('gulp');
 var path = require('path');
-var process = require('child_process');
 
 var builder = require('./script/builder');
 var async = require('async');

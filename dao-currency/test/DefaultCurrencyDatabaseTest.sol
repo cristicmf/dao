@@ -13,9 +13,11 @@ contract DefaultCurrencyDatabaseTest is DaoTest {
 
     uint constant TEST_SEND_AMOUNT = 30;
 
+    bytes32 constant ACTION_NAME = "user_actions";
+
     function testAddSuccess(){
-        var mdd = new MockDatabaseDoug(true);
-        var cdb = new DefaultCurrencyDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var cdb = new DefaultCurrencyDatabase(ACTION_NAME);
         cdb.setDougAddress(address(mdd));
 
         cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT).assertNoError("add returned error");
@@ -23,8 +25,8 @@ contract DefaultCurrencyDatabaseTest is DaoTest {
     }
 
     function testAddFailNotActions(){
-        var mdd = new MockDatabaseDoug(false);
-        var cdb = new DefaultCurrencyDatabase();
+        var mdd = new MockDatabaseDoug("");
+        var cdb = new DefaultCurrencyDatabase(ACTION_NAME);
         cdb.setDougAddress(address(mdd));
 
         cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT).assertErrorsEqual(ACCESS_DENIED, "add returned no 'access denied' error");
@@ -32,8 +34,8 @@ contract DefaultCurrencyDatabaseTest is DaoTest {
     }
 
     function testAddFailRemoveMoreThenCurrentBalance(){
-        var mdd = new MockDatabaseDoug(true);
-        var cdb = new DefaultCurrencyDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var cdb = new DefaultCurrencyDatabase(ACTION_NAME);
         cdb.setDougAddress(address(mdd));
 
         cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT_NEG).assertErrorsEqual(TRANSFER_FAILED, "add returned no 'transfer failed' error");
@@ -41,8 +43,8 @@ contract DefaultCurrencyDatabaseTest is DaoTest {
     }
 
     function testSendSuccess(){
-        var mdd = new MockDatabaseDoug(true);
-        var cdb = new DefaultCurrencyDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var cdb = new DefaultCurrencyDatabase(ACTION_NAME);
         cdb.setDougAddress(address(mdd));
 
         cdb.add(TEST_ADDRESS, TEST_ADD_AMOUNT).assertNoError("add returned error");
@@ -53,8 +55,8 @@ contract DefaultCurrencyDatabaseTest is DaoTest {
     }
 
     function testSendFailNotActions(){
-        var mdd = new MockDatabaseDoug(false);
-        var cdb = new DefaultCurrencyDatabase();
+        var mdd = new MockDatabaseDoug("");
+        var cdb = new DefaultCurrencyDatabase(ACTION_NAME);
         cdb.setDougAddress(address(mdd));
 
         cdb.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_SEND_AMOUNT).assertErrorsEqual(ACCESS_DENIED, "send returned no 'access denied' error");
@@ -62,8 +64,8 @@ contract DefaultCurrencyDatabaseTest is DaoTest {
     }
 
     function testSendFailNotEnoughFunds(){
-        var mdd = new MockDatabaseDoug(true);
-        var cdb = new DefaultCurrencyDatabase();
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var cdb = new DefaultCurrencyDatabase(ACTION_NAME);
         cdb.setDougAddress(address(mdd));
 
         cdb.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_SEND_AMOUNT).assertErrorsEqual(INSUFFICIENT_SENDER_BALANCE,

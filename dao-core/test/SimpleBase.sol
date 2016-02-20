@@ -8,10 +8,11 @@ contract SimpleDb is Database {
     function data() constant returns (uint data);
 }
 
-
 contract DefaultSimpleDb is SimpleDb, DefaultDatabase {
 
     uint _data;
+
+    function DefaultSimpleDb() DefaultDatabase("simple") {}
 
     function setData(uint data) returns (uint16 error) {
         if (!_checkCaller())

@@ -7,18 +7,15 @@ contract SimpleTwoTest is DaoTest {
     uint constant TEST_DATA = 55;
 
     function testAddSuccess() {
-        var dp = new DefaultPermission(this);
-        var dd = new DefaultDoug(dp, false, false);
-
+        var mdd = new MockDatabaseDoug("simple");
         var dsdb = new DefaultSimpleDb();
+        dsdb.setDougAddress(mdd);
         var st = new SimpleTwo(dsdb, this);
-        dd.addActionsContract("simple", st);
-
         st.addData(TEST_DATA).assertNoError("addData returned an error");
     }
 
     function testAddFailNotActions() {
-        var mdd = new MockDatabaseDoug(false);
+        var mdd = new MockDatabaseDoug("");
         var dsdb = new DefaultSimpleDb();
         var st = new SimpleTwo(dsdb, this);
         dsdb.setDougAddress(mdd);
@@ -26,14 +23,8 @@ contract SimpleTwoTest is DaoTest {
     }
 
     function testAddFailNotOwner() {
-        var dp = new DefaultPermission(this);
-        var dd = new DefaultDoug(dp, false, false);
-
-        var dsdb = new DefaultSimpleDb();
-        var st = new SimpleTwo(dsdb, 0);
-        dd.addActionsContract("simple", st);
-
-        st.addData(TEST_DATA).assertErrorsEqual(ACCESS_DENIED, "addData returned no 'access denied' error");
+        new SimpleTwo(0, 0).addData(TEST_DATA)
+            .assertErrorsEqual(ACCESS_DENIED, "addData returned no 'access denied' error");
     }
 
 }

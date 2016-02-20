@@ -46,6 +46,6 @@ The permission contract is used to control access to Doug functionality, such as
 
 #### Database
 
-`Database` is an interface that extends `DougEnabled` and can be used by database contracts. It has a method that can be used to check caller addresses. There is a default implementation named `DefaultDatabase`, which extends `DefaultDougEnabled` and implements the method method by checking if the calling contract is registered as a Doug actions contract. 
+`Database` is an interface that extends `DougEnabled` and can be used by database contracts. It has a method that can be used to check caller addresses. There is a default implementation named `DefaultDatabase`, which extends `DefaultDougEnabled` and implements the check-method by checking if the calling contract is registered with doug under a name that is provided in the database contract constructor. 
 
 The database contracts are is not required, but the default implementation can be useful when 

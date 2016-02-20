@@ -60,7 +60,7 @@ function deploy(dep, administered, callback) {
     // The functions.
 
     function deployDb(cb) {
-        dep.deploy("userDb", "DefaultUserDatabase", function (err, contract) {
+        dep.deploy("userDb", "DefaultUserDatabase", ["userReg"], function (err, contract) {
             if (err) throw err;
             userDb = new UserDatabase(dep.web3(), contract, dep.gas());
             cb();

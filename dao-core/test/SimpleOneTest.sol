@@ -7,18 +7,16 @@ contract SimpleOneTest is DaoTest {
     uint constant TEST_DATA = 55;
 
     function testAddSuccess() {
-        var dp = new DefaultPermission(this);
-        var dd = new DefaultDoug(dp, false, false);
-
+        var mdd = new MockDatabaseDoug("simple");
         var dsdb = new DefaultSimpleDb();
+        dsdb.setDougAddress(mdd);
         var so = new SimpleOne(dsdb);
-        dd.addActionsContract("simple", so);
 
         so.addData(TEST_DATA).assertNoError("addData returned an error");
     }
 
     function testAddFailNotActions() {
-        var mdd = new MockDatabaseDoug(false);
+        var mdd = new MockDatabaseDoug("");
         var dsdb = new DefaultSimpleDb();
         var so = new SimpleOne(dsdb);
         dsdb.setDougAddress(mdd);

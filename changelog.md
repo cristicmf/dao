@@ -1,5 +1,11 @@
 # changelog
 
+#### 0.1.17
+
+Gave databases an action name parameter that must be passed into the constructor. This is to limit writes to only one particular actions-contract rather then all, e.g. `var db = new SomeDb("writer");`. In this example, `db` would only accept write ops from a contract registered as an action in doug, under the name `writer`.
+ 
+This will make for a better and clearer "permissions flow" in a system: one database - one writer. If write-access must be granted to more contracts then one, it should be managed by the writer. 
+
 #### 0.1.16
 
 - Updated loading to allow both a web3 instance and a default address as input.

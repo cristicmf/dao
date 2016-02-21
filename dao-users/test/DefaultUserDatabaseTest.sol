@@ -160,6 +160,32 @@ contract DefaultUserDatabaseTest is DaoTest {
         err.assertErrorsEqual(ACCESS_DENIED, "updateDataHash did not return an 'access denied' error");
     }
 
+    function testSetProperty() {
+        var mdd = new MockDatabaseDoug(ACTION_NAME);
+        var udb = new DefaultUserDatabase(ACTION_NAME);
+        udb.setDougAddress(mdd);
+
+        udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
+
+        var err = udb.setProperty(TEST_ADDRESS, TEST_HASH, true);
+        err.assertNoError("setProperty returned an error");
+
+        var (has, propErr) = udb.hasProperty(TEST_ADDRESS, TEST_HASH);
+        has.assert("hasProperty returning the wrong value");
+    }
+
+    function testSetPropertyFailNotActions() {
+        var mdd = new MockDatabaseDoug("");
+        var udb = new DefaultUserDatabase(ACTION_NAME);
+        udb.setDougAddress(mdd);
+
+        udb.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_TIMESTAMP, TEST_HASH);
+
+        udb.setProperty(TEST_ADDRESS, TEST_HASH, true).assertErrorsEqual(ACCESS_DENIED, "setProperty returned the wrong error");
+        var (has, propErr) = udb.hasProperty(TEST_ADDRESS, TEST_HASH);
+        has.assertFalse("hasProperty returning the wrong value");
+    }
+
     function testRegisterTwo() {
 
         var mdd = new MockDatabaseDoug(ACTION_NAME);

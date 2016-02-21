@@ -42,6 +42,20 @@ contract UserDatabase is Database {
     function updateDataHash(address addr, bytes32 dataHash) returns (uint16 error);
 
     /*
+        Function: setProperty
+
+        Set a generic property.
+
+        Params:
+            addr (address) - The address.
+            propName (bytes32) - The name of the property
+            value (bool) - 'true' to set the property, 'false' to unset.
+        Returns:
+            error (uint16) An error code.
+    */
+    function setProperty(address addr, bytes32 propName, bool value) returns (uint16 error);
+
+    /*
         Function: removeUser
 
         Remove a user.
@@ -139,6 +153,36 @@ contract UserDatabase is Database {
             has2 (bool) - Whether or not the second user exists.
     */
     function hasUsers(bytes32 nickname1, bytes32 nickname2) constant returns (bool has1, bool has2);
+
+    /*
+        Function: hasProperty(address)
+
+        Check if a user has the given property.
+
+        Params:
+            userAddress (address) - The user address.
+            property (bytes32) - The property.
+
+        Returns:
+            has (bool) - Whether or not the user has the property.
+            error (uint16) - An error code.
+    */
+    function hasProperty(address userAddress, bytes32 property) constant returns (bool hasProperty, uint16 error);
+
+    /*
+        Function: hasProperty(bytes32)
+
+        Check if a user has the given property.
+
+        Params:
+            nickname (bytes32) - The user nickname.
+            property (bytes32) - The property.
+
+        Returns:
+            has (bool) - Whether or not the user has the property.
+            error (uint16) - An error code.
+    */
+    function hasProperty(bytes32 nickname, bytes32 property) constant returns (bool hasProperty, uint16 error);
 
     /*
         Function: userAddressFromIndex

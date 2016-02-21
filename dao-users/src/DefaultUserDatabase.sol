@@ -32,6 +32,7 @@ contract DefaultUserDatabase is DefaultDatabase {
             nickname - The user nickname.
             timestamp - The (unix) time when the user was registered.
             dataHash - The hash to the file containing user data.
+            properties - Reserved for generic properties.
     */
     struct Element {
         // For backing array.
@@ -40,6 +41,7 @@ contract DefaultUserDatabase is DefaultDatabase {
         bytes32 nickname;
         uint timestamp;
         bytes32 dataHash;
+        mapping(bytes32 => bool) properties;
     }
 
     uint _maxSize;
@@ -56,7 +58,6 @@ contract DefaultUserDatabase is DefaultDatabase {
             actionsName (bytes32) - The name of the actions contract with write privileges..
     */
     function DefaultUserDatabase(bytes32 actionsName) DefaultDatabase(actionsName) {}
-
 
     /*
         Function: registerUser
@@ -105,6 +106,29 @@ contract DefaultUserDatabase is DefaultDatabase {
             return RESOURCE_NOT_FOUND;
         else
             elem.dataHash = dataHash;
+    }
+
+    /*
+        Function: setProperty
+
+        Set a generic property.
+
+        Params:
+            addr (address) - The address.
+            propName (bytes32) - The name of the property
+            value (bool) - 'true' to set the property, 'false' to unset.
+        Returns:
+            error (uint16) An error code.
+    */
+    function setProperty(address addr, bytes32 propName, bool value) returns (uint16 error) {
+        if (!_checkCaller())
+            return ACCESS_DENIED;
+        var elem = _data[addr];
+        var exists = elem.nickname != 0;
+        if (!exists)
+            return RESOURCE_NOT_FOUND;
+        else
+            elem.properties[propName] = value;
     }
 
     /*
@@ -237,6 +261,46 @@ contract DefaultUserDatabase is DefaultDatabase {
     */
     function hasUsers(bytes32 nickname1, bytes32 nickname2) constant returns (bool has1, bool has2) {
         return(_nToA[nickname1] != 0, _nToA[nickname2] != 0);
+    }
+
+    /*
+        Function: hasProperty(address)
+
+        Check if a user has the given property.
+
+        Params:
+            userAddress (address) - The user address.
+            property (bytes32) - The property.
+
+        Returns:
+            has (bool) - Whether or not the user has the property.
+            error (uint16) - An error code.
+    */
+    function hasProperty(address userAddress, bytes32 property) constant returns (bool hasProperty, uint16 error) {
+        var elem = _data[userAddress];
+        if (elem.nickname == 0)
+            return (false, RESOURCE_NOT_FOUND);
+        hasProperty = elem.properties[property];
+    }
+
+    /*
+        Function: hasProperty(bytes32)
+
+        Check if a user has the given property.
+
+        Params:
+            nickname (bytes32) - The user nickname.
+            property (bytes32) - The property.
+
+        Returns:
+            has (bool) - Whether or not the user has the property.
+            error (uint16) - An error code.
+    */
+    function hasProperty(bytes32 nickname, bytes32 property) constant returns (bool hasProperty, uint16 error) {
+        var addr = _nToA[nickname];
+        if (addr == 0)
+            return (false, RESOURCE_NOT_FOUND);
+        hasProperty = _data[addr].properties[property];
     }
 
     /*

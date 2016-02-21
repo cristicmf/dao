@@ -88,6 +88,48 @@ UserDatabase.prototype.hasUserFromAddress = function (addr, txData, cb) {
 };
 
 /**
+ * Check if a user has a given property.
+ *
+ * @param {string} addr - The address.
+ * @param {string} property - The property.
+ * @param {Object} [txData] - tx data.
+ * @param {Function} cb - error first callback: function(error, result).
+ */
+UserDatabase.prototype.hasPropertyFromAddress = function (addr, property, txData, cb) {
+    var propHex = daoUtils.atoh(property);
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.hasProperty['address'](addr, propHex, txData, cb);
+};
+
+/**
+ * Check if a user has a given property.
+ *
+ * @param {string} name - The name.
+ * @param {string} property - The property.
+ * @param {Object} [txData] - tx data.
+ * @param {Function} cb - error first callback: function(error, result).
+ */
+UserDatabase.prototype.hasPropertyFroName = function (name, property, txData, cb) {
+    var nameHex = daoUtils.atoh(name);
+    var propHex = daoUtils.atoh(property);
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    this._contract.hasProperty['bytes32'](nameHex, propHex, txData, function(err, ret) {
+        if(err) return cb(err);
+        return cb(null, {has: ret[0], errorCode: ret[1].toNumber()});
+    });
+};
+
+/**
  * Check if a name belongs to a registered user.
  *
  * @param {string} name - The name.
@@ -102,7 +144,10 @@ UserDatabase.prototype.hasUserFromName = function (name, txData, cb) {
     }
     else
         txData = this._txData(txData);
-    this._contract.user['bytes32'](nameHex, txData, cb);
+    this._contract.user['bytes32'](nameHex, txData, function(err, ret) {
+        if(err) return cb(err);
+        return cb(null, {has: ret[0], errorCode: ret[1].toNumber()});
+    });
 };
 
 /**

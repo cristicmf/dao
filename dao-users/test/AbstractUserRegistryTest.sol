@@ -127,6 +127,34 @@ contract AbstractUserRegistryTest is DaoTest {
         err.assertErrorsEqual(MOCK_RETURN, "updateMyDataHash returned the wrong error");
     }
 
+    function testSetPropertySuccessIsAdmin() {
+        var mud = new MockUserDatabase(0, true, 0);
+        var auri = new AbstractUserRegistryImpl(mud, this);
+        var err = auri.setProperty(TEST_ADDRESS, TEST_HASH, true);
+        err.assertErrorsEqual(MOCK_RETURN, "updateDataHash returned the wrong error");
+    }
+
+    function testSetPropertyFailNotAdmin() {
+        var mud = new MockUserDatabase(0, true, 0);
+        var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
+        var err = auri.setProperty(TEST_ADDRESS_2, TEST_HASH, true);
+        err.assertErrorsEqual(ACCESS_DENIED, "updateDataHash did not return 'access denied' error");
+    }
+
+    function testSetPropertyFailAddressIsNull() {
+        var mud = new MockUserDatabase(0, true, 0);
+        var auri = new AbstractUserRegistryImpl(mud, this);
+        var err = auri.setProperty(0, TEST_HASH, true);
+        err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "updateDataHash did not return 'access denied' error");
+    }
+
+    function testSetPropertyFailPropertyIsNull() {
+        var mud = new MockUserDatabase(0, true, 0);
+        var auri = new AbstractUserRegistryImpl(mud, this);
+        var err = auri.setProperty(TEST_ADDRESS, 0, true);
+        err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "updateDataHash did not return 'access denied' error");
+    }
+
     function testSetMaxUsersSuccess() {
         var mud = new MockUserDatabase(0, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);

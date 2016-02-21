@@ -140,6 +140,31 @@ UserRegistry.prototype.updateDataHash = function (data, txData, cb) {
 };
 
 /**
+ * Set a user property.
+ *
+ * @param {Object} data - {address: <string>, property: <string>, value: <boolean>}
+ * @param {Object} [txData] - tx data.
+ * @param {Function} cb - error first callback: function(error, errorCode).
+ */
+UserRegistry.prototype.updateDataHash = function (data, txData, cb) {
+    var addr = data.address;
+    var propHex = daoUtils.atoh(data.property);
+    var value = data.value;
+
+    if (typeof(txData) === 'function') {
+        cb = txData;
+        txData = this._txData(null);
+    }
+    else
+        txData = this._txData(txData);
+    var that = this;
+    this._contract.setProperty(addr, propHex, value, txData, function(error, txHash){
+        if(error) return cb(error);
+        that.waitFor('SetProperty', txHash, cb);
+    });
+};
+
+/**
  * Update the caller's data-hash.
  *
  * @param {string} dataHash - The hash of the file containing user data.

@@ -18,6 +18,10 @@ contract MockUserDatabase is UserDatabase {
         return MOCK_RETURN;
     }
 
+    function setProperty(address addr, bytes32 propName, bool value) returns (uint16 error) {
+        return MOCK_RETURN;
+    }
+
     function updateDataHash(address addr, bytes32 dataHash) returns (uint16 error) {
         return MOCK_RETURN;
     }
@@ -52,10 +56,13 @@ contract MockUserDatabase is UserDatabase {
         has2 = _has;
     }
 
+    function hasProperty(address userAddress, bytes32 property) constant returns (bool hasProperty, uint16 error) {}
+
+    function hasProperty(bytes32 nickname, bytes32 property) constant returns (bool hasProperty, uint16 error) {}
+
     function userAddressFromIndex(uint index) constant returns (address addr, uint16 error) {}
 
     function userFromIndex(uint index) constant returns (address addr, bytes32 nickname, uint timestamp, bytes32 dataHash, uint16 error) {}
-
 
     function size() constant returns (uint size) {
         return _size;

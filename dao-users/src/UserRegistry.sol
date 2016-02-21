@@ -53,6 +53,17 @@ contract UserRegistry is DougEnabled {
     event SetUserDatabase(address indexed dbAddr, uint16 indexed error);
 
     /*
+        Event: SetProperty
+
+        Params:
+            userAddr (address) - The user address.
+            propName (bytes32) - The name of the property
+            value (bool) - 'true' to set the property, 'false' to unset.
+            error (uint16) - An error code.
+    */
+    event SetProperty(address indexed userAddr, bytes32 indexed propName, bool indexed value, uint16 error);
+
+    /*
         Event: SetAdmin
 
         Params:
@@ -148,6 +159,20 @@ contract UserRegistry is DougEnabled {
             error (uint16) - An error code.
     */
     function updateMyDataHash(bytes32 dataHash) returns (uint16 error);
+
+    /*
+        Function: setProperty
+
+        Set a generic property.
+
+        Params:
+            userAddr (address) - The user-address.
+            propName (bytes32) - The name of the property
+            value (bool) - 'true' to set the property, 'false' to unset.
+        Returns:
+            error (uint16) An error code.
+    */
+    function setProperty(address userAddr, bytes32 propName, bool value) returns (uint16 error);
 
     /*
         Function: setMaxUsers

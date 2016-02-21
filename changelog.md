@@ -1,5 +1,17 @@
 # changelog
 
+#### 0.1.18
+
+Added generic `(bytes32 -> bool)` properties to user data. There are new functions in the `UserDatabase` interface. 
+
+ `setProperty(address userAddr, bytes32 property, bool value) returns (uint16 error)` to map the boolean `value` to `property`. Example: `setProperty("0x453453...", "myProperty", true)`. 
+
+`hasProperty(userAddr, prop) constant returns (bool has, uint16 error)`. In this example, if the user exists, the function `hasProperty("0x453453...", "myProperty")` would now return `(true, NO_ERROR)` (NO_ERROR being 0).
+
+`DefaultUserDatabase` implements this through a `mapping(bytes32 => bool)` in the user data struct. `AbstractUserRegistry` has bindings for it as well.
+
+Finally, the `hasProperty` function can be called with both a user nickname and a user address as identifier.   
+
 #### 0.1.17
 
 Gave databases an action name parameter that must be passed into the constructor. This is to limit writes to only one particular actions-contract rather then all, e.g. `var db = new SomeDb("writer");`. In this example, `db` would only accept write ops from a contract registered as an action in doug, under the name `writer`.

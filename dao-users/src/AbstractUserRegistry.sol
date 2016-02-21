@@ -133,6 +133,29 @@ contract AbstractUserRegistry is UserRegistry, DefaultDougEnabled {
     }
 
     /*
+        Function: setProperty
+
+        Set a generic property.
+
+        Params:
+            userAddr (address) - The user-address.
+            propName (bytes32) - The name of the property
+            value (bool) - 'true' to set the property, 'false' to unset.
+        Returns:
+            error (uint16) An error code.
+    */
+    function setProperty(address userAddr, bytes32 propName, bool value) returns (uint16 error) {
+        if (msg.sender != _admin)
+            error = ACCESS_DENIED;
+        else if (userAddr == 0 || propName == 0)
+            error = NULL_PARAM_NOT_ALLOWED;
+        else
+            error =  _userDatabase.setProperty(userAddr, propName, value);
+
+        SetProperty(userAddr, propName, value, error);
+    }
+
+    /*
         Function: setMaxUsers
 
         Set the maximum number of users that are allowed in the group.

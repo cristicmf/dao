@@ -67,7 +67,7 @@ gulp.task('build:votes', function (cb) {
 /************************ public currency example ***************************/
 
 gulp.task('build:examples', function (cb) {
-    builder.build('examples/contracts/public_currency', {test: true}, function (error, stats) {
+    builder.build('examples/contracts/public_currency', {test: true, includes: {'public-currency': path.join(__dirname, 'examples/contracts/public_currency')}}, function (error, stats) {
         if (error) return cb(error);
         var failed = stats.total - stats.successful;
         if (failed !== 0)

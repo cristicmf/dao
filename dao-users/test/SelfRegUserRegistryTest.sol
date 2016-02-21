@@ -19,14 +19,14 @@ contract SelfRegUserRegistryTest is DaoTest {
     }
 
     function testRegisterSelfSuccess() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var srur = new SelfRegUserRegistry(mud, this);
         var err = srur.registerSelf(TEST_NICKNAME, TEST_HASH);
         err.assertErrorsEqual(MOCK_RETURN, "registerUser returned the wrong error");
     }
 
     function testRegisterSelfFailNicknameIsNull() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var srur = new SelfRegUserRegistry(mud, this);
         var err = srur.registerSelf(0, TEST_HASH);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "registerUser returned the wrong error");

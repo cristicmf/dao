@@ -19,7 +19,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testMintSuccess() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.mint(TEST_ADDRESS, TEST_AMOUNT);
         err.assertErrorsEqual(MOCK_RETURN, "mint returned the wrong error");
@@ -27,7 +27,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testMintFailReceiverIsNull() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.mint(0, TEST_AMOUNT);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "mint did not return 'null param' error");
@@ -35,7 +35,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testMintFailAmountIsNull() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.mint(TEST_ADDRESS_2, 0);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "mint did not return 'null param' error");
@@ -49,7 +49,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testMintFailReceiverNotUser() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, false, 0);
+        var mud = new MockUserDatabase(0, false, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.mint(TEST_ADDRESS, TEST_AMOUNT);
         err.assertErrorsEqual(RESOURCE_NOT_FOUND, "mint did not return 'resource not found' error");
@@ -57,7 +57,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testSendSuccess() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.send(TEST_ADDRESS, TEST_AMOUNT);
         err.assertErrorsEqual(MOCK_RETURN, "mint returned the wrong error");
@@ -65,7 +65,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testSendFailReceiverIsNull() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.send(0, TEST_AMOUNT);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "mint did not return 'null param' error");
@@ -73,7 +73,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testSendFailAmountIsNull() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.send(TEST_ADDRESS, 0);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "mint did not return 'null param' error");
@@ -81,7 +81,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testSendFailSenderAndReceiverNotUsers() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, false, 0);
+        var mud = new MockUserDatabase(0, false, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.send(TEST_ADDRESS, TEST_AMOUNT);
         err.assertErrorsEqual(RESOURCE_NOT_FOUND, "mint did not return 'resource not found' error");
@@ -89,7 +89,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testAdminSendSuccess() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_AMOUNT);
         err.assertErrorsEqual(MOCK_RETURN, "send returned the wrong error");
@@ -97,7 +97,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testAdminSendFailNotAdmin() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var muc = new MintedUserCurrency(mcd, mud,TEST_ADDRESS);
         var err = muc.send(this, TEST_ADDRESS_2, TEST_AMOUNT);
         err.assertErrorsEqual(ACCESS_DENIED, "send did not return 'access denied' error");
@@ -105,7 +105,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testAdminSendFailSenderIsNull() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.send(0, TEST_ADDRESS, TEST_AMOUNT);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "send did not return 'null param' error");
@@ -113,7 +113,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testAdminSendFailReceiverIsNull() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.send(TEST_ADDRESS, 0, TEST_AMOUNT);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "send did not return 'null param' error");
@@ -121,7 +121,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testAdminSendFailAmountIsNull() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.send(TEST_ADDRESS, TEST_ADDRESS_2, 0);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "send did not return 'null param' error");
@@ -129,7 +129,7 @@ contract MintedUserCurrencyTest is DaoTest {
 
     function testAdminSendFailSenderAndReceiverNotUsers() {
         var mcd = new MockCurrencyDatabase();
-        var mud = new MockUserDatabase(0, false, 0);
+        var mud = new MockUserDatabase(0, false, true, 0);
         var muc = new MintedUserCurrency(mcd, mud, this);
         var err = muc.send(TEST_ADDRESS, TEST_ADDRESS_2, TEST_AMOUNT);
         err.assertErrorsEqual(RESOURCE_NOT_FOUND, "mint did not return 'resource not found' error");

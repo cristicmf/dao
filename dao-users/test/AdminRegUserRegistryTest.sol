@@ -19,21 +19,21 @@ contract AdminRegUserRegistryTest is DaoTest {
     }
 
     function testRegisterSelfAsAdmin() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var arur = new AdminRegUserRegistry(mud, this);
         var err = arur.registerSelf(TEST_NICKNAME, TEST_HASH);
         err.assertErrorsEqual(MOCK_RETURN, "registerUser returned the wrong error");
     }
 
     function testRegisterSelfAsNonAdmin() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var arur = new AdminRegUserRegistry(mud, TEST_ADDRESS);
         var err = arur.registerSelf(TEST_NICKNAME, TEST_HASH);
         err.assertErrorsEqual(ACCESS_DENIED, "registerUser returned the wrong error");
     }
 
     function testRegisterSelfFailNicknameIsNull() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var arur = new AdminRegUserRegistry(mud, this);
         var err = arur.registerSelf(0, TEST_HASH);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "registerUser returned the wrong error");

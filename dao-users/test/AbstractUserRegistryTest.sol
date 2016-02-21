@@ -30,133 +30,133 @@ contract AbstractUserRegistryTest is DaoTest {
     }
 
     function testRegisterUserSuccess() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_HASH);
         err.assertErrorsEqual(MOCK_RETURN, "registerUser returned the wrong error");
     }
 
     function testRegisterUserFailNotAdmin() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.registerUser(TEST_ADDRESS, TEST_NICKNAME, TEST_HASH);
         err.assertErrorsEqual(ACCESS_DENIED, "registerUser did not return 'access denied' error");
     }
 
     function testRegisterUserFailAddressIsNull() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.registerUser(0, TEST_NICKNAME, TEST_HASH);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "registerUser did not return 'null param' error");
     }
 
     function testRegisterUserFailNicknameIsNull() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.registerUser(TEST_ADDRESS, 0, TEST_HASH);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "registerUser did not return 'null param' error");
     }
 
     function testRemoveUserSuccessIsAdmin() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.removeUser(TEST_ADDRESS);
         err.assertErrorsEqual(MOCK_RETURN, "removeUser returned the wrong error");
     }
 
     function testRemoveUserSuccessIsUser() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.removeUser(this);
         err.assertErrorsEqual(MOCK_RETURN, "removeUser returned the wrong error");
     }
 
     function testRemoveUserFailNotAdminOrUser() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.removeUser(TEST_ADDRESS_2);
         err.assertErrorsEqual(ACCESS_DENIED, "removeUser did not return 'access denied' error");
     }
 
     function testRemoveUserFailAddressIsNull() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.removeUser(0);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "removeUser did not return 'access denied' error");
     }
 
     function testRemoveSelf() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.removeSelf();
         err.assertErrorsEqual(MOCK_RETURN, "removeSelf returned the wrong error");
     }
 
     function testUpdateDataHashSuccessIsAdmin() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.updateDataHash(TEST_ADDRESS, TEST_HASH);
         err.assertErrorsEqual(MOCK_RETURN, "updateDataHash returned the wrong error");
     }
 
     function testUpdateDataHashSuccessIsUser() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.updateDataHash(this, TEST_HASH);
         err.assertErrorsEqual(MOCK_RETURN, "updateDataHash returned the wrong error");
     }
 
     function testUpdateDataHashFailNotAdminOrUser() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.updateDataHash(TEST_ADDRESS_2, TEST_HASH);
         err.assertErrorsEqual(ACCESS_DENIED, "updateDataHash did not return 'access denied' error");
     }
 
     function testUpdateDataHashFailAddressIsNull() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.updateDataHash(0, TEST_HASH);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "updateDataHash did not return 'access denied' error");
     }
 
     function testUpdateMyDataHash() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.updateMyDataHash(TEST_HASH);
         err.assertErrorsEqual(MOCK_RETURN, "updateMyDataHash returned the wrong error");
     }
 
     function testSetPropertySuccessIsAdmin() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.setProperty(TEST_ADDRESS, TEST_HASH, true);
         err.assertErrorsEqual(MOCK_RETURN, "updateDataHash returned the wrong error");
     }
 
     function testSetPropertyFailNotAdmin() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, TEST_ADDRESS);
         var err = auri.setProperty(TEST_ADDRESS_2, TEST_HASH, true);
         err.assertErrorsEqual(ACCESS_DENIED, "updateDataHash did not return 'access denied' error");
     }
 
     function testSetPropertyFailAddressIsNull() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.setProperty(0, TEST_HASH, true);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "updateDataHash did not return 'access denied' error");
     }
 
     function testSetPropertyFailPropertyIsNull() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.setProperty(TEST_ADDRESS, 0, true);
         err.assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "updateDataHash did not return 'access denied' error");
     }
 
     function testSetMaxUsersSuccess() {
-        var mud = new MockUserDatabase(0, true, 0);
+        var mud = new MockUserDatabase(0, true, true, 0);
         var auri = new AbstractUserRegistryImpl(mud, this);
         var err = auri.setMaxUsers(TEST_MAX_USERS);
         err.assertErrorsEqual(MOCK_RETURN, "setMaxUsers returned the wrong error");

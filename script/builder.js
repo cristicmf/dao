@@ -95,11 +95,11 @@ function build(rootDir, options, callback) {
         command += DAO_DEFAULT_INCLUDES;
     }
 
-    var includes = buildFile.includes;
+    var includes = options.includes;
     if (includes) {
         for (var inc in includes) {
             if (includes.hasOwnProperty(inc)) {
-                command += inc + "=" + path.join(rootDir, includes[inc]);
+                command += " " + inc + "=" + includes[inc];
             }
         }
     }

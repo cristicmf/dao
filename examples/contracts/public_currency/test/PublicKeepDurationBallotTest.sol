@@ -14,7 +14,7 @@ contract PublicKeepDurationBallotTest is DaoTest {
     address constant TEST_ADDRESS               = 0x12345;
 
     function testCreate() {
-        var mdb = new MockUserDatabase(0, true, 0);
+        var mdb = new MockUserDatabase(0, true, true, 0);
         var mpc = new MockPublicCurrency();
         var pdb = PublicKeepDurationBallot(mpc.createKeepDurationBallot(TEST_ID, mdb, this, block.timestamp,
             TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS, 1));
@@ -23,7 +23,7 @@ contract PublicKeepDurationBallotTest is DaoTest {
     }
 
     function testExecute() {
-        var mdb = new MockUserDatabase(block.timestamp, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, 0);
         var mpc = new MockPublicCurrency();
         var pdb = PublicKeepDurationBallot(mpc.createKeepDurationBallot(TEST_ID, mdb, this, block.timestamp,
             TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS, 1));

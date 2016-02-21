@@ -7,7 +7,7 @@ import "dao-currency/test/MockCurrencyDatabase.sol";
 contract PublicCurrencyKeepDurationTest is PublicCurrencyBase {
 
     function testCreateKeepDurationBallotSuccess() {
-        var mdb = new MockUserDatabase(block.timestamp, true, TEST_NUM_ELIGIBLE_VOTERS);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, TEST_NUM_ELIGIBLE_VOTERS);
         var pc = new PublicCurrency(TEST_ADDRESS, mdb);
         pc.createKeepDurationBallot(1).assertNoError("createKeepDurationBallot returned error");
 
@@ -28,7 +28,7 @@ contract PublicCurrencyKeepDurationTest is PublicCurrencyBase {
     }
 
     function testCreateKeepDurationBallotFailDurationIsTheSame() {
-        var mdb = new MockUserDatabase(block.timestamp, true, TEST_NUM_ELIGIBLE_VOTERS);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, TEST_NUM_ELIGIBLE_VOTERS);
         var pc = new PublicCurrency(TEST_ADDRESS, mdb);
         pc.createKeepDurationBallot(TEST_KEEP_DURATION).assertErrorsEqual(INVALID_PARAM_VALUE, "createKeepDurationBallot returned the wrong error");
 
@@ -37,7 +37,7 @@ contract PublicCurrencyKeepDurationTest is PublicCurrencyBase {
     }
 
     function testCreateKeepDurationBallotFailNotUser() {
-        var mdb = new MockUserDatabase(0, false, 0);
+        var mdb = new MockUserDatabase(0, false, true, 0);
         var pc = new PublicCurrency(TEST_ADDRESS, mdb);
         pc.createKeepDurationBallot(1).assertErrorsEqual(RESOURCE_NOT_FOUND, "createKeepDurationBallot returned the wrong error");
 
@@ -46,13 +46,13 @@ contract PublicCurrencyKeepDurationTest is PublicCurrencyBase {
     }
 
     function testSetKeepDurationFailCallerNotBallot() {
-        var mdb = new MockUserDatabase(0, false, 0);
+        var mdb = new MockUserDatabase(0, false, true, 0);
         var pc = new PublicCurrency(TEST_ADDRESS, TEST_ADDRESS_2);
         pc.setKeepDuration(TEST_DURATION).assertErrorsEqual(ACCESS_DENIED, "setKeepDuration returned no 'access denied' error");
     }
 
     function testKeepDurationBallotSuccessVotePassed() {
-        var mdb = new MockUserDatabase(block.timestamp, true, TEST_NUM_ELIGIBLE_VOTERS);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, TEST_NUM_ELIGIBLE_VOTERS);
         var mcd = new MockCurrencyDatabase();
         var pc = new PublicCurrency(mcd, mdb);
         pc.createKeepDurationBallot(1).assertNoError("createKeepDurationBallot returned error");
@@ -70,7 +70,7 @@ contract PublicCurrencyKeepDurationTest is PublicCurrencyBase {
     }
 
     function testKeepDurationBallotSuccessVoteDidNotPass() {
-        var mdb = new MockUserDatabase(block.timestamp, true, TEST_NUM_ELIGIBLE_VOTERS);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, TEST_NUM_ELIGIBLE_VOTERS);
         var mcd = new MockCurrencyDatabase();
         var pc = new PublicCurrency(mcd, mdb);
         pc.createKeepDurationBallot(1).assertNoError("createKeepDurationBallot returned error");

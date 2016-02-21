@@ -1,5 +1,11 @@
 # changelog
 
+#### 0.1.19
+
+- Changed imports in builder. They must now be passed in as options (not through the `build.json` file). 
+
+- Added a 'hasProp' param to `MockUserDatabase`.
+
 #### 0.1.18
 
 Added generic `(bytes32 -> bool)` properties to user data. There are new functions in the `UserDatabase` interface. 

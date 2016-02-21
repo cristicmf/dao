@@ -7,11 +7,13 @@ contract MockUserDatabase is UserDatabase {
     uint _joined;
     uint _size;
     bool _has;
+    bool _hasProp;
 
-    function MockUserDatabase(uint joined, bool has, uint size) {
+    function MockUserDatabase(uint joined, bool has, bool hasProp, uint size) {
         _joined = joined;
         _has = has;
         _size = size;
+        _hasProp = hasProp;
     }
 
     function registerUser(address addr, bytes32 value_nickname, uint value_timestamp, bytes32 value_dataHash) returns (uint16 error) {
@@ -56,9 +58,19 @@ contract MockUserDatabase is UserDatabase {
         has2 = _has;
     }
 
-    function hasProperty(address userAddress, bytes32 property) constant returns (bool hasProperty, uint16 error) {}
+    function hasProperty(address userAddress, bytes32 property) constant returns (bool hasProperty, uint16 error) {
+        if(_hasProp) {
+            return (true, 0);
+        }
+        return (false, MOCK_RETURN);
+    }
 
-    function hasProperty(bytes32 nickname, bytes32 property) constant returns (bool hasProperty, uint16 error) {}
+    function hasProperty(bytes32 nickname, bytes32 property) constant returns (bool hasProperty, uint16 error) {
+        if(_hasProp) {
+            return (true, 0);
+        }
+        return (false, MOCK_RETURN);
+    }
 
     function userAddressFromIndex(uint index) constant returns (address addr, uint16 error) {}
 

@@ -14,7 +14,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     address constant TEST_ADDRESS = 0x12345;
 
     function testCreate() {
-        var mdb = new MockUserDatabase(0, true, 0);
+        var mdb = new MockUserDatabase(0, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
 
         mpb.id().assertEqual(TEST_ID, "id returns the wrong value.");
@@ -29,7 +29,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testYesVoteSuccess() {
-        var mdb = new MockUserDatabase(block.timestamp, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 1, block.timestamp).assertNoError("vote returned error");
 
@@ -49,7 +49,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testNoVoteSuccess() {
-        var mdb = new MockUserDatabase(block.timestamp, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 2, block.timestamp).assertNoError("vote returned error");
 
@@ -57,7 +57,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testAbstainVoteSuccess() {
-        var mdb = new MockUserDatabase(block.timestamp, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 3, block.timestamp).assertNoError("vote returned error");
 
@@ -65,7 +65,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testVoteFailedBadVoteValue() {
-        var mdb = new MockUserDatabase(block.timestamp, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 0, block.timestamp).assertErrorsEqual(INVALID_PARAM_VALUE, "vote returned no 'invalid param' error");
         var (, err) = mpb.voterData(this);
@@ -74,7 +74,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testVoteFailedTimeExpired() {
-        var mdb = new MockUserDatabase(block.timestamp, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp - 2 days, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 1, block.timestamp).assertErrorsEqual(INVALID_STATE, "vote returned no 'state' error");
         var (, err) = mpb.voterData(this);
@@ -83,7 +83,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testVoteFailedAlreadyVoted() {
-        var mdb = new MockUserDatabase(block.timestamp, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 1, block.timestamp);
         mpb.vote(this, 2, block.timestamp).assertErrorsEqual(RESOURCE_ALREADY_EXISTS, "vote returned no 'resource already exists' error");
@@ -93,7 +93,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testVoteFailedNotAUser() {
-        var mdb = new MockUserDatabase(0, false, 0);
+        var mdb = new MockUserDatabase(0, false, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 1, block.timestamp).assertErrorsEqual(ACCESS_DENIED, "vote returned no 'access denied' error");
         var (, err) = mpb.voterData(this);
@@ -102,7 +102,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testVoteFailedUserJoinedAfterVoteOpened() {
-        var mdb = new MockUserDatabase(block.timestamp + 1 days, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp + 1 days, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 1, block.timestamp).assertErrorsEqual(ACCESS_DENIED, "vote returned no 'access denied' error");
         var (, err) = mpb.voterData(this);
@@ -111,7 +111,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testAutoFinalizeVotePassed() {
-        var mdb = new MockUserDatabase(block.timestamp, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 1, block.timestamp).assertNoError("vote returned error");
         mpb.vote(TEST_ADDRESS, 1, block.timestamp).assertNoError("vote returned error for proxy");
@@ -125,7 +125,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testAutoFinalizeVoteDidNotPass() {
-        var mdb = new MockUserDatabase(block.timestamp, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 1, block.timestamp).assertNoError("vote returned error");
         mpb.vote(TEST_ADDRESS, 2, block.timestamp).assertNoError("vote returned error for proxy");
@@ -139,7 +139,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testManualFinalizeSuccessPassed() {
-        var mdb = new MockUserDatabase(block.timestamp - 3 days, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp - 3 days, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp - 2 days, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 1, block.timestamp - 2 days).assertNoError("vote returned error");
         var (passed, error, execError) = mpb.finalize();
@@ -155,7 +155,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testManualFinalizeSuccessDidNotPass() {
-        var mdb = new MockUserDatabase(block.timestamp - 3 days, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp - 3 days, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp - 2 days, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 2, block.timestamp - 2 days).assertNoError("vote returned error");
         var (passed, error, execError) = mpb.finalize();
@@ -171,7 +171,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testManualFinalizeFailAlreadyClosed() {
-        var mdb = new MockUserDatabase(block.timestamp, true, 0);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
         mpb.vote(this, 1, block.timestamp).assertNoError("vote returned error");
         mpb.vote(TEST_ADDRESS, 1, block.timestamp);
@@ -182,7 +182,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testManualFinalizeFailTimeNotUp() {
-        var mdb = new MockUserDatabase(0, false, 0);
+        var mdb = new MockUserDatabase(0, false, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
 
         var (passed, error, execError) = mpb.finalize();
@@ -193,7 +193,7 @@ contract AbstractPublicYNABallotTest is DaoTest {
     }
 
     function testManualFinalizeFailQuorum() {
-        var mdb = new MockUserDatabase(0, false, 0);
+        var mdb = new MockUserDatabase(0, false, true, 0);
         var mpb = new MockPublicYNABallot(TEST_ID, mdb, this, block.timestamp - 2 days, TEST_DURATION, TEST_QUORUM, TEST_NUM_ELIGIBLE_VOTERS);
 
         var (passed, error, execError) = mpb.finalize();

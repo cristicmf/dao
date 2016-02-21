@@ -7,7 +7,7 @@ import "dao-currency/test/MockCurrencyDatabase.sol";
 contract PublicCurrencyMintingTest is PublicCurrencyBase {
 
     function testCreateMintBallotSuccess() {
-        var mdb = new MockUserDatabase(block.timestamp, true, TEST_NUM_ELIGIBLE_VOTERS);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, TEST_NUM_ELIGIBLE_VOTERS);
         var pc = new PublicCurrency(TEST_ADDRESS, mdb);
         pc.createMintBallot(this, 1).assertNoError("createMintBallot returned error");
 
@@ -29,7 +29,7 @@ contract PublicCurrencyMintingTest is PublicCurrencyBase {
     }
 
     function testCreateMintBallotFailReceiverIsNull() {
-        var mdb = new MockUserDatabase(block.timestamp, true, TEST_NUM_ELIGIBLE_VOTERS);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, TEST_NUM_ELIGIBLE_VOTERS);
         var pc = new PublicCurrency(TEST_ADDRESS, mdb);
         pc.createMintBallot(0, 1).assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "createMintBallot returned the wrong error");
 
@@ -38,7 +38,7 @@ contract PublicCurrencyMintingTest is PublicCurrencyBase {
     }
 
     function testCreateMintBallotFailAmountIsNull() {
-        var mdb = new MockUserDatabase(block.timestamp, true, TEST_NUM_ELIGIBLE_VOTERS);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, TEST_NUM_ELIGIBLE_VOTERS);
         var pc = new PublicCurrency(TEST_ADDRESS, mdb);
         pc.createMintBallot(this, 0).assertErrorsEqual(NULL_PARAM_NOT_ALLOWED, "createMintBallot returned the wrong error");
 
@@ -47,7 +47,7 @@ contract PublicCurrencyMintingTest is PublicCurrencyBase {
     }
 
     function testCreateMintBallotFailNotUser() {
-        var mdb = new MockUserDatabase(0, false, 0);
+        var mdb = new MockUserDatabase(0, false, true, 0);
         var pc = new PublicCurrency(TEST_ADDRESS, mdb);
         pc.createMintBallot(this, 1).assertErrorsEqual(RESOURCE_NOT_FOUND, "createMintBallot returned the wrong error");
 
@@ -56,13 +56,13 @@ contract PublicCurrencyMintingTest is PublicCurrencyBase {
     }
 
     function testMintingFailCallerNotBallot() {
-        var mdb = new MockUserDatabase(0, false, 0);
+        var mdb = new MockUserDatabase(0, false, true, 0);
         var pc = new PublicCurrency(TEST_ADDRESS, TEST_ADDRESS_2);
         pc.mint(this, 1).assertErrorsEqual(ACCESS_DENIED, "mint returned no 'access denied' error");
     }
 
     function testMintBallotSuccessVotePassed() {
-        var mdb = new MockUserDatabase(block.timestamp, true, TEST_NUM_ELIGIBLE_VOTERS);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, TEST_NUM_ELIGIBLE_VOTERS);
         var mcd = new MockCurrencyDatabase();
         var pc = new PublicCurrency(mcd, mdb);
         pc.createMintBallot(this, 1).assertNoError("createMintBallot returned error");
@@ -83,7 +83,7 @@ contract PublicCurrencyMintingTest is PublicCurrencyBase {
     }
 
     function testMintBallotSuccessVoteDidNotPass() {
-        var mdb = new MockUserDatabase(block.timestamp, true, TEST_NUM_ELIGIBLE_VOTERS);
+        var mdb = new MockUserDatabase(block.timestamp, true, true, TEST_NUM_ELIGIBLE_VOTERS);
         var mcd = new MockCurrencyDatabase();
         var pc = new PublicCurrency(mcd, mdb);
         pc.createMintBallot(this, 1).assertNoError("createMintBallot returned error");

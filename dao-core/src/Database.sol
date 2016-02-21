@@ -69,11 +69,16 @@ contract DefaultDatabase is Database, DefaultDougEnabled {
     bytes32 _actionsName;
 
     /*
-        Constructor: DefaultDatabase
+        Function: setActionsName
+
+        Set the name of the actions-contract that has write privileges. Can only
+        be done by the contract with current write privileges.
 
         Params:
-            actionsName (bytes32) - The name of the actions contract with write privileges..
+            actionsName (bytes32) - The name.
 
+        Returns:
+            error (uint16) - An error code.
     */
     function DefaultDatabase(bytes32 actionsName) {
         _actionsName = actionsName;

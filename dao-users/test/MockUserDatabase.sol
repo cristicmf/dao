@@ -1,6 +1,7 @@
-import "dao-users/src/UserDatabase.sol";
+import {UserDatabase} from "dao-users/src/UserDatabase.sol";
+import {Errors} from "dao-stl/src/errors/Errors.sol";
 
-contract MockUserDatabase is UserDatabase {
+contract MockUserDatabase is UserDatabase, Errors {
 
     uint16 constant MOCK_RETURN = 0x1111;
 
@@ -59,10 +60,9 @@ contract MockUserDatabase is UserDatabase {
     }
 
     function hasProperty(address userAddress, bytes32 property) constant returns (bool hasProperty, uint16 error) {
-        if(_hasProp) {
-            return (true, 0);
-        }
-        return (false, MOCK_RETURN);
+        if(!_has)
+            return (false, RESOURCE_NOT_FOUND);
+        return (_hasProp, NO_ERROR);
     }
 
     function hasProperty(bytes32 nickname, bytes32 property) constant returns (bool hasProperty, uint16 error) {

@@ -1,5 +1,9 @@
 # changelog
 
+#### 0.1.20
+
+- Modified prop function to make the error possible as well.
+
 #### 0.1.19
 
 - Changed imports in builder. They must now be passed in as options (not through the `build.json` file). 

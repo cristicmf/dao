@@ -131,7 +131,7 @@ gulp.task('build:all', function (cb) {
                     cb();
                 });
             }, function (cb) {
-                builder.build('examples/contracts/public_currency', {test: true}, function (error, stats) {
+                builder.build('examples/contracts/public_currency', {test: true, includes: {'public-currency': path.join(__dirname, 'examples/contracts/public_currency')}}, function (error, stats) {
                     if (error) return cb(error);
                     total += stats.total;
                     successful += stats.successful;

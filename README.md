@@ -4,7 +4,7 @@
 
 **IMPORTANT UPDATE:** Many new interesting libraries are going into production. One of the most interesting-looking ones is BoardRoom (http://boardroom.to/). This looks like it will be very good, and I am very excited to get to try it myself.
 
-If that becomes the case, my code from now on will be centered around modules for that library, and these type of libraries will be around for research purposes and for providing examples. More time will be spent on tutorials and such, and to frame specific code and contract, and complement them with charts and written material (focus will be 100% on education).
+If that becomes the case, my code from now on will be centered around modules for that platform, and these type of libraries will be around for research purposes and for providing examples, and will move to the `smartcontractlabs` org. More time will be spent on tutorials and such, and to frame specific code and contract, and complement them with charts and written material (focus will be 100% on education).
 
 --
 

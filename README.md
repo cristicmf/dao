@@ -1,5 +1,13 @@
 # The DAO framework
 
+--
+
+**IMPORTANT UPDATE:** Many new interesting libraries are going into production. One of the most interesting-looking ones is BoardRoom (http://boardroom.to/). This looks like it will be very good, and I am very excited to get to try it myself.
+
+If that becomes the case, my code from now on will be centered around modules for that library, and these type of libraries will be around for research purposes and for providing examples. More time will be spent on tutorials and such, and to frame specific code and contract, and complement them with charts and written material (focus will be 100% on education).
+
+--
+
 This is the a light-weight framework for modular systems of [Ethereum](https://ethereum.org/) contracts. It is meant to be used with Ethereum, or other chains that supports Ethereum contracts. It will get a better name.
 
 The contracts are written in the [Solidity](http://solidity.readthedocs.org/en/latest/index.html) language. The purpose of this library as of now is to act as a template for extending, or just as an example of how to write Solidity contracts. This is a **contracts-only library**, but there are some javascript utilities for deploying and testing.
@@ -139,8 +147,6 @@ To contact me, send a personal message on linkedin: https://www.linkedin.com/in/
 **Me Hiring**
 
 I'm not hiring as of right now.
-
-I will likely soon be looking for a part time web-applications developer.
 
 ## Licence
 
